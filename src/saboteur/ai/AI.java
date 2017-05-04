@@ -11,7 +11,8 @@ import saboteur.model.Player;
 
 public abstract class AI extends Player {
 	
-	private Map<Player,Float> trust;
+	private Map<Player,Float> trust;	private Difficulty difficulty;
+
 
 	public AI(Game game) {
 		super(game);
@@ -24,6 +25,11 @@ public abstract class AI extends Player {
 	
 	public void updateTrust(OperationActionCardToPlayer o){
 		
+	}
+	
+	public AI setDifficulty(Difficulty difficulty){
+		this.difficulty = difficulty;
+		return this;
 	}
 	
 	
