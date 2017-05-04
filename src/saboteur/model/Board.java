@@ -3,10 +3,11 @@ package saboteur.model;
 import saboteur.model.Card.*;
 
 public class Board {
+	private static final int GRID_SIZE = 89;
 	private PathCard[][] board;
 	
 	public Board(){
-		this.board = new PathCard[89][89];
+		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
 	}
 	
 	public void addCard(PathCard card, Position position){
