@@ -20,7 +20,7 @@ public class Board {
 	}
 	
 	public int getTaxiDistance(Position p1, Position p2) {
-		return Math.abs(p2.getcX() - p1.getcX() + p2.getcY() - p1.getcY());
+		return Math.abs(p2.getcX() - p1.getcX()) + Math.abs(p2.getcY() - p1.getcY());
 	}
 	
 }
