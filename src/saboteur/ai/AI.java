@@ -7,6 +7,7 @@ import java.util.Map;
 
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
+import saboteur.model.OperationPathCard;
 import saboteur.model.Player;
 
 public abstract class AI extends Player {
@@ -26,6 +27,8 @@ public abstract class AI extends Player {
 		
 	}
 	
-	
+	public void updateTrust(OperationPathCard o){
+		
+	}
 	
 }

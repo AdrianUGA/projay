@@ -14,6 +14,10 @@ public class Game {
 	private ArrayList<Card> stack;
 	private ArrayList<Card> trash;
 	private ArrayList<Player> playerList;
+	public ArrayList<Player> getPlayerList() {
+		return playerList;
+	}
+
 	private Board board;
 	
 	private LinkedList<Player> observers;
