@@ -9,12 +9,14 @@ import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
 import saboteur.model.OperationPathCard;
 import saboteur.model.Player;
+import saboteur.model.Position;
 import saboteur.model.Card.PathCard;
 
 public abstract class AI extends Player {
 	
 	private Map<Player,Float> trust;	
 	private Difficulty difficulty;
+	private Position goldCardPosition;
 	
 
 	public AI(Game game) {
@@ -23,7 +25,14 @@ public abstract class AI extends Player {
 		for(Player p : game.getPlayerList()){
 			trust.put(p, (float) 50);
 		}
-		trust.put(this, (float) 1073741824);
+		if(isSaboteur()){
+			trust.put(this, (float) -1073741824);
+		}
+		else{
+			trust.put(this, (float) 1073741824);
+		}
+		goldCardPosition = new Position(0,0);
+		// TODO change goldCardPosition to middle of the 3 hidden cards
 	}
 	
 	@Override
@@ -64,16 +73,27 @@ public abstract class AI extends Player {
 	public void updateTrust(OperationActionCardToPlayer o){
 		switch(o.getCard().getClass().getName()){
 		case "SobotageCard":
-			if(trust.get(o.getSourcePlayer()) > trust.get(((OperationActionCardToPlayer) o).getDestinationPlayer())){
+			if(trust.get(o.getSourcePlayer()) > trust.get(o.getDestinationPlayer()) && (trust.get(o.getDestinationPlayer()) <= 40)){
 				// Ennemies of our ennemies are our allies
 				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 10);
 			}
-			else{
+			else if(trust.get(o.getSourcePlayer()) <= trust.get(o.getDestinationPlayer()) && (trust.get(o.getDestinationPlayer()) >= 60)){
 				// Ennemies of our allies are our ennemies
-				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 10);
+				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) - 10);
 			}
 			break;
 		case "RescueCard":
+		case "DoubleRescueCard":
+			if(!o.getSourcePlayer().equals(o.getDestinationPlayer())){
+				if(trust.get(o.getDestinationPlayer()) <= 40){
+					// Allies of our ennemies are our ennemies
+					trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) - 10);
+				}
+				else if(trust.get(o.getDestinationPlayer()) >= 60){
+					// Allies of our allies are our allies
+					trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 10);
+				}
+			}
 			break;
 		default:
 			System.err.println("Operation ActionCarToPlayer undetected");
@@ -81,8 +101,14 @@ public abstract class AI extends Player {
 	}
 	
 	public void updateTrust(OperationPathCard o){
-		
-		
+		int taxiDistance = this.getGame().getBoard().getTaxiDistance(o.getP(), goldCardPosition);
+		if(((PathCard) o.getCard()).isCulDeSac()){ // The closer the gold card, heavier is the card
+			trust.put(o.getSourcePlayer(), (float) (trust.get(o.getSourcePlayer()) - 40/(Math.pow(2, taxiDistance)) - 2));
+		}
+		else{
+			trust.put(o.getSourcePlayer(), (float) (trust.get(o.getSourcePlayer()) + 40/(Math.pow(2, taxiDistance)) + 3));
+		}
+		System.err.println("Operation PathCard undetected");
 	}
 	
 	public AI setDifficulty(Difficulty difficulty){

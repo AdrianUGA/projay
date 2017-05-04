@@ -3,14 +3,14 @@ package saboteur.model;
 import saboteur.model.Card.Card;
 
 public class OperationPathCard extends Operation {
-	Position position;
+	private Position p;
 	
-	public OperationPathCard(Player sourcePlayer, Card card, Position position) {
-		super(sourcePlayer, card);
-		this.position = position;
+	public Position getP() {
+		return p;
 	}
 
-	public Position getPosition(){
-		return this.position;
+	public OperationPathCard(Player sourcePlayer, Card card, Position position) {
+		super(sourcePlayer, card);
+		this.p = position;
 	}
 }
