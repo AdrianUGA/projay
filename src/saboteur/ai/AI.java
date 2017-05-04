@@ -1,14 +1,26 @@
 package saboteur.ai;
+import java.util.HashMap;
+import java.util.Map;
+
+import saboteur.model.OperationActionCardToBoard;
+import saboteur.model.OperationActionCardToPlayer;
 import saboteur.model.Player;
 
 public abstract class AI extends Player {
 	
-	private int trust[];
+	private Map<Player,Float> trust;
 	
 	public AI(int playerAmount){
-		for(int i=0; i<playerAmount;i++){
-			trust[i] = 50;
-		}
+		trust = new HashMap<Player,Float>();
+		
+	}
+	
+	public void updateTrust(OperationActionCardToBoard o){
+		
+	}
+	
+	public void updateTrust(OperationActionCardToPlayer o){
+		
 	}
 	
 }
