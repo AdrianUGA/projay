@@ -9,6 +9,8 @@ public class Game {
 	private int round;
 	private ArrayList<GoldCard> goldCardStack;
 	private ArrayList<Operation> history;
+
+
 	private ArrayList<Card> stack;
 	private ArrayList<Card> trash;
 	private ArrayList<Player> playerList;
@@ -41,5 +43,10 @@ public class Game {
 
 	public Board getBoard() {
 		return board;
+	}
+	
+	/* This method is needed by our fellow AI */
+	public ArrayList<Operation> getHistory() {
+		return history;
 	}
 }

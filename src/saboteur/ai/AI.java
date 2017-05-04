@@ -1,5 +1,6 @@
 package saboteur.ai;
+import saboteur.model.Player;
 
-public interface AI {
-
+public abstract class AI extends Player {
+	
 }
