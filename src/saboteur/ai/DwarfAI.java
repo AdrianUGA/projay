@@ -5,8 +5,8 @@ public class DwarfAI extends AI {
 	
 	private Difficulty difficulty;
 
-	public DwarfAI(int playerAmount){
-		super(playerAmount);
+	public DwarfAI(){
+		super();
 	}
 	
 	public DwarfAI setDifficulty(Difficulty difficulty){
