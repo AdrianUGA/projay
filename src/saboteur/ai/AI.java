@@ -20,6 +20,10 @@ public abstract class AI extends Player {
 	public AI(Game game) {
 		super(game);
 		trust = new HashMap<Player,Float>();
+		for(Player p : game.getPlayerList()){
+			trust.put(p, (float) 50);
+		}
+		trust.put(this, (float) 1073741824);
 	}
 	
 	@Override
@@ -46,16 +50,34 @@ public abstract class AI extends Player {
 			break;
 		case "CollapseCard":
 			if(((PathCard) o.getCard()).isCulDeSac()){
-				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 10);
+				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 20);
 			}
 			else{
-				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) - 10);
+				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) - 20);
 			}
+			break;
+		default:
+			System.err.println("Operation ActionCardToBoard undetected");
 		}
 	}
 	
 	public void updateTrust(OperationActionCardToPlayer o){
-		
+		switch(o.getCard().getClass().getName()){
+		case "SobotageCard":
+			if(trust.get(o.getSourcePlayer()) > trust.get(((OperationActionCardToPlayer) o).getDestinationPlayer())){
+				// Ennemies of our ennemies are our allies
+				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 10);
+			}
+			else{
+				// Ennemies of our allies are our ennemies
+				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 10);
+			}
+			break;
+		case "RescueCard":
+			break;
+		default:
+			System.err.println("Operation ActionCarToPlayer undetected");
+		}
 	}
 	
 	public void updateTrust(OperationPathCard o){
