@@ -1,4 +1,4 @@
-package AI;
+package saboteur.ai;
 
 public interface AI {
 

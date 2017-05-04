@@ -1,6 +1,6 @@
-package Model;
+package saboteur.model;
 
-import Model.Card.*;
+import saboteur.model.Card.*;
 
 public class OperationActionCardToBoard extends Operation {
 	private PathCard destinationCard;

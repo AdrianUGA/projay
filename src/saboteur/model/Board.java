@@ -1,6 +1,6 @@
-package Model;
+package saboteur.model;
 
-import Model.Card.*;
+import saboteur.model.Card.*;
 
 public class Board {
 	private Graphe graph;

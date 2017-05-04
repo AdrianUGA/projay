@@ -1,28 +1,28 @@
-package Model;
+package saboteur.model;
 
 import java.io.*;
 import java.util.*;
 
 /**
- * Classe qui implémente des graphes non orientés éventuellement avec boucles et arêtes multiples <BR>
- * implémentation sous forme de ArrayList avec dans chaque case la listes des voisins
+ * Classe qui implï¿½mente des graphes non orientï¿½s ï¿½ventuellement avec boucles et arï¿½tes multiples <BR>
+ * implï¿½mentation sous forme de ArrayList avec dans chaque case la listes des voisins
  *
  * @author Nadia Brauner
  * @student : Robin Extrant
  */
 public class Graphe {
 
-	//TODO changer l'implémentation pour gérer des cartes et pas des entiers
+	//TODO changer l'implï¿½mentation pour gï¿½rer des cartes et pas des entiers
 	
-    private final int n; // nombre de sommets. Ne peut être assigné qu'une fois
+    private final int n; // nombre de sommets. Ne peut ï¿½tre assignï¿½ qu'une fois
 
-    private ArrayList<LinkedList<Integer>> adjacence; // les arêtes en listes de voisins
+    private ArrayList<LinkedList<Integer>> adjacence; // les arï¿½tes en listes de voisins
 
     /**
      * Initialise l'instance de graphe avec {@code n} sommets
      *
-     * @param n le nombre de sommets du graphe. {@code n} doit être strictement positif.
-     * @throws IllegalArgumentException si {@code n} est négatif ou nul
+     * @param n le nombre de sommets du graphe. {@code n} doit ï¿½tre strictement positif.
+     * @throws IllegalArgumentException si {@code n} est nï¿½gatif ou nul
      */
     public Graphe(int n) {
         if (n < 1)
@@ -35,9 +35,9 @@ public class Graphe {
     }
 
     /**
-     * Construit un graphe à partir d'un flux de données (InputStream)
+     * Construit un graphe ï¿½ partir d'un flux de donnï¿½es (InputStream)
      *
-     * @param input données du graphe à construire
+     * @param input donnï¿½es du graphe ï¿½ construire
      * @return un graphe
      * @throws GrapheReaderException en cas d'erreur de lecture de {@code input}
      */
@@ -47,14 +47,14 @@ public class Graphe {
 
     /**
      * Ajoute l'arete {@code i}{@code j} au graphe.<BR>
-     * On peut rajouter une arête déjà existante ou faire des boucles !
+     * On peut rajouter une arï¿½te dï¿½jï¿½ existante ou faire des boucles !
      *
-     * @param i sommet extremité de l'arête
-     * @param j sommet extremité de l'arête
+     * @param i sommet extremitï¿½ de l'arï¿½te
+     * @param j sommet extremitï¿½ de l'arï¿½te
      * @throws IllegalArgumentException si {@code i} ou {@code j} n'est pas un sommet valide
      */
     public void ajouteArete(int i, int j) {
-        // graphe non orienté. Si on a l'arête ij alors, on a aussi ji
+        // graphe non orientï¿½. Si on a l'arï¿½te ij alors, on a aussi ji
         verifieSommet(i);
         verifieSommet(j);
         this.adjacence.get(i).add(j);
@@ -71,9 +71,9 @@ public class Graphe {
     }
 
     /**
-     * vérifie que le sommet {@code v} est un sommet valide du graphe
+     * vï¿½rifie que le sommet {@code v} est un sommet valide du graphe
      *
-     * @param v sommet du graphe à verifier
+     * @param v sommet du graphe ï¿½ verifier
      * @throws IllegalArgumentException si le sommet n'est pas valide
      */
     private void verifieSommet(int v) {
@@ -84,7 +84,7 @@ public class Graphe {
 
     /**
      * Renvoie la liste des voisins du sommet {@code v}.<BR>
-     * Cette liste ne peut pas etre modifiée
+     * Cette liste ne peut pas etre modifiï¿½e
      *
      * @param v sommet du graphe
      * @return la liste des voisins du sommet {@code v}
@@ -108,10 +108,10 @@ public class Graphe {
     }
     
     /**
-     * Calcule le degré du sommet {@code v}
+     * Calcule le degrï¿½ du sommet {@code v}
      *
      * @param v sommet du graphe
-     * @return le degré de {@code v}
+     * @return le degrï¿½ de {@code v}
      * @throws IllegalArgumentException si {@code v} n'est pas un sommet valide
      */
     public int degre(int v) {
@@ -121,9 +121,9 @@ public class Graphe {
     }
 
     /**
-     * Calcule le  degré maximum des sommets du graphe
+     * Calcule le  degrï¿½ maximum des sommets du graphe
      *
-     * @return le degré maximum des sommets du graphe
+     * @return le degrï¿½ maximum des sommets du graphe
      */
     public int maxDegre() {
 		int taille = getN();
@@ -139,16 +139,16 @@ public class Graphe {
 
 
     /**
-     * Calcule le nombre d'arêtes à partir de la somme des degrés
+     * Calcule le nombre d'arï¿½tes ï¿½ partir de la somme des degrï¿½s
      *
-     * @return la somme des degrés divisée par 2
+     * @return la somme des degrï¿½s divisï¿½e par 2
      */
     public int nbAretes() {
 		int taille = getN();
         int total = 0;
         for (int i=0; i<taille; i++){
 			total += degre(i);
-			//On ajoute 1 si il y a une boucle sur le même sommet pour pouvoir diviser par 2 à la fin
+			//On ajoute 1 si il y a une boucle sur le mï¿½me sommet pour pouvoir diviser par 2 ï¿½ la fin
 			if (adjacence.get(i).contains(i)) total+=1;
 		}
         return (total/2);
@@ -179,8 +179,8 @@ public class Graphe {
     }
 
     /**
-     * Calcule le graphe complémentaire
-     * @return le graphe complémentaire
+     * Calcule le graphe complï¿½mentaire
+     * @return le graphe complï¿½mentaire
      */
     public Graphe complementaire(){
         int taille = getN();
@@ -199,7 +199,7 @@ public class Graphe {
     }
     
     /**
-     * Construit le graphe complet à {@code k} sommets
+     * Construit le graphe complet ï¿½ {@code k} sommets
      *
      * @param k le nombre de sommets du graphe complet
      */

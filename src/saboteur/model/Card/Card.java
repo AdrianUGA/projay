@@ -1,4 +1,4 @@
-package Model.Card;
+package saboteur.model.Card;
 
 public abstract class Card {
 	

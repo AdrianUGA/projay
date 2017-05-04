@@ -1,6 +1,6 @@
-package AI;
+package saboteur.ai;
 
-import Model.Player;
+import saboteur.model.Player;
 
 public class DwarfAI extends Player implements AI {
 

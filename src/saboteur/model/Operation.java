@@ -1,4 +1,4 @@
-package Model;
+package saboteur.model;
 
 public abstract class Operation {
 	private Player sourcePlayer;

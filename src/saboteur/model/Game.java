@@ -1,8 +1,8 @@
-package Model;
+package saboteur.model;
 
 import java.util.ArrayList;
 
-import Model.Card.*;
+import saboteur.model.Card.*;
 
 public class Game {
 	private Player currentPlayer;
