@@ -16,8 +16,12 @@ public abstract class Player {
 		return this.saboteur;
 	}
 	
+	public void playCard(Card card){
+		//TODO use the card
+	}
+	
 	public void playCard(){
-		//TODO use selectedCard
+		this.playCard(this.selectedCard);
 	}
 	
 	public ArrayList<ActionCard> getHandicaps(){
@@ -59,5 +63,14 @@ public abstract class Player {
 	public boolean canHandicap(ActionCard card){
 		//TODO
 		return false;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public Player setNom(String nom) {
+		this.nom = nom;
+		return this;
 	}
 }
