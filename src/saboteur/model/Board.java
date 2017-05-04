@@ -17,4 +17,8 @@ public class Board {
 		this.board[position.getcX()][position.getcY()] = null;
 	}
 	
+	public int getTaxiDistance(Position p1, Position p2) {
+		return Math.abs(p2.getcX() - p1.getcX() + p2.getcY() - p1.getcY());
+	}
+	
 }
