@@ -8,4 +8,9 @@ public class Board {
 	public void addCard(PathCard card){
 		//TODO
 	}
+
+	public int getTaxiDistance(Position p, Position goldCardPosition) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
