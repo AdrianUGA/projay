@@ -6,6 +6,38 @@ import saboteur.model.Card.*;
 
 public abstract class Player {
 	private boolean saboteur;	
+	public Card getSelectedCard() {
+		return selectedCard;
+	}
+
+	public void setSelectedCard(Card selectedCard) {
+		this.selectedCard = selectedCard;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+	public void setSaboteur(boolean saboteur) {
+		this.saboteur = saboteur;
+	}
+
+	public void setHandicaps(ArrayList<ActionCard> handicaps) {
+		this.handicaps = handicaps;
+	}
+
+	public void setGold(ArrayList<GoldCard> gold) {
+		this.gold = gold;
+	}
+
+	public void setHand(ArrayList<Card> hand) {
+		this.hand = hand;
+	}
+
 	private Card selectedCard;
 	private String nom;
 	private ArrayList<ActionCard> handicaps;
