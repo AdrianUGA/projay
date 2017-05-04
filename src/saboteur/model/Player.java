@@ -15,6 +15,7 @@ public abstract class Player {
 	
 	public Player (Game game){
 		this.game = game;
+		game.register(this);
 	}
 	
 	public boolean isSaboteur(){
@@ -77,5 +78,9 @@ public abstract class Player {
 	public Player setNom(String nom) {
 		this.nom = nom;
 		return this;
+	}
+	
+	public void notify(Operation o){
+		
 	}
 }

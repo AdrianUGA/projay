@@ -51,4 +51,14 @@ public class Game {
 	public ArrayList<Operation> getHistory() {
 		return this.history;
 	}
+
+	public void register(Player player) {
+		this.observers.add(player);
+	}
+	
+	public void notify(Operation operation){
+		for(Player player: this.observers){
+			player.notify(operation);
+		}
+	}
 }
