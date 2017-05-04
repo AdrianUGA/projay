@@ -47,6 +47,6 @@ public class Game {
 	
 	/* This method is needed by our fellow AI */
 	public ArrayList<Operation> getHistory() {
-		return history;
+		return this.history;
 	}
 }

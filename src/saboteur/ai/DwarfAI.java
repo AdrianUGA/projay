@@ -1,7 +1,16 @@
 package saboteur.ai;
 
-import saboteur.model.Player;
 
 public class DwarfAI extends AI {
 	
+	private Difficulty difficulty;
+
+	public DwarfAI(){
+		
+	}
+	
+	public DwarfAI setDifficulty(Difficulty difficulty){
+		this.difficulty = difficulty;
+		return this;
+	}
 }
