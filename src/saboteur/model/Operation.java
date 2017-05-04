@@ -6,6 +6,11 @@ public abstract class Operation {
 	private Player sourcePlayer;
 	private Card card;
 	
+	public Operation(Player sourcePlayer, Card card){
+		this.sourcePlayer = sourcePlayer;
+		this.card = card;
+	}
+	
 	public void exec(){
 		
 	}

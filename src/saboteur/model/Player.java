@@ -8,7 +8,7 @@ public abstract class Player {
 	private boolean saboteur;	
 	private Card selectedCard;
 	private String nom;
-	private ArrayList<ActionCard> handicaps;
+	private ArrayList<SabotageCard> handicaps;
 	private ArrayList<GoldCard> gold;
 	private ArrayList<Card> hand;
 	private Game game;
@@ -23,14 +23,32 @@ public abstract class Player {
 	}
 	
 	public void playCard(Card card){
+	}
+	public void playCard(Player destinationPlayer){
+		Operation operation = new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer);
 		
+		this.game.playOperation(operation);
+	}
+	public void playCard( PathCard destinationCard){
+		Operation operation = new OperationActionCardToBoard(this, this.selectedCard, destinationCard);
+		
+		this.game.playOperation(operation);
+	}
+	public void playCard(Position position){
+		Operation operation = new OperationPathCard(this, this.selectedCard, position);
+		
+		this.game.playOperation(operation);
 	}
 	
 	public void playCard(){
-		this.playCard(this.selectedCard);
+		Operation operation = new OperationTrash(this, this.selectedCard);
+		
+		this.game.playOperation(operation);
 	}
 	
-	public ArrayList<ActionCard> getHandicaps(){
+	
+	
+	public ArrayList<SabotageCard> getHandicaps(){
 		return this.handicaps;
 	}
 	
@@ -58,7 +76,7 @@ public abstract class Player {
 		this.hand.add(card);
 	}
 	
-	public void addHandicapCard(ActionCard card){
+	public void addHandicapCard(SabotageCard card){
 		this.handicaps.add(card);
 	}
 	
@@ -66,9 +84,35 @@ public abstract class Player {
 		this.gold.remove(card);
 	}
 	
-	public boolean canHandicap(ActionCard card){
-		//TODO
+	public boolean canHandicap(ActionCardToPlayer card){
+		System.out.println("On ne doit pas passer la ! (N1)");
 		return false;
+	}
+	public boolean canHandicap(DoubleRescueCard card){
+		int currentType;
+		for (SabotageCard sabotageCard : this.handicaps){
+			currentType = sabotageCard.getSabotageType();
+			if (currentType == card.getRescueType1() || currentType == card.getRescueType2()){
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean canHandicap(RescueCard card){
+		for (SabotageCard sabotageCard : this.handicaps){
+			if (sabotageCard.getSabotageType() == card.getRescueType()){
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean canHandicap(SabotageCard card){
+		for (SabotageCard sabotageCard : this.handicaps){
+			if (sabotageCard.getSabotageType() == card.getSabotageType()){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public String getNom() {
