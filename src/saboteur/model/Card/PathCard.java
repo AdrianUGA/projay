@@ -1,15 +1,16 @@
 package saboteur.model.Card;
 
-import java.util.BitSet;
+import java.util.LinkedList;
+import java.util.List;
 
 public class PathCard extends Card {
 	//OPENUP(1), OPENRIGHT(2), OPENDOWN(4), OPENLEFT(8));
 	
-	final boolean [] openSides;
+	List<Cardinal> openSides;
 	final boolean isCulDeSac;
 	
-	PathCard(int i){
-		this.openSides = new boolean[4];
+	public PathCard(int i){
+		this.openSides = new LinkedList<Cardinal>();
 		if(i>=16){
 			isCulDeSac = true;
 			i=i-16;
@@ -17,35 +18,48 @@ public class PathCard extends Card {
 			isCulDeSac = false;
 		}
 		if(i>=8){
-			openSides[3] = true;
+			this.openSides.add(Cardinal.West);
 			i=i-8;
 		}
-		else{
-			openSides[3] = false;
-		}
 		if(i>=4){
-			openSides[2] = true;
+			this.openSides.add(Cardinal.South);
 			i=i-4;
 		}
-		else{
-			openSides[2] = false;
-		}
 		if(i>=2){
-			openSides[1] = false;
+			this.openSides.add(Cardinal.East);
 			i=i-2;
 		}
-		else{
-			openSides[1] = false;
-		}
 		if(i>=1){
-			openSides[0] = false;
+			this.openSides.add(Cardinal.North);
 		}
-		else{
-			openSides[0] = false;
-		}
-	};
+	}
+	
+	public PathCard(List<Cardinal> openSides, boolean isCulDeSac){
+		this.openSides = openSides;
+		this.isCulDeSac = isCulDeSac;
+	}
 	
 	public boolean isCulDeSac(){
 		return (this.isCulDeSac);
+	}
+	
+	public PathCard reversed(){
+		List<Cardinal> openSides = new LinkedList<Cardinal>();
+		for(Cardinal cardinal : this.openSides){
+			openSides.add(cardinal.opposite());
+		}
+		
+		try {
+			return ((PathCard) this.clone()).setOpenSides(openSides);
+		} catch (CloneNotSupportedException e) {
+			System.err.println("Impossible to clone pathcard. That is NOT supposed to happen, like ever");
+			e.printStackTrace();
+		}
+		return null; /* that never happen */
+	}
+
+	private PathCard setOpenSides(List<Cardinal> openSides) {
+		this.openSides = openSides;
+		return this;
 	}
 }
