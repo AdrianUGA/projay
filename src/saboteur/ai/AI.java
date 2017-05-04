@@ -15,7 +15,7 @@ public abstract class AI extends Player {
 	
 	private Map<Player,Float> trust;	
 	private Difficulty difficulty;
-
+	
 
 	public AI(Game game) {
 		super(game);
@@ -46,7 +46,10 @@ public abstract class AI extends Player {
 			break;
 		case "CollapseCard":
 			if(((PathCard) o.getCard()).isCulDeSac()){
-				
+				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 10);
+			}
+			else{
+				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) - 10);
 			}
 		}
 	}
@@ -56,6 +59,7 @@ public abstract class AI extends Player {
 	}
 	
 	public void updateTrust(OperationPathCard o){
+		
 		
 	}
 	
