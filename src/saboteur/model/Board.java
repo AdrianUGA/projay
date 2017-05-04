@@ -23,4 +23,11 @@ public class Board {
 		return Math.abs(p2.getcX() - p1.getcX()) + Math.abs(p2.getcY() - p1.getcY());
 	}
 	
+	public int numberOfNeighbors(Position position){
+		return (this.board[position.getcX()][position.getcY()] != null ? 1 : 0)
+				+(this.board[position.getcX()][position.getcY()] != null ? 1 : 0)
+				+(this.board[position.getcX()][position.getcY()] != null ? 1 : 0)
+				+(this.board[position.getcX()][position.getcY()] != null ? 1 : 0);
+	}
+	
 }
