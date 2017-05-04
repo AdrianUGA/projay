@@ -13,4 +13,8 @@ public abstract class Operation {
 	public Card getCard(){
 		return card;
 	}
+	
+	public Player getSourcePlayer(){
+		return this.sourcePlayer;
+	}
 }
