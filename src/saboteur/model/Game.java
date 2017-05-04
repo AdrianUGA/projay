@@ -1,6 +1,7 @@
 package saboteur.model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import saboteur.model.Card.*;
 
@@ -10,11 +11,12 @@ public class Game {
 	private ArrayList<GoldCard> goldCardStack;
 	private ArrayList<Operation> history;
 
-
 	private ArrayList<Card> stack;
 	private ArrayList<Card> trash;
 	private ArrayList<Player> playerList;
 	private Board board;
+	
+	private LinkedList<Player> observers;
 	
 	public void addPlayer(Player player){
 		this.playerList.add(player);

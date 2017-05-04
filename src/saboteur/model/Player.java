@@ -11,13 +11,18 @@ public abstract class Player {
 	private ArrayList<ActionCard> handicaps;
 	private ArrayList<GoldCard> gold;
 	private ArrayList<Card> hand;
+	private Game game;
+	
+	public Player (Game game){
+		this.game = game;
+	}
 	
 	public boolean isSaboteur(){
 		return this.saboteur;
 	}
 	
 	public void playCard(Card card){
-		//TODO use the card
+		
 	}
 	
 	public void playCard(){
