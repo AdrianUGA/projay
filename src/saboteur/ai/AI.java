@@ -16,7 +16,7 @@ public abstract class AI extends Player {
 	
 	private Map<Player,Float> trust;	
 	private Difficulty difficulty;
-	private Position goldCardPosition;
+	private Position estimatedGoldCardPosition;
 	
 
 	public AI(Game game) {
@@ -31,7 +31,7 @@ public abstract class AI extends Player {
 		else{
 			trust.put(this, (float) 1073741824);
 		}
-		goldCardPosition = new Position(0,0);
+		estimatedGoldCardPosition = new Position(0,0);
 		// TODO change goldCardPosition to middle of the 3 hidden cards
 	}
 	
@@ -52,6 +52,7 @@ public abstract class AI extends Player {
 		}
 	}
 	
+	// Collapse card
 	public void updateTrust(OperationActionCardToBoard o){
 		switch(o.getCard().getClass().getName()){
 		case "PlanCard":
@@ -70,6 +71,7 @@ public abstract class AI extends Player {
 		}
 	}
 	
+	// Sabotage & Rescue card
 	public void updateTrust(OperationActionCardToPlayer o){
 		switch(o.getCard().getClass().getName()){
 		case "SobotageCard":
@@ -100,15 +102,19 @@ public abstract class AI extends Player {
 		}
 	}
 	
+	// Path card
 	public void updateTrust(OperationPathCard o){
-		int taxiDistance = this.getGame().getBoard().getTaxiDistance(o.getP(), goldCardPosition);
-		if(((PathCard) o.getCard()).isCulDeSac()){ // The closer the gold card, heavier is the card
-			trust.put(o.getSourcePlayer(), (float) (trust.get(o.getSourcePlayer()) - 40/(Math.pow(2, taxiDistance)) - 2));
+		int taxiDistance = this.getGame().getBoard().getTaxiDistance(o.getP(), estimatedGoldCardPosition);
+		int neighborsAmount = this.getGame().getBoard().numberOfNeighbors(o.getP());
+		
+		if(((PathCard) o.getCard()).isCulDeSac()){ 
+			// The closer the gold card, the heavier is the card.
+			// The more, the merr... heavier.
+			trust.put(o.getSourcePlayer(), (float) (trust.get(o.getSourcePlayer()) - (40/(Math.pow(2, taxiDistance)))*(0.75+(neighborsAmount/4)) - 2));
 		}
 		else{
 			trust.put(o.getSourcePlayer(), (float) (trust.get(o.getSourcePlayer()) + 40/(Math.pow(2, taxiDistance)) + 3));
 		}
-		System.err.println("Operation PathCard undetected");
 	}
 	
 	public AI setDifficulty(Difficulty difficulty){
@@ -116,6 +122,8 @@ public abstract class AI extends Player {
 		return this;
 	}
 	
-	
+	public Difficulty getDifficulty(){
+		return difficulty;
+	}
 	
 }

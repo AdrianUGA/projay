@@ -24,10 +24,10 @@ public class Board {
 	}
 	
 	public int numberOfNeighbors(Position position){
-		return (this.board[position.getcX()][position.getcY()] != null ? 1 : 0)
-				+(this.board[position.getcX()][position.getcY()] != null ? 1 : 0)
-				+(this.board[position.getcX()][position.getcY()] != null ? 1 : 0)
-				+(this.board[position.getcX()][position.getcY()] != null ? 1 : 0);
+		return (this.board[position.getcX()+1][position.getcY()] != null ? 1 : 0)
+				+(this.board[position.getcX()-1][position.getcY()] != null ? 1 : 0)
+				+(this.board[position.getcX()][position.getcY()+1] != null ? 1 : 0)
+				+(this.board[position.getcX()][position.getcY()-1] != null ? 1 : 0);
 	}
 	
 }
