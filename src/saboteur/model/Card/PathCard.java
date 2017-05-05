@@ -8,8 +8,14 @@ public class PathCard extends Card {
 	
 	List<Cardinal> openSides;
 	final boolean isCulDeSac;
+	boolean isGoal;
+	boolean hasGold;
+	boolean isVisible;
 	
 	public PathCard(int i){
+		this.isVisible=true;
+		this.hasGold = false;
+		this.isGoal = false;
 		this.openSides = new LinkedList<Cardinal>();
 		if(i>=16){
 			isCulDeSac = true;
@@ -32,6 +38,30 @@ public class PathCard extends Card {
 		if(i>=1){
 			this.openSides.add(Cardinal.North);
 		}
+	}
+	
+	public void setToGoal(){
+		this.isGoal = true;
+	}
+	
+	public void setVisible(boolean visible){
+		this.isVisible = visible;
+	}
+	
+	public void setToGold(){
+		this.hasGold = true;
+	}
+	
+	public boolean isGoal(){
+		return this.isGoal;
+	}
+	
+	public boolean isVisible(){
+		return this.isVisible;
+	}
+	
+	public boolean hasGold(){
+		return this.hasGold;
 	}
 	
 	public PathCard(List<Cardinal> openSides, boolean isCulDeSac){
