@@ -13,4 +13,10 @@ public class OperationActionCardToPlayer extends Operation {
 	public Player getDestinationPlayer(){
 		return destinationPlayer;
 	}
+
+	@Override
+	public void exec(Game game) {
+		// TODO Auto-generated method stub
+		
+	}
 }

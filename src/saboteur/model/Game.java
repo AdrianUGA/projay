@@ -28,7 +28,7 @@ public class Game {
 	
 	public void playOperation(Operation op){
 		this.history.add(op);
-		//TODO
+		op.exec(this);
 	}
 	
 	public void save(){

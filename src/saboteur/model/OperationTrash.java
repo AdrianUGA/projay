@@ -8,4 +8,10 @@ public class OperationTrash extends Operation {
 		super(sourcePlayer, card);
 	}
 
+	@Override
+	public void exec(Game game) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

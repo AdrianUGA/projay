@@ -13,4 +13,10 @@ public class OperationPathCard extends Operation {
 		super(sourcePlayer, card);
 		this.p = position;
 	}
+
+	@Override
+	public void exec(Game game) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -61,7 +61,7 @@ public abstract class Player {
 		
 		this.game.playOperation(operation);
 	}
-	public void playCard( PathCard destinationCard){
+	public void playCard(PathCard destinationCard){
 		Operation operation = new OperationActionCardToBoard(this, this.selectedCard, destinationCard);
 		
 		this.game.playOperation(operation);

@@ -11,9 +11,7 @@ public abstract class Operation {
 		this.card = card;
 	}
 	
-	public void exec(){
-		
-	}
+	public abstract void exec(Game game);
 	
 	public Card getCard(){
 		return card;
