@@ -18,8 +18,6 @@ public class App extends Application {
 
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Saboteur");
-        primaryStage.setFullScreen(true);
-        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
         GameStateMachine gsm = new GameStateMachine();
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
