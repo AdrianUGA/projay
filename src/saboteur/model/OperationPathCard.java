@@ -1,6 +1,6 @@
 package saboteur.model;
 
-import saboteur.model.Card.Card;
+import saboteur.model.Card.*;
 
 public class OperationPathCard extends Operation {
 	private Position p;
@@ -16,7 +16,7 @@ public class OperationPathCard extends Operation {
 
 	@Override
 	public void exec(Game game) {
-		// TODO Auto-generated method stub
-		
+		this.getSourcePlayer().removeHandCard(this.getCard());
+		game.getBoard().addCard((PathCard)this.getCard(), p);
 	}
 }

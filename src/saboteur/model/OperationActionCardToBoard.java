@@ -13,13 +13,13 @@ public class OperationActionCardToBoard extends Operation {
 	@Override
 	public void exec(Game game) {
 		this.getSourcePlayer().removeHandCard(this.getCard());
+		
+		//Execution different if destinationCard is a goal or a classic pathCard
 		if (destinationCard.isGoal()){
-			//TODO
+			//TODO communication of card (goal)
 		} else {
-			Position positionCard = new Position(4,4);//TODO use a method to find position of a PathCard
-			
+			Position positionCard = game.getBoard().getPositionCard(destinationCard);		
 			game.getBoard().removeCard(positionCard);
 		}
-		//Execution different if destinationCard is a goal or a classic pathCard
 	}
 }

@@ -10,8 +10,7 @@ public class OperationTrash extends Operation {
 
 	@Override
 	public void exec(Game game) {
-		// TODO Auto-generated method stub
-		
+		this.getSourcePlayer().removeHandCard(this.getCard());
 	}
 
 }

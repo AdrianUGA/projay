@@ -1,6 +1,6 @@
 package saboteur.model;
 
-import saboteur.model.Card.Card;
+import saboteur.model.Card.*;
 
 public class OperationActionCardToPlayer extends Operation {
 	private Player destinationPlayer;
@@ -16,7 +16,7 @@ public class OperationActionCardToPlayer extends Operation {
 
 	@Override
 	public void exec(Game game) {
-		// TODO Auto-generated method stub
-		
+		this.getSourcePlayer().removeHandCard(this.getCard());
+		destinationPlayer.addHandicapCard((SabotageCard)this.getCard());
 	}
 }
