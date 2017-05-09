@@ -31,14 +31,18 @@ public abstract class AI extends Player {
 		else{
 			trust.put(this, (float) 1073741824);
 		}
+		/*
 		estimatedGoldCardPosition = new HashMap<Position,Boolean>();
 		estimatedGoldCardPosition.put(new Position(0,0), true);
 		estimatedGoldCardPosition.put(new Position(1,1), true);
 		estimatedGoldCardPosition.put(new Position(2,2), true);
+		*/
 		
-		// TODO change goldCardPosition to middle of the 3 hidden cards
+		// est-ce qu’on ne ferait pas un couple Position/float pour associer la carte à la probabilité que ce soit la bonne ? 1/3 au début puis 1 quand on a trouvé.
+		
+		this.estimatedGoldCardPosition = game.getBoard().getGoldCards();
 	}
-	
+
 	@Override
 	public void notify(Operation o){
 		switch(o.getClass().getName()){
@@ -52,10 +56,10 @@ public abstract class AI extends Player {
 			updateTrust((OperationPathCard) o);
 			break;
 		default:
-			System.err.println("Op�ration non reconnue");
+			System.err.println("Op�ration non reconnue");
 		}
 	}
-	
+
 	// Collapse card
 	public void updateTrust(OperationActionCardToBoard o){
 		switch(o.getCard().getClass().getName()){
