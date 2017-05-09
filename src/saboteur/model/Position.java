@@ -16,4 +16,16 @@ public class Position {
 	public int getcY() {
 		return cY;
 	}
+	
+	public Position greaterX(Position p){
+		if(p.cX > this.cX)
+			return p;
+		return this;
+	}
+	
+	public Position greaterY(Position p){
+		if(p.cY > this.cY)
+			return p;
+		return this;
+	}
 }

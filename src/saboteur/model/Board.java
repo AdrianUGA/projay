@@ -1,17 +1,24 @@
 package saboteur.model;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import saboteur.model.Card.*;
 
 public class Board {
 	private static final int GRID_SIZE = 89;
 	
 	private PathCard[][] board;
+	private List<Position> goldCards;
 	
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
+		this.goldCards = new LinkedList<Position>();
 	}
 	
 	public void addCard(PathCard card, Position position){
+		if(card.getClass().getName() == "GoldCard")
+			this.goldCards.add(position);
 		//TODO WARNING : Position x of a position correspond to second index of a table
 		this.board[position.getcX()][position.getcY()] = card;
 	}
@@ -49,5 +56,9 @@ public class Board {
 			}
 		}
 		return new Position(-1, -1);
+	}
+	
+	public List<Position> getGoldCards(){
+		return this.goldCards;
 	}
 }
