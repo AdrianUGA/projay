@@ -42,7 +42,10 @@ public abstract class AI extends Player {
 		
 		// est-ce qu’on ne ferait pas un couple Position/float pour associer la carte à la probabilité que ce soit la bonne ? 1/3 au début puis 1 quand on a trouvé.
 		
-		this.estimatedGoldCardPosition = game.getBoard().getGoldCards();
+		this.estimatedGoldCardPosition = new HashMap<Position, Float>();
+		for (Position position : game.getBoard().getGoldCards()){
+			this.estimatedGoldCardPosition.put(position, 1f/3f);
+		}
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package saboteur.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import saboteur.model.Card.*;
 
@@ -10,16 +10,16 @@ public class Board {
 	private static final Position START = new Position(30,30);
 	
 	private PathCard[][] board;
-	private Map<Position, Float> objectiveCards;
+	private List<Position> objectiveCards;
 	
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
-		this.objectiveCards = new HashMap<Position, Float>();
+		this.objectiveCards = new LinkedList<Position>();
 	}
 	
 	public void addCard(PathCard card, Position position){
 		if(card.getClass().getName() == "GoldCard")
-			this.objectiveCards.put(position, 1f/3);
+			this.objectiveCards.add(position);
 
 		this.board[position.getcY()][position.getcX()] = card;
 	}
@@ -56,7 +56,7 @@ public class Board {
 		return new Position(-1, -1);
 	}
 	
-	public Map<Position, Float> getGoldCards(){
+	public List<Position> getGoldCards(){
 		return this.objectiveCards;
 	}
 }
