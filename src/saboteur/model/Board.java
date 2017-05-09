@@ -64,4 +64,9 @@ public class Board {
 	public List<Position> getGoldCards(){
 		return this.objectiveCards;
 	}
+	
+	public boolean isPossible(PathCard card, Position position){
+		
+		return true;
+	}
 }

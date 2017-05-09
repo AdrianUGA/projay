@@ -24,4 +24,8 @@ public enum Cardinal {
 		System.err.println("Invalid Cardinal. That is NOT supposed to happen, like ever");
 		return null;
 	}
+	
+	public int getValue(){
+		return this.value;
+	}
 }
