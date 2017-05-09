@@ -12,6 +12,7 @@ import saboteur.model.OperationActionCardToPlayer;
 import saboteur.model.OperationPathCard;
 import saboteur.model.Player;
 import saboteur.model.Position;
+import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 
 public abstract class AI extends Player {
@@ -19,6 +20,7 @@ public abstract class AI extends Player {
 	private Map<Player,Float> isDwarf;	
 	private Difficulty difficulty;
 	private Map<Position,Float> estimatedGoldCardPosition;
+	private Map<Card, Float> probabilitiesToPlayEachCard;
 	
 
 	public AI(Game game) {
@@ -187,5 +189,15 @@ public abstract class AI extends Player {
 	@Override
 	public void viewGoalCard(PathCard card){
 		changeEstimatedGoldCardPosition(getGame().getBoard().getPositionCard(card), card.hasGold());
+	}
+	
+	public void resetProbabilitiesToPlayEachCard(){
+		for(Card c : probabilitiesToPlayEachCard.keySet()){
+			probabilitiesToPlayEachCard.put(c, 1f/probabilitiesToPlayEachCard.size());
+		}
+	}
+	
+	public boolean hasThisTypeOfCard(Card c){
+		return true;
 	}
 }
