@@ -1,7 +1,11 @@
 package saboteur.ai;
 
-import saboteur.model.Player;
+import saboteur.model.Game;
 
-public class SaboteurAI extends Player implements AI {
-
+public class SaboteurAI extends AI {
+	
+	public SaboteurAI(Game game){
+		super(game);
+	}
+	
 }
