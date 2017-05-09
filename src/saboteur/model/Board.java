@@ -42,10 +42,20 @@ public class Board {
 	}
 	
 	public int numberOfNeighbors(Position position){
-		return (this.board[position.getcY()+1][position.getcX()] != null ? 1 : 0)
-				+(this.board[position.getcY()-1][position.getcX()] != null ? 1 : 0)
-				+(this.board[position.getcY()][position.getcX()+1] != null ? 1 : 0)
-				+(this.board[position.getcY()][position.getcX()-1] != null ? 1 : 0);
+		return this.getNeighbors(position).size();
+	}
+	
+	public List<Position> getNeighbors(Position position){
+		LinkedList<Position> positions = new LinkedList<Position>();
+		if(this.board[position.getcY()+1][position.getcX()] != null)
+			positions.add(new Position(position.getcY()+1, position.getcX()));
+		if(this.board[position.getcY()-1][position.getcX()] != null)
+			positions.add(new Position(position.getcY()-1, position.getcX()));
+		if(this.board[position.getcY()][position.getcX()+1] != null)
+			positions.add(new Position(position.getcY(), position.getcX()+1));
+		if(this.board[position.getcY()][position.getcX()-1] != null)
+			positions.add(new Position(position.getcY(), position.getcX()-1));
+		return positions;
 	}
 	
 	public Position getPositionCard(PathCard card){
@@ -63,6 +73,12 @@ public class Board {
 	
 	public List<Position> getGoldCards(){
 		return this.objectiveCards;
+	}
+	
+	public List<Position> getPossiblePathCardAction(){
+		List<Position> positions = new LinkedList<Position>();
+		
+		return positions;
 	}
 	
 	public boolean isPossible(PathCard card, Position position){
