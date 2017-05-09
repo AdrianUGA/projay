@@ -8,6 +8,8 @@ import saboteur.model.Card.*;
 public class Board {
 	private static final int GRID_SIZE = 61;
 	private static final Position START = new Position(30,30);
+	private static final int DISTANCE_START_OBJECTIVE_X = 7;
+	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	
 	private PathCard[][] board;
 	private List<Position> objectiveCards;
@@ -15,6 +17,9 @@ public class Board {
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
 		this.objectiveCards = new LinkedList<Position>();
+		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
+		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
+		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
 	}
 	
 	public void addCard(PathCard card, Position position){
