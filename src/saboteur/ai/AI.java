@@ -3,10 +3,8 @@ import saboteur.model.Game;
 import saboteur.model.Operation;
 
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import saboteur.model.OperationActionCardToBoard;
@@ -164,6 +162,12 @@ public abstract class AI extends Player {
 			if(!p.equals(position)){
 				this.estimatedGoldCardPosition.put(p, probability);
 			}
+		}
+	}
+	
+	public void setAllEstimatedGoldCardPositionExept(List<Position> positions, Float probability){
+		for(Position position : positions){
+			this.setAllEstimatedGoldCardPositionExept(position, probability);
 		}
 	}
 	
