@@ -8,19 +8,20 @@ import java.util.Map;
 import saboteur.model.Card.*;
 
 public class Board {
-	private static final int GRID_SIZE = 89;
+	private static final int GRID_SIZE = 61;
+	private static final Position START = new Position(30,30);
 	
 	private PathCard[][] board;
-	private Map<Position, Float> goldCards;
+	private Map<Position, Float> objectiveCards;
 	
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
-		this.goldCards = new HashMap<Position, Float>();
+		this.objectiveCards = new HashMap<Position, Float>();
 	}
 	
 	public void addCard(PathCard card, Position position){
 		if(card.getClass().getName() == "GoldCard")
-			this.goldCards.put(position, 1f/3);
+			this.objectiveCards.put(position, 1f/3);
 
 		this.board[position.getcY()][position.getcX()] = card;
 	}
@@ -58,6 +59,6 @@ public class Board {
 	}
 	
 	public Map<Position, Float> getGoldCards(){
-		return this.goldCards;
+		return this.objectiveCards;
 	}
 }
