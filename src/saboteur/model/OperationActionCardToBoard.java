@@ -16,7 +16,7 @@ public class OperationActionCardToBoard extends Operation {
 		
 		//Execution different if destinationCard is a goal or a classic pathCard
 		if (destinationCard.isGoal()){
-			//TODO communication of card (goal)
+			this.getSourcePlayer().viewGoalCard();
 		} else {
 			Position positionCard = game.getBoard().getPositionCard(destinationCard);		
 			game.getBoard().removeCard(positionCard);

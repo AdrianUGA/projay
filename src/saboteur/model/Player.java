@@ -147,6 +147,11 @@ public abstract class Player {
 		return true;
 	}
 
+	//Human : useless
+	//IA : redefinition
+	public void viewGoalCard(){
+	}
+	
 	public String getNom() {
 		return nom;
 	}
