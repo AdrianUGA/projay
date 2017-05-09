@@ -21,13 +21,12 @@ public class Board {
 	public void addCard(PathCard card, Position position){
 		if(card.getClass().getName() == "GoldCard")
 			this.goldCards.put(position, 1f/3);
-		//TODO WARNING : Position x of a position correspond to second index of a table
-		this.board[position.getcX()][position.getcY()] = card;
+
+		this.board[position.getcY()][position.getcX()] = card;
 	}
 	
 	public void removeCard(Position position){
-		//TODO WARNING : Position x of a position correspond to second index of a table
-		this.board[position.getcX()][position.getcY()] = null;
+		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
 	public PathCard getCard(Position position){
@@ -35,16 +34,14 @@ public class Board {
 	}
 	
 	public int getTaxiDistance(Position p1, Position p2) {
-		//TODO WARNING : Position x of a position correspond to second index of a table
-		return Math.abs(p2.getcX() - p1.getcX()) + Math.abs(p2.getcY() - p1.getcY());
+		return Math.abs(p2.getcY() - p1.getcY()) + Math.abs(p2.getcX() - p1.getcX());
 	}
 	
 	public int numberOfNeighbors(Position position){
-		//TODO WARNING : Position x of a position correspond to second index of a table
-		return (this.board[position.getcX()+1][position.getcY()] != null ? 1 : 0)
-				+(this.board[position.getcX()-1][position.getcY()] != null ? 1 : 0)
-				+(this.board[position.getcX()][position.getcY()+1] != null ? 1 : 0)
-				+(this.board[position.getcX()][position.getcY()-1] != null ? 1 : 0);
+		return (this.board[position.getcY()+1][position.getcX()] != null ? 1 : 0)
+				+(this.board[position.getcY()-1][position.getcX()] != null ? 1 : 0)
+				+(this.board[position.getcY()][position.getcX()+1] != null ? 1 : 0)
+				+(this.board[position.getcY()][position.getcX()-1] != null ? 1 : 0);
 	}
 	
 	public Position getPositionCard(PathCard card){
