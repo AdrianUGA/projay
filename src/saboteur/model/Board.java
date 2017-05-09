@@ -6,26 +6,31 @@ import java.util.List;
 import saboteur.model.Card.*;
 
 public class Board {
-	private static final int GRID_SIZE = 89;
+	private static final int GRID_SIZE = 61;
+	private static final Position START = new Position(30,30);
+	private static final int DISTANCE_START_OBJECTIVE_X = 7;
+	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	
 	private PathCard[][] board;
-	private List<Position> goldCards;
+	private List<Position> objectiveCards;
 	
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
-		this.goldCards = new LinkedList<Position>();
+		this.objectiveCards = new LinkedList<Position>();
+		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
+		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
+		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
 	}
 	
 	public void addCard(PathCard card, Position position){
 		if(card.getClass().getName() == "GoldCard")
-			this.goldCards.add(position);
-		//TODO WARNING : Position x of a position correspond to second index of a table
-		this.board[position.getcX()][position.getcY()] = card;
+			this.objectiveCards.add(position);
+
+		this.board[position.getcY()][position.getcX()] = card;
 	}
 	
 	public void removeCard(Position position){
-		//TODO WARNING : Position x of a position correspond to second index of a table
-		this.board[position.getcX()][position.getcY()] = null;
+		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
 	public PathCard getCard(Position position){
@@ -33,16 +38,24 @@ public class Board {
 	}
 	
 	public int getTaxiDistance(Position p1, Position p2) {
-		//TODO WARNING : Position x of a position correspond to second index of a table
-		return Math.abs(p2.getcX() - p1.getcX()) + Math.abs(p2.getcY() - p1.getcY());
+		return Math.abs(p2.getcY() - p1.getcY()) + Math.abs(p2.getcX() - p1.getcX());
 	}
 	
 	public int numberOfNeighbors(Position position){
-		//TODO WARNING : Position x of a position correspond to second index of a table
-		return (this.board[position.getcX()+1][position.getcY()] != null ? 1 : 0)
-				+(this.board[position.getcX()-1][position.getcY()] != null ? 1 : 0)
-				+(this.board[position.getcX()][position.getcY()+1] != null ? 1 : 0)
-				+(this.board[position.getcX()][position.getcY()-1] != null ? 1 : 0);
+		return this.getNeighbors(position).size();
+	}
+	
+	public List<Position> getNeighbors(Position position){
+		LinkedList<Position> positions = new LinkedList<Position>();
+		if(this.board[position.getcY()+1][position.getcX()] != null)
+			positions.add(new Position(position.getcY()+1, position.getcX()));
+		if(this.board[position.getcY()-1][position.getcX()] != null)
+			positions.add(new Position(position.getcY()-1, position.getcX()));
+		if(this.board[position.getcY()][position.getcX()+1] != null)
+			positions.add(new Position(position.getcY(), position.getcX()+1));
+		if(this.board[position.getcY()][position.getcX()-1] != null)
+			positions.add(new Position(position.getcY(), position.getcX()-1));
+		return positions;
 	}
 	
 	public Position getPositionCard(PathCard card){
@@ -59,6 +72,34 @@ public class Board {
 	}
 	
 	public List<Position> getGoldCards(){
-		return this.goldCards;
+		return this.objectiveCards;
+	}
+	
+	public List<Position> getPossiblePathCardAction(){
+		List<Position> positions = new LinkedList<Position>();
+		
+		return positions;
+	}
+	
+	public boolean isPossible(PathCard card, Position position){
+		PathCard neighbor;
+    	
+		//Test North
+		neighbor = this.getCard(new Position(position.getcX(), position.getcY()-1));
+		if (neighbor != null && (card.isOpen(Cardinal.North)^neighbor.isOpen(Cardinal.South))) return false;
+		
+		//Test East
+		neighbor = this.getCard(new Position(position.getcX()+1, position.getcY()));
+		if (neighbor != null && (card.isOpen(Cardinal.East)^neighbor.isOpen(Cardinal.West))) return false;
+		
+		//Test South
+		neighbor = this.getCard(new Position(position.getcX(), position.getcY()+1));
+		if (neighbor != null && (card.isOpen(Cardinal.South)^neighbor.isOpen(Cardinal.North))) return false;
+		
+		//Test West
+		neighbor = this.getCard(new Position(position.getcX()-1, position.getcY()));
+		if (neighbor != null && (card.isOpen(Cardinal.West)^neighbor.isOpen(Cardinal.East))) return false;
+		
+		return true;
 	}
 }

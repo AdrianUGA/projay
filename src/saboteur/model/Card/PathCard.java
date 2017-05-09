@@ -92,4 +92,11 @@ public class PathCard extends Card {
 		this.openSides = openSides;
 		return this;
 	}
+	
+	public boolean isOpen(Cardinal cardinal){
+		for (Cardinal current : this.openSides){
+			if (current.getValue() == cardinal.getValue()) return true;
+		}
+		return false;
+	}
 }
