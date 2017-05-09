@@ -117,7 +117,7 @@ public abstract class Player {
 	}
 	
 	public boolean canHandicap(ActionCardToPlayer card){
-		System.out.println("On ne doit pas passer la ! (N1)");
+		System.err.println("Invalid Card. That is NOT supposed to happen, like ever");
 		return false;
 	}
 	public boolean canHandicap(DoubleRescueCard card){

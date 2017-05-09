@@ -66,6 +66,23 @@ public class Board {
 	}
 	
 	public boolean isPossible(PathCard card, Position position){
+		PathCard neighbor;
+    	
+		//Test North
+		neighbor = this.getCard(new Position(position.getcX(), position.getcY()-1));
+		if (neighbor != null && (card.isOpen(Cardinal.North)^neighbor.isOpen(Cardinal.South))) return false;
+		
+		//Test East
+		neighbor = this.getCard(new Position(position.getcX()+1, position.getcY()));
+		if (neighbor != null && (card.isOpen(Cardinal.East)^neighbor.isOpen(Cardinal.West))) return false;
+		
+		//Test South
+		neighbor = this.getCard(new Position(position.getcX(), position.getcY()+1));
+		if (neighbor != null && (card.isOpen(Cardinal.South)^neighbor.isOpen(Cardinal.North))) return false;
+		
+		//Test West
+		neighbor = this.getCard(new Position(position.getcX()-1, position.getcY()));
+		if (neighbor != null && (card.isOpen(Cardinal.West)^neighbor.isOpen(Cardinal.East))) return false;
 		
 		return true;
 	}
