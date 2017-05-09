@@ -8,6 +8,7 @@ import saboteur.model.Card.*;
 public class Game {
 	private Player currentPlayer;
 	private int round;
+	private int turn;
 	private ArrayList<GoldCard> goldCardStack;
 	private ArrayList<Operation> history;
 
@@ -65,5 +66,9 @@ public class Game {
 		for(Player player: this.observers){
 			player.notify(operation);
 		}
+	}
+	
+	public int getTurn(){
+		return turn;
 	}
 }
