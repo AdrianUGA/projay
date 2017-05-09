@@ -16,7 +16,7 @@ public abstract class AI extends Player {
 	
 	private Map<Player,Float> trust;	
 	private Difficulty difficulty;
-	private Position estimatedGoldCardPosition;
+	private Map<Position,Boolean> estimatedGoldCardPosition;
 	
 
 	public AI(Game game) {
@@ -31,7 +31,11 @@ public abstract class AI extends Player {
 		else{
 			trust.put(this, (float) 1073741824);
 		}
-		estimatedGoldCardPosition = new Position(0,0);
+		estimatedGoldCardPosition = new HashMap<Position,Boolean>();
+		estimatedGoldCardPosition.put(new Position(0,0), true);
+		estimatedGoldCardPosition.put(new Position(1,1), true);
+		estimatedGoldCardPosition.put(new Position(2,2), true);
+		
 		// TODO change goldCardPosition to middle of the 3 hidden cards
 	}
 	
@@ -104,12 +108,12 @@ public abstract class AI extends Player {
 	
 	// Path card
 	public void updateTrust(OperationPathCard o){
-		int taxiDistance = this.getGame().getBoard().getTaxiDistance(o.getP(), estimatedGoldCardPosition);
+		int taxiDistance = this.getGame().getBoard().getTaxiDistance(o.getP(), getEstimatedGoldCardPosition());
 		int neighborsAmount = this.getGame().getBoard().numberOfNeighbors(o.getP());
 		
 		if(((PathCard) o.getCard()).isCulDeSac()){ 
 			// The closer the gold card, the heavier is the card.
-			// The more, the merr... heavier.
+			// The more neighbors, the merr... heavier is the card.
 			trust.put(o.getSourcePlayer(), (float) (trust.get(o.getSourcePlayer()) - (40/(Math.pow(2, taxiDistance)))*(0.75+(neighborsAmount/4)) - 2));
 		}
 		else{
@@ -126,4 +130,41 @@ public abstract class AI extends Player {
 		return difficulty;
 	}
 	
+	public Position getEstimatedGoldCardPosition(){
+		//TODO changer les positions par celles des cartes "objectif"
+		if(estimatedGoldCardPosition.get(new Position(0,0))){
+			return new Position(0,0);
+		}
+		if(estimatedGoldCardPosition.get(new Position(1,1))){
+			return new Position(1,1);
+		}
+		return new Position(2,2);
+	}
+	
+	public void changeEstimatedGoldCardPosition(Position p, Boolean b){
+		//TODO changer les positions par celles des cartes "objectif"
+		if(!b){
+			this.estimatedGoldCardPosition.put(p, b);
+		}else{
+			this.estimatedGoldCardPosition.put(new Position(0,0), false);
+			this.estimatedGoldCardPosition.put(new Position(1,1), false);
+			this.estimatedGoldCardPosition.put(new Position(2,2), false);
+			this.estimatedGoldCardPosition.put(p, b);
+		}
+	}
+	
+	public boolean knowsTheGoldCardPosition(){
+		//TODO changer les positions par celles des cartes "objectif"
+		// If at least 2 positions could contains the gold card, the AI isn't sure of its real position.
+		if((estimatedGoldCardPosition.get(new Position(0,0)) && estimatedGoldCardPosition.get(new Position(1,1)))
+			|| (estimatedGoldCardPosition.get(new Position(0,0)) && estimatedGoldCardPosition.get(new Position(2,2)))
+			|| (estimatedGoldCardPosition.get(new Position(1,1)) && estimatedGoldCardPosition.get(new Position(2,2))))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public void viewGoalCard(PathCard card){
+		changeEstimatedGoldCardPosition(getGame().getBoard().getPositionCard(card), card.hasGold());
+	}
 }

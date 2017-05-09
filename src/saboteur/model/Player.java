@@ -149,7 +149,7 @@ public abstract class Player {
 
 	//Human : useless
 	//IA : redefinition
-	public void viewGoalCard(){
+	public void viewGoalCard(PathCard card){
 	}
 	
 	public String getNom() {
