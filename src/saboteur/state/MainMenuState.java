@@ -1,12 +1,8 @@
 package saboteur.state;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import saboteur.App;
 import saboteur.GameStateMachine;
+import saboteur.controller.MainMenuController;
 import saboteur.model.Game;
 
 import java.io.IOException;
@@ -35,17 +31,7 @@ public class MainMenuState implements State {
 
     @Override
     public void onEnter(Object param) {
-        try{
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(App.class.getResource("/saboteur/view/mainMenu.fxml"));
-            Pane rootLayout = (Pane) loader.load();
-            Scene scene = new Scene(rootLayout);
-            primaryStage.setScene(scene);
-            primaryStage.setFullScreen(true);
-            primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        MainMenuController controller = new MainMenuController(this.primaryStage);
     }
 
     @Override

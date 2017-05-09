@@ -30,6 +30,7 @@ public class App extends Application {
         gsm.add("saveGame", new SaveGameState(gsm, game, primaryStage));
         gsm.add("options", new OptionsState(gsm, game, primaryStage));
         gsm.add("score", new ScoreState(gsm, game, primaryStage));
+        gsm.add("help", new HelpState(gsm, game, primaryStage));
 
         gsm.change("mainMenu");
 
