@@ -11,16 +11,16 @@ public class Board {
 	private static final int GRID_SIZE = 89;
 	
 	private PathCard[][] board;
-	private Map<Position, Boolean> goldCards;
+	private Map<Position, Float> goldCards;
 	
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
-		this.goldCards = new HashMap<Position, Boolean>();
+		this.goldCards = new HashMap<Position, Float>();
 	}
 	
 	public void addCard(PathCard card, Position position){
 		if(card.getClass().getName() == "GoldCard")
-			this.goldCards.put(position, true);
+			this.goldCards.put(position, 1f/3);
 		//TODO WARNING : Position x of a position correspond to second index of a table
 		this.board[position.getcX()][position.getcY()] = card;
 	}
@@ -60,7 +60,7 @@ public class Board {
 		return new Position(-1, -1);
 	}
 	
-	public Map<Position, Boolean> getGoldCards(){
+	public Map<Position, Float> getGoldCards(){
 		return this.goldCards;
 	}
 }

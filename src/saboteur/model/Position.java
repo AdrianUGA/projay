@@ -28,4 +28,10 @@ public class Position {
 			return p;
 		return this;
 	}
+	
+	@Override
+	public boolean equals(Object o){
+		Position p = (Position) o;
+		return this.cX == p.cX && this.cY == p.cY;
+	}
 }
