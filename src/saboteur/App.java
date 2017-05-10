@@ -14,8 +14,6 @@ public class App extends Application {
 
     public void run() {
         game = new Game();
-        Loader loader = new Loader();
-        loader.loadCard();
 //        launch();
     }
 
