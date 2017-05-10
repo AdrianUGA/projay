@@ -34,6 +34,8 @@ public class Board {
 	}
 	
 	public PathCard getCard(Position position){
+		if (!position.isValid())
+			return null;
 		return this.board[position.getcY()][position.getcX()];
 	}
 	
@@ -48,22 +50,20 @@ public class Board {
 	public List<Position> getNeighbors(Position position){
 		LinkedList<Position> positions = new LinkedList<Position>();
 		for(Position p : this.getAllNeighbors(position)){
-			if (p != null)
+			if (this.getCard(p) != null)
 				positions.add(p);
 		}
 		return positions;
 	}
 	
+	/* Returns all valid positions next to position. */
 	public List<Position> getAllNeighbors(Position position){
 		LinkedList<Position> positions = new LinkedList<Position>();
-		if(this.board[position.getcY()+1][position.getcX()] != null)
-			positions.add(new Position(position.getcY()+1, position.getcX()));
-		if(this.board[position.getcY()-1][position.getcX()] != null)
-			positions.add(new Position(position.getcY()-1, position.getcX()));
-		if(this.board[position.getcY()][position.getcX()+1] != null)
-			positions.add(new Position(position.getcY(), position.getcX()+1));
-		if(this.board[position.getcY()][position.getcX()-1] != null)
-			positions.add(new Position(position.getcY(), position.getcX()-1));
+		for(Cardinal cardinal : Cardinal.values()){
+			Position p = position.get(position, cardinal);
+			if (p != null)
+				positions.add(p);
+		}
 		return positions;
 	}
 	
