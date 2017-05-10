@@ -20,4 +20,5 @@ public abstract class Operation {
 	public Player getSourcePlayer(){
 		return this.sourcePlayer;
 	}
+	
 }
