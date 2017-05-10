@@ -23,7 +23,7 @@ public class Board {
 	}
 	
 	public void addCard(PathCard card, Position position){
-		if(card.getClass().getName() == "GoldCard")
+		if(card.getClass().getName() == "PathCard" && card.isGoal())
 			this.objectiveCards.add(position);
 
 		this.board[position.getcY()][position.getcX()] = card;
@@ -46,6 +46,15 @@ public class Board {
 	}
 	
 	public List<Position> getNeighbors(Position position){
+		LinkedList<Position> positions = new LinkedList<Position>();
+		for(Position p : this.getAllNeighbors(position)){
+			if (p != null)
+				positions.add(p);
+		}
+		return positions;
+	}
+	
+	public List<Position> getAllNeighbors(Position position){
 		LinkedList<Position> positions = new LinkedList<Position>();
 		if(this.board[position.getcY()+1][position.getcX()] != null)
 			positions.add(new Position(position.getcY()+1, position.getcX()));
