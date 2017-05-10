@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import saboteur.model.Card.*;
 
 public abstract class Player {
-	private boolean saboteur;
-	private Card selectedCard;
-	private String nom;
-	private ArrayList<SabotageCard> handicaps;
-	private ArrayList<GoldCard> gold;
-	private ArrayList<Card> hand;
-	private Game game;
+	protected boolean saboteur;
+	protected Card selectedCard;
+	protected String nom;
+	protected ArrayList<SabotageCard> handicaps;
+	protected ArrayList<GoldCard> gold;
+	protected ArrayList<Card> hand;
+	protected Game game;
 	
 	public Card getSelectedCard() {
 		return selectedCard;

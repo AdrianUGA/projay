@@ -38,18 +38,29 @@ public class DwarfAI extends AI {
 			case "PlanCard":
 				if(!knowsTheGoldCardPosition()){
 					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(getEstimatedGoldCardPosition()));
-					operationsWeight.put(o, (1 + positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - getGame().getTurn()))
-											* Coefficients.DWARF_PLAN_EASY);
+					operationsWeight.put(o, (float) ((1 + positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - getGame().getTurn()))
+											* Coefficients.DWARF_PLAN_EASY));
 				}
 				else{
-					operationsWeight.put(o, 0);
+					operationsWeight.put(o, -1f);
 				}
 				break;
 			case "RescueCard":
 				if(canRescue((RescueCard)o.getCard())){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
+					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_RESCUE_EASY);
+				}else{
+					operationsWeight.put(o, 0f);
 				}
-				
+				break;
+			case "DoubleRescueCard":
+				if(canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard())){
+					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
+					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_DOUBLERESCUE_EASY);
+				}else{
+					operationsWeight.put(o, 0f);
+				}
+				break;
 			}
 		}
 		
