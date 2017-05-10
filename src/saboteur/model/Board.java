@@ -1,6 +1,6 @@
 package saboteur.model;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +18,8 @@ public class Board {
 	private PathCard[][] board;
 	private List<Position> objectiveCards;
 	
-	private Map<Position, Position> childrensDad;
-	private List<Position> pathCardsPosition;
+	private Map<Position, Position> childrenDad;
+	private Map<Position, PathCard> pathCardsPosition;
 	
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
@@ -29,26 +29,31 @@ public class Board {
 			}
 		}
 		this.objectiveCards = new LinkedList<Position>();
-		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
-		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
-		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
-		childrensDad.put(START, START);
-		pathCardsPosition.add(START);
+		
+		// TODO add the wining card
+		PathCard pathCard = (new PathCard(15)).setToGoal();
+		this.addCard(pathCard, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
+		this.addCard(pathCard, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
+		this.addCard(pathCard, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
+		
+		this.addCard(pathCard, START);
+		
+		this.pathCardsPosition = new HashMap<Position, PathCard>();
 	}
 	
 	public void addCard(PathCard card, Position position){
 		if(card.isGoal())
 			this.objectiveCards.add(position);
-		this.pathCardsPosition.add(position);
-		this.childrensDad.put(position, find(position));
+		this.pathCardsPosition.put(position, card);
+		this.childrenDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
 	}
 
 	public void removeCard(Position position){
 		this.pathCardsPosition.remove(position);
 		//
-		childrensDad.clear();
-		for(Position current : pathCardsPosition){
+		childrenDad.clear();
+		for(Position current : pathCardsPosition.keySet()){
 			for(Position neighbor : getAllNeighbors(current)){
 				if(!areConnected(current,neighbor)){
 					connect(current,neighbor);
@@ -61,23 +66,23 @@ public class Board {
 	
 	private Position find(Position position) {
 		Position currentPos = position;
-		while(childrensDad.get(currentPos) != currentPos){
-			currentPos = childrensDad.get(currentPos);
+		while(childrenDad.get(currentPos) != currentPos){
+			currentPos = childrenDad.get(currentPos);
 		}
 		return currentPos;
 	}
 	
 	private boolean areConnected(Position pos1, Position pos2){
-		return find(childrensDad.get(pos1)).equals(find(childrensDad.get(pos2)));
+		return find(childrenDad.get(pos1)).equals(find(childrenDad.get(pos2)));
 	}
 	
 	private void connect(Position pos1, Position pos2){
 		if(!areConnected(pos1, pos2)){
 			if(indice(pos1)<indice(pos2)){
-				childrensDad.put(find(pos1), find(pos2));
+				childrenDad.put(find(pos1), find(pos2));
 			}
 			else{
-				childrensDad.put(find(pos2), find(pos1));
+				childrenDad.put(find(pos2), find(pos1));
 			}
 		}
 	}
@@ -109,7 +114,7 @@ public class Board {
 	public List<Position> getAllNeighbors(Position position){
 		LinkedList<Position> positions = new LinkedList<Position>();
 		for(Cardinal cardinal : Cardinal.values()){
-			Position p = position.get(position, cardinal);
+			Position p = position.getNeighbor(position, cardinal);
 			if (p != null)
 				positions.add(p);
 		}
@@ -136,7 +141,7 @@ public class Board {
 	public List<Position> getPossiblePathCardPlace(){
 		List<Position> possiblePlaces = new LinkedList<Position>();
 		
-		for(PathCard pathCard : this.getAllCards()){
+		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPositionCard(pathCard))){
 				if(this.isPossible(pathCard, neighbor)){
 					possiblePlaces.add(neighbor);
@@ -147,19 +152,6 @@ public class Board {
 		return possiblePlaces;
 	}
 	
-	
-	
-	private List<PathCard> getAllCards() {
-		List<PathCard> cards = new LinkedList<PathCard>();
-		for (int i=0; i<GRID_SIZE; i++){
-			for (int j=0; j<GRID_SIZE; j++){
-				if(this.board[i][j] != null){
-					cards.add(this.board[i][j]);
-				}
-			}
-		}
-		return cards;
-	}
 
 	public boolean isPossible(PathCard card, Position position){
 		PathCard neighbor;
