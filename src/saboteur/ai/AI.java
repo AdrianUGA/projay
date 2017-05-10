@@ -22,7 +22,7 @@ public abstract class AI extends Player {
 	protected Map<Player,Float> isDwarf;	
 	protected Difficulty difficulty;
 	protected Map<Position,Float> estimatedGoldCardPosition;
-	protected Map<Operation, Integer> operationsWeight;
+	protected Map<Operation, Float> operationsWeight;
 	
 
 	public AI(Game game) {
@@ -190,18 +190,17 @@ public abstract class AI extends Player {
 		for(Card c : getHand()){
 			switch(c.getClassName()){
 			case "PathCard" :
-				operationsWeight.put(new OperationPathCard(this, c, null), 0);
+				operationsWeight.put(new OperationPathCard(this, c, null), 0f);
 				break;
 			case "CollapseCard" :
 			case "PlanCard" :
-				operationsWeight.put(new OperationActionCardToBoard(this, c, null), 0);
+				operationsWeight.put(new OperationActionCardToBoard(this, c, null), 0f);
 				break;
 			case "RescueCard":
 			case "DoubleRescueCard":
 			case "SabotageCard":
-				operationsWeight.put(new OperationActionCardToPlayer(this, c, null), 0);
+				operationsWeight.put(new OperationActionCardToPlayer(this, c, null), 0f);
 			}
-			//operationsWeight.put(new Operation(c,null), 0);
 		}
 	}
 	
