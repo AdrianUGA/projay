@@ -116,11 +116,11 @@ public abstract class Player {
 		this.gold.remove(card);
 	}
 	
-	public boolean canHandicap(ActionCardToPlayer card){
+	public boolean canRescue(ActionCardToPlayer card){
 		System.err.println("Invalid Card. That is NOT supposed to happen, like ever");
 		return false;
 	}
-	public boolean canHandicap(DoubleRescueCard card){
+	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card){
 		Tool currentType;
 		for (SabotageCard sabotageCard : this.handicaps){
 			currentType = sabotageCard.getSabotageType();
@@ -164,4 +164,5 @@ public abstract class Player {
 	public void notify(Operation o){
 		
 	}
+
 }

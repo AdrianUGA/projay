@@ -10,4 +10,5 @@ public class RescueCard extends ActionCardToPlayer {
 	public Tool getRescueType(){
 		return this.rescueType;
 	}
+	
 }

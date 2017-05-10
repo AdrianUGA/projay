@@ -3,8 +3,12 @@ package saboteur.ai;
 import saboteur.model.Game;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
+import saboteur.model.OperationActionCardToPlayer;
+import saboteur.model.Player;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
+import saboteur.model.Card.RescueCard;
+import saboteur.model.Card.DoubleRescueCard;
 
 public class DwarfAI extends AI {
 	
@@ -34,39 +38,20 @@ public class DwarfAI extends AI {
 			case "PlanCard":
 				if(!knowsTheGoldCardPosition()){
 					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(getEstimatedGoldCardPosition()));
-					operationsWeight.put(o, (1 + positiveOrZero(3 - getGame().getTurn())) * Coefficients.DWARF_PLAN_EASY);
+					operationsWeight.put(o, (1 + positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - getGame().getTurn()))
+											* Coefficients.DWARF_PLAN_EASY);
 				}
 				else{
 					operationsWeight.put(o, 0);
 				}
 				break;
 			case "RescueCard":
+				if(canRescue((RescueCard)o.getCard())){
+					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
+				}
 				
 			}
 		}
-		
-		/*if(knowsTheGoldCardPosition()){
-			// Proba of playing plan = 0
-		}
-		else{ 
-			if(getGame().getTurn()<2){
-			// Proba of playing plan +++
-			}
-			else if(getGame().getTurn()<4){
-				// Proba of playing plan ++
-			}
-			else if(getGame().getTurn()<6){
-				// Proba of playing plan +
-			}
-		}
-		if(true){ // if can play any path card which isn't cul-de-sac
-			// Proba of playing pathCard ++
-		}
-		// Proba of destroying random card + (turn > 3)
-		// Proba of put a bit "randomly" a sabotage card + (4 >= turn >= 2)
-		//				a bit "precisely" a sabotage card + (7 >= turn >= 5)
-		//				very "precisely" a sabotage card + (turn > 8)
-		*/
 		
 	}
 	

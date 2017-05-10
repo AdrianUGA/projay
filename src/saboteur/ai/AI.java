@@ -17,6 +17,8 @@ import saboteur.model.Card.PathCard;
 
 public abstract class AI extends Player {
 	
+	protected final int AVERAGE_TRUST = 50;
+	
 	protected Map<Player,Float> isDwarf;	
 	protected Difficulty difficulty;
 	protected Map<Position,Float> estimatedGoldCardPosition;
@@ -27,7 +29,7 @@ public abstract class AI extends Player {
 		super(game);
 		isDwarf = new HashMap<Player,Float>();
 		for(Player p : game.getPlayerList()){
-			isDwarf.put(p, (float) 50);
+			isDwarf.put(p, (float) AVERAGE_TRUST);
 		}
 		if(isSaboteur()){
 			isDwarf.put(this, (float) -1073741824);
@@ -213,5 +215,29 @@ public abstract class AI extends Player {
 			return i;
 		}
 		return 0;
+	}
+	
+	public Player mostLikelyADwarf(){
+		float maxTrust=-1073741824;
+		Player mostTrustfulPlayer = null;
+		for(Player p : isDwarf.keySet()){
+			if(isDwarf.get(p) > maxTrust){
+				maxTrust = isDwarf.get(p);
+				mostTrustfulPlayer = p;
+			}
+		}
+		return mostTrustfulPlayer;
+	}
+	
+	public Player mostLikelyASaboteur(){
+		float leastTrust=1073741824;
+		Player leastTrustfulPlayer = null;
+		for(Player p : isDwarf.keySet()){
+			if(isDwarf.get(p) < leastTrust){
+				leastTrust = isDwarf.get(p);
+				leastTrustfulPlayer = p;
+			}
+		}
+		return leastTrustfulPlayer;
 	}
 }
