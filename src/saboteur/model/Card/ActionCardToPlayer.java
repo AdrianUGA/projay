@@ -1,7 +1,7 @@
 package saboteur.model.Card;
 
-public class ActionCardToPlayer extends ActionCard {
-	public final static int KART = 0;
-	public final static int PICKAXE = 0;
-	public final static int LAMP = 0;
+public abstract class ActionCardToPlayer extends ActionCard {
+	public final static int CART = 0;
+	public final static int PICKAXE = 1;
+	public final static int LANTERN = 2;
 }

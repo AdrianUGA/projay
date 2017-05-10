@@ -1,5 +1,5 @@
 package saboteur.model.Card;
 
-public class ActionCardToBoard extends ActionCard {
-
+public abstract class ActionCardToBoard extends ActionCard {
+	public abstract boolean isCollapse();
 }

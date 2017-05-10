@@ -9,6 +9,7 @@ public class PathCard extends Card {
 	List<Cardinal> openSides;
 	final boolean isCulDeSac;
 	boolean isGoal;
+	boolean isStart;
 	boolean hasGold;
 	boolean isVisible;
 	
@@ -16,6 +17,7 @@ public class PathCard extends Card {
 		this.isVisible=true;
 		this.hasGold = false;
 		this.isGoal = false;
+		this.isStart = false;
 		this.openSides = new LinkedList<Cardinal>();
 		if(i>=16){
 			isCulDeSac = true;
@@ -40,6 +42,14 @@ public class PathCard extends Card {
 		}
 	}
 	
+	public boolean isStart() {
+		return isStart;
+	}
+
+	public void setStart(boolean isStart) {
+		this.isStart = isStart;
+	}
+
 	public void setToGoal(){
 		this.isGoal = true;
 	}
