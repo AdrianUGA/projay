@@ -1,5 +1,5 @@
 package saboteur.model.Card;
 
-public class ActionCard extends Card {
+public abstract class ActionCard extends Card {
 
 }
