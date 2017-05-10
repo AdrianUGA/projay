@@ -1,5 +1,6 @@
 package saboteur.model;
 
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -115,7 +116,7 @@ public class Board {
 		for (int i=0; i<GRID_SIZE; i++){
 			for (int j=0; j<GRID_SIZE; j++){
 				current = board[i][j];
-				if (current != null && current == card){
+				if (current != null && current == card){ //TODO ne serait-ce pas mieux avec .equals ?
 					return new Position(j, i);
 				}
 			}
@@ -127,12 +128,34 @@ public class Board {
 		return this.objectiveCards;
 	}
 	
-	public List<Position> getPossiblePathCardAction(){
-		List<Position> positions = new LinkedList<Position>();
+	public List<Position> getPossiblePathCardPlace(){
+		List<Position> possiblePlaces = new LinkedList<Position>();
 		
-		return positions;
+		for(PathCard pathCard : this.getAllCards()){
+			for(Position neighbor : this.getAllNeighbors(this.getPositionCard(pathCard))){
+				if(this.isPossible(pathCard, neighbor)){
+					possiblePlaces.add(neighbor);
+				}
+			}
+		}
+		
+		return possiblePlaces;
 	}
 	
+	
+	
+	private List<PathCard> getAllCards() {
+		List<PathCard> cards = new LinkedList<PathCard>();
+		for (int i=0; i<GRID_SIZE; i++){
+			for (int j=0; j<GRID_SIZE; j++){
+				if(this.board[i][j] != null){
+					cards.add(this.board[i][j]);
+				}
+			}
+		}
+		return cards;
+	}
+
 	public boolean isPossible(PathCard card, Position position){
 		PathCard neighbor;
     	
