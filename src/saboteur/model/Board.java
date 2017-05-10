@@ -2,17 +2,23 @@ package saboteur.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import saboteur.model.Card.*;
 
 public class Board {
 	private static final int GRID_SIZE = 61;
-	private static final Position START = new Position(30,30);
+	private static final int MIDDLE_Y = 30;
+	private static final int MIDDLE_X = 30;
+	private static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
 	private static final int DISTANCE_START_OBJECTIVE_X = 7;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	
 	private PathCard[][] board;
 	private List<Position> objectiveCards;
+	
+	private Map<Position, Position> childrensDad;
+	private List<Position> pathCardsPosition;
 	
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
@@ -25,11 +31,11 @@ public class Board {
 	public void addCard(PathCard card, Position position){
 		if(card.getClass().getName() == "GoldCard")
 			this.objectiveCards.add(position);
-
 		this.board[position.getcY()][position.getcX()] = card;
 	}
 	
 	public void removeCard(Position position){
+		this.pathCardsPosition.remove(position);
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
