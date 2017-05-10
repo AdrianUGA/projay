@@ -14,7 +14,7 @@ public class App extends Application {
 
     public void run() {
         game = new Game();
-//        launch();
+        launch();
     }
 
     public void start(Stage primaryStage) throws Exception {
@@ -25,7 +25,7 @@ public class App extends Application {
 
         GameStateMachine gsm = new GameStateMachine();
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
-        gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
+        gsm.add("newGameMenu", new NewGameMenuState(gsm, game, primaryStage));
         gsm.add("game", new GameState(gsm, game, primaryStage));
         gsm.add("pauseMenu", new PauseMenuState(gsm, game, primaryStage));
         gsm.add("loadGame", new LoadGameState(gsm, game, primaryStage));
@@ -33,7 +33,6 @@ public class App extends Application {
         gsm.add("options", new OptionsState(gsm, game, primaryStage));
         gsm.add("score", new ScoreState(gsm, game, primaryStage));
         gsm.add("help", new HelpState(gsm, game, primaryStage));
-
         gsm.change("mainMenu");
 
         GameLoop gameLoop = new GameLoop(gsm);
