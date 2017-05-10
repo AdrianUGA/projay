@@ -1,7 +1,10 @@
 package saboteur.ai;
 
 import saboteur.model.Game;
+import saboteur.model.Operation;
+import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.Card.Card;
+import saboteur.model.Card.PathCard;
 
 public class DwarfAI extends AI {
 	
@@ -26,14 +29,15 @@ public class DwarfAI extends AI {
 	}
 	
 	private void computeCardWeightEasyAI() {
-		for(Card c : cardsWeight.keySet()){
-			switch(c.getClassName()){
+		for(Operation o : operationsWeight.keySet()){
+			switch(o.getCard().getClassName()){
 			case "PlanCard":
 				if(!knowsTheGoldCardPosition()){
-					cardsWeight.put(c, (1 + positiveOrZero(3 - getGame().getTurn())) * Coefficients.DWARF_PLAN_EASY);
+					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(getEstimatedGoldCardPosition()));
+					operationsWeight.put(o, (1 + positiveOrZero(3 - getGame().getTurn())) * Coefficients.DWARF_PLAN_EASY);
 				}
 				else{
-					cardsWeight.put(c, 0);
+					operationsWeight.put(o, 0);
 				}
 				break;
 			case "RescueCard":

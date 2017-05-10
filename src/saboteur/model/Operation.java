@@ -22,7 +22,7 @@ public abstract class Operation {
 	public Player getSourcePlayer(){
 		return this.sourcePlayer;
 	}
-	
+
 	public Operation setSourcePlayer(Player sourcePlayer) {
 		this.sourcePlayer = sourcePlayer;
 		return this;

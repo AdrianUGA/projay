@@ -139,12 +139,12 @@ public class Board {
 		return this.objectiveCards;
 	}
 	
-	public List<Position> getPossiblePathCardPlace(){
+	public List<Position> getPossiblePathCardPlace(PathCard card){
 		List<Position> possiblePlaces = new LinkedList<Position>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPositionCard(pathCard))){
-				if(this.isPossible(pathCard, neighbor)){
+				if(this.isPossible(card, neighbor)){
 					possiblePlaces.add(neighbor);
 				}
 			}
