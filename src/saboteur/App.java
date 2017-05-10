@@ -5,6 +5,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import saboteur.model.Game;
 import saboteur.state.*;
+import saboteur.tools.Loader;
 
 
 public class App extends Application {
@@ -21,6 +22,7 @@ public class App extends Application {
         primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
+
         GameStateMachine gsm = new GameStateMachine();
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));

@@ -5,8 +5,6 @@ import saboteur.GameStateMachine;
 import saboteur.controller.MainMenuController;
 import saboteur.model.Game;
 
-import java.io.IOException;
-
 public class MainMenuState implements State {
 
     private GameStateMachine gsm;
