@@ -1,6 +1,9 @@
 package saboteur.model;
 
+import saboteur.model.Card.Cardinal;
+
 public class Position {
+	private static final int MAX_COORDINATE = 61;
 	private int cX;
 	private int cY;
 	
@@ -27,6 +30,28 @@ public class Position {
 		if(p.cY > this.cY)
 			return p;
 		return this;
+	}
+	
+	public Position get(Position position, Cardinal cardinal){
+		if(cardinal == Cardinal.North)
+			position = new Position(position.cX, position.cY-1);
+		else if(cardinal == Cardinal.East)
+			position = new Position(position.cX+1, position.cY);
+		else if(cardinal == Cardinal.South)
+			position = new Position(position.cX, position.cY+1);
+		else if(cardinal == Cardinal.West)
+			position = new Position(position.cX-1, position.cY);
+		
+		if(position.isValid())
+			return position;
+		return null;
+	}
+	
+	public boolean isValid(){
+		if(this.getcX() < 0 || this.getcX() > MAX_COORDINATE-1 || this.getcY() < 0 || this.getcY() > MAX_COORDINATE-1){
+			return false;
+		}
+		return true;
 	}
 	
 	@Override
