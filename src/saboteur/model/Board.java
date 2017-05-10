@@ -26,17 +26,54 @@ public class Board {
 		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
 		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
 		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
+		childrensDad.put(START, START);
+		pathCardsPosition.add(START);
 	}
 	
 	public void addCard(PathCard card, Position position){
-		if(card.getClass().getName() == "GoldCard")
+		if(card.isGoal())
 			this.objectiveCards.add(position);
+		this.pathCardsPosition.add(position);
+		this.childrensDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
 	}
-	
+
 	public void removeCard(Position position){
 		this.pathCardsPosition.remove(position);
+		//
+		childrensDad.clear();
+		for(Position current : pathCardsPosition){
+			for(Position neighbor : getAllNeighbors(current)){
+				if(!areConnected(current,neighbor)){
+					connect(current,neighbor);
+				}
+			}
+		}
+		//
 		this.board[position.getcY()][position.getcX()] = null;
+	}
+	
+	private Position find(Position position) {
+		Position currentPos = position;
+		while(childrensDad.get(currentPos) != currentPos){
+			currentPos = childrensDad.get(currentPos);
+		}
+		return currentPos;
+	}
+	
+	private boolean areConnected(Position pos1, Position pos2){
+		return find(childrensDad.get(pos1)).equals(find(childrensDad.get(pos2)));
+	}
+	
+	private void connect(Position pos1, Position pos2){
+		if(!areConnected(pos1, pos2)){
+			if(indice(pos1)<indice(pos2)){
+				childrensDad.put(find(pos1), find(pos2));
+			}
+			else{
+				childrensDad.put(find(pos2), find(pos1));
+			}
+		}
 	}
 	
 	public PathCard getCard(Position position){
@@ -52,6 +89,15 @@ public class Board {
 	}
 	
 	public List<Position> getNeighbors(Position position){
+		LinkedList<Position> positions = new LinkedList<Position>();
+		for(Position p : this.getAllNeighbors(position)){
+			if (p != null)
+				positions.add(p);
+		}
+		return positions;
+	}
+	
+	public List<Position> getAllNeighbors(Position position){
 		LinkedList<Position> positions = new LinkedList<Position>();
 		if(this.board[position.getcY()+1][position.getcX()] != null)
 			positions.add(new Position(position.getcY()+1, position.getcX()));
@@ -107,5 +153,9 @@ public class Board {
 		if (neighbor != null && (card.isOpen(Cardinal.West)^neighbor.isOpen(Cardinal.East))) return false;
 		
 		return true;
+	}
+	
+	public int indice(Position pos){
+		return pos.getcY() * 60 + pos.getcX();
 	}
 }
