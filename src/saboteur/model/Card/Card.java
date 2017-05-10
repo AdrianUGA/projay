@@ -1,23 +1,23 @@
 package saboteur.model.Card;
 
 public abstract class Card {
-    
+
     protected String frontImage;
     protected String backImage;
 
-    protected void setFrontImage(String frontImage){
+    public void setFrontImage(String frontImage){
         this.frontImage = frontImage;
     }
 
-    protected void setBackImage(String backImage){
+    public void setBackImage(String backImage){
         this.backImage = backImage;
     }
 
-    protected String getFrontImage(){
+    public String getFrontImage(){
         return this.frontImage;
     }
 
-    protected String getBackImage() {
+    public String getBackImage() {
         return this.backImage;
     }
 
