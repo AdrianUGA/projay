@@ -61,6 +61,14 @@ public class DwarfAI extends AI {
 					operationsWeight.put(o, 0f);
 				}
 				break;
+			case "SabotageCard":
+				Player p = mostLikelyASaboteur();
+				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
+				operationsWeight.put(o, (float) (positiveOrZero(AVERAGE_TRUST - isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY));
+				break;
+			case "PathCard":
+				// Récupérer la case la plus proche à vol d'oiseau sur laquelle on peut mettre une carte (= presque dans tous les cas la meilleure case)
+				break;
 			}
 		}
 		

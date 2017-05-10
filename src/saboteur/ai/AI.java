@@ -209,7 +209,7 @@ public abstract class AI extends Player {
 	}
 	
 	//TODO move this method somewhere
-	public int positiveOrZero(int i){
+	public float positiveOrZero(float i){
 		if(i>0){
 			return i;
 		}
@@ -220,7 +220,7 @@ public abstract class AI extends Player {
 		float maxTrust=-1073741824;
 		Player mostTrustfulPlayer = null;
 		for(Player p : isDwarf.keySet()){
-			if(isDwarf.get(p) > maxTrust){
+			if(isDwarf.get(p) > maxTrust && p != this){
 				maxTrust = isDwarf.get(p);
 				mostTrustfulPlayer = p;
 			}
@@ -232,7 +232,7 @@ public abstract class AI extends Player {
 		float leastTrust=1073741824;
 		Player leastTrustfulPlayer = null;
 		for(Player p : isDwarf.keySet()){
-			if(isDwarf.get(p) < leastTrust){
+			if(isDwarf.get(p) < leastTrust && p != this){
 				leastTrust = isDwarf.get(p);
 				leastTrustfulPlayer = p;
 			}

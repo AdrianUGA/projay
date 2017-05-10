@@ -3,6 +3,7 @@ package saboteur.ai;
 public class Coefficients {
 	
 	// Easy AI coefficients
+	public static int DWARF_SABOTAGE_EASY = 1;
 	public static float DWARF_HANDICAP_SIZE_EASY = 0.5f;
 	public static int DWARF_RESCUE_EASY = 10;
 	public static int DWARF_DOUBLERESCUE_EASY = 9;
