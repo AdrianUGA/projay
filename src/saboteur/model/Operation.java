@@ -4,6 +4,8 @@ import saboteur.model.Card.Card;
 
 public abstract class Operation {
 	private Player sourcePlayer;
+
+
 	private Card card;
 	
 	public Operation(Player sourcePlayer, Card card){
@@ -20,5 +22,14 @@ public abstract class Operation {
 	public Player getSourcePlayer(){
 		return this.sourcePlayer;
 	}
-	
+
+	public Operation setSourcePlayer(Player sourcePlayer) {
+		this.sourcePlayer = sourcePlayer;
+		return this;
+	}
+
+	public Operation setCard(Card card) {
+		this.card = card;
+		return this;
+	}
 }

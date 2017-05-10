@@ -26,19 +26,19 @@ public class PathCard extends Card {
 			isCulDeSac = false;
 		}
 		if(i>=8){
-			this.openSides.add(Cardinal.West);
+			this.openSides.add(Cardinal.WEST);
 			i=i-8;
 		}
 		if(i>=4){
-			this.openSides.add(Cardinal.South);
+			this.openSides.add(Cardinal.SOUTH);
 			i=i-4;
 		}
 		if(i>=2){
-			this.openSides.add(Cardinal.East);
+			this.openSides.add(Cardinal.EAST);
 			i=i-2;
 		}
 		if(i>=1){
-			this.openSides.add(Cardinal.North);
+			this.openSides.add(Cardinal.NORTH);
 		}
 	}
 	
@@ -46,20 +46,24 @@ public class PathCard extends Card {
 		return isStart;
 	}
 
-	public void setStart(boolean isStart) {
+	public PathCard setStart(boolean isStart) {
 		this.isStart = isStart;
+		return this;
 	}
 
-	public void setToGoal(){
+	public PathCard setToGoal(){
 		this.isGoal = true;
+		return this;
 	}
 	
-	public void setVisible(boolean visible){
+	public PathCard setVisible(boolean visible){
 		this.isVisible = visible;
+		return this;
 	}
 	
-	public void setToGold(){
+	public PathCard setToGold(){
 		this.hasGold = true;
+		return this;
 	}
 	
 	public boolean isGoal(){

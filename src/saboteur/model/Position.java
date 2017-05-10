@@ -32,14 +32,14 @@ public class Position {
 		return this;
 	}
 	
-	public Position get(Position position, Cardinal cardinal){
-		if(cardinal == Cardinal.North)
+	public Position getNeighbor(Position position, Cardinal cardinal){
+		if(cardinal == Cardinal.NORTH)
 			position = new Position(position.cX, position.cY-1);
-		else if(cardinal == Cardinal.East)
+		else if(cardinal == Cardinal.EAST)
 			position = new Position(position.cX+1, position.cY);
-		else if(cardinal == Cardinal.South)
+		else if(cardinal == Cardinal.SOUTH)
 			position = new Position(position.cX, position.cY+1);
-		else if(cardinal == Cardinal.West)
+		else if(cardinal == Cardinal.WEST)
 			position = new Position(position.cX-1, position.cY);
 		
 		if(position.isValid())

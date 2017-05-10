@@ -15,13 +15,13 @@ public class DwarfAI extends AI {
 	public void selectCard(){
 		resetProbabilitiesToPlayEachCard();
 		switch(this.getDifficulty()){
-		case easy:
+		case EASY:
 			computeCardWeightEasyAI();
 			break;
-		case medium:
+		case MEDIUM:
 			computeCardWeightMediumAI();
 			break;
-		case hard:
+		case HARD:
 			computeCardWeightHardAI();
 			break;
 		}
@@ -33,8 +33,7 @@ public class DwarfAI extends AI {
 			switch(o.getCard().getClassName()){
 			case "PlanCard":
 				if(!knowsTheGoldCardPosition()){
-					;
-					this.getGame().getBoard().getPositionCard(pc);//OperationActionCardToBoard.getDestinationCard().;
+					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(getEstimatedGoldCardPosition()));
 					operationsWeight.put(o, (1 + positiveOrZero(3 - getGame().getTurn())) * Coefficients.DWARF_PLAN_EASY);
 				}
 				else{

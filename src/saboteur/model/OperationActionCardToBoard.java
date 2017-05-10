@@ -27,4 +27,15 @@ public class OperationActionCardToBoard extends Operation {
 			}
 		}
 	}
+
+	public PathCard getDestinationCard() {
+		return destinationCard;
+	}
+
+	public OperationActionCardToBoard setDestinationCard(PathCard destinationCard) {
+		this.destinationCard = destinationCard;
+		return this;
+	}
+	
+	
 }
