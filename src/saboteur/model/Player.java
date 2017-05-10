@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import saboteur.model.Card.*;
 
 public abstract class Player {
-	private boolean saboteur;	
+	private boolean saboteur;
+	private Card selectedCard;
+	private String nom;
+	private ArrayList<SabotageCard> handicaps;
+	private ArrayList<GoldCard> gold;
+	private ArrayList<Card> hand;
+	private Game game;
+	
 	public Card getSelectedCard() {
 		return selectedCard;
 	}
@@ -38,13 +45,6 @@ public abstract class Player {
 		this.hand = hand;
 	}
 
-	private Card selectedCard;
-	private String nom;
-	private ArrayList<SabotageCard> handicaps;
-	private ArrayList<GoldCard> gold;
-	private ArrayList<Card> hand;
-	private Game game;
-	
 	public Player (Game game){
 		this.game = game;
 		game.register(this);
@@ -121,7 +121,7 @@ public abstract class Player {
 		return false;
 	}
 	public boolean canHandicap(DoubleRescueCard card){
-		int currentType;
+		Tool currentType;
 		for (SabotageCard sabotageCard : this.handicaps){
 			currentType = sabotageCard.getSabotageType();
 			if (currentType == card.getRescueType1() || currentType == card.getRescueType2()){

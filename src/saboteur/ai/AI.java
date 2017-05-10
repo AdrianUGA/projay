@@ -17,10 +17,10 @@ import saboteur.model.Card.PathCard;
 
 public abstract class AI extends Player {
 	
-	private Map<Player,Float> isDwarf;	
-	private Difficulty difficulty;
-	private Map<Position,Float> estimatedGoldCardPosition;
-	private Map<Card, Float> probabilitiesToPlayEachCard;
+	protected Map<Player,Float> isDwarf;	
+	protected Difficulty difficulty;
+	protected Map<Position,Float> estimatedGoldCardPosition;
+	protected Map<Card, Integer> cardsWeight;
 	
 
 	public AI(Game game) {
@@ -35,14 +35,6 @@ public abstract class AI extends Player {
 		else{
 			isDwarf.put(this, (float) 1073741824);
 		}
-		/*
-		estimatedGoldCardPosition = new HashMap<Position,Boolean>();
-		estimatedGoldCardPosition.put(new Position(0,0), true);
-		estimatedGoldCardPosition.put(new Position(1,1), true);
-		estimatedGoldCardPosition.put(new Position(2,2), true);
-		*/
-		
-		// est-ce qu’on ne ferait pas un couple Position/float pour associer la carte à la probabilité que ce soit la bonne ? 1/3 au début puis 1 quand on a trouvé.
 		
 		this.estimatedGoldCardPosition = new HashMap<Position, Float>();
 		for (Position position : game.getBoard().getGoldCards()){
@@ -192,12 +184,21 @@ public abstract class AI extends Player {
 	}
 	
 	public void resetProbabilitiesToPlayEachCard(){
-		for(Card c : probabilitiesToPlayEachCard.keySet()){
-			probabilitiesToPlayEachCard.put(c, 1f/probabilitiesToPlayEachCard.size());
+		cardsWeight.clear();
+		for(Card c : getHand()){
+			cardsWeight.put(c, 0);
 		}
 	}
 	
 	public boolean hasThisTypeOfCard(Card c){
 		return true;
+	}
+	
+	//TODO move this method somewhere
+	public int positiveOrZero(int i){
+		if(i>0){
+			return i;
+		}
+		return 0;
 	}
 }
