@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 import saboteur.model.Card.*;
 
 public class Board {
-	private static final PathCard OPEN_PATH_CARD = new PathCard(15);
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
@@ -33,11 +33,20 @@ public class Board {
 		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
 		// TODO add the wining card
-		this.addCard(OPEN_PATH_CARD, START);
-		OPEN_PATH_CARD.setToGoal();
-		this.addCard(OPEN_PATH_CARD, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
-		this.addCard(OPEN_PATH_CARD, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
-		this.addCard(OPEN_PATH_CARD, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
+		this.addCard(new PathCard(15), START);
+		
+		int rand = ThreadLocalRandom.current().nextInt(0, 3);
+		PathCard[] goals = new PathCard[3];
+		for(int i=0; i<3; i++){
+			goals[i] = new PathCard(15).setToGoal();
+			if (rand == i)
+				goals[i].setToGold();
+		}
+		
+		
+		this.addCard(goals[0], new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
+		this.addCard(goals[1], new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
+		this.addCard(goals[2], new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
 		
 		
 	}
