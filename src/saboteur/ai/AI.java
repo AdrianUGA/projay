@@ -17,17 +17,19 @@ import saboteur.model.Card.PathCard;
 
 public abstract class AI extends Player {
 	
+	protected final int AVERAGE_TRUST = 50;
+	
 	protected Map<Player,Float> isDwarf;	
 	protected Difficulty difficulty;
 	protected Map<Position,Float> estimatedGoldCardPosition;
-	protected Map<Card, Integer> cardsWeight;
+	protected Map<Operation, Float> operationsWeight;
 	
 
 	public AI(Game game) {
 		super(game);
 		isDwarf = new HashMap<Player,Float>();
 		for(Player p : game.getPlayerList()){
-			isDwarf.put(p, (float) 50);
+			isDwarf.put(p, (float) AVERAGE_TRUST);
 		}
 		if(isSaboteur()){
 			isDwarf.put(this, (float) -1073741824);
@@ -184,9 +186,21 @@ public abstract class AI extends Player {
 	}
 	
 	public void resetProbabilitiesToPlayEachCard(){
-		cardsWeight.clear();
+		operationsWeight.clear();
 		for(Card c : getHand()){
-			cardsWeight.put(c, 0);
+			switch(c.getClassName()){
+			case "PathCard" :
+				operationsWeight.put(new OperationPathCard(this, c, null), 0f);
+				break;
+			case "CollapseCard" :
+			case "PlanCard" :
+				operationsWeight.put(new OperationActionCardToBoard(this, c, null), 0f);
+				break;
+			case "RescueCard":
+			case "DoubleRescueCard":
+			case "SabotageCard":
+				operationsWeight.put(new OperationActionCardToPlayer(this, c, null), 0f);
+			}
 		}
 	}
 	
@@ -195,10 +209,34 @@ public abstract class AI extends Player {
 	}
 	
 	//TODO move this method somewhere
-	public int positiveOrZero(int i){
+	public float positiveOrZero(float i){
 		if(i>0){
 			return i;
 		}
 		return 0;
+	}
+	
+	public Player mostLikelyADwarf(){
+		float maxTrust=-1073741824;
+		Player mostTrustfulPlayer = null;
+		for(Player p : isDwarf.keySet()){
+			if(isDwarf.get(p) > maxTrust && p != this){
+				maxTrust = isDwarf.get(p);
+				mostTrustfulPlayer = p;
+			}
+		}
+		return mostTrustfulPlayer;
+	}
+	
+	public Player mostLikelyASaboteur(){
+		float leastTrust=1073741824;
+		Player leastTrustfulPlayer = null;
+		for(Player p : isDwarf.keySet()){
+			if(isDwarf.get(p) < leastTrust && p != this){
+				leastTrust = isDwarf.get(p);
+				leastTrustfulPlayer = p;
+			}
+		}
+		return leastTrustfulPlayer;
 	}
 }

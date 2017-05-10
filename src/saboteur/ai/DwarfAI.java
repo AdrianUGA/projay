@@ -1,7 +1,14 @@
 package saboteur.ai;
 
 import saboteur.model.Game;
+import saboteur.model.Operation;
+import saboteur.model.OperationActionCardToBoard;
+import saboteur.model.OperationActionCardToPlayer;
+import saboteur.model.Player;
 import saboteur.model.Card.Card;
+import saboteur.model.Card.PathCard;
+import saboteur.model.Card.RescueCard;
+import saboteur.model.Card.DoubleRescueCard;
 
 public class DwarfAI extends AI {
 	
@@ -26,43 +33,44 @@ public class DwarfAI extends AI {
 	}
 	
 	private void computeCardWeightEasyAI() {
-		for(Card c : cardsWeight.keySet()){
-			switch(c.getClassName()){
+		for(Operation o : operationsWeight.keySet()){
+			switch(o.getCard().getClassName()){
 			case "PlanCard":
 				if(!knowsTheGoldCardPosition()){
-					cardsWeight.put(c, (1 + positiveOrZero(3 - getGame().getTurn())) * Coefficients.DWARF_PLAN_EASY);
+					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(getEstimatedGoldCardPosition()));
+					operationsWeight.put(o, (float) ((1 + positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - getGame().getTurn()))
+											* Coefficients.DWARF_PLAN_EASY));
 				}
 				else{
-					cardsWeight.put(c, 0);
+					operationsWeight.put(o, -1f);
 				}
 				break;
 			case "RescueCard":
-				
+				if(canRescue((RescueCard)o.getCard())){
+					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
+					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_RESCUE_EASY);
+				}else{
+					operationsWeight.put(o, 0f);
+				}
+				break;
+			case "DoubleRescueCard":
+				if(canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard())){
+					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
+					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_DOUBLERESCUE_EASY);
+				}else{
+					operationsWeight.put(o, 0f);
+				}
+				break;
+			case "SabotageCard":
+				Player p = mostLikelyASaboteur();
+				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
+				operationsWeight.put(o, (float) (positiveOrZero(AVERAGE_TRUST - isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY));
+				break;
+			case "PathCard":
+				// Récupérer la case la plus proche à vol d'oiseau sur laquelle on peut mettre une carte (= presque dans tous les cas la meilleure case)
+				break;
 			}
 		}
-		
-		/*if(knowsTheGoldCardPosition()){
-			// Proba of playing plan = 0
-		}
-		else{ 
-			if(getGame().getTurn()<2){
-			// Proba of playing plan +++
-			}
-			else if(getGame().getTurn()<4){
-				// Proba of playing plan ++
-			}
-			else if(getGame().getTurn()<6){
-				// Proba of playing plan +
-			}
-		}
-		if(true){ // if can play any path card which isn't cul-de-sac
-			// Proba of playing pathCard ++
-		}
-		// Proba of destroying random card + (turn > 3)
-		// Proba of put a bit "randomly" a sabotage card + (4 >= turn >= 2)
-		//				a bit "precisely" a sabotage card + (7 >= turn >= 5)
-		//				very "precisely" a sabotage card + (turn > 8)
-		*/
 		
 	}
 	

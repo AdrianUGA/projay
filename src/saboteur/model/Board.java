@@ -1,6 +1,7 @@
 package saboteur.model;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import saboteur.model.Card.*;
 
@@ -29,13 +30,20 @@ public class Board {
 		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
 		// TODO add the wining card
+		// TODO melange le tableau goalPathCard
+		/*int rand = ThreadLocalRandom.current().nextInt(0, 3);
+		PathCard[] goals = new PathCard[3];
+		for(int i=0; i<3; i++){
+			goals[i] = new PathCard(15).setToGoal();
+			if (rand == i)
+				goals[i].setToGold();
+		}*/
+
 		this.addCard(goalPathCard.get(0), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
 		this.addCard(goalPathCard.get(1), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
 		this.addCard(goalPathCard.get(2), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
 		
 		this.addCard(startPathCard.get(0), START);
-		
-		
 	}
 	
 	public void addCard(PathCard card, Position position){
@@ -135,12 +143,12 @@ public class Board {
 		return this.objectiveCards;
 	}
 	
-	public List<Position> getPossiblePathCardPlace(){
+	public List<Position> getPossiblePathCardPlace(PathCard card){
 		List<Position> possiblePlaces = new LinkedList<Position>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPositionCard(pathCard))){
-				if(this.isPossible(pathCard, neighbor)){
+				if(this.isPossible(card, neighbor)){
 					possiblePlaces.add(neighbor);
 				}
 			}
@@ -152,24 +160,37 @@ public class Board {
 
 	public boolean isPossible(PathCard card, Position position){
 		PathCard neighbor;
+		boolean atLeastOnePath = false;
     	
 		//Test North
 		neighbor = this.getCard(new Position(position.getcX(), position.getcY()-1));
-		if (neighbor != null && (card.isOpen(Cardinal.NORTH)^neighbor.isOpen(Cardinal.SOUTH))) return false;
+		if (neighbor != null){
+			if (card.isOpen(Cardinal.NORTH) && neighbor.isOpen(Cardinal.SOUTH)) atLeastOnePath = true;
+			if (card.isOpen(Cardinal.NORTH)^neighbor.isOpen(Cardinal.SOUTH)) return false;
+		}
 		
 		//Test East
 		neighbor = this.getCard(new Position(position.getcX()+1, position.getcY()));
-		if (neighbor != null && (card.isOpen(Cardinal.EAST)^neighbor.isOpen(Cardinal.WEST))) return false;
+		if (neighbor != null){
+			if (card.isOpen(Cardinal.EAST) && neighbor.isOpen(Cardinal.WEST)) atLeastOnePath = true;
+			if (card.isOpen(Cardinal.EAST)^neighbor.isOpen(Cardinal.WEST)) return false;
+		}
 		
 		//Test South
 		neighbor = this.getCard(new Position(position.getcX(), position.getcY()+1));
-		if (neighbor != null && (card.isOpen(Cardinal.SOUTH)^neighbor.isOpen(Cardinal.NORTH))) return false;
+		if (neighbor != null){
+			if (card.isOpen(Cardinal.SOUTH) && neighbor.isOpen(Cardinal.NORTH)) atLeastOnePath = true;
+			if (card.isOpen(Cardinal.SOUTH)^neighbor.isOpen(Cardinal.NORTH)) return false;
+		}
 		
 		//Test West
 		neighbor = this.getCard(new Position(position.getcX()-1, position.getcY()));
-		if (neighbor != null && (card.isOpen(Cardinal.WEST)^neighbor.isOpen(Cardinal.EAST))) return false;
+		if (neighbor != null){
+			if (card.isOpen(Cardinal.WEST) && neighbor.isOpen(Cardinal.EAST)) atLeastOnePath = true;
+			if (card.isOpen(Cardinal.WEST)^neighbor.isOpen(Cardinal.EAST)) return false;
+		}
 		
-		return true;
+		return (card.isGoal() || card.isStart() || atLeastOnePath);
 	}
 	
 	public int indice(Position pos){
