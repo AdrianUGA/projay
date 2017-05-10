@@ -1,6 +1,7 @@
 package saboteur.ai;
 
 import saboteur.model.Game;
+import saboteur.model.Card.Card;
 
 public class DwarfAI extends AI {
 	
@@ -12,19 +13,35 @@ public class DwarfAI extends AI {
 		resetProbabilitiesToPlayEachCard();
 		switch(this.getDifficulty()){
 		case easy:
-			selectCardEasyAI();
+			computeCardWeightEasyAI();
 			break;
 		case medium:
-			selectCardMediumAI();
+			computeCardWeightMediumAI();
 			break;
 		case hard:
-			selectCardHardAI();
+			computeCardWeightHardAI();
 			break;
 		}
+		//TODO choose heaviest card
 	}
 	
-	private void selectCardEasyAI() {
-		if(knowsTheGoldCardPosition()){
+	private void computeCardWeightEasyAI() {
+		for(Card c : cardsWeight.keySet()){
+			switch(c.getClassName()){
+			case "PlanCard":
+				if(!knowsTheGoldCardPosition()){
+					cardsWeight.put(c, (1 + positiveOrZero(3 - getGame().getTurn())) * Coefficients.DWARF_PLAN_EASY);
+				}
+				else{
+					cardsWeight.put(c, 0);
+				}
+				break;
+			case "RescueCard":
+				
+			}
+		}
+		
+		/*if(knowsTheGoldCardPosition()){
 			// Proba of playing plan = 0
 		}
 		else{ 
@@ -45,18 +62,18 @@ public class DwarfAI extends AI {
 		// Proba of put a bit "randomly" a sabotage card + (4 >= turn >= 2)
 		//				a bit "precisely" a sabotage card + (7 >= turn >= 5)
 		//				very "precisely" a sabotage card + (turn > 8)
-		
+		*/
 		
 	}
 	
-	private void selectCardMediumAI() {
+	private void computeCardWeightMediumAI() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void selectCardHardAI() {
+	private void computeCardWeightHardAI() {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 }

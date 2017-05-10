@@ -1,7 +1,7 @@
 package saboteur.model.Card;
 
 public abstract class Card {
-
+    
     protected String frontImage;
     protected String backImage;
 
@@ -17,7 +17,11 @@ public abstract class Card {
         return this.frontImage;
     }
 
-    protected String getBackImage(){
+    protected String getBackImage() {
         return this.backImage;
+    }
+
+    public String getClassName() {
+        return this.getClass().getName();
     }
 }

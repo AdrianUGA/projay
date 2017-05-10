@@ -1,13 +1,13 @@
 package saboteur.model.Card;
 
 public class SabotageCard extends ActionCardToPlayer {
-	private int sabotageType;
+	private Tool sabotageType;
 	
-	public SabotageCard(int type){
+	public SabotageCard(Tool type){
 		this.sabotageType = type;
 	}
 	
-	public int getSabotageType(){
+	public Tool getSabotageType(){
 		return this.sabotageType;
 	}
 }
