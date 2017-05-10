@@ -12,13 +12,13 @@ public class DwarfAI extends AI {
 	public void selectCard(){
 		resetProbabilitiesToPlayEachCard();
 		switch(this.getDifficulty()){
-		case easy:
+		case EASY:
 			computeCardWeightEasyAI();
 			break;
-		case medium:
+		case MEDIUM:
 			computeCardWeightMediumAI();
 			break;
-		case hard:
+		case HARD:
 			computeCardWeightHardAI();
 			break;
 		}
