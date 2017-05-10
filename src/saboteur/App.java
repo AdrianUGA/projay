@@ -14,7 +14,9 @@ public class App extends Application {
 
     public void run() {
         game = new Game();
-        launch();
+        Loader loader = new Loader();
+        loader.loadCard();
+//        launch();
     }
 
     public void start(Stage primaryStage) throws Exception {
