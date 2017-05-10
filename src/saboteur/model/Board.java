@@ -2,17 +2,23 @@ package saboteur.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import saboteur.model.Card.*;
 
 public class Board {
 	private static final int GRID_SIZE = 61;
-	private static final Position START = new Position(30,30);
+	private static final int MIDDLE_Y = 30;
+	private static final int MIDDLE_X = 30;
+	private static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
 	private static final int DISTANCE_START_OBJECTIVE_X = 7;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	
 	private PathCard[][] board;
 	private List<Position> objectiveCards;
+	
+	private Map<Position, Position> childrensDad;
+	private List<Position> pathCardsPosition;
 	
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
@@ -20,17 +26,54 @@ public class Board {
 		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
 		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
 		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
+		childrensDad.put(START, START);
+		pathCardsPosition.add(START);
 	}
 	
 	public void addCard(PathCard card, Position position){
-		if(card.getClass().getName() == "PathCard" && card.isGoal())
+		if(card.isGoal())
 			this.objectiveCards.add(position);
-
+		this.pathCardsPosition.add(position);
+		this.childrensDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
 	}
-	
+
 	public void removeCard(Position position){
+		this.pathCardsPosition.remove(position);
+		//
+		childrensDad.clear();
+		for(Position current : pathCardsPosition){
+			for(Position neighbor : getAllNeighbors(current)){
+				if(!areConnected(current,neighbor)){
+					connect(current,neighbor);
+				}
+			}
+		}
+		//
 		this.board[position.getcY()][position.getcX()] = null;
+	}
+	
+	private Position find(Position position) {
+		Position currentPos = position;
+		while(childrensDad.get(currentPos) != currentPos){
+			currentPos = childrensDad.get(currentPos);
+		}
+		return currentPos;
+	}
+	
+	private boolean areConnected(Position pos1, Position pos2){
+		return find(childrensDad.get(pos1)).equals(find(childrensDad.get(pos2)));
+	}
+	
+	private void connect(Position pos1, Position pos2){
+		if(!areConnected(pos1, pos2)){
+			if(indice(pos1)<indice(pos2)){
+				childrensDad.put(find(pos1), find(pos2));
+			}
+			else{
+				childrensDad.put(find(pos2), find(pos1));
+			}
+		}
 	}
 	
 	public PathCard getCard(Position position){
@@ -110,5 +153,9 @@ public class Board {
 		if (neighbor != null && (card.isOpen(Cardinal.West)^neighbor.isOpen(Cardinal.East))) return false;
 		
 		return true;
+	}
+	
+	public int indice(Position pos){
+		return pos.getcY() * 60 + pos.getcX();
 	}
 }

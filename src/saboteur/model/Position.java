@@ -59,4 +59,5 @@ public class Position {
 		Position p = (Position) o;
 		return this.cX == p.cX && this.cY == p.cY;
 	}
+
 }
