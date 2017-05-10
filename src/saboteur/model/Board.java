@@ -22,6 +22,11 @@ public class Board {
 	
 	public Board(){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
+		for (int i=0; i<GRID_SIZE; i++){
+			for (int j=0; j<GRID_SIZE; j++){
+				this.board[i][j] = null;
+			}
+		}
 		this.objectiveCards = new LinkedList<Position>();
 		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
 		objectiveCards.add(new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
