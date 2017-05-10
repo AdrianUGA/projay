@@ -8,6 +8,7 @@ import java.util.Map;
 import saboteur.model.Card.*;
 
 public class Board {
+	private static final PathCard OPEN_PATH_CARD = new PathCard(15);
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
@@ -32,12 +33,11 @@ public class Board {
 		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
 		// TODO add the wining card
-		PathCard pathCard = (new PathCard(15)).setToGoal();
-		this.addCard(pathCard, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
-		this.addCard(pathCard, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
-		this.addCard(pathCard, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
-		
-		this.addCard(pathCard, START);
+		this.addCard(OPEN_PATH_CARD, START);
+		OPEN_PATH_CARD.setToGoal();
+		this.addCard(OPEN_PATH_CARD, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
+		this.addCard(OPEN_PATH_CARD, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
+		this.addCard(OPEN_PATH_CARD, new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
 		
 		
 	}
