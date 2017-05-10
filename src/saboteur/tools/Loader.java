@@ -4,10 +4,7 @@ package saboteur.tools;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import saboteur.App;
-import saboteur.model.Card.ActionCard;
-import saboteur.model.Card.ActionCardToPlayer;
-import saboteur.model.Card.Card;
-import saboteur.model.Card.SabotageCard;
+import saboteur.model.Card.*;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -36,10 +33,31 @@ public class Loader {
             JSONArray sabotageCardsObj = cardsObj.getJSONArray("sabotageCards");
             sabotageCardsObj.forEach(item -> {
                 JSONObject obj = (JSONObject) item;
-                System.out.println(obj);
                 for (int i = 0; i < obj.getInt("number"); i++){
-                    obj.getString("type");
-                    cards.add(new SabotageCard(ActionCardToPlayer.));
+                    SabotageCard sabotageCard = new SabotageCard(Tool.valueOf(obj.getString("type")));
+                    sabotageCard.setFrontImage(obj.getString("frontImage"));
+                    sabotageCard.setBackImage(obj.getString("backImage"));
+                    cards.add(sabotageCard);
+                }
+            });
+            JSONArray rescueCardsObj = cardsObj.getJSONArray("rescueCards");
+            rescueCardsObj.forEach(item -> {
+                JSONObject obj = (JSONObject) item;
+                for (int i = 0; i < obj.getInt("number"); i++){
+                    RescueCard rescueCard = new RescueCard(Tool.valueOf(obj.getString("type")));
+                    rescueCard.setFrontImage(obj.getString("frontImage"));
+                    rescueCard.setBackImage(obj.getString("backImage"));
+                    cards.add(rescueCard);
+                }
+            });
+            JSONArray doubleRescueCardsObj = cardsObj.getJSONArray("doubleRescueCards");
+            doubleRescueCardsObj.forEach(item -> {
+                JSONObject obj = (JSONObject) item;
+                for (int i = 0; i < obj.getInt("number"); i++){
+                    RescueCard doubleRescueCard = new RescueCard(Tool.valueOf(obj.getString("type1")), Tool.valueOf(obj.getString("type2")));
+                    rescueCard.setFrontImage(obj.getString("frontImage"));
+                    rescueCard.setBackImage(obj.getString("backImage"));
+                    cards.add(rescueCard);
                 }
             });
 
