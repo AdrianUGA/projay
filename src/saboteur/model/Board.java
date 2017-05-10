@@ -29,6 +29,7 @@ public class Board {
 			}
 		}
 		this.objectiveCards = new LinkedList<Position>();
+		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
 		// TODO add the wining card
 		PathCard pathCard = (new PathCard(15)).setToGoal();
@@ -38,7 +39,7 @@ public class Board {
 		
 		this.addCard(pathCard, START);
 		
-		this.pathCardsPosition = new HashMap<Position, PathCard>();
+		
 	}
 	
 	public void addCard(PathCard card, Position position){
@@ -158,19 +159,19 @@ public class Board {
     	
 		//Test North
 		neighbor = this.getCard(new Position(position.getcX(), position.getcY()-1));
-		if (neighbor != null && (card.isOpen(Cardinal.North)^neighbor.isOpen(Cardinal.South))) return false;
+		if (neighbor != null && (card.isOpen(Cardinal.NORTH)^neighbor.isOpen(Cardinal.SOUTH))) return false;
 		
 		//Test East
 		neighbor = this.getCard(new Position(position.getcX()+1, position.getcY()));
-		if (neighbor != null && (card.isOpen(Cardinal.East)^neighbor.isOpen(Cardinal.West))) return false;
+		if (neighbor != null && (card.isOpen(Cardinal.EAST)^neighbor.isOpen(Cardinal.WEST))) return false;
 		
 		//Test South
 		neighbor = this.getCard(new Position(position.getcX(), position.getcY()+1));
-		if (neighbor != null && (card.isOpen(Cardinal.South)^neighbor.isOpen(Cardinal.North))) return false;
+		if (neighbor != null && (card.isOpen(Cardinal.SOUTH)^neighbor.isOpen(Cardinal.NORTH))) return false;
 		
 		//Test West
 		neighbor = this.getCard(new Position(position.getcX()-1, position.getcY()));
-		if (neighbor != null && (card.isOpen(Cardinal.West)^neighbor.isOpen(Cardinal.East))) return false;
+		if (neighbor != null && (card.isOpen(Cardinal.WEST)^neighbor.isOpen(Cardinal.EAST))) return false;
 		
 		return true;
 	}
