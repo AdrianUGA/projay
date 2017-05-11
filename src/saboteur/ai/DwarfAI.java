@@ -1,6 +1,7 @@
 package saboteur.ai;
 
 import java.util.List;
+import java.util.Random;
 
 import saboteur.model.Game;
 import saboteur.model.Operation;
@@ -70,7 +71,7 @@ public class DwarfAI extends AI {
 			case "SabotageCard":
 				Player p = mostLikelyASaboteur();
 				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
-				operationsWeight.put(o, (float) (positiveOrZero(AVERAGE_TRUST - isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY));
+				operationsWeight.put(o, (float) (positiveOrZero(AVERAGE_TRUST - isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 				break;
 			case "PathCard":
 				// Récupérer la case la plus proche à vol d'oiseau sur laquelle on peut mettre une carte (= presque dans tous les cas la meilleure case)
@@ -83,6 +84,7 @@ public class DwarfAI extends AI {
 						int distance = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distance >= -1){
 							// At most 1 position away from the minimum
+							((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(currentPos));
 							operationsWeight.put((OperationActionCardToBoard) o, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
 									+ distance - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
 						}else{
@@ -95,6 +97,17 @@ public class DwarfAI extends AI {
 					operationsWeight.put((OperationTrash) o, -1f);
 				}
 				break;
+			case "CollapseCard" :
+				List<Position> allCulDeSac = getGame().getBoard().allCulDeSac();
+				if(allCulDeSac.size() == 0){
+					operationsWeight.put((OperationTrash) o, 0f);
+				}
+				else{
+					Random r = new Random();
+					Position randomPos = allCulDeSac.get(r.nextInt(allCulDeSac.size()));
+					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(randomPos));
+					operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_EASY);
+				}
 			}
 		}
 		

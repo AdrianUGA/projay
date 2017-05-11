@@ -175,5 +175,9 @@ public class Board {
 		return pos.getcY() * 60 + pos.getcX();
 	}
 	
+	public List<Position> allCulDeSac(){
+		//TODO 
+		return null;
+	}
 	
 }
