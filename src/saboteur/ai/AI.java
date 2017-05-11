@@ -288,4 +288,33 @@ public abstract class AI extends Player {
 		return bestOperations.get(r.nextInt(bestOperations.size()));
 	}
 	
+	@Override
+	public void playCard(){
+		this.getGame().playOperation(selectOperation());
+	}
+	
+	public Operation selectOperation(){
+		resetProbabilitiesToPlayEachOperation();
+		switch(this.getDifficulty()){
+		case EASY:
+			computeOperationWeightEasyAI();
+			break;
+		case MEDIUM:
+			computeOperationWeightMediumAI();
+			break;
+		case HARD:
+			computeOperationWeightHardAI();
+			break;
+		}
+		removeOperationWithNullTarget();
+		
+		return bestOperationToPlay();
+	}
+
+	protected abstract void computeOperationWeightHardAI();
+
+	protected abstract void computeOperationWeightMediumAI();
+
+	protected abstract void computeOperationWeightEasyAI();
+	
 }

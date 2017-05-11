@@ -21,5 +21,20 @@ public class TemporarAI extends AI {
 		}
 		return null;
 	}
+
+	@Override
+	protected void computeOperationWeightHardAI() {
+		return;
+	}
+
+	@Override
+	protected void computeOperationWeightMediumAI() {
+		return;
+	}
+
+	@Override
+	protected void computeOperationWeightEasyAI() {
+		return;
+	}
 	
 }

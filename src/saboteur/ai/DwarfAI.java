@@ -21,29 +21,7 @@ public class DwarfAI extends AI {
 	}
 	
 	@Override
-	public void playCard(){
-		this.getGame().playOperation(selectOperation());
-	}
-	
-	public Operation selectOperation(){
-		resetProbabilitiesToPlayEachOperation();
-		switch(this.getDifficulty()){
-		case EASY:
-			computeOperationWeightEasyAI();
-			break;
-		case MEDIUM:
-			computeOperationWeightMediumAI();
-			break;
-		case HARD:
-			computeOperationWeightHardAI();
-			break;
-		}
-		removeOperationWithNullTarget();
-		
-		return bestOperationToPlay();
-	}
-	
-	private void computeOperationWeightEasyAI() {
+	protected void computeOperationWeightEasyAI() {
 		for(Operation o : operationsWeight.keySet()){
 			switch(o.getCard().getClassName()){
 			case "PlanCard":
@@ -120,12 +98,14 @@ public class DwarfAI extends AI {
 		
 	}
 	
-	private void computeOperationWeightMediumAI() {
+	@Override
+	protected void computeOperationWeightMediumAI() {
 		// TODO Auto-generated method stub
 		
 	}
-
-	private void computeOperationWeightHardAI() {
+	
+	@Override
+	protected void computeOperationWeightHardAI() {
 		// TODO Auto-generated method stub
 		
 	}
