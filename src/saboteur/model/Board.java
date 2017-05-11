@@ -89,9 +89,7 @@ public class Board {
 		return this.board[position.getcY()][position.getcX()];
 	}
 	
-	public int getTaxiDistance(Position p1, Position p2) {
-		return Math.abs(p2.getcY() - p1.getcY()) + Math.abs(p2.getcX() - p1.getcX());
-	}
+
 	
 	public int numberOfNeighbors(Position position){
 		return this.getNeighbors(position).size();

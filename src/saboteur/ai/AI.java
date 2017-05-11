@@ -113,7 +113,7 @@ public abstract class AI extends Player {
 	
 	// Path card
 	public void updateTrust(OperationPathCard o){
-		int taxiDistance = this.getGame().getBoard().getTaxiDistance(o.getP(), getEstimatedGoldCardPosition());
+		int taxiDistance = o.getP().getTaxiDistance(getEstimatedGoldCardPosition());
 		int neighborsAmount = this.getGame().getBoard().numberOfNeighbors(o.getP());
 		
 		if(((PathCard) o.getCard()).isCulDeSac()){ 
