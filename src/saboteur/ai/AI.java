@@ -182,7 +182,7 @@ public abstract class AI extends Player {
 	
 	@Override
 	public void viewGoalCard(PathCard card){
-		changeEstimatedGoldCardPosition(getGame().getBoard().getPositionCard(card), card.hasGold());
+		changeEstimatedGoldCardPosition(getGame().getBoard().getPosition(card), card.hasGold());
 	}
 	
 	public void resetProbabilitiesToPlayEachCard(){

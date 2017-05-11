@@ -115,17 +115,12 @@ public class Board {
 		return positions;
 	}
 	
-	public Position getPositionCard(PathCard card){
-		PathCard current;
-		for (int i=0; i<GRID_SIZE; i++){
-			for (int j=0; j<GRID_SIZE; j++){
-				current = board[i][j];
-				if (current != null && current == card){ //TODO ne serait-ce pas mieux avec .equals ?
-					return new Position(j, i);
-				}
-			}
+	public Position getPosition(PathCard card){
+		for(Position position : this.pathCardsPosition.keySet()){
+			if(this.pathCardsPosition.get(position).equals(card))
+				return position;
 		}
-		return new Position(-1, -1);
+		return null;
 	}
 	
 	public List<Position> getGoldCards(){
@@ -136,7 +131,7 @@ public class Board {
 		List<Position> possiblePlaces = new LinkedList<Position>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
-			for(Position neighbor : this.getAllNeighbors(this.getPositionCard(pathCard))){
+			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
 				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){
 					possiblePlaces.add(neighbor);
 				}

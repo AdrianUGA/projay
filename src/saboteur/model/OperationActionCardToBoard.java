@@ -18,7 +18,7 @@ public class OperationActionCardToBoard extends Operation {
 		//Execution different if actionCard is a collapseCard or a planCard
 		if (sourceCard.isCollapse()){
 			if (!destinationCard.isStart() && !destinationCard.isGoal()){
-				Position positionCard = game.getBoard().getPositionCard(destinationCard);		
+				Position positionCard = game.getBoard().getPosition(destinationCard);		
 				game.getBoard().removeCard(positionCard);
 			}
 		} else {
