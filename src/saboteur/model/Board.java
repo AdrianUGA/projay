@@ -1,6 +1,5 @@
 package saboteur.model;
 
-import java.nio.file.Path;
 import java.util.*;
 
 import saboteur.model.Card.*;
