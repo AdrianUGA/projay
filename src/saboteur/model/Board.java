@@ -147,7 +147,7 @@ public class Board {
 		for(Cardinal cardinal : Cardinal.values()){
 			neighbor = this.getCard(position.getNeighbor(cardinal));
 			
-			//Important test if neighbor is visible because it can be a goalCard
+			/* Important test if neighbor is visible because it can be a goalCard */
 			if(neighbor == null || !neighbor.isVisible())
 				continue;
 			
