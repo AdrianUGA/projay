@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import saboteur.model.Position;
+import saboteur.model.Card.Cardinal;
 
 public class PositionTest {
 	
@@ -33,7 +34,8 @@ public class PositionTest {
 
 	@Test
 	public void testGetNeighbor() {
-		fail("Not yet implemented");
+		Position p1 = new Position(10, 20);
+		assertEquals(p1.getNeighbor(Cardinal.EAST).getcX(), 10);
 	}
 
 	@Test
