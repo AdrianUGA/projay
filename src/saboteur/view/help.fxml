@@ -27,7 +27,7 @@
             <Pane prefHeight="200.0" prefWidth="200.0" />
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="59.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="OK" AnchorPane.rightAnchor="109.0" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="59.0" mnemonicParsing="false" onAction="#backButtonAction" prefHeight="25.0" prefWidth="81.0" text="OK" AnchorPane.rightAnchor="109.0" />
                </children>
             </AnchorPane>
          </children>

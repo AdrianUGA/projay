@@ -91,9 +91,29 @@ public class MainMenuState implements State {
     }
     
     @FXML
-    private void newGame(){
+    private void newGameButtonAction(){
     	this.gsm.change("newGameMenu");
     }
+    
+    @FXML
+    private void loadGameButtonAction(){
+    	this.gsm.change("loadGame");
+    }
+    
+    @FXML
+    private void optionsButtonAction() {
+    	this.gsm.change("options");
+	}
+    
+    @FXML
+    private void scoreButtonAction() {
+    	this.gsm.change("score");
+	}
+    
+    @FXML
+    private void helpButtonAction() {
+    	this.gsm.change("help");
+	}
     
     @FXML
     private void quitGameButtonAction(){

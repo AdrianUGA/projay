@@ -88,7 +88,8 @@ public class NewGameMenuState implements State{
     }
     
     @FXML
-    private void startButtonAction() {
+    private void startNewGameButtonAction() {
+    	System.out.println("1");
 //    	this.gsm.change("game");
     }
     

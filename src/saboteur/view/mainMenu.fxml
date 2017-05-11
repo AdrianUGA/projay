@@ -12,7 +12,7 @@
    <children>
       <VBox prefWidth="700.0" style="-fx-background-color: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3));">
          <children>
-            <HBox alignment="CENTER" onMouseClicked="#newGame" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
+            <HBox alignment="CENTER" onMouseClicked="#newGameButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
                   <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
@@ -38,7 +38,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
+            <HBox alignment="CENTER" onMouseClicked="#loadGameButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
                   <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
@@ -64,7 +64,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
+            <HBox alignment="CENTER" onMouseClicked="#optionsButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
                   <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
@@ -90,7 +90,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
+            <HBox alignment="CENTER" onMouseClicked="#scoreButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
                   <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
@@ -116,7 +116,7 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
+            <HBox alignment="CENTER" onMouseClicked="#helpButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
                   <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>

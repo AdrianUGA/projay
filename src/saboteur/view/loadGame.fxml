@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<HBox alignment="CENTER" style="-fx-background-image: url(@../../resources/mine.jpg);" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER" style="-fx-background-color: rgba(0,0,0,0.7);">
+         <HBox.margin>
+            <Insets />
+         </HBox.margin>
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../resources/nouvelePartieLogo.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="40.0" top="20.0" />
+               </VBox.margin>
+            </ImageView>
+            <ScrollPane prefHeight="500.0" prefWidth="850.0" style="-fx-background-color: transparent;">
+               <VBox.margin>
+                  <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+               </VBox.margin>
+               <content>
+                  <VBox fx:id="loadableGameContainer" alignment="TOP_CENTER" prefHeight="500.0" prefWidth="835.0" style="-fx-background-color: rgba(0,0,0,0.7);">
+                     <children>
+                        <RadioButton mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="155.0" text="Exemple1" textFill="WHITE">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="155.0" text="Exemple1" textFill="WHITE">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="155.0" text="Exe" textFill="WHITE">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </VBox>
+               </content>
+            </ScrollPane>
+            <AnchorPane>
+               <children>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#backButtonAction" text="Annuler" AnchorPane.leftAnchor="25.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Button>
+                  <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#startLoadableGameButtonAction" text="Commencer" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="25.0">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Button>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" top="50.0" />
+               </VBox.margin>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</HBox>
