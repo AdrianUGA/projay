@@ -14,6 +14,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
+import saboteur.ai.DwarfAI;
 import saboteur.model.Game;
 
 public class GameState implements State{
@@ -62,8 +63,13 @@ public class GameState implements State{
 
     @Override
     public void onEnter(Object param) {
-    	/*this.game.getPlayerList().clear();
-    	this.game.addPlayer(player);
+    	/*
+    	 * Pour Emmanuel qui fait des tests avec les IA
+    	 *
+    	this.game.getPlayerList().clear();
+    	this.game.addPlayer(new DwarfAI(this.game));
+    	this.game.addPlayer(new DwarfAI(this.game));
+    	this.game.addPlayer(new DwarfAI(this.game));
     	*/
         this.game.newGame();
         try{
