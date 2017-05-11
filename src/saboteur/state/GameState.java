@@ -41,6 +41,9 @@ public class GameState implements State{
 
     @Override
     public void onEnter(Object param) {
+    	/*this.game.getPlayerList().clear();
+    	this.game.addPlayer(player);
+    	*/
         this.game.newGame();
         try{
             FXMLLoader loader = new FXMLLoader();
