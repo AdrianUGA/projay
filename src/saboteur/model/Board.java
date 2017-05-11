@@ -1,7 +1,6 @@
 package saboteur.model;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 import saboteur.model.Card.*;
 
@@ -29,15 +28,7 @@ public class Board {
 		this.objectiveCards = new LinkedList<Position>();
 		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
-		// TODO add the wining card
-		// TODO melange le tableau goalPathCard
-		/*int rand = ThreadLocalRandom.current().nextInt(0, 3);
-		PathCard[] goals = new PathCard[3];
-		for(int i=0; i<3; i++){
-			goals[i] = new PathCard(15).setToGoal();
-			if (rand == i)
-				goals[i].setToGold();
-		}*/
+		Collections.shuffle(goalPathCard);
 
 		this.addCard(goalPathCard.get(0), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
 		this.addCard(goalPathCard.get(1), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
