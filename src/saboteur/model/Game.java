@@ -57,8 +57,13 @@ public class Game {
 		//TODO
 	}
 	
-	public boolean isFinish(){
-		//TODO
+	public boolean gameIsFinished(){
+		if (round == 3 && roundIsFinished()) return true;
+		return false;
+	}
+	
+	public boolean roundIsFinished(){
+		if (this.board.goalCardWithGoldIsVisible()) return true;
 		return false;
 	}
 

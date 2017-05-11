@@ -211,4 +211,13 @@ public class Board {
 			}
 		}
 	}
+
+	public boolean goalCardWithGoldIsVisible() {
+		PathCard card;
+		for (Position posCard : this.objectiveCards){
+			card = getCard(posCard);
+			if (card.hasGold() && card.isVisible()) return true;
+		}
+		return false;
+	}
 }
