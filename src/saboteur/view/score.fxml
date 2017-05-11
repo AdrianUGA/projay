@@ -38,7 +38,7 @@
             </TableView>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="40.0" mnemonicParsing="false" onAction="#backButtonAction" prefHeight="25.0" prefWidth="81.0" text="OK" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="109.0" />
+                  <Button fx:id="okScoresButton" alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="40.0" mnemonicParsing="false" onMouseClicked="#okScoresButtonAction" prefHeight="25.0" prefWidth="81.0" text="OK" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="109.0" />
                </children>
             </AnchorPane>
          </children>

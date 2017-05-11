@@ -56,7 +56,7 @@ public class HelpState implements State {
     }
     
     @FXML
-    private void backButtonAction() {
+    private void okButtonAction() {
     	this.gsm.change("mainMenu");
     }
 }
