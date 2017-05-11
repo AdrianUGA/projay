@@ -48,7 +48,12 @@ public class Game {
 
 	public void newGame(){
 		this.goldCardStack = this.deck.getGoldCards();
+		Collections.shuffle(this.goldCardStack);
 		this.history = new LinkedList<>();
+		this.newRound();
+		while(true){
+
+		}
 	}
 
 	public void newRound(){

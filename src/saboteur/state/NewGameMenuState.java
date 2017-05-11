@@ -105,6 +105,7 @@ public class NewGameMenuState implements State{
             player.setName(playerName);
             this.game.addPlayer(player);
         }
+        this.gsm.change("game");
     }
     
     private void addPlayer(int num, boolean b) {
