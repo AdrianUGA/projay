@@ -22,6 +22,7 @@ public class PathCard extends Card {
         this.isCulDeSac = isCulDeSac;
         this.isStart = isStart;
         this.isGoal = isGoal;
+        this.isVisible = true;
 	}
 	
 	public boolean isStart() {
@@ -74,5 +75,9 @@ public class PathCard extends Card {
 			if (current.getValue() == cardinal.getValue()) return true;
 		}
 		return false;
+	}
+	
+	public int openSidesAmount(){
+		return this.openSides.size();
 	}
 }

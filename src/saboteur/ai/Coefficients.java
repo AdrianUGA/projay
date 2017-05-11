@@ -9,6 +9,9 @@ public class Coefficients {
 	public static int DWARF_DOUBLERESCUE_EASY = 9;
 	public static int DWARF_PLAN_TURN_EASY = 3;
 	public static int DWARF_PLAN_EASY = 8;
+	public static int DWARF_PATHCARD_EASY = 10;
+	public static int DWARF_DISTANCE_PATHCARD_EASY = 2;
+	public static int DWARF_COLLAPSE_EASY = 5;
 	
 	// Medium AI coefficients
 	

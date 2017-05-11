@@ -1,11 +1,15 @@
 package saboteur.ai;
 
+import java.util.List;
+import java.util.Random;
+
 import saboteur.model.Game;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
+import saboteur.model.OperationTrash;
 import saboteur.model.Player;
-import saboteur.model.Card.Card;
+import saboteur.model.Position;
 import saboteur.model.Card.PathCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.DoubleRescueCard;
@@ -20,19 +24,19 @@ public class DwarfAI extends AI {
 		resetProbabilitiesToPlayEachCard();
 		switch(this.getDifficulty()){
 		case EASY:
-			computeCardWeightEasyAI();
+			computeOperationWeightEasyAI();
 			break;
 		case MEDIUM:
-			computeCardWeightMediumAI();
+			computeOperationWeightMediumAI();
 			break;
 		case HARD:
-			computeCardWeightHardAI();
+			computeOperationWeightHardAI();
 			break;
 		}
 		//TODO choose heaviest card
 	}
 	
-	private void computeCardWeightEasyAI() {
+	private void computeOperationWeightEasyAI() {
 		for(Operation o : operationsWeight.keySet()){
 			switch(o.getCard().getClassName()){
 			case "PlanCard":
@@ -42,7 +46,8 @@ public class DwarfAI extends AI {
 											* Coefficients.DWARF_PLAN_EASY));
 				}
 				else{
-					operationsWeight.put(o, -1f);
+					// Trash
+					operationsWeight.put((OperationTrash) o, -2f);
 				}
 				break;
 			case "RescueCard":
@@ -50,7 +55,8 @@ public class DwarfAI extends AI {
 					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
 					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_RESCUE_EASY);
 				}else{
-					operationsWeight.put(o, 0f);
+					// Trash
+					operationsWeight.put((OperationTrash) o, 0f);
 				}
 				break;
 			case "DoubleRescueCard":
@@ -58,28 +64,61 @@ public class DwarfAI extends AI {
 					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
 					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_DOUBLERESCUE_EASY);
 				}else{
-					operationsWeight.put(o, 0f);
+					// Trash
+					operationsWeight.put((OperationTrash) o, 0f);
 				}
 				break;
 			case "SabotageCard":
 				Player p = mostLikelyASaboteur();
 				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
-				operationsWeight.put(o, (float) (positiveOrZero(AVERAGE_TRUST - isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY));
+				operationsWeight.put(o, (float) (positiveOrZero(AVERAGE_TRUST - isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 				break;
 			case "PathCard":
 				// Récupérer la case la plus proche à vol d'oiseau sur laquelle on peut mettre une carte (= presque dans tous les cas la meilleure case)
+				if(!((PathCard) o.getCard()).isCulDeSac()){
+					Position goldCardPosition = getEstimatedGoldCardPosition();
+					List<Position> allClosestPosition = getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
+					List<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
+					for(Position currentPos : allPositionsForThisCard){
+						int distance = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
+						if(distance >= -1){
+							// At most 1 position away from the minimum
+							((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(currentPos));
+							operationsWeight.put((OperationActionCardToBoard) o, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
+									+ distance - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
+						}else{
+							// Trash
+							operationsWeight.put((OperationTrash) o, 0f);
+						}
+					}
+				}else{
+					// We don't want to play cul-de-sac card
+					operationsWeight.put((OperationTrash) o, -1f);
+				}
 				break;
+			case "CollapseCard" :
+				List<Position> allCulDeSac = getGame().getBoard().allCulDeSac();
+				if(allCulDeSac.size() == 0){
+					operationsWeight.put((OperationTrash) o, 0f);
+				}
+				else{
+					Random r = new Random();
+					Position randomPos = allCulDeSac.get(r.nextInt(allCulDeSac.size()));
+					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(randomPos));
+					operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_EASY);
+				}
 			}
 		}
 		
 	}
 	
-	private void computeCardWeightMediumAI() {
+	private void computeOperationWeightMediumAI() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void computeCardWeightHardAI() {
+	private void computeOperationWeightHardAI() {
 		// TODO Auto-generated method stub
 		
 	}
