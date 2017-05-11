@@ -137,7 +137,7 @@ public class Board {
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPositionCard(pathCard))){
-				if(this.isPossible(card, neighbor)){
+				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){
 					possiblePlaces.add(neighbor);
 				}
 			}
@@ -146,6 +146,22 @@ public class Board {
 		return possiblePlaces;
 	}
 	
+	public List<Position> getNearestPossiblePathCardPlace(Position position){
+		List<Position> possible = this.getPossiblePathCardPlace(null);
+		possible.sort(new PositionComparator(position));
+		
+		int min = position.getTaxiDistance(possible.get(possible.size()));
+		List<Position> ret = new LinkedList<Position>();
+		for(int i=0; i<possible.size(); i++){
+			if(possible.get(i).getTaxiDistance(position) > min){
+				break;
+			}
+			ret.add(possible.get(i));
+		}
+		return ret;
+		
+		
+	}
 
 	public boolean isPossible(PathCard card, Position position){
 		PathCard neighbor;
@@ -185,4 +201,6 @@ public class Board {
 	public int indice(Position pos){
 		return pos.getcY() * 60 + pos.getcX();
 	}
+	
+	
 }
