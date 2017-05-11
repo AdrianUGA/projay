@@ -159,7 +159,7 @@ public class Board {
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
 	}
 	
-	public ArrayList<Position> goalCardsToFlip(PathCard card, Position p){
+	public ArrayList<Position> getGoalCardsToFlip(PathCard card, Position p){
 		PathCard neighbor;
 		Position posNeighbor;
 		ArrayList<Position> result = new ArrayList<>();
