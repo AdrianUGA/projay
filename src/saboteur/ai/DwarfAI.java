@@ -20,8 +20,13 @@ public class DwarfAI extends AI {
 		super(game);
 	}
 	
-	public void selectCard(){
-		resetProbabilitiesToPlayEachCard();
+	@Override
+	public void playCard(){
+		this.getGame().playOperation(selectOperation());
+	}
+	
+	public Operation selectOperation(){
+		resetProbabilitiesToPlayEachOperation();
 		switch(this.getDifficulty()){
 		case EASY:
 			computeOperationWeightEasyAI();
@@ -33,7 +38,9 @@ public class DwarfAI extends AI {
 			computeOperationWeightHardAI();
 			break;
 		}
-		//TODO choose heaviest card
+		removeOperationWithNullTarget();
+		
+		return null;
 	}
 	
 	private void computeOperationWeightEasyAI() {
@@ -103,7 +110,7 @@ public class DwarfAI extends AI {
 					operationsWeight.put((OperationTrash) o, 0f);
 				}
 				else{
-					Random r = new Random();
+					Random r = new Random(getGame().getSeed());
 					Position randomPos = allCulDeSac.get(r.nextInt(allCulDeSac.size()));
 					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(randomPos));
 					operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_EASY);

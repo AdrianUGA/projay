@@ -11,6 +11,7 @@ public class Game {
 	private Player currentPlayer;
 	private int round;
 	private int turn;
+	private final long seed;
 
 	private final HashMap<String, ArrayList<Card>> deck;
 
@@ -34,6 +35,7 @@ public class Game {
         deck = loader.loadCard();
         this.observers = new LinkedList<>();
         this.playerList = new ArrayList<>();
+        this.seed = 123456789;
     }
 	
 	public void addPlayer(Player player){
@@ -64,6 +66,10 @@ public class Game {
 
 	public Board getBoard() {
 		return board;
+	}
+	
+	public long getSeed() {
+		return seed;
 	}
 	
 	/* This method is needed by our fellow AI */

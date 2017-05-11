@@ -4,8 +4,10 @@ import saboteur.model.Operation;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
@@ -185,7 +187,7 @@ public abstract class AI extends Player {
 		changeEstimatedGoldCardPosition(getGame().getBoard().getPosition(card), card.hasGold());
 	}
 	
-	public void resetProbabilitiesToPlayEachCard(){
+	protected void resetProbabilitiesToPlayEachOperation(){
 		operationsWeight.clear();
 		for(Card c : getHand()){
 			switch(c.getClassName()){
@@ -200,12 +202,31 @@ public abstract class AI extends Player {
 			case "DoubleRescueCard":
 			case "SabotageCard":
 				operationsWeight.put(new OperationActionCardToPlayer(this, c, null), 0f);
+				break;
 			}
 		}
 	}
 	
-	public boolean hasThisTypeOfCard(Card c){
-		return true;
+	protected void removeOperationWithNullTarget(){
+		for(Operation o : operationsWeight.keySet()){
+			switch(o.getCard().getClassName()){
+			case "PathCard" :
+				if(((OperationPathCard) o).getP() == null)
+					operationsWeight.remove((OperationPathCard) o);
+				break;
+			case "CollapseCard" :
+			case "PlanCard" :
+				if(((OperationActionCardToPlayer) o).getDestinationPlayer() == null)
+					operationsWeight.remove((OperationActionCardToPlayer) o);
+				break;
+			case "RescueCard":
+			case "DoubleRescueCard":
+			case "SabotageCard":
+				if(((OperationActionCardToBoard) o).getDestinationCard() == null)
+					operationsWeight.remove((OperationActionCardToBoard) o);
+				break;
+			}
+		}
 	}
 	
 	//TODO move this method somewhere
@@ -216,7 +237,7 @@ public abstract class AI extends Player {
 		return 0;
 	}
 	
-	public Player mostLikelyADwarf(){
+	protected Player mostLikelyADwarf(){
 		float maxTrust=-1073741824;
 		Player mostTrustfulPlayer = null;
 		for(Player p : isDwarf.keySet()){
@@ -228,7 +249,7 @@ public abstract class AI extends Player {
 		return mostTrustfulPlayer;
 	}
 	
-	public Player mostLikelyASaboteur(){
+	protected Player mostLikelyASaboteur(){
 		float leastTrust=1073741824;
 		Player leastTrustfulPlayer = null;
 		for(Player p : isDwarf.keySet()){
@@ -239,4 +260,23 @@ public abstract class AI extends Player {
 		}
 		return leastTrustfulPlayer;
 	}
+	
+	protected Operation bestOperationToPlay(){
+		float max = -435365;
+		LinkedList<Operation> bestOperations = new LinkedList<Operation>();
+		Random r = new Random(getGame().getSeed());
+		
+		for(Operation o : this.operationsWeight.keySet()){
+			if(this.operationsWeight.get(o) > max){
+				max = this.operationsWeight.get(o);
+			}
+		}
+		for(Operation o : this.operationsWeight.keySet()){
+			if(this.operationsWeight.get(o) == max){
+				bestOperations.add(o);
+			}
+		}
+		return bestOperations.get(r.nextInt(bestOperations.size()));
+	}
+	
 }
