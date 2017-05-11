@@ -1,6 +1,7 @@
 package saboteur.ai;
 
 import saboteur.model.Game;
+import saboteur.model.Team;
 
 public class TemporarAI extends AI {
 	Game game;

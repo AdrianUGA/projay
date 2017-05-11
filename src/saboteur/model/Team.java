@@ -1,4 +1,4 @@
-package saboteur.ai;
+package saboteur.model;
 
 public enum Team {
 	DWARF, SABOTEUR
