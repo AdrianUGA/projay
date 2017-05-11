@@ -1,7 +1,6 @@
 package saboteur.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import saboteur.model.Card.*;
@@ -13,18 +12,15 @@ public class Game {
 	private int turn;
 	private final long seed;
 
-	private final HashMap<String, ArrayList<Card>> deck;
+	private final Deck deck;
 
-	private ArrayList<GoldCard> goldCardStack;
-	private ArrayList<Operation> history;
+	private LinkedList<GoldCard> goldCardStack;
+	private LinkedList<Operation> history;
 
-	private ArrayList<Card> stack;
-	private ArrayList<Card> trash;
+	private LinkedList<Card> stack;
+	private LinkedList<Card> trash;
 
-	private ArrayList<Player> playerList;
-	public ArrayList<Player> getPlayerList() {
-		return playerList;
-	}
+	private LinkedList<Player> playerList;
 
 	private Board board;
 	
@@ -34,7 +30,7 @@ public class Game {
         Loader loader = new Loader();
         deck = loader.loadCard();
         this.observers = new LinkedList<>();
-        this.playerList = new ArrayList<>();
+        this.playerList = new LinkedList<>();
         this.seed = 123456789;
     }
 	
@@ -45,6 +41,19 @@ public class Game {
 	public void playOperation(Operation op){
 		this.history.add(op);
 		op.exec(this);
+	}
+
+	public void newGame(){
+		this.goldCardStack = this.deck.getGoldCards();
+		this.history = new LinkedList<>();
+	}
+
+	public void newRound(){
+		this.trash = new LinkedList<>();
+		this.stack = this.deck.getOtherCards();
+		Collections.shuffle(this.stack);
+		this.board = new Board(this.deck.getStartPathCard(), this.deck.getGoalPathCards());
+		//TODO définir le role de chaque joueur
 	}
 	
 	public void save(){
@@ -59,9 +68,18 @@ public class Game {
 		//TODO
 	}
 	
-	public boolean isFinish(){
-		//TODO
+	public boolean gameIsFinished(){
+		if (round == 3 && roundIsFinished()) return true;
 		return false;
+	}
+	
+	public boolean roundIsFinished(){
+		if (this.board.goalCardWithGoldIsVisible()) return true;
+		return false;
+	}
+
+	public LinkedList<Player> getPlayerList() {
+		return playerList;
 	}
 
 	public Board getBoard() {
@@ -73,7 +91,7 @@ public class Game {
 	}
 	
 	/* This method is needed by our fellow AI */
-	public ArrayList<Operation> getHistory() {
+	public LinkedList<Operation> getHistory() {
 		return this.history;
 	}
 

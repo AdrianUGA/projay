@@ -1,6 +1,5 @@
 package saboteur.model;
 
-import java.nio.file.Path;
 import java.util.*;
 
 import saboteur.model.Card.*;
@@ -148,7 +147,7 @@ public class Board {
 		for(Cardinal cardinal : Cardinal.values()){
 			neighbor = this.getCard(position.getNeighbor(cardinal));
 			
-			//Important test if neighbor is visible because it can be a goalCard
+			/* Important test if neighbor is visible because it can be a goalCard */
 			if(neighbor == null || !neighbor.isVisible())
 				continue;
 			
@@ -210,5 +209,14 @@ public class Board {
 				childrenDad.put(find(pos2), find(pos1));
 			}
 		}
+	}
+
+	public boolean goalCardWithGoldIsVisible() {
+		PathCard card;
+		for (Position posCard : this.objectiveCards){
+			card = getCard(posCard);
+			if (card.hasGold() && card.isVisible()) return true;
+		}
+		return false;
 	}
 }
