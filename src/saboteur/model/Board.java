@@ -166,33 +166,11 @@ public class Board {
 	public boolean isPossible(PathCard card, Position position){
 		PathCard neighbor;
 		boolean atLeastOnePath = false;
-    	
-		//Test North
-		neighbor = this.getCard(new Position(position.getcX(), position.getcY()-1));
-		if (neighbor != null){
-			if (card.isOpen(Cardinal.NORTH) && neighbor.isOpen(Cardinal.SOUTH)) atLeastOnePath = true;
-			if (card.isOpen(Cardinal.NORTH)^neighbor.isOpen(Cardinal.SOUTH)) return false;
-		}
 		
-		//Test East
-		neighbor = this.getCard(new Position(position.getcX()+1, position.getcY()));
-		if (neighbor != null){
-			if (card.isOpen(Cardinal.EAST) && neighbor.isOpen(Cardinal.WEST)) atLeastOnePath = true;
-			if (card.isOpen(Cardinal.EAST)^neighbor.isOpen(Cardinal.WEST)) return false;
-		}
-		
-		//Test South
-		neighbor = this.getCard(new Position(position.getcX(), position.getcY()+1));
-		if (neighbor != null){
-			if (card.isOpen(Cardinal.SOUTH) && neighbor.isOpen(Cardinal.NORTH)) atLeastOnePath = true;
-			if (card.isOpen(Cardinal.SOUTH)^neighbor.isOpen(Cardinal.NORTH)) return false;
-		}
-		
-		//Test West
-		neighbor = this.getCard(new Position(position.getcX()-1, position.getcY()));
-		if (neighbor != null){
-			if (card.isOpen(Cardinal.WEST) && neighbor.isOpen(Cardinal.EAST)) atLeastOnePath = true;
-			if (card.isOpen(Cardinal.WEST)^neighbor.isOpen(Cardinal.EAST)) return false;
+		for(Cardinal cardinal : Cardinal.values()){
+			neighbor = this.getCard(position.getNeighbor(cardinal));
+			if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
+			if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
 		}
 		
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
