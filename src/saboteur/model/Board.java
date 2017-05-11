@@ -89,9 +89,7 @@ public class Board {
 		return this.board[position.getcY()][position.getcX()];
 	}
 	
-	public int getTaxiDistance(Position p1, Position p2) {
-		return Math.abs(p2.getcY() - p1.getcY()) + Math.abs(p2.getcX() - p1.getcX());
-	}
+
 	
 	public int numberOfNeighbors(Position position){
 		return this.getNeighbors(position).size();
@@ -139,7 +137,7 @@ public class Board {
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPositionCard(pathCard))){
-				if(this.isPossible(card, neighbor)){
+				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){
 					possiblePlaces.add(neighbor);
 				}
 			}
@@ -148,37 +146,33 @@ public class Board {
 		return possiblePlaces;
 	}
 	
+	public List<Position> getNearestPossiblePathCardPlace(Position position){
+		List<Position> possible = this.getPossiblePathCardPlace(null);
+		possible.sort(new PositionComparator(position));
+		
+		int min = position.getTaxiDistance(possible.get(possible.size()));
+		List<Position> ret = new LinkedList<Position>();
+		for(int i=0; i<possible.size(); i++){
+			if(possible.get(i).getTaxiDistance(position) > min){
+				break;
+			}
+			ret.add(possible.get(i));
+		}
+		return ret;
+		
+		
+	}
 
 	public boolean isPossible(PathCard card, Position position){
 		PathCard neighbor;
 		boolean atLeastOnePath = false;
-    	
-		//Test North
-		neighbor = this.getCard(new Position(position.getcX(), position.getcY()-1));
-		if (neighbor != null && neighbor.isVisible()){
-			if (card.isOpen(Cardinal.NORTH) && neighbor.isOpen(Cardinal.SOUTH)) atLeastOnePath = true;
-			if (card.isOpen(Cardinal.NORTH)^neighbor.isOpen(Cardinal.SOUTH)) return false;
-		}
-		
-		//Test East
-		neighbor = this.getCard(new Position(position.getcX()+1, position.getcY()));
-		if (neighbor != null && neighbor.isVisible()){
-			if (card.isOpen(Cardinal.EAST) && neighbor.isOpen(Cardinal.WEST)) atLeastOnePath = true;
-			if (card.isOpen(Cardinal.EAST)^neighbor.isOpen(Cardinal.WEST)) return false;
-		}
-		
-		//Test South
-		neighbor = this.getCard(new Position(position.getcX(), position.getcY()+1));
-		if (neighbor != null && neighbor.isVisible()){
-			if (card.isOpen(Cardinal.SOUTH) && neighbor.isOpen(Cardinal.NORTH)) atLeastOnePath = true;
-			if (card.isOpen(Cardinal.SOUTH)^neighbor.isOpen(Cardinal.NORTH)) return false;
-		}
-		
-		//Test West
-		neighbor = this.getCard(new Position(position.getcX()-1, position.getcY()));
-		if (neighbor != null && neighbor.isVisible()){
-			if (card.isOpen(Cardinal.WEST) && neighbor.isOpen(Cardinal.EAST)) atLeastOnePath = true;
-			if (card.isOpen(Cardinal.WEST)^neighbor.isOpen(Cardinal.EAST)) return false;
+
+		for(Cardinal cardinal : Cardinal.values()){
+			neighbor = this.getCard(position.getNeighbor(cardinal));
+			if (neighbor != null && neighbor.isVisible()){
+				if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
+				if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
+			}
 		}
 		
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
@@ -187,4 +181,6 @@ public class Board {
 	public int indice(Position pos){
 		return pos.getcY() * 60 + pos.getcX();
 	}
+	
+	
 }
