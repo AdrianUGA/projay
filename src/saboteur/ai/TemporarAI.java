@@ -8,18 +8,22 @@ public class TemporarAI extends AI {
 	public TemporarAI(Game game) {
 		super(game);
 		this.game = game;
-		
 	}
 	
-	public AI setTeam(Team team){
+	public AI getNewAI(Team team){
+		AI newAI = null;
 		if (team == Team.DWARF){
-			return new DwarfAI(this.game);
+			newAI = new DwarfAI(this.game);
+			newAI.setName(this.name);
+			newAI.setTeam(this.team);
 		}else if (team == Team.SABOTEUR){
-			return new SaboteurAI(this.game);
+			newAI = new SaboteurAI(this.game);
+			newAI.setName(this.name);
+			newAI.setTeam(this.team);
 		}else{
 			System.err.println("Not supposed to happen");
 		}
-		return null;
+		return newAI;
 	}
 	
 }

@@ -12,6 +12,7 @@ public abstract class Player {
 	protected ArrayList<GoldCard> gold;
 	protected ArrayList<Card> hand;
 	protected Game game;
+	protected Team team;
 	
 	public Card getSelectedCard() {
 		return selectedCard;
@@ -48,12 +49,6 @@ public abstract class Player {
 	public Player (Game game){
 		this.game = game;
 		game.register(this);
-	}
-
-	public Player (Game game, String name){
-		this.game = game;
-		game.register(this);
-		this.name = name;
 	}
 	
 	public boolean isSaboteur(){
@@ -162,13 +157,23 @@ public abstract class Player {
 		return this.name;
 	}
 
-	public Player setName(String nom) {
+	public void setName(String nom) {
 		this.name = nom;
-		return this;
 	}
 	
 	public void notify(Operation o){
 		
 	}
 
+	public void setTeam(Team team){
+		this.team = team;
+	}
+
+	public boolean isHuman(){
+		return false;
+	}
+
+	public boolean isAI(){
+		return false;
+	}
 }

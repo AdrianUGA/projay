@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
+import saboteur.ai.TemporarAI;
 import saboteur.model.Game;
 import saboteur.model.Human;
 import saboteur.model.Player;
@@ -97,11 +98,11 @@ public class NewGameMenuState implements State{
             String playerType = playerBox.getSelectPlayerMenu().getValue();
             Player player;
             if (playerType.equals("Humain")){
-                player = new Human(this.game, playerName);
+                player = new Human(this.game);
             } else{
-                //TODO créer une IA
-                player = new Human(this.game, playerName);
+                player = new TemporarAI(this.game);
             }
+            player.setName(playerName);
             this.game.addPlayer(player);
         }
     }

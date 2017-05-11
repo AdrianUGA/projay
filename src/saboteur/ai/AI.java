@@ -239,4 +239,8 @@ public abstract class AI extends Player {
 		}
 		return leastTrustfulPlayer;
 	}
+
+	public boolean isAI(){
+		return true;
+	}
 }
