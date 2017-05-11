@@ -75,4 +75,8 @@ public class PathCard extends Card {
 		}
 		return false;
 	}
+	
+	public int openSidesAmount(){
+		return this.openSides.size();
+	}
 }
