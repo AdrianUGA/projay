@@ -8,8 +8,8 @@ public class Board {
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
-	private static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
-	private static final int DISTANCE_START_OBJECTIVE_X = 7;
+	public static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
+	public static final int DISTANCE_START_OBJECTIVE_X = 7;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	
 	private PathCard[][] board;
@@ -155,28 +155,28 @@ public class Board {
     	
 		//Test North
 		neighbor = this.getCard(new Position(position.getcX(), position.getcY()-1));
-		if (neighbor != null){
+		if (neighbor != null && neighbor.isVisible()){
 			if (card.isOpen(Cardinal.NORTH) && neighbor.isOpen(Cardinal.SOUTH)) atLeastOnePath = true;
 			if (card.isOpen(Cardinal.NORTH)^neighbor.isOpen(Cardinal.SOUTH)) return false;
 		}
 		
 		//Test East
 		neighbor = this.getCard(new Position(position.getcX()+1, position.getcY()));
-		if (neighbor != null){
+		if (neighbor != null && neighbor.isVisible()){
 			if (card.isOpen(Cardinal.EAST) && neighbor.isOpen(Cardinal.WEST)) atLeastOnePath = true;
 			if (card.isOpen(Cardinal.EAST)^neighbor.isOpen(Cardinal.WEST)) return false;
 		}
 		
 		//Test South
 		neighbor = this.getCard(new Position(position.getcX(), position.getcY()+1));
-		if (neighbor != null){
+		if (neighbor != null && neighbor.isVisible()){
 			if (card.isOpen(Cardinal.SOUTH) && neighbor.isOpen(Cardinal.NORTH)) atLeastOnePath = true;
 			if (card.isOpen(Cardinal.SOUTH)^neighbor.isOpen(Cardinal.NORTH)) return false;
 		}
 		
 		//Test West
 		neighbor = this.getCard(new Position(position.getcX()-1, position.getcY()));
-		if (neighbor != null){
+		if (neighbor != null && neighbor.isVisible()){
 			if (card.isOpen(Cardinal.WEST) && neighbor.isOpen(Cardinal.EAST)) atLeastOnePath = true;
 			if (card.isOpen(Cardinal.WEST)^neighbor.isOpen(Cardinal.EAST)) return false;
 		}
