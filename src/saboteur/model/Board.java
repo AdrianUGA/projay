@@ -1,6 +1,5 @@
 package saboteur.model;
 
-import java.nio.file.Path;
 import java.util.*;
 
 import saboteur.model.Card.*;
@@ -148,7 +147,7 @@ public class Board {
 		for(Cardinal cardinal : Cardinal.values()){
 			neighbor = this.getCard(position.getNeighbor(cardinal));
 			
-			//Important test if neighbor is visible because it can be a goalCard
+			/* Important test if neighbor is visible because it can be a goalCard */
 			if(neighbor == null || !neighbor.isVisible())
 				continue;
 			
@@ -160,10 +159,42 @@ public class Board {
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
 	}
 	
-	public ArrayList<Position> goalCardsToFlip(PathCard card, Position p){
+	public ArrayList<Position> getGoalCardsToFlip(PathCard card, Position p){
 		PathCard neighbor;
 		Position posNeighbor;
 		ArrayList<Position> result = new ArrayList<>();
+		
+		ArrayList<Position> positionsToExplore = new ArrayList<>();
+		
+		PathCard currentCard;
+		Position currentPosition;
+		
+		ArrayList<Integer> positionsAlreadyExplored = new ArrayList<>();
+		
+		currentPosition = START;
+		positionsToExplore.add(currentPosition);
+		positionsAlreadyExplored.add(indice(currentPosition));
+		
+		while (!positionsToExplore.isEmpty()){
+			currentPosition = positionsToExplore.remove(positionsToExplore.size());
+			currentCard = this.getCard(currentPosition);
+			for(Cardinal cardinal : Cardinal.values()){
+				posNeighbor = p.getNeighbor(cardinal);
+				neighbor = this.getCard(posNeighbor);
+				if (neighbor != null && currentCard.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())){
+					if (!positionsAlreadyExplored.contains(indice(posNeighbor))){
+						positionsAlreadyExplored.add(indice(posNeighbor));
+						positionsToExplore.add(posNeighbor);
+						if (neighbor.isGoal() && !neighbor.isVisible()){
+							result.add(currentPosition);
+						}
+					}
+				}
+			}
+		}
+		
+		
+		
 		
 		for(Cardinal cardinal : Cardinal.values()){
 			if (card.isOpen(cardinal)){
