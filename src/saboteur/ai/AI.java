@@ -138,18 +138,24 @@ public abstract class AI extends Player {
 	}
 	
 	public Position getEstimatedGoldCardPosition(){
-		//TODO changer les positions par celles des cartes "objectif"
-		if(estimatedGoldCardPosition.get(new Position(0,0)) != null){
-			return new Position(0,0);
+		float max = -28091994;
+		LinkedList<Position> equiprobableGoldCardPosition = new LinkedList<Position>();
+		Random r = new Random(getGame().getSeed());
+		
+		for(Position p : estimatedGoldCardPosition.keySet()){
+			if(estimatedGoldCardPosition.get(p) > max){
+				max = estimatedGoldCardPosition.get(p);
+			}
 		}
-		if(estimatedGoldCardPosition.get(new Position(1,1)) != null){
-			return new Position(1,1);
+		for(Position p : estimatedGoldCardPosition.keySet()){
+			if(estimatedGoldCardPosition.get(p) == max){
+				equiprobableGoldCardPosition.add(p);
+			}
 		}
-		return new Position(2,2);
+		return equiprobableGoldCardPosition.get(r.nextInt(equiprobableGoldCardPosition.size()));
 	}
 	
 	public void changeEstimatedGoldCardPosition(Position p, Boolean b){
-		//TODO changer les positions par celles des cartes "objectif"
 		if(b){
 			this.estimatedGoldCardPosition.put(p, 1f);
 			this.setAllEstimatedGoldCardPositionExept(p, 0f);
