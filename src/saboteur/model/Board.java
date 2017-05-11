@@ -8,8 +8,8 @@ public class Board {
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
-	private static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
-	private static final int DISTANCE_START_OBJECTIVE_X = 7;
+	public static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
+	public static final int DISTANCE_START_OBJECTIVE_X = 7;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	
 	private PathCard[][] board;
@@ -143,14 +143,21 @@ public class Board {
 		
 		PathCard neighbor;
 		boolean atLeastOnePath = false;
-		
+
 		for(Cardinal cardinal : Cardinal.values()){
 			neighbor = this.getCard(position.getNeighbor(cardinal));
+<<<<<<< HEAD
 			if(neighbor == null)
 				continue;
 			
 			if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
 			if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
+=======
+			if (neighbor != null && neighbor.isVisible()){
+				if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
+				if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
+			}
+>>>>>>> branch 'master' of https://github.com/adrianuga/projay
 		}
 		
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
