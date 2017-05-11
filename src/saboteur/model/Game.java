@@ -47,21 +47,47 @@ public class Game {
 	}
 
 	public void newGame(){
+		this.round = 0;
+
 		this.goldCardStack = this.deck.getGoldCards();
 		Collections.shuffle(this.goldCardStack);
+
 		this.history = new LinkedList<>();
+
 		this.newRound();
-		this.round = 0;
 	}
 
 	public void newRound(){
 		this.round++;
+		this.turn = 1;
+
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getOtherCards();
 		Collections.shuffle(this.stack);
+
 		this.board = new Board(this.deck.getStartPathCard(), this.deck.getGoalPathCards());
+
 		this.setTeam();
-		this.turn = 1;
+		this.dealCardsToPlayer();
+	}
+
+	private void dealCardsToPlayer(){
+		int nbPlayer = this.playerList.size();
+		int nbCards;
+		if (nbPlayer <= 5){
+			nbCards = 6;
+		} else if(nbPlayer <= 7){
+			nbCards = 5;
+		} else{
+			nbCards = 4;
+		}
+		for (Player player: this.playerList) {
+			ArrayList<Card> hand = new ArrayList<>();
+			for (int i = 0; i < nbCards; i++){
+				hand.add(this.stack.removeFirst());
+			}
+			player.setHand(hand);
+		}
 	}
 
 	public Player getCurrentPlayer(){
