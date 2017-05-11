@@ -7,7 +7,7 @@ import saboteur.model.Card.*;
 public abstract class Player {
 	protected boolean saboteur;
 	protected Card selectedCard;
-	protected String nom;
+	protected String name;
 	protected ArrayList<SabotageCard> handicaps;
 	protected ArrayList<GoldCard> gold;
 	protected ArrayList<Card> hand;
@@ -48,6 +48,12 @@ public abstract class Player {
 	public Player (Game game){
 		this.game = game;
 		game.register(this);
+	}
+
+	public Player (Game game, String name){
+		this.game = game;
+		game.register(this);
+		this.name = name;
 	}
 	
 	public boolean isSaboteur(){
@@ -152,12 +158,12 @@ public abstract class Player {
 	public void viewGoalCard(PathCard card){
 	}
 	
-	public String getNom() {
-		return nom;
+	public String getName() {
+		return this.name;
 	}
 
-	public Player setNom(String nom) {
-		this.nom = nom;
+	public Player setName(String nom) {
+		this.name = nom;
 		return this;
 	}
 	

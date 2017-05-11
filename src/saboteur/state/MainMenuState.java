@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import saboteur.App;
 import saboteur.GameStateMachine;
-import saboteur.controller.MainMenuController;
 import saboteur.model.Game;
 
 public class MainMenuState implements State {
@@ -128,7 +127,7 @@ public class MainMenuState implements State {
        //add a modal box from builder (exit game confirmation)
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(App.class.getResource("/saboteur/view/modal.fxml"));
+            loader.setLocation(App.class.getResource("/saboteur/view/modalQuitGame.fxml"));
             loader.setController(this);
             Pane rootLayout = loader.load();
             Scene scene = new Scene(rootLayout,400, 400, Color.TRANSPARENT);

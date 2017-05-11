@@ -19,6 +19,7 @@ public class Game {
 
 	private ArrayList<Card> stack;
 	private ArrayList<Card> trash;
+
 	private ArrayList<Player> playerList;
 	public ArrayList<Player> getPlayerList() {
 		return playerList;
@@ -31,6 +32,8 @@ public class Game {
 	public Game(){
         Loader loader = new Loader();
         deck = loader.loadCard();
+        this.observers = new LinkedList<>();
+        this.playerList = new ArrayList<>();
     }
 	
 	public void addPlayer(Player player){

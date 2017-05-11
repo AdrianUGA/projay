@@ -5,6 +5,7 @@ import java.io.IOException;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
@@ -14,7 +15,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
+import saboteur.model.Card.PlanCard;
 import saboteur.model.Game;
+import saboteur.model.Human;
+import saboteur.model.Player;
 import saboteur.view.NewPlayerHBox;
 
 public class NewGameMenuState implements State{
@@ -79,7 +83,7 @@ public class NewGameMenuState implements State{
 				public void handle(MouseEvent event) {
 					nbPlayer--;
 					Pane p = (Pane)event.getSource();
-					HBox h = (HBox)p.getParent();
+                    NewPlayerHBox h = (NewPlayerHBox)p.getParent();
 					playerContainer.getChildren().remove(h);
 			    }
 			};
@@ -89,18 +93,30 @@ public class NewGameMenuState implements State{
     
     @FXML
     private void startNewGameButtonAction() {
-    	System.out.println("1");
-//    	this.gsm.change("game");
+        for (Node n: this.playerContainer.getChildren()) {
+            NewPlayerHBox playerBox = (NewPlayerHBox) n;
+            String playerName = playerBox.getPlayerName().getCharacters().toString();
+            String playerType = playerBox.getSelectPlayerMenu().getValue();
+            Player player;
+            if (playerType.equals("Humain")){
+                player = new Human(this.game, playerName);
+            } else{
+                //TODO créer une IA
+                player = new Human(this.game, playerName);
+            }
+            this.game.addPlayer(player);
+        }
+    	this.gsm.change("game");
     }
     
     private void addPlayer(int num, boolean b) {
     	NewPlayerHBox newPlayer = new NewPlayerHBox(num, b);
-    	this.playerContainer.getChildren().add(newPlayer.getHBox());
+    	this.playerContainer.getChildren().add(newPlayer);
     }
     
     private void addPlayer(int num, boolean b, EventHandler<MouseEvent> event) {
     	NewPlayerHBox newPlayer = new NewPlayerHBox(num, b);
     	newPlayer.setRemovePlayerAction(event);
-    	this.playerContainer.getChildren().add(newPlayer.getHBox());
+    	this.playerContainer.getChildren().add(newPlayer);
     }
 }
