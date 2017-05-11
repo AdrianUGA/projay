@@ -51,14 +51,26 @@ public class Game {
 		Collections.shuffle(this.goldCardStack);
 		this.history = new LinkedList<>();
 		this.newRound();
+		this.round = 0;
 	}
 
 	public void newRound(){
+		this.round++;
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getOtherCards();
 		Collections.shuffle(this.stack);
 		this.board = new Board(this.deck.getStartPathCard(), this.deck.getGoalPathCards());
 		this.setTeam();
+		this.turn = 1;
+	}
+
+	public Player getCurrentPlayer(){
+		return this.currentPlayer;
+	}
+
+	public void nextPlayer(){
+		this.currentPlayer = this.playerList.removeFirst();
+		this.playerList.addLast(this.currentPlayer);
 	}
 	
 	public void save(){
