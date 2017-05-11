@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: url(..\..\resources\mine.jpg);" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="CENTER" opacity="0.7" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: black;">
@@ -22,7 +21,7 @@
          <children>
             <ImageView fitHeight="84.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/Charger%20une%20PartieLogo.png" />
+                  <Image url="@../../resources/chargerPartieLogo.png" />
                </image>
                <VBox.margin>
                   <Insets bottom="40.0" top="20.0" />
@@ -46,8 +45,8 @@
             </ScrollPane>
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Button alignment="CENTER" layoutX="24.0" layoutY="80.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="81.0" text="Annuler" AnchorPane.leftAnchor="24.0" />
-                  <Button alignment="CENTER_RIGHT" layoutX="205.0" layoutY="80.0" mnemonicParsing="false" text="Commencer" AnchorPane.rightAnchor="24.0" />
+                  <Button fx:id="cancelButton" alignment="CENTER" layoutX="24.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#cancelButtonAction" prefHeight="25.0" prefWidth="81.0" text="Annuler" AnchorPane.leftAnchor="24.0" />
+                  <Button fx:id="startButton" alignment="CENTER_RIGHT" layoutX="205.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#startButtonAction" text="Commencer" AnchorPane.rightAnchor="24.0" />
                </children>
             </AnchorPane>
          </children>
