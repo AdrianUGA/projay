@@ -60,28 +60,7 @@ public class Board {
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
-	private Position find(Position position) {
-		Position currentPos = position;
-		while(childrenDad.get(currentPos) != currentPos){
-			currentPos = childrenDad.get(currentPos);
-		}
-		return currentPos;
-	}
-	
-	private boolean areConnected(Position pos1, Position pos2){
-		return find(childrenDad.get(pos1)).equals(find(childrenDad.get(pos2)));
-	}
-	
-	private void connect(Position pos1, Position pos2){
-		if(!areConnected(pos1, pos2)){
-			if(indice(pos1)<indice(pos2)){
-				childrenDad.put(find(pos1), find(pos2));
-			}
-			else{
-				childrenDad.put(find(pos2), find(pos1));
-			}
-		}
-	}
+
 	
 	public PathCard getCard(Position position){
 		if (!position.isValid())
@@ -182,4 +161,28 @@ public class Board {
 	}
 	
 	
+/* Union find stuff */
+	
+	private Position find(Position position) {
+		Position currentPos = position;
+		while(childrenDad.get(currentPos) != currentPos){
+			currentPos = childrenDad.get(currentPos);
+		}
+		return currentPos;
+	}
+	
+	private boolean areConnected(Position pos1, Position pos2){
+		return find(childrenDad.get(pos1)).equals(find(childrenDad.get(pos2)));
+	}
+	
+	private void connect(Position pos1, Position pos2){
+		if(!areConnected(pos1, pos2)){
+			if(indice(pos1)<indice(pos2)){
+				childrenDad.put(find(pos1), find(pos2));
+			}
+			else{
+				childrenDad.put(find(pos2), find(pos1));
+			}
+		}
+	}
 }
