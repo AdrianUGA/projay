@@ -41,6 +41,7 @@ public class GameState implements State{
 
     @Override
     public void onEnter(Object param) {
+        this.game.newGame();
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));

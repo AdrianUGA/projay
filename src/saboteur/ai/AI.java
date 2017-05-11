@@ -279,6 +279,10 @@ public abstract class AI extends Player {
 		}
 		return leastTrustfulPlayer;
 	}
+
+	public boolean isAI(){
+		return true;
+	}
 	
 	protected Operation bestOperationToPlay(){
 		float max = -435365;
@@ -326,5 +330,4 @@ public abstract class AI extends Player {
 	protected abstract void computeOperationWeightMediumAI();
 
 	protected abstract void computeOperationWeightEasyAI();
-	
 }
