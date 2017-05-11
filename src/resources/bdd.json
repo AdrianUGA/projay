@@ -1,0 +1,637 @@
+{
+  "cards": {
+    "pathCards": [
+      {
+        "frontImage": "start_card.png",
+        "backImage": "goal_card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": true,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "goal_card_rock_1.png",
+        "backImage": "goal_card_verso.png",
+        "cardinal": [
+          "EAST",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": true,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "goal_card_rock_2.png",
+        "backImage": "goal_card_verso.png",
+        "cardinal": [
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": true,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "goal_card_gold.png",
+        "backImage": "goal_card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": true,
+        "hasGold": true,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_16.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_19.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_18.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_17.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_28.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_36.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_30.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_24.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_37.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_29.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_40.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_34.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_31.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_15.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_32.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "EAST",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_25.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_35.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_26.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_1.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_5.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "EAST",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_3.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "EAST",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_4.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "EAST",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_39.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_23.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_38.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_20.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_21.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_22.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_14.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_33.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "EAST",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_27.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "EAST",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": false
+      },
+      {
+        "frontImage": "path_card_6.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
+      },
+      {
+        "frontImage": "path_card_10.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "EAST",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
+      },
+      {
+        "frontImage": "path_card_7.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "EAST",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
+      },
+      {
+        "frontImage": "path_card_13.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "EAST",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
+      },
+      {
+        "frontImage": "path_card_11.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
+      },
+      {
+        "frontImage": "path_card_12.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
+      },
+      {
+        "frontImage": "path_card_9.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "SOUTH",
+          "WEST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
+      },
+      {
+        "frontImage": "path_card_8.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
+      }
+    ],
+    "goldCards": [
+      {
+        "frontImage": "gold_card_1.png",
+        "value": 1,
+        "number": 16
+      },
+      {
+        "frontImage": "gold_card_2.png",
+        "value": 2,
+        "number": 8
+      },
+      {
+        "frontImage": "gold_card_3.png",
+        "value": 3,
+        "number": 4
+      }
+    ],
+    "sabotageCards": [
+      {
+        "frontImage": "broken_lantern_card.png",
+        "backImage": "card_verso.png",
+        "type": "LANTERN",
+        "number": 3
+      },
+      {
+        "frontImage": "broken_cart_card.png",
+        "backImage": "card_verso.png",
+        "type": "CART",
+        "number": 3
+      },
+      {
+        "frontImage": "broken_pickaxe_card.png",
+        "backImage": "card_verso.png",
+        "type": "PICKAXE",
+        "number": 3
+      }
+    ],
+    "rescueCards": [
+      {
+        "frontImage": "lantern_card.png",
+        "backImage": "card_verso.png",
+        "type": "LANTERN",
+        "number": 2
+      },
+      {
+        "frontImage": "cart_card.png",
+        "backImage": "card_verso.png",
+        "type": "CART",
+        "number": 2
+      },
+      {
+        "frontImage": "pickaxe_card.png",
+        "backImage": "card_verso.png",
+        "type": "PICKAXE",
+        "number": 2
+      }
+    ],
+    "doubleRescueCards": [
+      {
+        "frontImage": "pickaxe_cart_card.png",
+        "backImage": "card_verso.png",
+        "type1": "PICKAXE",
+        "type2": "CART",
+        "number": 1
+      },
+      {
+        "frontImage": "pickaxe_lantern_card.png",
+        "backImage": "card_verso.png",
+        "type1": "PICKAXE",
+        "type2": "LANTERN",
+        "number": 1
+      },
+      {
+        "frontImage": "lantern_cart_card.png",
+        "backImage": "card_verso.png",
+        "type1": "CART",
+        "type2": "LANTERN",
+        "number": 1
+      }
+    ],
+    "planCard": {
+      "frontImage": "plan_card.png",
+      "backImage": "card_verso.png",
+      "number": 6
+    },
+    "collapseCard": {
+      "frontImage": "collapse_card.png",
+      "backImage": "card_verso.png",
+      "number": 3
+    }
+  }
+}

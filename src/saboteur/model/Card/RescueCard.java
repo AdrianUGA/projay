@@ -1,13 +1,14 @@
 package saboteur.model.Card;
 
 public class RescueCard extends ActionCardToPlayer {
-	private int rescueType;
+	private Tool rescueType;
 	
-	public RescueCard(int type){
+	public RescueCard(Tool type){
 		this.rescueType = type;
 	}
 	
-	public int getRescueType(){
+	public Tool getRescueType(){
 		return this.rescueType;
 	}
+	
 }

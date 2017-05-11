@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import saboteur.model.Card.*;
 
 public abstract class Player {
-	private boolean saboteur;	
+	protected boolean saboteur;
+	protected Card selectedCard;
+	protected String nom;
+	protected ArrayList<SabotageCard> handicaps;
+	protected ArrayList<GoldCard> gold;
+	protected ArrayList<Card> hand;
+	protected Game game;
+	
 	public Card getSelectedCard() {
 		return selectedCard;
 	}
@@ -38,13 +45,6 @@ public abstract class Player {
 		this.hand = hand;
 	}
 
-	private Card selectedCard;
-	private String nom;
-	private ArrayList<SabotageCard> handicaps;
-	private ArrayList<GoldCard> gold;
-	private ArrayList<Card> hand;
-	private Game game;
-	
 	public Player (Game game){
 		this.game = game;
 		game.register(this);
@@ -116,12 +116,12 @@ public abstract class Player {
 		this.gold.remove(card);
 	}
 	
-	public boolean canHandicap(ActionCardToPlayer card){
-		System.out.println("On ne doit pas passer la ! (N1)");
+	public boolean canRescue(ActionCardToPlayer card){
+		System.err.println("Invalid Card. That is NOT supposed to happen, like ever");
 		return false;
 	}
-	public boolean canHandicap(DoubleRescueCard card){
-		int currentType;
+	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card){
+		Tool currentType;
 		for (SabotageCard sabotageCard : this.handicaps){
 			currentType = sabotageCard.getSabotageType();
 			if (currentType == card.getRescueType1() || currentType == card.getRescueType2()){
@@ -164,4 +164,5 @@ public abstract class Player {
 	public void notify(Operation o){
 		
 	}
+
 }

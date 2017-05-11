@@ -5,6 +5,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import saboteur.model.Game;
 import saboteur.state.*;
+import saboteur.tools.Loader;
 
 
 public class App extends Application {
@@ -21,16 +22,17 @@ public class App extends Application {
         primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
+
         GameStateMachine gsm = new GameStateMachine();
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
-        gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
+        gsm.add("newGameMenu", new NewGameMenuState(gsm, game, primaryStage));
         gsm.add("game", new GameState(gsm, game, primaryStage));
         gsm.add("pauseMenu", new PauseMenuState(gsm, game, primaryStage));
         gsm.add("loadGame", new LoadGameState(gsm, game, primaryStage));
         gsm.add("saveGame", new SaveGameState(gsm, game, primaryStage));
         gsm.add("options", new OptionsState(gsm, game, primaryStage));
         gsm.add("score", new ScoreState(gsm, game, primaryStage));
-
+        gsm.add("help", new HelpState(gsm, game, primaryStage));
         gsm.change("mainMenu");
 
         GameLoop gameLoop = new GameLoop(gsm);

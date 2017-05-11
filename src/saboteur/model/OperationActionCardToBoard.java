@@ -12,14 +12,30 @@ public class OperationActionCardToBoard extends Operation {
 
 	@Override
 	public void exec(Game game) {
+		ActionCardToBoard sourceCard = (ActionCardToBoard) this.getCard();
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		
-		//Execution different if destinationCard is a goal or a classic pathCard
-		if (destinationCard.isGoal()){
-			this.getSourcePlayer().viewGoalCard(destinationCard);
+		//Execution different if actionCard is a collapseCard or a planCard
+		if (sourceCard.isCollapse()){
+			if (!destinationCard.isStart() && !destinationCard.isGoal()){
+				Position positionCard = game.getBoard().getPositionCard(destinationCard);		
+				game.getBoard().removeCard(positionCard);
+			}
 		} else {
-			Position positionCard = game.getBoard().getPositionCard(destinationCard);		
-			game.getBoard().removeCard(positionCard);
+			if (destinationCard.isGoal()){
+				this.getSourcePlayer().viewGoalCard(destinationCard);
+			}
 		}
 	}
+
+	public PathCard getDestinationCard() {
+		return destinationCard;
+	}
+
+	public OperationActionCardToBoard setDestinationCard(PathCard destinationCard) {
+		this.destinationCard = destinationCard;
+		return this;
+	}
+	
+	
 }

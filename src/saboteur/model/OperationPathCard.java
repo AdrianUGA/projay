@@ -19,4 +19,11 @@ public class OperationPathCard extends Operation {
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		game.getBoard().addCard((PathCard)this.getCard(), p);
 	}
+
+	public OperationPathCard setP(Position p) {
+		this.p = p;
+		return this;
+	}
+	
+	
 }

@@ -8,13 +8,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox style="-fx-background-image: url(@../../resources/mine.jpg); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="saboteur.controller.MainMenuController">
+<HBox style="-fx-background-image: url(@../../resources/mine.jpg); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox prefWidth="700.0" style="-fx-background-color: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.3));">
          <children>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" onMouseClicked="#newGame" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
@@ -22,7 +22,7 @@
                         <Image url="@../../resources/pioche.png" />
                      </image>
                   </ImageView>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="New Game" textAlignment="CENTER">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Créer Partie" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -38,14 +38,17 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
                   </ImageView>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Load Game" textAlignment="CENTER">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Charger Partie" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -61,12 +64,15 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
                   </ImageView>
                   <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Options" textAlignment="CENTER">
                      <font>
@@ -84,14 +90,17 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
                   </ImageView>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Score" textAlignment="CENTER">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Scores" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -107,14 +116,17 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
                   </ImageView>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Help" textAlignment="CENTER">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Aide" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>
@@ -130,14 +142,17 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox fx:id="quitGameButton" alignment="CENTER" onMouseClicked="#quitGameButtonAction">
+            <HBox fx:id="quitGameButton" alignment="CENTER" onMouseClicked="#quitGameButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="55.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" visible="false">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
                   </ImageView>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Quit Game" textAlignment="CENTER">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Quitter" textAlignment="CENTER">
                      <font>
                         <Font size="20.0" />
                      </font>

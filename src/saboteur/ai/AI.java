@@ -2,7 +2,9 @@ package saboteur.ai;
 import saboteur.model.Game;
 import saboteur.model.Operation;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import saboteur.model.OperationActionCardToBoard;
@@ -10,37 +12,36 @@ import saboteur.model.OperationActionCardToPlayer;
 import saboteur.model.OperationPathCard;
 import saboteur.model.Player;
 import saboteur.model.Position;
+import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 
 public abstract class AI extends Player {
 	
-	private Map<Player,Float> trust;	
-	private Difficulty difficulty;
-	private Map<Position,Boolean> estimatedGoldCardPosition;
+	protected final int AVERAGE_TRUST = 50;
+	
+	protected Map<Player,Float> isDwarf;	
+	protected Difficulty difficulty;
+	protected Map<Position,Float> estimatedGoldCardPosition;
+	protected Map<Operation, Float> operationsWeight;
 	
 
 	public AI(Game game) {
 		super(game);
-		trust = new HashMap<Player,Float>();
+		isDwarf = new HashMap<Player,Float>();
 		for(Player p : game.getPlayerList()){
-			trust.put(p, (float) 50);
+			isDwarf.put(p, (float) AVERAGE_TRUST);
 		}
 		if(isSaboteur()){
-			trust.put(this, (float) -1073741824);
+			isDwarf.put(this, (float) -1073741824);
 		}
 		else{
-			trust.put(this, (float) 1073741824);
+			isDwarf.put(this, (float) 1073741824);
 		}
-		/*
-		estimatedGoldCardPosition = new HashMap<Position,Boolean>();
-		estimatedGoldCardPosition.put(new Position(0,0), true);
-		estimatedGoldCardPosition.put(new Position(1,1), true);
-		estimatedGoldCardPosition.put(new Position(2,2), true);
-		*/
 		
-		// est-ce qu’on ne ferait pas un couple Position/float pour associer la carte à la probabilité que ce soit la bonne ? 1/3 au début puis 1 quand on a trouvé.
-		
-		this.estimatedGoldCardPosition = game.getBoard().getGoldCards();
+		this.estimatedGoldCardPosition = new HashMap<Position, Float>();
+		for (Position position : game.getBoard().getGoldCards()){
+			this.estimatedGoldCardPosition.put(position, 1f/3f);
+		}
 	}
 
 	@Override
@@ -68,10 +69,10 @@ public abstract class AI extends Player {
 			break;
 		case "CollapseCard":
 			if(((PathCard) o.getCard()).isCulDeSac()){
-				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 20);
+				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) + 20);
 			}
 			else{
-				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) - 20);
+				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) - 20);
 			}
 			break;
 		default:
@@ -83,25 +84,25 @@ public abstract class AI extends Player {
 	public void updateTrust(OperationActionCardToPlayer o){
 		switch(o.getCard().getClass().getName()){
 		case "SobotageCard":
-			if(trust.get(o.getSourcePlayer()) > trust.get(o.getDestinationPlayer()) && (trust.get(o.getDestinationPlayer()) <= 40)){
+			if(isDwarf.get(o.getSourcePlayer()) > isDwarf.get(o.getDestinationPlayer()) && (isDwarf.get(o.getDestinationPlayer()) <= 40)){
 				// Ennemies of our ennemies are our allies
-				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 10);
+				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) + 10);
 			}
-			else if(trust.get(o.getSourcePlayer()) <= trust.get(o.getDestinationPlayer()) && (trust.get(o.getDestinationPlayer()) >= 60)){
+			else if(isDwarf.get(o.getSourcePlayer()) <= isDwarf.get(o.getDestinationPlayer()) && (isDwarf.get(o.getDestinationPlayer()) >= 60)){
 				// Ennemies of our allies are our ennemies
-				trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) - 10);
+				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) - 10);
 			}
 			break;
 		case "RescueCard":
 		case "DoubleRescueCard":
 			if(!o.getSourcePlayer().equals(o.getDestinationPlayer())){
-				if(trust.get(o.getDestinationPlayer()) <= 40){
+				if(isDwarf.get(o.getDestinationPlayer()) <= 40){
 					// Allies of our ennemies are our ennemies
-					trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) - 10);
+					isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) - 10);
 				}
-				else if(trust.get(o.getDestinationPlayer()) >= 60){
+				else if(isDwarf.get(o.getDestinationPlayer()) >= 60){
 					// Allies of our allies are our allies
-					trust.put(o.getSourcePlayer(), trust.get(o.getSourcePlayer()) + 10);
+					isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) + 10);
 				}
 			}
 			break;
@@ -118,10 +119,10 @@ public abstract class AI extends Player {
 		if(((PathCard) o.getCard()).isCulDeSac()){ 
 			// The closer the gold card, the heavier is the card.
 			// The more neighbors, the merr... heavier is the card.
-			trust.put(o.getSourcePlayer(), (float) (trust.get(o.getSourcePlayer()) - (40/(Math.pow(2, taxiDistance)))*(0.75+(neighborsAmount/4)) - 2));
+			isDwarf.put(o.getSourcePlayer(), (float) (isDwarf.get(o.getSourcePlayer()) - (40/(Math.pow(2, taxiDistance)))*(0.75+(neighborsAmount/4)) - 2));
 		}
 		else{
-			trust.put(o.getSourcePlayer(), (float) (trust.get(o.getSourcePlayer()) + 40/(Math.pow(2, taxiDistance)) + 3));
+			isDwarf.put(o.getSourcePlayer(), (float) (isDwarf.get(o.getSourcePlayer()) + 40/(Math.pow(2, taxiDistance)) + 3));
 		}
 	}
 	
@@ -136,10 +137,10 @@ public abstract class AI extends Player {
 	
 	public Position getEstimatedGoldCardPosition(){
 		//TODO changer les positions par celles des cartes "objectif"
-		if(estimatedGoldCardPosition.get(new Position(0,0))){
+		if(estimatedGoldCardPosition.get(new Position(0,0)) != null){
 			return new Position(0,0);
 		}
-		if(estimatedGoldCardPosition.get(new Position(1,1))){
+		if(estimatedGoldCardPosition.get(new Position(1,1)) != null){
 			return new Position(1,1);
 		}
 		return new Position(2,2);
@@ -147,28 +148,95 @@ public abstract class AI extends Player {
 	
 	public void changeEstimatedGoldCardPosition(Position p, Boolean b){
 		//TODO changer les positions par celles des cartes "objectif"
-		if(!b){
-			this.estimatedGoldCardPosition.put(p, b);
+		if(b){
+			this.estimatedGoldCardPosition.put(p, 1f);
+			this.setAllEstimatedGoldCardPositionExept(p, 0f);
 		}else{
-			this.estimatedGoldCardPosition.put(new Position(0,0), false);
-			this.estimatedGoldCardPosition.put(new Position(1,1), false);
-			this.estimatedGoldCardPosition.put(new Position(2,2), false);
-			this.estimatedGoldCardPosition.put(p, b);
+			this.estimatedGoldCardPosition.put(p, 0f);
 		}
 	}
 	
+	public void setAllEstimatedGoldCardPositionExept(Position position, Float probability){
+		for(Position p : this.estimatedGoldCardPosition.keySet()){
+			if(!p.equals(position)){
+				this.estimatedGoldCardPosition.put(p, probability);
+			}
+		}
+	}
+	
+	public void setAllEstimatedGoldCardPositionExept(List<Position> positions, Float probability){
+		for(Position position : positions){
+			this.setAllEstimatedGoldCardPositionExept(position, probability);
+		}
+	}
+	
+	public Position getMostProbableGoldCard(){
+		Position[] positions = (Position[]) this.estimatedGoldCardPosition.values().toArray();
+		Arrays.sort(positions);
+		return positions[0];
+	}
+	
 	public boolean knowsTheGoldCardPosition(){
-		//TODO changer les positions par celles des cartes "objectif"
-		// If at least 2 positions could contains the gold card, the AI isn't sure of its real position.
-		if((estimatedGoldCardPosition.get(new Position(0,0)) && estimatedGoldCardPosition.get(new Position(1,1)))
-			|| (estimatedGoldCardPosition.get(new Position(0,0)) && estimatedGoldCardPosition.get(new Position(2,2)))
-			|| (estimatedGoldCardPosition.get(new Position(1,1)) && estimatedGoldCardPosition.get(new Position(2,2))))
-			return false;
-		return true;
+		return this.estimatedGoldCardPosition.containsValue(1f);
 	}
 	
 	@Override
 	public void viewGoalCard(PathCard card){
 		changeEstimatedGoldCardPosition(getGame().getBoard().getPositionCard(card), card.hasGold());
+	}
+	
+	public void resetProbabilitiesToPlayEachCard(){
+		operationsWeight.clear();
+		for(Card c : getHand()){
+			switch(c.getClassName()){
+			case "PathCard" :
+				operationsWeight.put(new OperationPathCard(this, c, null), 0f);
+				break;
+			case "CollapseCard" :
+			case "PlanCard" :
+				operationsWeight.put(new OperationActionCardToBoard(this, c, null), 0f);
+				break;
+			case "RescueCard":
+			case "DoubleRescueCard":
+			case "SabotageCard":
+				operationsWeight.put(new OperationActionCardToPlayer(this, c, null), 0f);
+			}
+		}
+	}
+	
+	public boolean hasThisTypeOfCard(Card c){
+		return true;
+	}
+	
+	//TODO move this method somewhere
+	public float positiveOrZero(float i){
+		if(i>0){
+			return i;
+		}
+		return 0;
+	}
+	
+	public Player mostLikelyADwarf(){
+		float maxTrust=-1073741824;
+		Player mostTrustfulPlayer = null;
+		for(Player p : isDwarf.keySet()){
+			if(isDwarf.get(p) > maxTrust && p != this){
+				maxTrust = isDwarf.get(p);
+				mostTrustfulPlayer = p;
+			}
+		}
+		return mostTrustfulPlayer;
+	}
+	
+	public Player mostLikelyASaboteur(){
+		float leastTrust=1073741824;
+		Player leastTrustfulPlayer = null;
+		for(Player p : isDwarf.keySet()){
+			if(isDwarf.get(p) < leastTrust && p != this){
+				leastTrust = isDwarf.get(p);
+				leastTrustfulPlayer = p;
+			}
+		}
+		return leastTrustfulPlayer;
 	}
 }

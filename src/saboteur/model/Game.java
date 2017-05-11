@@ -1,13 +1,19 @@
 package saboteur.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import saboteur.model.Card.*;
+import saboteur.tools.Loader;
 
 public class Game {
 	private Player currentPlayer;
 	private int round;
+	private int turn;
+
+	private final HashMap<String, ArrayList<Card>> deck;
+
 	private ArrayList<GoldCard> goldCardStack;
 	private ArrayList<Operation> history;
 
@@ -21,6 +27,11 @@ public class Game {
 	private Board board;
 	
 	private LinkedList<Player> observers;
+
+	public Game(){
+        Loader loader = new Loader();
+        deck = loader.loadCard();
+    }
 	
 	public void addPlayer(Player player){
 		this.playerList.add(player);
@@ -65,5 +76,9 @@ public class Game {
 		for(Player player: this.observers){
 			player.notify(operation);
 		}
+	}
+	
+	public int getTurn(){
+		return turn;
 	}
 }

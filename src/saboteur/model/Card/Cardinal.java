@@ -1,7 +1,7 @@
 package saboteur.model.Card;
 
 public enum Cardinal {
-	North(1), East(2), South(4), West(8);
+	NORTH(1), EAST(2), SOUTH(4), WEST(8);
 
 	private int value;
 
@@ -10,18 +10,22 @@ public enum Cardinal {
 	}
 	
 	public Cardinal opposite() {
-		if(this == Cardinal.North)
-			return Cardinal.South;
+		if(this == Cardinal.NORTH)
+			return Cardinal.SOUTH;
 		
-		if(this == Cardinal.East)
-			return Cardinal.West;
+		if(this == Cardinal.EAST)
+			return Cardinal.WEST;
 		
-		if(this == Cardinal.South)
-			return Cardinal.North;
+		if(this == Cardinal.SOUTH)
+			return Cardinal.NORTH;
 		
-		if(this == Cardinal.West)
-			return Cardinal.East;
+		if(this == Cardinal.WEST)
+			return Cardinal.EAST;
 		System.err.println("Invalid Cardinal. That is NOT supposed to happen, like ever");
 		return null;
+	}
+	
+	public int getValue(){
+		return this.value;
 	}
 }

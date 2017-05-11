@@ -19,4 +19,11 @@ public class OperationActionCardToPlayer extends Operation {
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		destinationPlayer.addHandicapCard((SabotageCard)this.getCard());
 	}
+
+	public OperationActionCardToPlayer setDestinationPlayer(Player destinationPlayer) {
+		this.destinationPlayer = destinationPlayer;
+		return this;
+	}
+	
+	
 }
