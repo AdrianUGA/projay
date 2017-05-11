@@ -171,4 +171,11 @@ public abstract class Player {
 		
 	}
 
+	public boolean emptyHand(){
+		return this.hand.isEmpty();
+	}
+	
+	public void addGold(GoldCard goldCard){
+		this.gold.add(goldCard);
+	}
 }

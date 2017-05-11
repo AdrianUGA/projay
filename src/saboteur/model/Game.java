@@ -1,5 +1,6 @@
 package saboteur.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -74,8 +75,15 @@ public class Game {
 	}
 	
 	public boolean roundIsFinished(){
-		if (this.board.goalCardWithGoldIsVisible()) return true;
+		if (this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers()) return true;
 		return false;
+	}
+
+	private boolean emptyHandsPlayers() {
+		for (Player player : playerList){
+			if (!player.emptyHand()) return false;
+		}
+		return true;
 	}
 
 	public LinkedList<Player> getPlayerList() {
@@ -107,5 +115,139 @@ public class Game {
 	
 	public int getTurn(){
 		return turn;
+	}
+	
+	public boolean dwarfsWon(){
+		if (this.board.goalCardWithGoldIsVisible()) return true;
+		return false;
+	}
+	
+	public void dealGold(){
+		if (dwarfsWon()){
+			Player current;
+			GoldCard goldCard;
+			int currentNumber = playerList.indexOf(currentPlayer);
+			int nbCardsDealt = 0;
+			while (nbCardsDealt <= (playerList.size()%9)){
+				current = playerList.get(currentNumber);
+				if (!current.isSaboteur()){
+					goldCard = goldCardStack.removeFirst();
+					current.addGold(goldCard);
+					nbCardsDealt++;
+				}
+				currentNumber = (currentNumber+1)%playerList.size();
+			}
+		} else {
+			int nbSaboteurs = 0;
+			int valueToDeal = 0;
+			Player current;
+			
+			for (int i=0; i<this.playerList.size(); i++){
+				if (this.playerList.get(i).isSaboteur()) nbSaboteurs++;
+			}
+			
+			switch (nbSaboteurs){
+				case 0:
+					break;
+				case 1:
+					valueToDeal = 4;
+					break;
+				case 2:
+				case 3:
+					valueToDeal = 3;
+					break;
+				case 4:
+					valueToDeal = 2;
+					break;
+				default:
+					System.err.println("Impossible to be here");
+			}
+			
+			for (int i=0; i<this.playerList.size(); i++){
+				current = this.playerList.get(i);
+				if (current.isSaboteur()){
+					for (GoldCard card : getCardsToValue(valueToDeal)){
+						current.addGold(card);
+					}
+				}
+			}
+		}
+	}
+	
+	public ArrayList<GoldCard> getCardsToValue(int value){
+		//TODO Improve this method
+		ArrayList<GoldCard> result = new ArrayList<>();
+		boolean finished;
+		switch (value){
+			case 0:
+				break;
+			case 1:
+				for (GoldCard card : goldCardStack){
+					if (card.getValue() == 1){
+						result.add(card);
+						goldCardStack.remove(card);
+						break;
+					}
+				}
+				break;
+			case 2:
+				finished = false;
+				for (GoldCard card : goldCardStack){
+					if (card.getValue() == 2){
+						result.add(card);
+						goldCardStack.remove(card);
+						finished = true;
+						break;
+					}
+				}
+				if (!finished){
+					result.add(getCardsToValue(1).get(0));
+					result.add(getCardsToValue(1).get(0));
+				}
+
+				break;
+			case 3:
+				finished = false;
+				for (GoldCard card : goldCardStack){
+					if (card.getValue() == 3){
+						result.add(card);
+						goldCardStack.remove(card);
+						finished = true;
+						break;
+					}
+				}
+				if (!finished){
+					for (GoldCard card : getCardsToValue(2)){
+						result.add(card);
+						goldCardStack.remove(card);
+					}
+					result.add(getCardsToValue(1).get(0));
+				}
+				break;
+			case 4:
+				ArrayList<GoldCard> ofValueOne = getCardsToValue(1);
+				if (!ofValueOne.isEmpty()){
+					for (GoldCard card : getCardsToValue(3)){
+						result.add(card);
+						goldCardStack.remove(card);
+					}
+					result.add(ofValueOne.get(0));
+				} else {
+					for (GoldCard card : getCardsToValue(2)){
+						result.add(card);
+						goldCardStack.remove(card);
+					}
+					for (GoldCard card : getCardsToValue(2)){
+						result.add(card);
+						goldCardStack.remove(card);
+					}
+				}
+
+				break;
+			default:
+				System.err.println("Impossible to be here");		
+		}
+		
+		return result;
 	}
 }
