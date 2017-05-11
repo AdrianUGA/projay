@@ -40,6 +40,7 @@ public class Loader {
                 if(pathCard.isStart()){
                     startPathCard.add(pathCard);
                 } else if (pathCard.isGoal()){
+                    pathCard.setVisible(false);
                     goalPathCards.add(pathCard);
                 } else{
                     otherCards.add(pathCard);

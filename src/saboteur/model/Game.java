@@ -69,6 +69,8 @@ public class Game {
 
 		this.setTeam();
 		this.dealCardsToPlayer();
+
+		this.nextPlayer();
 	}
 
 	private void dealCardsToPlayer(){
@@ -184,6 +186,9 @@ public class Game {
 		for(int i = 0; i < this.playerList.size(); i++){
 			Team role = team.get(0);
 			this.playerList.get(i).setTeam(role);
+			//TODO MARCHE PAS !!!!!
+			//une fois la manche une terminée, un saboteur doit pouvoir devenir un nain et inversement !
+			//conclusion: TemporarAI sert a rien...
 			if (this.playerList.get(i).isAI()){
 				this.playerList.set(i, ((TemporarAI)this.playerList.get(i)).getNewAI(role));
 			}

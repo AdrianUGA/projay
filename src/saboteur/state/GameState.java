@@ -66,12 +66,15 @@ public class GameState implements State{
     public void onEnter(Object param) {
     	/*
     	 * Pour Emmanuel qui fait des tests avec les IA
+    	 * Pour pas être embêter par le problème de setTeam(),
+    	 * commente son appel dans la méthode newRound de la classe Game
     	 *
     	this.game.getPlayerList().clear();
     	this.game.addPlayer(new DwarfAI(this.game));
     	this.game.addPlayer(new DwarfAI(this.game));
     	this.game.addPlayer(new DwarfAI(this.game));
     	*/
+
         this.game.newGame();
         try{
             FXMLLoader loader = new FXMLLoader();
