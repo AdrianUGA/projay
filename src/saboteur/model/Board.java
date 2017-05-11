@@ -61,28 +61,7 @@ public class Board {
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
-	private Position find(Position position) {
-		Position currentPos = position;
-		while(childrenDad.get(currentPos) != currentPos){
-			currentPos = childrenDad.get(currentPos);
-		}
-		return currentPos;
-	}
-	
-	private boolean areConnected(Position pos1, Position pos2){
-		return find(childrenDad.get(pos1)).equals(find(childrenDad.get(pos2)));
-	}
-	
-	private void connect(Position pos1, Position pos2){
-		if(!areConnected(pos1, pos2)){
-			if(indice(pos1)<indice(pos2)){
-				childrenDad.put(find(pos1), find(pos2));
-			}
-			else{
-				childrenDad.put(find(pos2), find(pos1));
-			}
-		}
-	}
+
 	
 	public PathCard getCard(Position position){
 		if (!position.isValid())
@@ -160,15 +139,26 @@ public class Board {
 	}
 
 	public boolean isPossible(PathCard card, Position position){
+		if(!position.isValid())
+			return false;
+		
 		PathCard neighbor;
 		boolean atLeastOnePath = false;
 
 		for(Cardinal cardinal : Cardinal.values()){
 			neighbor = this.getCard(position.getNeighbor(cardinal));
+<<<<<<< HEAD
+			if(neighbor == null)
+				continue;
+			
+			if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
+			if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
+=======
 			if (neighbor != null && neighbor.isVisible()){
 				if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
 				if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
 			}
+>>>>>>> branch 'master' of https://github.com/adrianuga/projay
 		}
 		
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
@@ -197,4 +187,28 @@ public class Board {
 	}
 	
 	
+/* Union find stuff */
+	
+	private Position find(Position position) {
+		Position currentPos = position;
+		while(childrenDad.get(currentPos) != currentPos){
+			currentPos = childrenDad.get(currentPos);
+		}
+		return currentPos;
+	}
+	
+	private boolean areConnected(Position pos1, Position pos2){
+		return find(childrenDad.get(pos1)).equals(find(childrenDad.get(pos2)));
+	}
+	
+	private void connect(Position pos1, Position pos2){
+		if(!areConnected(pos1, pos2)){
+			if(indice(pos1)<indice(pos2)){
+				childrenDad.put(find(pos1), find(pos2));
+			}
+			else{
+				childrenDad.put(find(pos2), find(pos1));
+			}
+		}
+	}
 }
