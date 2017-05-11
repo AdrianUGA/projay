@@ -146,18 +146,12 @@ public class Board {
 
 		for(Cardinal cardinal : Cardinal.values()){
 			neighbor = this.getCard(position.getNeighbor(cardinal));
-<<<<<<< HEAD
 			if(neighbor == null)
 				continue;
 			
 			if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
 			if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
-=======
-			if (neighbor != null && neighbor.isVisible()){
-				if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
-				if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
-			}
->>>>>>> branch 'master' of https://github.com/adrianuga/projay
+
 		}
 		
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
