@@ -32,15 +32,18 @@ public class Position {
 		return this;
 	}
 	
-	public Position getNeighbor(Position position, Cardinal cardinal){
+	public Position getNeighbor(Cardinal cardinal){
+		Position position = null;
 		if(cardinal == Cardinal.NORTH)
-			position = new Position(position.cX, position.cY-1);
+			position = new Position(this.cX, this.cY-1);
 		else if(cardinal == Cardinal.EAST)
-			position = new Position(position.cX+1, position.cY);
+			position = new Position(this.cX+1, this.cY);
 		else if(cardinal == Cardinal.SOUTH)
-			position = new Position(position.cX, position.cY+1);
+			position = new Position(this.cX, this.cY+1);
 		else if(cardinal == Cardinal.WEST)
-			position = new Position(position.cX-1, position.cY);
+			position = new Position(this.cX-1, this.cY);
+		else
+			return null;
 		
 		if(position.isValid())
 			return position;

@@ -119,7 +119,7 @@ public class Board {
 	public List<Position> getAllNeighbors(Position position){
 		LinkedList<Position> positions = new LinkedList<Position>();
 		for(Cardinal cardinal : Cardinal.values()){
-			Position p = position.getNeighbor(position, cardinal);
+			Position p = position.getNeighbor(cardinal);
 			if (p != null)
 				positions.add(p);
 		}
