@@ -1,5 +1,6 @@
 package saboteur.model;
 
+import java.nio.file.Path;
 import java.util.*;
 
 import saboteur.model.Card.*;
@@ -146,21 +147,33 @@ public class Board {
 
 		for(Cardinal cardinal : Cardinal.values()){
 			neighbor = this.getCard(position.getNeighbor(cardinal));
-<<<<<<< HEAD
 			if(neighbor == null)
 				continue;
 			
 			if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
 			if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
-=======
-			if (neighbor != null && neighbor.isVisible()){
-				if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
-				if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
-			}
->>>>>>> branch 'master' of https://github.com/adrianuga/projay
+
 		}
 		
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
+	}
+	
+	public ArrayList<Position> goalCardsToFlip(PathCard card, Position p){
+		PathCard neighbor;
+		Position posNeighbor;
+		ArrayList<Position> result = new ArrayList<>();
+		
+		for(Cardinal cardinal : Cardinal.values()){
+			if (card.isOpen(cardinal)){
+				posNeighbor = p.getNeighbor(cardinal);
+				neighbor = this.getCard(posNeighbor);
+				if (neighbor != null && neighbor.isGoal() && !neighbor.isVisible()){
+					result.add(posNeighbor);
+				}
+			}
+		}
+		
+		return result;
 	}
 	
 	public int indice(Position pos){
