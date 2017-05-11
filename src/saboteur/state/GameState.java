@@ -14,6 +14,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
+import saboteur.ai.DwarfAI;
 import saboteur.model.Game;
 
 public class GameState implements State{
@@ -31,7 +32,29 @@ public class GameState implements State{
 
     @Override
     public void update() {
-
+        if (this.game.gameIsFinished()){
+            //fin de la partie
+            //this.gsm.change("annonce vainqueur");
+            System.out.println("fin de partie");
+        } else {
+            if (this.game.roundIsFinished()){
+                //fin de la manche
+                //Distribution des cartes gold
+                this.game.newRound();
+            } else{
+                //la manche continue
+                if (this.game.getCurrentPlayer().isAI()){
+                    this.game.getCurrentPlayer().playCard();
+                    System.out.println("AI has played");
+                    try{
+                        Thread.sleep(3000);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    this.game.nextPlayer();
+                }
+            }
+        }
     }
 
     @Override
@@ -41,6 +64,15 @@ public class GameState implements State{
 
     @Override
     public void onEnter(Object param) {
+    	/*
+    	 * Pour Emmanuel qui fait des tests avec les IA
+    	 *
+    	this.game.getPlayerList().clear();
+    	this.game.addPlayer(new DwarfAI(this.game));
+    	this.game.addPlayer(new DwarfAI(this.game));
+    	this.game.addPlayer(new DwarfAI(this.game));
+    	*/
+        this.game.newGame();
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));

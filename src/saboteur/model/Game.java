@@ -3,7 +3,9 @@ package saboteur.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Random;
 
+import saboteur.ai.TemporarAI;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
@@ -45,16 +47,56 @@ public class Game {
 	}
 
 	public void newGame(){
+		this.round = 0;
+
 		this.goldCardStack = this.deck.getGoldCards();
+		Collections.shuffle(this.goldCardStack);
+
 		this.history = new LinkedList<>();
+
+		this.newRound();
 	}
 
 	public void newRound(){
+		this.round++;
+		this.turn = 1;
+
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getOtherCards();
 		Collections.shuffle(this.stack);
+
 		this.board = new Board(this.deck.getStartPathCard(), this.deck.getGoalPathCards());
-		//TODO définir le role de chaque joueur
+
+		this.setTeam();
+		this.dealCardsToPlayer();
+	}
+
+	private void dealCardsToPlayer(){
+		int nbPlayer = this.playerList.size();
+		int nbCards;
+		if (nbPlayer <= 5){
+			nbCards = 6;
+		} else if(nbPlayer <= 7){
+			nbCards = 5;
+		} else{
+			nbCards = 4;
+		}
+		for (Player player: this.playerList) {
+			ArrayList<Card> hand = new ArrayList<>();
+			for (int i = 0; i < nbCards; i++){
+				hand.add(this.stack.removeFirst());
+			}
+			player.setHand(hand);
+		}
+	}
+
+	public Player getCurrentPlayer(){
+		return this.currentPlayer;
+	}
+
+	public void nextPlayer(){
+		this.currentPlayer = this.playerList.removeFirst();
+		this.playerList.addLast(this.currentPlayer);
 	}
 	
 	public void save(){
@@ -249,5 +291,43 @@ public class Game {
 		}
 		
 		return result;
+	}
+
+	public void setTeam(){
+		ArrayList<Team> team = new ArrayList<>();
+		int nbPlayer = this.playerList.size();
+		team.add(Team.DWARF);
+		team.add(Team.DWARF);
+		team.add(Team.DWARF);
+		team.add(Team.SABOTEUR);
+		if (nbPlayer > 3){
+			team.add(Team.DWARF);
+		}
+		if (nbPlayer > 4){
+			team.add(Team.SABOTEUR);
+		}
+		if (nbPlayer > 5){
+			team.add(Team.DWARF);
+		}
+		if (nbPlayer > 6){
+			team.add(Team.SABOTEUR);
+		}
+		if (nbPlayer > 7){
+			team.add(Team.DWARF);
+		}
+		if (nbPlayer > 8){
+			team.add(Team.DWARF);
+		}
+		if (nbPlayer > 9){
+			team.add(Team.SABOTEUR);
+		}
+		Collections.shuffle(team);
+		for(int i = 0; i < this.playerList.size(); i++){
+			Team role = team.get(0);
+			this.playerList.get(i).setTeam(role);
+			if (this.playerList.get(i).isAI()){
+				this.playerList.set(i, ((TemporarAI)this.playerList.get(i)).getNewAI(role));
+			}
+		}
 	}
 }

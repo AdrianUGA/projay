@@ -60,25 +60,25 @@ public class DwarfAI extends AI {
 				break;
 			case "PathCard":
 				// Récupérer la case la plus proche à vol d'oiseau sur laquelle on peut mettre une carte (= presque dans tous les cas la meilleure case)
-				if(!((PathCard) o.getCard()).isCulDeSac()){
+				if(!((PathCard) o.getCard()).isCulDeSac() && this.getHandicaps().size() == 0){
 					Position goldCardPosition = getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 					List<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(Position currentPos : allPositionsForThisCard){
-						int distance = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
-						if(distance >= -1){
+						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
+						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
 							((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(currentPos));
 							operationsWeight.put((OperationActionCardToBoard) o, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
-									+ distance - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
+									+ distanceDifference - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
 						}else{
 							// Trash
 							operationsWeight.put((OperationTrash) o, 0f);
 						}
 					}
 				}else{
-					// We don't want to play cul-de-sac card
+					// We don't want to play cul-de-sac card, and we can't play a pathcard if our tools are broken
 					operationsWeight.put((OperationTrash) o, -1f);
 				}
 				break;

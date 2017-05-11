@@ -15,7 +15,7 @@ public class Board {
 	private PathCard[][] board;
 	private List<Position> objectiveCards;
 	
-	private Map<Position, Position> childrenDad;
+	//private Map<Position, Position> childrenDad;
 	private Map<Position, PathCard> pathCardsPosition;
 	
 	public Board(ArrayList<PathCard> startPathCard, ArrayList<PathCard> goalPathCard){
@@ -41,13 +41,13 @@ public class Board {
 		if(card.isGoal())
 			this.objectiveCards.add(position);
 		this.pathCardsPosition.put(position, card);
-		this.childrenDad.put(position, find(position));
+		//this.childrenDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
 	}
 
 	public void removeCard(Position position){
 		this.pathCardsPosition.remove(position);
-		//
+		/*
 		childrenDad.clear();
 		for(Position current : pathCardsPosition.keySet()){
 			for(Position neighbor : getAllNeighbors(current)){
@@ -56,7 +56,7 @@ public class Board {
 				}
 			}
 		}
-		//
+		*/
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
@@ -220,7 +220,7 @@ public class Board {
 	
 /* Union find stuff */
 	
-	private Position find(Position position) {
+	/*private Position find(Position position) {
 		Position currentPos = position;
 		while(childrenDad.get(currentPos) != currentPos){
 			currentPos = childrenDad.get(currentPos);
@@ -241,7 +241,7 @@ public class Board {
 				childrenDad.put(find(pos2), find(pos1));
 			}
 		}
-	}
+	}*/
 
 	public boolean goalCardWithGoldIsVisible() {
 		PathCard card;

@@ -246,6 +246,16 @@ public abstract class AI extends Player {
 		return 0;
 	}
 	
+	//TODO move this method somewhere
+	public float ifNegativeZeroElseOne(float i){
+		if(i<=0){
+			return 0;
+		}
+		else{
+			return 1;
+		}
+	}
+	
 	protected Player mostLikelyADwarf(){
 		float maxTrust=-1073741824;
 		Player mostTrustfulPlayer = null;
@@ -268,6 +278,10 @@ public abstract class AI extends Player {
 			}
 		}
 		return leastTrustfulPlayer;
+	}
+
+	public boolean isAI(){
+		return true;
 	}
 	
 	protected Operation bestOperationToPlay(){
@@ -316,5 +330,4 @@ public abstract class AI extends Player {
 	protected abstract void computeOperationWeightMediumAI();
 
 	protected abstract void computeOperationWeightEasyAI();
-	
 }
