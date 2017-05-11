@@ -18,7 +18,6 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import saboteur.App;
 import saboteur.GameStateMachine;
-import saboteur.controller.MainMenuController;
 import saboteur.model.Game;
 
 public class MainMenuState implements State {

@@ -7,4 +7,8 @@ public class Human extends Player {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Human(Game game, String name){
+		super(game, name);
+	}
+
 }

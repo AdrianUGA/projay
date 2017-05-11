@@ -62,5 +62,9 @@ public class Position {
 		Position p = (Position) o;
 		return this.cX == p.cX && this.cY == p.cY;
 	}
+	
+	public int getTaxiDistance(Position p) {
+		return Math.abs(this.getcY() - p.getcY()) + Math.abs(this.getcX() - p.getcX());
+	}
 
 }
