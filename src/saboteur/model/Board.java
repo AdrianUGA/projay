@@ -159,13 +159,19 @@ public class Board {
 	}
 
 	public boolean isPossible(PathCard card, Position position){
+		if(!position.isValid())
+			return false;
+		
 		PathCard neighbor;
 		boolean atLeastOnePath = false;
 		
 		for(Cardinal cardinal : Cardinal.values()){
 			neighbor = this.getCard(position.getNeighbor(cardinal));
-			if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
+			if(neighbor == null)
+				continue;
+			
 			if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
+			if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
 		}
 		
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
