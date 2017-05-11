@@ -52,7 +52,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onMouseClicked="#startNewGameButtonAction" text="Commencer" textAlignment="CENTER">
+                  <Button mnemonicParsing="false" onAction="#startNewGameButtonAction" text="Commencer" textAlignment="CENTER">
                      <HBox.margin>
                         <Insets left="50.0" top="20.0" />
                      </HBox.margin>

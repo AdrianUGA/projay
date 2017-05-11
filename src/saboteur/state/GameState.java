@@ -1,11 +1,24 @@
 package saboteur.state;
 
+import java.io.IOException;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 
 public class GameState implements State{
 
+	@FXML private Canvas board;
     private GameStateMachine gsm;
     private Game game;
     private Stage primaryStage;
@@ -28,7 +41,26 @@ public class GameState implements State{
 
     @Override
     public void onEnter(Object param) {
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
+            loader.setController(this);
+            Pane rootLayout = loader.load();
+            Scene scene = new Scene(rootLayout);
+            
+            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
 
+            //set Stage boundaries to visible bounds of the main screen
+            double size = primaryScreenBounds.getHeight();
+            this.board.setHeight(size);
+            this.board.setWidth(size);
+            
+            this.primaryStage.setScene(scene);
+            this.primaryStage.setFullScreen(true);
+            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
