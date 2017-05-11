@@ -40,7 +40,7 @@ public class DwarfAI extends AI {
 		}
 		removeOperationWithNullTarget();
 		
-		return null;
+		return bestOperationToPlay();
 	}
 	
 	private void computeOperationWeightEasyAI() {

@@ -41,6 +41,9 @@ public abstract class AI extends Player {
 		}
 		
 		this.estimatedGoldCardPosition = new HashMap<Position, Float>();
+	}
+	
+	public void initializeEstimatedGoldCardPosition(){
 		for (Position position : game.getBoard().getGoldCards()){
 			this.estimatedGoldCardPosition.put(position, 1f/3f);
 		}
