@@ -22,6 +22,7 @@ public class PathCard extends Card {
         this.isCulDeSac = isCulDeSac;
         this.isStart = isStart;
         this.isGoal = isGoal;
+        this.isVisible = true;
 	}
 	
 	public boolean isStart() {
