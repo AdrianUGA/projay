@@ -50,7 +50,8 @@ public class Game {
 		this.round = 0;
 
 		this.goldCardStack = this.deck.getGoldCards();
-		Collections.shuffle(this.goldCardStack);
+		// TODO Use Game.seed to shuffle (new Random r(this.seed))
+		//Collections.shuffle(this.goldCardStack);
 
 		this.history = new LinkedList<>();
 
@@ -63,11 +64,12 @@ public class Game {
 
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getOtherCards();
-		Collections.shuffle(this.stack);
+		//TODO Use game seed to shuffle stack
+		//Collections.shuffle(this.stack);
 
 		this.board = new Board(this.deck.getStartPathCard(), this.deck.getGoalPathCards());
 
-		this.setTeam();
+		//this.setTeam();
 		this.dealCardsToPlayer();
 
 		this.nextPlayer();

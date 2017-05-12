@@ -1,6 +1,8 @@
 package saboteur.ai;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import saboteur.model.Game;
@@ -16,15 +18,16 @@ import saboteur.model.Card.RescueCard;
 
 public class SaboteurAI extends AI {
 	
-	public SaboteurAI(Game game){
-		super(game);
+	public SaboteurAI(Game game, String name){
+		super(game, name);
 	}
 
 	@Override
 	protected void computeOperationWeightEasyAI() {
-		for(Operation o : operationsWeight.keySet()){
+		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(operationsWeight);
+		for(Operation o : cloneOperationsWeight.keySet()){
 			switch(o.getCard().getClassName()){
-			case "PlanCard":
+			case "saboteur.model.Card.PlanCard":
 				if(!knowsTheGoldCardPosition()){
 					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(getEstimatedGoldCardPosition()));
 					operationsWeight.put(o, (float) ((1 + positiveOrZero(Coefficients.SABOTEUR_PLAN_TURN_EASY - getGame().getTurn()))
@@ -32,36 +35,36 @@ public class SaboteurAI extends AI {
 				}
 				else{
 					// Trash
-					operationsWeight.put((OperationTrash) o, -2f);
+					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -2f);
 				}
 				break;
-			case "RescueCard":
+			case "saboteur.model.Card.RescueCard":
 				if(canRescue((RescueCard)o.getCard())){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
 					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) * Coefficients.SABOTEUR_RESCUE_EASY);
 				}else{
 					// Trash
-					operationsWeight.put((OperationTrash) o, 0f);
+					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				break;
-			case "DoubleRescueCard":
+			case "saboteur.model.Card.DoubleRescueCard":
 				if(canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard())){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
 					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) * Coefficients.SABOTEUR_DOUBLERESCUE_EASY);
 				}else{
 					// Trash
-					operationsWeight.put((OperationTrash) o, 0f);
+					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				break;
-			case "SabotageCard":
+			case "saboteur.model.Card.SabotageCard":
 				Player p = mostLikelyADwarf();
 				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 				operationsWeight.put(o, (float) (positiveOrZero(AVERAGE_TRUST - isDwarf.get(p)) * Coefficients.SABOTEUR_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 				break;
-			case "PathCard":
+			case "saboteur.model.Card.PathCard":
 				if(this.getHandicaps().size() == 0){
 					// Trash
-					operationsWeight.put((OperationTrash) o, 0f);
+					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				else if(!((PathCard) o.getCard()).isCulDeSac()){
 					Position goldCardPosition = getEstimatedGoldCardPosition();
@@ -78,7 +81,7 @@ public class SaboteurAI extends AI {
 									+ distanceDifference - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.SABOTEUR_PATHCARD_EASY);
 						}else{
 							// Trash
-							operationsWeight.put((OperationTrash) o, 0f);
+							operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 						}
 					}
 				}else {
@@ -95,15 +98,16 @@ public class SaboteurAI extends AI {
 							operationsWeight.put((OperationActionCardToBoard) o, (float) ifNegativeZeroElseOne(Coefficients.SABOTEUR_DISTANCE_LEFT_EASY-currentPos.getTaxiDistance(goldCardPosition))*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distance - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.SABOTEUR_CUL_DE_SAC_EASY);
 						}else{
 							// Trash
-							operationsWeight.put((OperationTrash) o, 0f);
+							operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 						}
 					}
 				}
 				break;
-			case "CollapseCard" :
+			case "saboteur.model.Card.CollapseCard" :
+				//TODO to be changed (Saboteur are bad guys, right ?)
 				List<Position> allCulDeSac = getGame().getBoard().allCulDeSac();
 				if(allCulDeSac.size() == 0){
-					operationsWeight.put((OperationTrash) o, 0f);
+					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				else{
 					Random r = new Random(getGame().getSeed());

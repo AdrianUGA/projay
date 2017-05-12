@@ -20,7 +20,9 @@ import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.ai.DwarfAI;
+import saboteur.ai.SaboteurAI;
 import saboteur.model.Game;
+import saboteur.model.Player;
 import saboteur.tools.Resources;
 import saboteur.view.PlayerArc;
 
@@ -86,14 +88,31 @@ public class GameState implements State{
     	 * Pour Emmanuel qui fait des tests avec les IA
     	 * Pour pas être embêter par le problème de setTeam(),
     	 * commente son appel dans la méthode newRound de la classe Game
-    	 *
+    	 */
+    	//Début du bloc à commenter
     	this.game.getPlayerList().clear();
-    	this.game.addPlayer(new DwarfAI(this.game));
-    	this.game.addPlayer(new DwarfAI(this.game));
-    	this.game.addPlayer(new DwarfAI(this.game));
-    	*/
+    	this.game.addPlayer(new DwarfAI(this.game, "Yves"));
+    	this.game.addPlayer(new DwarfAI(this.game, "Philippe"));
+    	this.game.addPlayer(new DwarfAI(this.game, "Jean-Marie"));
 
+    	//Fin du bloc à commenter
+    	
         this.game.newGame();
+        
+        //Début du bloc à commenter
+        
+        for(Player p : this.game.getPlayerList()){
+    		if(p.isAI()){
+    			if(!p.isSaboteur()){
+    				((DwarfAI) p).initializeAI();
+    			}else{
+    				((SaboteurAI) p).initializeAI();
+    			}
+    		}
+    	}
+        
+        //Fin du bloc à commenter
+        
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));

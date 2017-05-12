@@ -3,7 +3,7 @@ package saboteur.model;
 public class Human extends Player {
 
 	public Human(Game game) {
-		super(game);
+		super(game, "human");
 		// TODO Auto-generated constructor stub
 	}
 

@@ -100,7 +100,7 @@ public class NewGameMenuState implements State{
             if (playerType.equals("Humain")){
                 player = new Human(this.game);
             } else{
-                player = new TemporarAI(this.game);
+                player = new TemporarAI(this.game, "temp");
             }
             player.setName(playerName);
             this.game.addPlayer(player);

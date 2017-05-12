@@ -27,9 +27,20 @@ public abstract class AI extends Player {
 	protected Map<Operation, Float> operationsWeight;
 	
 
-	public AI(Game game) {
-		super(game);
+	public AI(Game game, String name) {
+		super(game, name);
 		isDwarf = new HashMap<Player,Float>();
+		this.difficulty = Difficulty.EASY;
+		this.operationsWeight = new HashMap<Operation, Float>();
+		this.estimatedGoldCardPosition = new HashMap<Position, Float>();
+	}
+	
+	public void initializeAI(){
+		//Initialize estimated gold card position
+		for (Position position : game.getBoard().getGoldCards()){
+			this.estimatedGoldCardPosition.put(position, 1f/3f);
+		}
+		//Initialize trust
 		for(Player p : game.getPlayerList()){
 			isDwarf.put(p, (float) AVERAGE_TRUST);
 		}
@@ -39,40 +50,32 @@ public abstract class AI extends Player {
 		else{
 			isDwarf.put(this, (float) 1073741824);
 		}
-		
-		this.estimatedGoldCardPosition = new HashMap<Position, Float>();
-	}
-	
-	public void initializeEstimatedGoldCardPosition(){
-		for (Position position : game.getBoard().getGoldCards()){
-			this.estimatedGoldCardPosition.put(position, 1f/3f);
-		}
 	}
 
 	@Override
 	public void notify(Operation o){
 		switch(o.getClass().getName()){
-		case "OperationActionCardToBoard":
+		case "saboteur.model.Operation.OperationActionCardToBoard":
 			updateTrust((OperationActionCardToBoard) o);
 			break;
-		case "OperationActionCardToPlayer":
+		case "saboteur.model.Operation.OperationActionCardToPlayer":
 			updateTrust((OperationActionCardToPlayer) o);
 			break;
-		case "OperationPathCard":
+		case "saboteur.model.Operation.OperationPathCard":
 			updateTrust((OperationPathCard) o);
 			break;
 		default:
-			System.err.println("Op�ration non reconnue");
+			System.err.println("Opération non reconnue");
 		}
 	}
 
 	// Collapse card
 	public void updateTrust(OperationActionCardToBoard o){
 		switch(o.getCard().getClass().getName()){
-		case "PlanCard":
+		case "saboteur.model.Card.PlanCard":
 			// Nothing to update
 			break;
-		case "CollapseCard":
+		case "saboteur.model.Card.CollapseCard":
 			if(((PathCard) o.getCard()).isCulDeSac()){
 				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) + 20);
 			}
@@ -87,8 +90,8 @@ public abstract class AI extends Player {
 	
 	// Sabotage & Rescue card
 	public void updateTrust(OperationActionCardToPlayer o){
-		switch(o.getCard().getClass().getName()){
-		case "SobotageCard":
+		switch(o.getCard().getClassName()){
+		case "saboteur.model.Card.SobotageCard":
 			if(isDwarf.get(o.getSourcePlayer()) > isDwarf.get(o.getDestinationPlayer()) && (isDwarf.get(o.getDestinationPlayer()) <= 40)){
 				// Ennemies of our ennemies are our allies
 				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) + 10);
@@ -98,8 +101,8 @@ public abstract class AI extends Player {
 				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) - 10);
 			}
 			break;
-		case "RescueCard":
-		case "DoubleRescueCard":
+		case "saboteur.model.Card.RescueCard":
+		case "saboteur.model.Card.DoubleRescueCard":
 			if(!o.getSourcePlayer().equals(o.getDestinationPlayer())){
 				if(isDwarf.get(o.getDestinationPlayer()) <= 40){
 					// Allies of our ennemies are our ennemies
@@ -199,17 +202,18 @@ public abstract class AI extends Player {
 	protected void resetProbabilitiesToPlayEachOperation(){
 		operationsWeight.clear();
 		for(Card c : getHand()){
+			System.out.println("name = " +c.getClassName());
 			switch(c.getClassName()){
-			case "PathCard" :
+			case "saboteur.model.Card.PathCard" :
 				operationsWeight.put(new OperationPathCard(this, c, null), 0f);
 				break;
-			case "CollapseCard" :
-			case "PlanCard" :
+			case "saboteur.model.Card.CollapseCard" :
+			case "saboteur.model.Card.PlanCard" :
 				operationsWeight.put(new OperationActionCardToBoard(this, c, null), 0f);
 				break;
-			case "RescueCard":
-			case "DoubleRescueCard":
-			case "SabotageCard":
+			case "saboteur.model.Card.RescueCard":
+			case "saboteur.model.Card.DoubleRescueCard":
+			case "saboteur.model.Card.SabotageCard":
 				operationsWeight.put(new OperationActionCardToPlayer(this, c, null), 0f);
 				break;
 			}
@@ -217,23 +221,26 @@ public abstract class AI extends Player {
 	}
 	
 	protected void removeOperationWithNullTarget(){
-		for(Operation o : operationsWeight.keySet()){
-			switch(o.getCard().getClassName()){
-			case "PathCard" :
-				if(((OperationPathCard) o).getP() == null)
-					operationsWeight.remove((OperationPathCard) o);
-				break;
-			case "CollapseCard" :
-			case "PlanCard" :
-				if(((OperationActionCardToPlayer) o).getDestinationPlayer() == null)
-					operationsWeight.remove((OperationActionCardToPlayer) o);
-				break;
-			case "RescueCard":
-			case "DoubleRescueCard":
-			case "SabotageCard":
-				if(((OperationActionCardToBoard) o).getDestinationCard() == null)
-					operationsWeight.remove((OperationActionCardToBoard) o);
-				break;
+		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(operationsWeight);
+		for(Operation o : cloneOperationsWeight.keySet()){
+			if(o.getClass().getName() != "saboteur.model.OperationTrash"){
+				switch(o.getCard().getClassName()){
+				case "saboteur.model.Card.PathCard" :
+					if(((OperationPathCard) o).getP() == null)
+						operationsWeight.remove((OperationPathCard) o);
+					break;
+				case "saboteur.model.Card.CollapseCard" :
+				case "saboteur.model.Card.PlanCard" :
+					if(((OperationActionCardToBoard) o).getDestinationCard() == null)
+						operationsWeight.remove((OperationActionCardToBoard) o);
+					break;
+				case "saboteur.model.Card.RescueCard":
+				case "saboteur.model.Card.DoubleRescueCard":
+				case "saboteur.model.Card.SabotageCard":
+					if(((OperationActionCardToPlayer) o).getDestinationPlayer() == null)
+						operationsWeight.remove((OperationActionCardToPlayer) o);
+					break;
+				}
 			}
 		}
 	}
@@ -299,12 +306,15 @@ public abstract class AI extends Player {
 				bestOperations.add(o);
 			}
 		}
+		System.out.println(hand.size());
 		return bestOperations.get(r.nextInt(bestOperations.size()));
 	}
 	
 	@Override
 	public void playCard(){
-		this.getGame().playOperation(selectOperation());
+		Operation o = selectOperation();
+		System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
+		this.getGame().playOperation(o);
 	}
 	
 	public Operation selectOperation(){
