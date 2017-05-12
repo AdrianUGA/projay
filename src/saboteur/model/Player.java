@@ -79,7 +79,11 @@ public abstract class Player {
 		this.game.playOperation(operation);
 	}
 	
-	
+	public void pickCard(){
+		Operation operation = new OperationPick(this);
+		
+		this.game.playOperation(operation);
+	}
 	
 	public ArrayList<SabotageCard> getHandicaps(){
 		return this.handicaps;
