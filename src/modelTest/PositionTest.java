@@ -36,16 +36,19 @@ public class PositionTest {
 	public void testGetNeighbor() {
 		Position p1 = new Position(10, 20);
 		assertEquals(p1.getNeighbor(Cardinal.EAST).getcX(), 10);
+		assertNull((new Position(0, 0)).getNeighbor(Cardinal.NORTH));
 	}
 
 	@Test
 	public void testIsValid() {
-		fail("Not yet implemented");
+		assertTrue((new Position(10,20)).isValid());
+		assertFalse((new Position(-1, 20)).isValid());
 	}
 
 	@Test
 	public void testEqualsObject() {
-		fail("Not yet implemented");
+		assertTrue((new Position(10,20)).equals(new Position(10, 20)));
+		assertFalse((new Position(10,20)).equals(new Position(20, 10)));
 	}
 
 }
