@@ -12,5 +12,10 @@ public class OperationTrash extends Operation {
 	public void exec(Game game) {
 		this.getSourcePlayer().removeHandCard(this.getCard());
 	}
+	
+	@Override
+	public void execReverse(Game game) {
+		this.getSourcePlayer().addHandCard(this.getCard());
+	}
 
 }

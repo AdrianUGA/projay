@@ -14,6 +14,7 @@ public abstract class Operation {
 	}
 	
 	public abstract void exec(Game game);
+	public abstract void execReverse(Game game);
 	
 	public Card getCard(){
 		return card;

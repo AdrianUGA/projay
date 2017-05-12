@@ -19,6 +19,12 @@ public class OperationActionCardToPlayer extends Operation {
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		destinationPlayer.addHandicapCard((SabotageCard)this.getCard());
 	}
+	
+	@Override
+	public void execReverse(Game game) {
+		this.getSourcePlayer().addHandCard(this.getCard());
+		destinationPlayer.removeHandicapCard((SabotageCard)this.getCard());
+	}
 
 	public OperationActionCardToPlayer setDestinationPlayer(Player destinationPlayer) {
 		this.destinationPlayer = destinationPlayer;
