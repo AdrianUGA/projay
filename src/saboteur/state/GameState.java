@@ -65,8 +65,9 @@ public class GameState implements State{
                 //la manche continue
                 if (this.game.getCurrentPlayer().isAI()){
                     this.game.getCurrentPlayer().playCard();
-                    /*System.out.println("AI has played");
-                    try{
+                    this.game.getCurrentPlayer().pickCard();
+                    //System.out.println("AI has played");
+                    /*try{
                         Thread.sleep(3000);
                     } catch (Exception e){
                         e.printStackTrace();

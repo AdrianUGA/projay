@@ -163,6 +163,14 @@ public class Game {
 		return turn;
 	}
 	
+	public Card pick(){
+		return this.stack.removeFirst();
+	}
+	
+	public void addCardToStack(Card card){
+		this.stack.addFirst(card);
+	}
+	
 	public boolean dwarfsWon(){
 		if (this.board.goalCardWithGoldIsVisible()) return true;
 		return false;
