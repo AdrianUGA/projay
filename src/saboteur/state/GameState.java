@@ -65,12 +65,12 @@ public class GameState implements State{
                 //la manche continue
                 if (this.game.getCurrentPlayer().isAI()){
                     this.game.getCurrentPlayer().playCard();
-                    System.out.println("AI has played");
+                    /*System.out.println("AI has played");
                     try{
                         Thread.sleep(3000);
                     } catch (Exception e){
                         e.printStackTrace();
-                    }
+                    }*/
                     this.game.nextPlayer();
                 }
             }
@@ -90,17 +90,16 @@ public class GameState implements State{
     	 * commente son appel dans la méthode newRound de la classe Game
     	 */
     	//Début du bloc à commenter
+    	/*
     	this.game.getPlayerList().clear();
     	this.game.addPlayer(new DwarfAI(this.game, "Yves"));
     	this.game.addPlayer(new DwarfAI(this.game, "Philippe"));
     	this.game.addPlayer(new DwarfAI(this.game, "Jean-Marie"));
-
+		*/
     	//Fin du bloc à commenter
     	
         this.game.newGame();
-        
-        //Début du bloc à commenter
-        
+
         for(Player p : this.game.getPlayerList()){
     		if(p.isAI()){
     			if(!p.isSaboteur()){
@@ -110,8 +109,6 @@ public class GameState implements State{
     			}
     		}
     	}
-        
-        //Fin du bloc à commenter
         
         try{
             FXMLLoader loader = new FXMLLoader();

@@ -2,6 +2,7 @@ package saboteur.ai;
 import saboteur.model.Game;
 import saboteur.model.Operation;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -147,14 +148,16 @@ public abstract class AI extends Player {
 		float max = -28091994;
 		LinkedList<Position> equiprobableGoldCardPosition = new LinkedList<Position>();
 		Random r = new Random(getGame().getSeed());
+		DecimalFormat df = new DecimalFormat("#.####");
 		
 		for(Position p : estimatedGoldCardPosition.keySet()){
 			if(estimatedGoldCardPosition.get(p) > max){
 				max = estimatedGoldCardPosition.get(p);
+				System.out.println("max = " + max);
 			}
 		}
 		for(Position p : estimatedGoldCardPosition.keySet()){
-			if(estimatedGoldCardPosition.get(p) == max){
+			if(df.format(estimatedGoldCardPosition.get(p).doubleValue()) == df.format(max)){
 				equiprobableGoldCardPosition.add(p);
 			}
 		}
@@ -306,7 +309,6 @@ public abstract class AI extends Player {
 				bestOperations.add(o);
 			}
 		}
-		System.out.println(hand.size());
 		return bestOperations.get(r.nextInt(bestOperations.size()));
 	}
 	
@@ -315,6 +317,7 @@ public abstract class AI extends Player {
 		Operation o = selectOperation();
 		System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
 		this.getGame().playOperation(o);
+		System.out.println("It now has " + hand.size() + " cards");
 	}
 	
 	public Operation selectOperation(){
