@@ -9,6 +9,7 @@ import saboteur.model.Game;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
+import saboteur.model.OperationPathCard;
 import saboteur.model.OperationTrash;
 import saboteur.model.Player;
 import saboteur.model.Position;
@@ -70,12 +71,13 @@ public class DwarfAI extends AI {
 					List<Position> allClosestPosition = getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 					List<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
+					System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
 					for(Position currentPos : allPositionsForThisCard){
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
-							((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(currentPos));
-							operationsWeight.put((OperationActionCardToBoard) o, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
+							((OperationPathCard) o).setP(currentPos);
+							operationsWeight.put((OperationPathCard) o, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
 									+ distanceDifference - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
 						}else{
 							// Trash

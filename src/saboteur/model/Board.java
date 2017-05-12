@@ -108,8 +108,13 @@ public class Board {
 	
 	public List<Position> getPossiblePathCardPlace(PathCard card){
 		List<Position> possiblePlaces = new LinkedList<Position>();
+		Map<Position, PathCard> temp = new HashMap<Position, PathCard>(this.pathCardsPosition);
 		
-		for(PathCard pathCard : this.pathCardsPosition.values()){
+		for(Position pos : this.getGoldCards()){
+			temp.remove(pos);
+		}
+		
+		for(PathCard pathCard : temp.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
 				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){
 					possiblePlaces.add(neighbor);
@@ -123,7 +128,6 @@ public class Board {
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
 		List<Position> possible = this.getPossiblePathCardPlace(null);
 		possible.sort(new PositionComparator(position));
-		
 		int min = position.getTaxiDistance(possible.get(possible.size()-1));
 		List<Position> ret = new LinkedList<Position>();
 		for(int i=0; i<possible.size(); i++){
@@ -214,8 +218,9 @@ public class Board {
 	}
 	
 	public List<Position> allCulDeSac(){
-		//TODO 
-		return null;
+		//TODO
+		List<Position> list = new LinkedList<Position>();
+		return list;
 	}
 	
 /* Union find stuff */

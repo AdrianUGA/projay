@@ -88,6 +88,7 @@ public class Game {
 		for (Player player: this.playerList) {
 			ArrayList<Card> hand = new ArrayList<>();
 			for (int i = 0; i < nbCards; i++){
+				//TODO doesnt work
 				hand.add(this.stack.removeFirst());
 			}
 			player.setHand(hand);

@@ -148,7 +148,6 @@ public abstract class AI extends Player {
 		float max = -28091994;
 		LinkedList<Position> equiprobableGoldCardPosition = new LinkedList<Position>();
 		Random r = new Random(getGame().getSeed());
-		DecimalFormat df = new DecimalFormat("#.####");
 		
 		for(Position p : estimatedGoldCardPosition.keySet()){
 			if(estimatedGoldCardPosition.get(p) > max){
@@ -157,7 +156,7 @@ public abstract class AI extends Player {
 			}
 		}
 		for(Position p : estimatedGoldCardPosition.keySet()){
-			if(df.format(estimatedGoldCardPosition.get(p).doubleValue()) == df.format(max)){
+			if(estimatedGoldCardPosition.get(p) == max){
 				equiprobableGoldCardPosition.add(p);
 			}
 		}
@@ -300,6 +299,7 @@ public abstract class AI extends Player {
 		Random r = new Random(getGame().getSeed());
 		
 		for(Operation o : this.operationsWeight.keySet()){
+			System.out.println(o.getClass().getName());
 			if(this.operationsWeight.get(o) > max){
 				max = this.operationsWeight.get(o);
 			}

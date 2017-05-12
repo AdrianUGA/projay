@@ -17,6 +17,7 @@ public class OperationActionCardToPlayer extends Operation {
 	@Override
 	public void exec(Game game) {
 		this.getSourcePlayer().removeHandCard(this.getCard());
+		//TODO check if card type = sabotage or rescue or doublerescue
 		destinationPlayer.addHandicapCard((SabotageCard)this.getCard());
 	}
 	
