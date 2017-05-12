@@ -4,8 +4,10 @@ import saboteur.model.Operation;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
@@ -39,6 +41,9 @@ public abstract class AI extends Player {
 		}
 		
 		this.estimatedGoldCardPosition = new HashMap<Position, Float>();
+	}
+	
+	public void initializeEstimatedGoldCardPosition(){
 		for (Position position : game.getBoard().getGoldCards()){
 			this.estimatedGoldCardPosition.put(position, 1f/3f);
 		}
@@ -136,18 +141,24 @@ public abstract class AI extends Player {
 	}
 	
 	public Position getEstimatedGoldCardPosition(){
-		//TODO changer les positions par celles des cartes "objectif"
-		if(estimatedGoldCardPosition.get(new Position(0,0)) != null){
-			return new Position(0,0);
+		float max = -28091994;
+		LinkedList<Position> equiprobableGoldCardPosition = new LinkedList<Position>();
+		Random r = new Random(getGame().getSeed());
+		
+		for(Position p : estimatedGoldCardPosition.keySet()){
+			if(estimatedGoldCardPosition.get(p) > max){
+				max = estimatedGoldCardPosition.get(p);
+			}
 		}
-		if(estimatedGoldCardPosition.get(new Position(1,1)) != null){
-			return new Position(1,1);
+		for(Position p : estimatedGoldCardPosition.keySet()){
+			if(estimatedGoldCardPosition.get(p) == max){
+				equiprobableGoldCardPosition.add(p);
+			}
 		}
-		return new Position(2,2);
+		return equiprobableGoldCardPosition.get(r.nextInt(equiprobableGoldCardPosition.size()));
 	}
 	
 	public void changeEstimatedGoldCardPosition(Position p, Boolean b){
-		//TODO changer les positions par celles des cartes "objectif"
 		if(b){
 			this.estimatedGoldCardPosition.put(p, 1f);
 			this.setAllEstimatedGoldCardPositionExept(p, 0f);
@@ -185,7 +196,7 @@ public abstract class AI extends Player {
 		changeEstimatedGoldCardPosition(getGame().getBoard().getPosition(card), card.hasGold());
 	}
 	
-	public void resetProbabilitiesToPlayEachCard(){
+	protected void resetProbabilitiesToPlayEachOperation(){
 		operationsWeight.clear();
 		for(Card c : getHand()){
 			switch(c.getClassName()){
@@ -200,12 +211,31 @@ public abstract class AI extends Player {
 			case "DoubleRescueCard":
 			case "SabotageCard":
 				operationsWeight.put(new OperationActionCardToPlayer(this, c, null), 0f);
+				break;
 			}
 		}
 	}
 	
-	public boolean hasThisTypeOfCard(Card c){
-		return true;
+	protected void removeOperationWithNullTarget(){
+		for(Operation o : operationsWeight.keySet()){
+			switch(o.getCard().getClassName()){
+			case "PathCard" :
+				if(((OperationPathCard) o).getP() == null)
+					operationsWeight.remove((OperationPathCard) o);
+				break;
+			case "CollapseCard" :
+			case "PlanCard" :
+				if(((OperationActionCardToPlayer) o).getDestinationPlayer() == null)
+					operationsWeight.remove((OperationActionCardToPlayer) o);
+				break;
+			case "RescueCard":
+			case "DoubleRescueCard":
+			case "SabotageCard":
+				if(((OperationActionCardToBoard) o).getDestinationCard() == null)
+					operationsWeight.remove((OperationActionCardToBoard) o);
+				break;
+			}
+		}
 	}
 	
 	//TODO move this method somewhere
@@ -216,7 +246,17 @@ public abstract class AI extends Player {
 		return 0;
 	}
 	
-	public Player mostLikelyADwarf(){
+	//TODO move this method somewhere
+	public float ifNegativeZeroElseOne(float i){
+		if(i<=0){
+			return 0;
+		}
+		else{
+			return 1;
+		}
+	}
+	
+	protected Player mostLikelyADwarf(){
 		float maxTrust=-1073741824;
 		Player mostTrustfulPlayer = null;
 		for(Player p : isDwarf.keySet()){
@@ -228,7 +268,7 @@ public abstract class AI extends Player {
 		return mostTrustfulPlayer;
 	}
 	
-	public Player mostLikelyASaboteur(){
+	protected Player mostLikelyASaboteur(){
 		float leastTrust=1073741824;
 		Player leastTrustfulPlayer = null;
 		for(Player p : isDwarf.keySet()){
@@ -239,4 +279,55 @@ public abstract class AI extends Player {
 		}
 		return leastTrustfulPlayer;
 	}
+
+	public boolean isAI(){
+		return true;
+	}
+	
+	protected Operation bestOperationToPlay(){
+		float max = -435365;
+		LinkedList<Operation> bestOperations = new LinkedList<Operation>();
+		Random r = new Random(getGame().getSeed());
+		
+		for(Operation o : this.operationsWeight.keySet()){
+			if(this.operationsWeight.get(o) > max){
+				max = this.operationsWeight.get(o);
+			}
+		}
+		for(Operation o : this.operationsWeight.keySet()){
+			if(this.operationsWeight.get(o) == max){
+				bestOperations.add(o);
+			}
+		}
+		return bestOperations.get(r.nextInt(bestOperations.size()));
+	}
+	
+	@Override
+	public void playCard(){
+		this.getGame().playOperation(selectOperation());
+	}
+	
+	public Operation selectOperation(){
+		resetProbabilitiesToPlayEachOperation();
+		switch(this.getDifficulty()){
+		case EASY:
+			computeOperationWeightEasyAI();
+			break;
+		case MEDIUM:
+			computeOperationWeightMediumAI();
+			break;
+		case HARD:
+			computeOperationWeightHardAI();
+			break;
+		}
+		removeOperationWithNullTarget();
+		
+		return bestOperationToPlay();
+	}
+
+	protected abstract void computeOperationWeightHardAI();
+
+	protected abstract void computeOperationWeightMediumAI();
+
+	protected abstract void computeOperationWeightEasyAI();
 }

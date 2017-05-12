@@ -1,6 +1,5 @@
 package saboteur.model;
 
-import java.nio.file.Path;
 import java.util.*;
 
 import saboteur.model.Card.*;
@@ -16,7 +15,7 @@ public class Board {
 	private PathCard[][] board;
 	private List<Position> objectiveCards;
 	
-	private Map<Position, Position> childrenDad;
+	//private Map<Position, Position> childrenDad;
 	private Map<Position, PathCard> pathCardsPosition;
 	
 	public Board(ArrayList<PathCard> startPathCard, ArrayList<PathCard> goalPathCard){
@@ -42,13 +41,13 @@ public class Board {
 		if(card.isGoal())
 			this.objectiveCards.add(position);
 		this.pathCardsPosition.put(position, card);
-		this.childrenDad.put(position, find(position));
+		//this.childrenDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
 	}
 
 	public void removeCard(Position position){
 		this.pathCardsPosition.remove(position);
-		//
+		/*
 		childrenDad.clear();
 		for(Position current : pathCardsPosition.keySet()){
 			for(Position neighbor : getAllNeighbors(current)){
@@ -57,7 +56,7 @@ public class Board {
 				}
 			}
 		}
-		//
+		*/
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
@@ -148,7 +147,7 @@ public class Board {
 		for(Cardinal cardinal : Cardinal.values()){
 			neighbor = this.getCard(position.getNeighbor(cardinal));
 			
-			//Important test if neighbor is visible because it can be a goalCard
+			/* Important test if neighbor is visible because it can be a goalCard */
 			if(neighbor == null || !neighbor.isVisible())
 				continue;
 			
@@ -160,10 +159,42 @@ public class Board {
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
 	}
 	
-	public ArrayList<Position> goalCardsToFlip(PathCard card, Position p){
+	public ArrayList<Position> getGoalCardsToFlip(PathCard card, Position p){
 		PathCard neighbor;
 		Position posNeighbor;
 		ArrayList<Position> result = new ArrayList<>();
+		
+		ArrayList<Position> positionsToExplore = new ArrayList<>();
+		
+		PathCard currentCard;
+		Position currentPosition;
+		
+		ArrayList<Integer> positionsAlreadyExplored = new ArrayList<>();
+		
+		currentPosition = START;
+		positionsToExplore.add(currentPosition);
+		positionsAlreadyExplored.add(indice(currentPosition));
+		
+		while (!positionsToExplore.isEmpty()){
+			currentPosition = positionsToExplore.remove(positionsToExplore.size());
+			currentCard = this.getCard(currentPosition);
+			for(Cardinal cardinal : Cardinal.values()){
+				posNeighbor = p.getNeighbor(cardinal);
+				neighbor = this.getCard(posNeighbor);
+				if (neighbor != null && currentCard.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())){
+					if (!positionsAlreadyExplored.contains(indice(posNeighbor))){
+						positionsAlreadyExplored.add(indice(posNeighbor));
+						positionsToExplore.add(posNeighbor);
+						if (neighbor.isGoal() && !neighbor.isVisible()){
+							result.add(currentPosition);
+						}
+					}
+				}
+			}
+		}
+		
+		
+		
 		
 		for(Cardinal cardinal : Cardinal.values()){
 			if (card.isOpen(cardinal)){
@@ -189,7 +220,7 @@ public class Board {
 	
 /* Union find stuff */
 	
-	private Position find(Position position) {
+	/*private Position find(Position position) {
 		Position currentPos = position;
 		while(childrenDad.get(currentPos) != currentPos){
 			currentPos = childrenDad.get(currentPos);
@@ -210,5 +241,14 @@ public class Board {
 				childrenDad.put(find(pos2), find(pos1));
 			}
 		}
+	}*/
+
+	public boolean goalCardWithGoldIsVisible() {
+		PathCard card;
+		for (Position posCard : this.objectiveCards){
+			card = getCard(posCard);
+			if (card.hasGold() && card.isVisible()) return true;
+		}
+		return false;
 	}
 }
