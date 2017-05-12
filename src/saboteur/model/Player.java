@@ -46,9 +46,11 @@ public abstract class Player {
 		this.hand = hand;
 	}
 
-	public Player (Game game){
+	public Player (Game game, String name){
 		this.game = game;
 		game.register(this);
+		this.handicaps = new ArrayList<SabotageCard>();
+		this.name = name;
 	}
 	
 	public boolean isSaboteur(){
@@ -122,7 +124,6 @@ public abstract class Player {
 	}
 	
 	public boolean canRescue(ActionCardToPlayer card){
-		System.err.println("Invalid Card. That is NOT supposed to happen, like ever");
 		return false;
 	}
 	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card){
@@ -188,4 +189,5 @@ public abstract class Player {
 	public boolean isAI(){
 		return false;
 	}
+
 }

@@ -124,7 +124,7 @@ public class Board {
 		List<Position> possible = this.getPossiblePathCardPlace(null);
 		possible.sort(new PositionComparator(position));
 		
-		int min = position.getTaxiDistance(possible.get(possible.size()));
+		int min = position.getTaxiDistance(possible.get(possible.size()-1));
 		List<Position> ret = new LinkedList<Position>();
 		for(int i=0; i<possible.size(); i++){
 			if(possible.get(i).getTaxiDistance(position) > min){
