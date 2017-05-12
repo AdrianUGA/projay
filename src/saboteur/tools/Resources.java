@@ -14,7 +14,7 @@ public class Resources {
 
     private HashMap<String, Image> imageCard;
 
-    public Resources(){
+	public Resources(){
         this.imageCard = new HashMap();
         try{
             this.pathImageCardFolder = Paths.get(App.class.getResource("/resources/cards/").toURI());
@@ -32,4 +32,9 @@ public class Resources {
             e.printStackTrace();
         }
     }
+    
+    public HashMap<String, Image> getImageCard() {
+		return imageCard;
+	}
+    
 }
