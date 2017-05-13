@@ -180,7 +180,7 @@ public class Board {
 		positionsAlreadyExplored.add(indice(currentPosition));
 		
 		while (!positionsToExplore.isEmpty()){
-			currentPosition = positionsToExplore.remove(positionsToExplore.size());
+			currentPosition = positionsToExplore.remove(positionsToExplore.size()-1);
 			currentCard = this.getCard(currentPosition);
 			for(Cardinal cardinal : Cardinal.values()){
 				posNeighbor = p.getNeighbor(cardinal);

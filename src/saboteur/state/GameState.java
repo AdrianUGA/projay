@@ -91,12 +91,12 @@ public class GameState implements State{
     	 * commente son appel dans la méthode newRound de la classe Game
     	 */
     	//Début du bloc à commenter
-    	/*
+    	
     	this.game.getPlayerList().clear();
     	this.game.addPlayer(new DwarfAI(this.game, "Yves"));
     	this.game.addPlayer(new DwarfAI(this.game, "Philippe"));
     	this.game.addPlayer(new DwarfAI(this.game, "Jean-Marie"));
-		*/
+		
     	//Fin du bloc à commenter
     	
         this.game.newGame();
