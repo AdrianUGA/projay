@@ -64,6 +64,11 @@ public abstract class Player {
 		
 		this.game.playOperation(operation);
 	}
+	public void playCard(Player destinationPlayer, Tool destinationTool){
+		Operation operation = new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer, destinationTool);
+		
+		this.game.playOperation(operation);
+	}
 	public void playCard(PathCard destinationCard){
 		Operation operation = new OperationActionCardToBoard(this, this.selectedCard, destinationCard);
 		
@@ -82,9 +87,11 @@ public abstract class Player {
 	}
 	
 	public void pickCard(){
-		Operation operation = new OperationPick(this);
-		
-		this.game.playOperation(operation);
+		if (!game.stackIsEmpty()){
+			Operation operation = new OperationPick(this);
+			
+			this.game.playOperation(operation);
+		}
 	}
 	
 	public ArrayList<SabotageCard> getHandicaps(){
@@ -107,7 +114,7 @@ public abstract class Player {
 		this.hand.remove(card);
 	}
 	
-	public void removeHandicapCard(ActionCard card){
+	public void removeHandicapCard(SabotageCard card){
 		this.handicaps.remove(card);
 	}
 	
@@ -123,7 +130,12 @@ public abstract class Player {
 		this.gold.remove(card);
 	}
 	
-	public boolean canRescue(ActionCardToPlayer card){
+	public boolean canRescue(RescueCard card){
+		for (SabotageCard sabotageCard : this.handicaps){
+			if (sabotageCard.getSabotageType() == card.getRescueType()){
+				return true;
+			}
+		}
 		return false;
 	}
 	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card){
@@ -136,14 +148,6 @@ public abstract class Player {
 		}
 		return false;
 	}
-	public boolean canHandicap(RescueCard card){
-		for (SabotageCard sabotageCard : this.handicaps){
-			if (sabotageCard.getSabotageType() == card.getRescueType()){
-				return true;
-			}
-		}
-		return false;
-	}
 	public boolean canHandicap(SabotageCard card){
 		for (SabotageCard sabotageCard : this.handicaps){
 			if (sabotageCard.getSabotageType() == card.getSabotageType()){
@@ -151,6 +155,15 @@ public abstract class Player {
 			}
 		}
 		return true;
+	}
+	//return null if not found
+	public SabotageCard getCardCorrespondingToRescueType(Tool tool){
+		for (SabotageCard sabotageCard : this.handicaps){
+			if (sabotageCard.getSabotageType() == tool){
+				return sabotageCard;
+			}
+		}
+		return null;
 	}
 
 	//Human : useless

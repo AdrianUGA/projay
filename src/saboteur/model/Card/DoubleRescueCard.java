@@ -16,6 +16,9 @@ public class DoubleRescueCard extends ActionCardToPlayer {
 	public Tool getRescueType2() {
 		return this.rescueType2;
 	}
-	
-	
+
+	@Override
+	public ActionCardToPlayerType getType() {
+		return ActionCardToPlayerType.DOUBLE_RESCUE;
+	}
 }

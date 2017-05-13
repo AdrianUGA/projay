@@ -168,6 +168,10 @@ public class Game {
 		return this.stack.removeFirst();
 	}
 	
+	public boolean stackIsEmpty(){
+		return this.stack.isEmpty();
+	}
+	
 	public void addCardToStack(Card card){
 		this.stack.addFirst(card);
 	}
