@@ -40,6 +40,7 @@ public class Board {
 	}
 	
 	public void addCard(PathCard card, Position position){
+		System.out.println("carte =" +card);
 		if(card == null)
 			return;
 		if(card.isGoal())
