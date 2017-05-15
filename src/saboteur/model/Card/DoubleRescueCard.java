@@ -21,4 +21,15 @@ public class DoubleRescueCard extends ActionCardToPlayer {
 	public ActionCardToPlayerType getType() {
 		return ActionCardToPlayerType.DOUBLE_RESCUE;
 	}
+
+	public DoubleRescueCard clone(){
+		DoubleRescueCard card;
+
+		card = (DoubleRescueCard) super.clone();
+
+		card.rescueType1 = rescueType1;
+		card.rescueType2 = rescueType2;
+
+		return card;
+	}
 }

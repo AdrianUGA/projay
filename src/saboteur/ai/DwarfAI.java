@@ -18,102 +18,99 @@ import saboteur.model.Card.PathCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.DoubleRescueCard;
 
-public class DwarfAI extends AI {
+public abstract class DwarfAI {
 	
-	public DwarfAI(Game game, String name){
-		super(game, name);
-	}
-	
-	@Override
-	protected void computeOperationWeightEasyAI() {
-		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(operationsWeight);
+	public static void computeOperationWeightEasyAI(AI artificialIntelligence) {
+		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(artificialIntelligence.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			switch(o.getCard().getClassName()){
 			case "saboteur.model.Card.PlanCard":
-				if(!knowsTheGoldCardPosition()){
-					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(getEstimatedGoldCardPosition()));
-					operationsWeight.put(o, (float) ((1 + positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - getGame().getTurn()))
+				if(!artificialIntelligence.knowsTheGoldCardPosition()){
+					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(artificialIntelligence.getEstimatedGoldCardPosition()));
+					artificialIntelligence.operationsWeight.put(o, (float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - artificialIntelligence.getGame().getTurn()))
 											* Coefficients.DWARF_PLAN_EASY));
 				}
 				else{
 					// Trash
-					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -2f);
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -2f);
 				}
 				break;
 			case "saboteur.model.Card.RescueCard":
-				if(canRescue((RescueCard)o.getCard())){
-					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
-					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_RESCUE_EASY);
+				if(artificialIntelligence.canRescue((RescueCard)o.getCard())){
+					((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
+					artificialIntelligence.operationsWeight.put(o, (float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_RESCUE_EASY);
 				}else{
 					// Trash
-					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				break;
 			case "saboteur.model.Card.DoubleRescueCard":
-				if(canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard())){
-					((OperationActionCardToPlayer) o).setDestinationPlayer(this);
-					operationsWeight.put(o, (float) ((4 - handicaps.size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_DOUBLERESCUE_EASY);
+				if(artificialIntelligence.canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard())){
+					((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
+					artificialIntelligence.operationsWeight.put(o, (float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_DOUBLERESCUE_EASY);
 				}else{
 					// Trash
-					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				break;
 			case "saboteur.model.Card.SabotageCard":
-				Player p = mostLikelyASaboteur();
+				Player p = artificialIntelligence.mostLikelyASaboteur();
 				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 				//System.out.println("Nb joueur = " + getGame().getPlayerList().size());
 				//System.out.println("Size isDwarf = " + isDwarf.size());
-				operationsWeight.put(o, (float) (positiveOrZero(AVERAGE_TRUST - isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
+				artificialIntelligence.operationsWeight.put(o, (float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 				break;
 			case "saboteur.model.Card.PathCard":
 				// R�cup�rer la case la plus proche � vol d'oiseau sur laquelle on peut mettre une carte (= presque dans tous les cas la meilleure case)
-				if(!((PathCard) o.getCard()).isCulDeSac() && this.getHandicaps().size() == 0){
-					Position goldCardPosition = getEstimatedGoldCardPosition();
-					List<Position> allClosestPosition = getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					Set<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+				
+				if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
+					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
+					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
+					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					System.out.println("Pour la carte " + o.getCard());
+
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					//System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
 					for(Position currentPos : allPositionsForThisCard){
+						System.out.println("Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY());
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
 							((OperationPathCard) o).setP(currentPos);
-							operationsWeight.put((OperationPathCard) o, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
+							artificialIntelligence.operationsWeight.put((OperationPathCard) o, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
 									+ distanceDifference - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
 						}else{
 							// Trash
-							operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+							artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 						}
 					}
 				}else{
 					// We don't want to play cul-de-sac card, and we can't play a pathcard if our tools are broken
-					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -1f);
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -1f);
 				}
 				break;
 			case "saboteur.model.Card.CollapseCard" :
-				List<Position> allCulDeSac = getGame().getBoard().allCulDeSac();
+				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().allCulDeSac();
 				if(allCulDeSac.size() == 0){
-					operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				else{
-					Random r = new Random(getGame().getSeed());
+					Random r = new Random(artificialIntelligence.getGame().getSeed());
 					Position randomPos = allCulDeSac.get(r.nextInt(allCulDeSac.size()));
-					((OperationActionCardToBoard) o).setDestinationCard(getGame().getBoard().getCard(randomPos));
-					operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_EASY);
+					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(randomPos));
+					artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_EASY);
 				}
 			}
 		}
 		
 	}
 	
-	@Override
-	protected void computeOperationWeightMediumAI() {
+	public static void computeOperationWeightMediumAI(AI ai) {
 		// TODO Auto-generated method stub
 		
 	}
 	
-	@Override
-	protected void computeOperationWeightHardAI() {
+	public static void computeOperationWeightHardAI(AI ai) {
 		// TODO Auto-generated method stub
 		
 	}

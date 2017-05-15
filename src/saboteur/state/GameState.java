@@ -19,6 +19,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
+import saboteur.ai.AI;
 import saboteur.ai.DwarfAI;
 import saboteur.ai.SaboteurAI;
 import saboteur.model.Game;
@@ -95,9 +96,9 @@ public class GameState implements State{
     	//Début du bloc à commenter
     	
     	this.game.getPlayerList().clear();
-    	this.game.addPlayer(new DwarfAI(this.game, "Yves"));
-    	this.game.addPlayer(new DwarfAI(this.game, "Philippe"));
-    	this.game.addPlayer(new DwarfAI(this.game, "Jean-Marie"));
+    	this.game.addPlayer(new AI(this.game, "Yves"));
+    	this.game.addPlayer(new AI(this.game, "Philippe"));
+    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
 		
     	//Fin du bloc à commenter
     	
@@ -105,11 +106,7 @@ public class GameState implements State{
 
         for(Player p : this.game.getPlayerList()){
     		if(p.isAI()){
-    			if(p.getTeam() == Team.DWARF){
-    				((DwarfAI) p).initializeAI();
-    			}else{
-    				((SaboteurAI) p).initializeAI();
-    			}
+    			((AI)p).initializeAI();
     		}
     	}
         
@@ -152,6 +149,7 @@ public class GameState implements State{
         }
         Resources resources = new Resources();
         resources.loadImage();
+        resources.loadPicto();
         HashMap<String, Image> allCards = resources.getImageCard();
         this.firstCard.setImage(allCards.get("broken_cart_card.png"));
         this.secondCard.setImage(allCards.get("collapse_card.png"));
