@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import saboteur.model.Game;
 import saboteur.model.Operation;
@@ -62,9 +63,11 @@ public abstract class SaboteurAI {
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				else if(!((PathCard) o.getCard()).isCulDeSac()){
+
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					List<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(Position currentPos : allPositionsForThisCard){
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
@@ -81,9 +84,11 @@ public abstract class SaboteurAI {
 					}
 				}else {
 					// Easy Saboteur AI starts playing cul-de-sac when there is only 2 "distance" left
+
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					List<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(Position currentPos : allPositionsForThisCard){
 						int distance = distanceMin - currentPos.getTaxiDistance(goldCardPosition);

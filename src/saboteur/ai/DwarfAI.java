@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import saboteur.model.Game;
 import saboteur.model.Operation;
@@ -61,11 +62,13 @@ public abstract class DwarfAI {
 				break;
 			case "saboteur.model.Card.PathCard":
 				// R�cup�rer la case la plus proche � vol d'oiseau sur laquelle on peut mettre une carte (= presque dans tous les cas la meilleure case)
+				
 				if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					List<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
 					System.out.println("Pour la carte " + o.getCard());
+
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					//System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
 					for(Position currentPos : allPositionsForThisCard){

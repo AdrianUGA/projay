@@ -130,12 +130,14 @@ public class Board {
 	}
 	
 	/* Returns every free positions when card=null */
-	public List<Position> getPossiblePathCardPlace(PathCard card){
-		List<Position> possiblePlaces = new LinkedList<Position>();
+	public Set<Position> getPossiblePathCardPlace(PathCard card){
+		Set<Position> possiblePlaces = new HashSet<Position>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
-				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){ // ?
+				if (this.getCard(neighbor) != null)
+					continue;
+				if(this.isPossible(card, neighbor) || card == null){
 					possiblePlaces.add(neighbor);
 				}
 			}
@@ -145,16 +147,16 @@ public class Board {
 	}
 	
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
-		List<Position> possible = this.getPossiblePathCardPlace(null);
-		possible.sort(new PositionComparator(position));
+		Position[] possible = (Position[]) this.getPossiblePathCardPlace(null).toArray();
+		Arrays.sort(possible, new PositionComparator(position));
 		
-		int min = position.getTaxiDistance(possible.get(possible.size()-1));
+		int min = position.getTaxiDistance(possible[possible.length-1]);
 		List<Position> ret = new LinkedList<Position>();
-		for(int i=0; i<possible.size(); i++){
-			if(possible.get(i).getTaxiDistance(position) > min){
+		for(int i=0; i<possible.length; i++){
+			if(possible[i].getTaxiDistance(position) > min){
 				break;
 			}
-			ret.add(possible.get(i));
+			ret.add(possible[i]);
 		}
 		return ret;
 	}
