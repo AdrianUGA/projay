@@ -60,8 +60,8 @@ public class DwarfAI extends AI {
 			case "saboteur.model.Card.SabotageCard":
 				Player p = mostLikelyASaboteur();
 				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
-				System.out.println("Nb joueur = " + getGame().getPlayerList().size());
-				System.out.println("Size isDwarf = " + isDwarf.size());
+				//System.out.println("Nb joueur = " + getGame().getPlayerList().size());
+				//System.out.println("Size isDwarf = " + isDwarf.size());
 				operationsWeight.put(o, (float) (positiveOrZero(AVERAGE_TRUST - isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 				break;
 			case "saboteur.model.Card.PathCard":
@@ -71,7 +71,7 @@ public class DwarfAI extends AI {
 					List<Position> allClosestPosition = getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 					List<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
-					System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
+					//System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
 					for(Position currentPos : allPositionsForThisCard){
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distanceDifference >= -1){

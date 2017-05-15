@@ -80,4 +80,11 @@ public class PathCard extends Card {
 	public int openSidesAmount(){
 		return this.openSides.size();
 	}
+
+	@Override
+	public String toString() {
+		return "Paths : " + this.openSides;
+	}
+
+	
 }

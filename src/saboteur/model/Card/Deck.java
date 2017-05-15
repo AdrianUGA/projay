@@ -31,18 +31,18 @@ public class Deck {
     }
 
     public LinkedList<Card> getOtherCards() {
-        return otherCards;
+        return new LinkedList<Card>(otherCards);
     }
 
     public ArrayList<PathCard> getStartPathCard() {
-        return startPathCard;
+        return new ArrayList<PathCard>(startPathCard);
     }
 
     public ArrayList<PathCard> getGoalPathCards() {
-        return goalPathCards;
+        return new ArrayList<PathCard>(goalPathCards);
     }
 
     public LinkedList<GoldCard> getGoldCards() {
-        return goldCards;
+        return new LinkedList<GoldCard>(goldCards);
     }
 }

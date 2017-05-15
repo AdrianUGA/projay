@@ -15,7 +15,7 @@ public class Resources {
     private HashMap<String, Image> imageCard;
 
 	public Resources(){
-        this.imageCard = new HashMap();
+        this.imageCard = new HashMap<String, Image>();
         try{
             this.pathImageCardFolder = Paths.get(App.class.getResource("/resources/cards/").toURI());
         } catch(Exception e){

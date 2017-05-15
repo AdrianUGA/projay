@@ -55,8 +55,9 @@ public class GameState implements State{
     public void update() {
         if (this.game.gameIsFinished()){
             //fin de la partie
+        	if(game.dwarfsWon())System.out.println("Nains ont gagné");
             //this.gsm.change("annonce vainqueur");
-            System.out.println("fin de partie");
+            //System.out.println("fin de partie");
         } else {
             if (this.game.roundIsFinished()){
                 //fin de la manche
