@@ -11,6 +11,11 @@ public class Board {
 	public static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
 	public static final int DISTANCE_START_OBJECTIVE_X = 7;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
+	private static final Position[] goalCardsPositions = new Position[] {
+			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()),
+			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y),
+			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y)};
+	
 	
 	private PathCard[][] board;
 	private List<Position> objectiveCards;
@@ -29,10 +34,6 @@ public class Board {
 		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
 		Collections.shuffle(goalPathCard);
-		Position[] goalCardsPositions = new Position[] {
-				new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()),
-				new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y),
-				new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y)};
 		
 		for(int i=0; i<3; i++)
 			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);

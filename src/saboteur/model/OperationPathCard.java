@@ -3,7 +3,6 @@ package saboteur.model;
 import java.util.ArrayList;
 
 import saboteur.model.Card.*;
-import sun.security.x509.IssuingDistributionPointExtension;
 
 public class OperationPathCard extends Operation {
 	private Position p;
