@@ -135,7 +135,7 @@ public class Board {
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
-				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){
+				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){ // ?
 					possiblePlaces.add(neighbor);
 				}
 			}

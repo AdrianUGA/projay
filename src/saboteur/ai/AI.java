@@ -310,9 +310,9 @@ public abstract class AI extends Player {
 			}
 		}
 		Operation o = bestOperations.get(r.nextInt(bestOperations.size()));
+		System.out.println("Opération joué par " + this.name + " de type" + o.getClass().getName());
 		if(o.getClass().getName() == "saboteur.model.OperationPathCard"){
-			System.out.println("Opération joué par " + this.name);
-			System.out.println("x =" + ((OperationPathCard) o).getP().getcX() + " y= " +((OperationPathCard) o).getP().getcY() + "with weight = "+ operationsWeight.get(o));
+			System.out.println("x =" + ((OperationPathCard) o).getP().getcX() + " y= " +((OperationPathCard) o).getP().getcY() + " with weight = "+ operationsWeight.get(o));
 		}
 		return o;
 	}
