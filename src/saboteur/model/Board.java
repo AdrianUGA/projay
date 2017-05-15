@@ -147,16 +147,16 @@ public class Board {
 	}
 	
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
-		Position[] possible = (Position[]) this.getPossiblePathCardPlace(null).toArray();
-		Arrays.sort(possible, new PositionComparator(position));
+		List<Position> possible =  new ArrayList<Position>(this.getPossiblePathCardPlace(null));
+		possible.sort(new PositionComparator(position));
 		
-		int min = position.getTaxiDistance(possible[possible.length-1]);
+		int min = position.getTaxiDistance(possible.get(possible.size()-1));
 		List<Position> ret = new LinkedList<Position>();
-		for(int i=0; i<possible.length; i++){
-			if(possible[i].getTaxiDistance(position) > min){
+		for(int i=0; i<possible.size(); i++){
+			if(possible.get(i).getTaxiDistance(position) > min){
 				break;
 			}
-			ret.add(possible[i]);
+			ret.add(possible.get(i));
 		}
 		return ret;
 	}
