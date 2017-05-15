@@ -22,6 +22,7 @@ public class OperationPathCard extends Operation {
 	public void exec(Game game) {
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		game.getBoard().addCard((PathCard)this.getCard(), p);
+		System.out.println("carte posé en x= " + p.getcX() + " y= " +p.getcY());
 		
 		this.goalCardsToFlip = game.getBoard().getGoalCardsToFlip((PathCard)this.getCard(), p);
 		PathCard toFlip;
@@ -50,6 +51,10 @@ public class OperationPathCard extends Operation {
 			
 			if (toFlip.isGoal()){
 				toFlip.setVisible(false);
+				System.out.println("J'ai trouvé un but");
+				if(toFlip.hasGold()){
+					System.out.println("On a trouvé Laure");
+				}
 			}
 		}
 	}

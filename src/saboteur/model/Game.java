@@ -70,6 +70,7 @@ public class Game {
 		this.board = new Board(this.deck.getStartPathCard(), this.deck.getGoalPathCards());
 
 		//this.setTeam();
+		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
 		this.dealCardsToPlayer();
 
 		this.nextPlayer();
@@ -87,9 +88,11 @@ public class Game {
 		}
 		for (Player player: this.playerList) {
 			ArrayList<Card> hand = new ArrayList<>();
-			for (int i = 0; i < nbCards; i++){
-				//TODO doesnt work
-				hand.add(this.stack.removeFirst());
+			if(!this.stackIsEmpty()){
+				for (int i = 0; i < nbCards; i++){
+					//TODO doesnt work
+					hand.add(this.stack.removeFirst());
+				}
 			}
 			player.setHand(hand);
 		}
@@ -117,12 +120,16 @@ public class Game {
 	}
 	
 	public boolean gameIsFinished(){
-		if (round == 3 && roundIsFinished()) return true;
+		if (round == 3 && roundIsFinished()){
+			return true;
+		}
 		return false;
 	}
 	
 	public boolean roundIsFinished(){
-		if (this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers()) return true;
+		if (this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers()){
+			return true;
+		}
 		return false;
 	}
 
