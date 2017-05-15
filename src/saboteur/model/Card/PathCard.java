@@ -85,5 +85,6 @@ public class PathCard extends Card {
 	public String toString() {
 		return "Paths : " + this.openSides;
 	}
+
 	
 }

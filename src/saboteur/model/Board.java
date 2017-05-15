@@ -236,8 +236,11 @@ public class Board {
 	}
 	
 	public List<Position> allCulDeSac(){
-		//TODO
 		List<Position> list = new LinkedList<Position>();
+		for(Position position : this.pathCardsPosition.keySet()){
+			if(this.pathCardsPosition.get(position).isCulDeSac())
+				list.add(position);
+		}
 		return list;
 	}
 	
