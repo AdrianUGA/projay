@@ -110,6 +110,11 @@ public class Board {
 			if(this.pathCardsPosition.get(position).equals(card))
 				return position;
 		}
+		
+		for(Position goalCard : this.objectiveCards){
+			if(goalCard.equals(card))
+				return goalCard;
+		}
 		return null;
 	}
 	
@@ -117,6 +122,7 @@ public class Board {
 		return this.objectiveCards;
 	}
 	
+	/* Returns every free positions when card=null */
 	public List<Position> getPossiblePathCardPlace(PathCard card){
 		List<Position> possiblePlaces = new LinkedList<Position>();
 		
@@ -134,6 +140,7 @@ public class Board {
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
 		List<Position> possible = this.getPossiblePathCardPlace(null);
 		possible.sort(new PositionComparator(position));
+		
 		int min = position.getTaxiDistance(possible.get(possible.size()-1));
 		List<Position> ret = new LinkedList<Position>();
 		for(int i=0; i<possible.size(); i++){
@@ -143,8 +150,6 @@ public class Board {
 			ret.add(possible.get(i));
 		}
 		return ret;
-		
-		
 	}
 
 	public boolean isPossible(PathCard card, Position position){
