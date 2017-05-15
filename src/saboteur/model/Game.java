@@ -1,5 +1,6 @@
 package saboteur.model;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -55,6 +56,9 @@ public class Game {
 		this.history = new LinkedList<>();
 
 		this.newRound();
+		
+        save("test1");
+        load("test1");
 	}
 
 	public void newRound(){
@@ -106,12 +110,50 @@ public class Game {
 		this.playerList.addLast(this.currentPlayer);
 	}
 	
-	public void save(){
-		//TODO
+	public void save(String name) {
+		File dirSave = new File("./.saves");
+		dirSave.mkdir();
+		File saveFile = new File("./.saves/" + name + ".save");
+		try {
+			if (saveFile.exists()){
+				saveFile.delete();
+			}
+			saveFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        try {
+            FileOutputStream fileOutput = new FileOutputStream(saveFile);
+            ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
+            if (playerList.getFirst() == null) System.out.println("est nul");
+            System.out.println(playerList.getFirst().getName() + "  " + playerList.getFirst().getHand().size() + "fin");
+            objectOutput.writeObject(playerList.getFirst());
+            objectOutput.close();
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void load(){
-		//TODO
+	public void load(String name){
+		File saveFile = new File("./.saves/" + name + ".save");
+		FileInputStream fileInput;
+		try {
+			fileInput = new FileInputStream(saveFile);
+	        ObjectInputStream objectInputStream = new ObjectInputStream(fileInput);
+	        Player test = (Player) objectInputStream.readObject();
+	        System.out.println(test.name + "humain : " + test.isHuman());
+	        objectInputStream.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void draw(){

@@ -1,16 +1,17 @@
 package saboteur.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import saboteur.model.Card.*;
 
-public abstract class Player {
+public abstract class Player implements Serializable {
 	protected Card selectedCard; //NOT TO SAVE
 	protected String name; //TO SAVE
 	protected ArrayList<SabotageCard> handicaps; //TO SAVE
 	protected ArrayList<GoldCard> gold; //TO SAVE
 	protected ArrayList<Card> hand; //TO SAVE
-	protected Game game; //NOT TO SAVE
+	transient protected Game game; //NOT TO SAVE
 	protected Team team; //TO SAVE
 	
 	public Card getSelectedCard() {
