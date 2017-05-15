@@ -1,6 +1,5 @@
 package saboteur.model.Card;
 
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,13 +67,26 @@ public class PathCard extends Card {
 //		return null; /* that never happen */
 //	}
 
-	public void reversed(){
+	public void reverse(){
 		List<Cardinal> newOpenSides = new LinkedList<>();
 		for(Cardinal cardinal : this.openSides){
 			newOpenSides.add(cardinal.opposite());
 		}
 		this.openSides = newOpenSides;
 		this.isReversed = false;
+		
+	}
+	
+	public PathCard reversed(){
+		List<Cardinal> newOpenSides = new LinkedList<Cardinal>();
+		for(Cardinal cardinal : this.openSides)
+			newOpenSides.add(cardinal.opposite());
+		return ((PathCard) this.clone()).setCardinal(newOpenSides);
+	}
+
+	private PathCard setCardinal(List<Cardinal> newOpenSides) {
+		this.openSides = newOpenSides;
+		return this;
 	}
 
 	public boolean isReversed(){
