@@ -23,6 +23,7 @@ import saboteur.ai.DwarfAI;
 import saboteur.ai.SaboteurAI;
 import saboteur.model.Game;
 import saboteur.model.Player;
+import saboteur.model.Team;
 import saboteur.tools.Resources;
 import saboteur.view.PlayerArc;
 
@@ -103,7 +104,7 @@ public class GameState implements State{
 
         for(Player p : this.game.getPlayerList()){
     		if(p.isAI()){
-    			if(!p.isSaboteur()){
+    			if(p.getTeam() == Team.DWARF){
     				((DwarfAI) p).initializeAI();
     			}else{
     				((SaboteurAI) p).initializeAI();

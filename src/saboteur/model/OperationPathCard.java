@@ -6,8 +6,8 @@ import saboteur.model.Card.*;
 import sun.security.x509.IssuingDistributionPointExtension;
 
 public class OperationPathCard extends Operation {
-	private Position p;
-	private ArrayList<Position> goalCardsToFlip;
+	private Position p; //TO SAVE
+	private ArrayList<Position> goalCardsToFlip; //TO SAVE
 	
 	public Position getP() {
 		return p;

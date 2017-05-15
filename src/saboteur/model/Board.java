@@ -12,9 +12,9 @@ public class Board {
 	public static final int DISTANCE_START_OBJECTIVE_X = 7;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	
-	private PathCard[][] board;
-	private List<Position> objectiveCards;
-	private Map<Position, PathCard> pathCardsPosition;
+	private PathCard[][] board; //NOT TO SAVE
+	private List<Position> objectiveCards; //TO SAVE
+	private Map<Position, PathCard> pathCardsPosition; //TO SAVE
 	
 	//private Map<Position, Position> childrenDad;
 	

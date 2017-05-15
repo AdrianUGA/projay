@@ -15,6 +15,7 @@ import saboteur.model.OperationActionCardToPlayer;
 import saboteur.model.OperationPathCard;
 import saboteur.model.Player;
 import saboteur.model.Position;
+import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 
@@ -45,7 +46,7 @@ public abstract class AI extends Player {
 		for(Player p : game.getPlayerList()){
 			isDwarf.put(p, (float) AVERAGE_TRUST);
 		}
-		if(isSaboteur()){
+		if(getTeam() == Team.SABOTEUR){
 			isDwarf.put(this, (float) -1073741824);
 		}
 		else{

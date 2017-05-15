@@ -3,9 +3,9 @@ package saboteur.model;
 import saboteur.model.Card.*;
 
 public class OperationActionCardToPlayer extends Operation {
-	private Player destinationPlayer;
-	private Tool toolDestination;
-	private SabotageCard destinationCard;
+	private Player destinationPlayer; //TO SAVE
+	private Tool toolDestination; //TO SAVE
+	private SabotageCard destinationCard; //TO SAVE
 	
 	public OperationActionCardToPlayer(Player sourcePlayer, Card card, Player destinationPlayer) {
 		super(sourcePlayer, card);
