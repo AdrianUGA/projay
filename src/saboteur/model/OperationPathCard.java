@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import saboteur.model.Card.*;
 
 public class OperationPathCard extends Operation {
-	private Position p;
-	private ArrayList<Position> goalCardsToFlip;
+	private Position p; //TO SAVE
+	private ArrayList<Position> goalCardsToFlip; //TO SAVE
 	
 	public Position getP() {
 		return p;
