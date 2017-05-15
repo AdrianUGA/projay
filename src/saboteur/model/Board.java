@@ -33,7 +33,7 @@ public class Board {
 		this.objectiveCards = new LinkedList<Position>();
 		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
-		Collections.shuffle(goalPathCard);
+		Collections.shuffle(goalPathCard, new Random(Game.seed));
 		
 		for(int i=0; i<3; i++)
 			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);

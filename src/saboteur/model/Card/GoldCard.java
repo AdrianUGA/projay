@@ -10,4 +10,8 @@ public class GoldCard extends Card {
 	public int getValue(){
 		return this.value;
 	}
+
+	public GoldCard clone(){
+		return (GoldCard) super.clone();
+	}
 }
