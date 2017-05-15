@@ -14,9 +14,9 @@ public class Board {
 	
 	private PathCard[][] board;
 	private List<Position> objectiveCards;
+	private Map<Position, PathCard> pathCardsPosition;
 	
 	//private Map<Position, Position> childrenDad;
-	private Map<Position, PathCard> pathCardsPosition;
 	
 	public Board(ArrayList<PathCard> startPathCard, ArrayList<PathCard> goalPathCard){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
@@ -42,13 +42,22 @@ public class Board {
 	public void addCard(PathCard card, Position position){
 		if(card.isGoal())
 			this.objectiveCards.add(position);
-		this.pathCardsPosition.put(position, card);
+		else
+			this.pathCardsPosition.put(position, card);
+		
+		/* Adding the goal cards when reached */
+		for(Position p : this.getNeighbors(position)){
+			this.pathCardsPosition.put(p, this.getCard(position));
+		}
 		//this.childrenDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
 	}
 
 	public void removeCard(Position position){
-		this.pathCardsPosition.remove(position);
+		if(this.getCard(position).isGoal())
+			this.objectiveCards.remove(position);
+		else
+			this.pathCardsPosition.remove(position);
 		/*
 		childrenDad.clear();
 		for(Position current : pathCardsPosition.keySet()){
@@ -104,19 +113,14 @@ public class Board {
 		return null;
 	}
 	
-	public List<Position> getGoldCards(){
+	public List<Position> getGoalCards(){
 		return this.objectiveCards;
 	}
 	
 	public List<Position> getPossiblePathCardPlace(PathCard card){
 		List<Position> possiblePlaces = new LinkedList<Position>();
-		Map<Position, PathCard> temp = new HashMap<Position, PathCard>(this.pathCardsPosition);
 		
-		for(Position pos : this.getGoldCards()){
-			temp.remove(pos);
-		}
-		
-		for(PathCard pathCard : temp.values()){
+		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
 				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){
 					possiblePlaces.add(neighbor);

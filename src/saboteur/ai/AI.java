@@ -38,7 +38,7 @@ public abstract class AI extends Player {
 	
 	public void initializeAI(){
 		//Initialize estimated gold card position
-		for (Position position : game.getBoard().getGoldCards()){
+		for (Position position : game.getBoard().getGoalCards()){
 			this.estimatedGoldCardPosition.put(position, 1f/3f);
 		}
 		//Initialize trust
