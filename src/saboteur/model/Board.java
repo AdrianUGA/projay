@@ -29,11 +29,13 @@ public class Board {
 		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
 		Collections.shuffle(goalPathCard);
-
-		this.addCard(goalPathCard.get(0), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
-		this.addCard(goalPathCard.get(1), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
-		this.addCard(goalPathCard.get(2), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
+		Position[] goalCardsPositions = new Position[] {
+				new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()),
+				new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y),
+				new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y)};
 		
+		for(int i=0; i<3; i++)
+			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);
 		this.addCard(startPathCard.get(0), START);
 	}
 	
