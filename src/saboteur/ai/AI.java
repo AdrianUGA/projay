@@ -66,7 +66,7 @@ public abstract class AI extends Player {
 			updateTrust((OperationPathCard) o);
 			break;
 		default:
-			System.err.println("Opération non reconnue");
+			//System.err.println("Opération non reconnue");
 		}
 	}
 
@@ -85,7 +85,7 @@ public abstract class AI extends Player {
 			}
 			break;
 		default:
-			System.err.println("Operation ActionCardToBoard undetected");
+			//System.err.println("Operation ActionCardToBoard undetected");
 		}
 	}
 	
@@ -116,7 +116,7 @@ public abstract class AI extends Player {
 			}
 			break;
 		default:
-			System.err.println("Operation ActionCarToPlayer undetected");
+			//System.err.println("Operation ActionCarToPlayer undetected");
 		}
 	}
 	
@@ -152,7 +152,7 @@ public abstract class AI extends Player {
 		for(Position p : estimatedGoldCardPosition.keySet()){
 			if(estimatedGoldCardPosition.get(p) > max){
 				max = estimatedGoldCardPosition.get(p);
-				System.out.println("max = " + max);
+				//System.out.println("max = " + max);
 			}
 		}
 		for(Position p : estimatedGoldCardPosition.keySet()){
@@ -204,7 +204,7 @@ public abstract class AI extends Player {
 	protected void resetProbabilitiesToPlayEachOperation(){
 		operationsWeight.clear();
 		for(Card c : getHand()){
-			System.out.println("name = " +c.getClassName());
+			////System.out.println("name = " +c.getClassName());
 			switch(c.getClassName()){
 			case "saboteur.model.Card.PathCard" :
 				operationsWeight.put(new OperationPathCard(this, c, null), 0f);
@@ -299,7 +299,7 @@ public abstract class AI extends Player {
 		Random r = new Random(getGame().getSeed());
 		
 		for(Operation o : this.operationsWeight.keySet()){
-			System.out.println(o.getClass().getName());
+			////System.out.println(o.getClass().getName());
 			if(this.operationsWeight.get(o) > max){
 				max = this.operationsWeight.get(o);
 			}
@@ -309,15 +309,20 @@ public abstract class AI extends Player {
 				bestOperations.add(o);
 			}
 		}
-		return bestOperations.get(r.nextInt(bestOperations.size()));
+		Operation o = bestOperations.get(r.nextInt(bestOperations.size()));
+		if(o.getClass().getName() == "saboteur.model.OperationPathCard"){
+			System.out.println("Opération joué par " + this.name);
+			System.out.println("x =" + ((OperationPathCard) o).getP().getcX() + " y= " +((OperationPathCard) o).getP().getcY() + "with weight = "+ operationsWeight.get(o));
+		}
+		return o;
 	}
 	
 	@Override
 	public void playCard(){
 		Operation o = selectOperation();
-		System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
+		//System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
 		this.getGame().playOperation(o);
-		System.out.println("It now has " + hand.size() + " cards");
+		//System.out.println("It now has " + hand.size() + " cards");
 	}
 	
 	public Operation selectOperation(){
