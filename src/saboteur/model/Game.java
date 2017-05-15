@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-import saboteur.ai.DwarfAI;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
@@ -344,7 +343,7 @@ public class Game {
 		}
 
 		Collections.shuffle(team, new Random(Game.seed));
-		
+
 		for(int i = 0; i < this.playerList.size(); i++){
 			Team role = team.remove(0);
 			this.playerList.get(i).setTeam(role);
