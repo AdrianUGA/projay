@@ -149,6 +149,7 @@ public class GameState implements State{
         }
         Resources resources = new Resources();
         resources.loadImage();
+        resources.loadPicto();
         HashMap<String, Image> allCards = resources.getImageCard();
         this.firstCard.setImage(allCards.get("broken_cart_card.png"));
         this.secondCard.setImage(allCards.get("collapse_card.png"));
