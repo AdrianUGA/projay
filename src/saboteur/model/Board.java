@@ -50,7 +50,8 @@ public class Board {
 		
 		/* Adding the goal cards when reached */
 		for(Position p : this.getNeighbors(position)){
-			this.pathCardsPosition.put(p, this.getCard(position));
+			if (this.getCard(position) != null)
+				this.pathCardsPosition.put(p, this.getCard(position));
 		}
 		//this.childrenDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
@@ -109,6 +110,8 @@ public class Board {
 	}
 	
 	public Position getPosition(PathCard card){
+		if (card == null)
+			return null;
 		for(Position position : this.pathCardsPosition.keySet()){
 			if(this.pathCardsPosition.get(position).equals(card))
 				return position;
