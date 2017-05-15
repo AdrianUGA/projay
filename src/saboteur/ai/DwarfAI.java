@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import saboteur.model.Game;
 import saboteur.model.Operation;
@@ -69,7 +70,7 @@ public class DwarfAI extends AI {
 				if(!((PathCard) o.getCard()).isCulDeSac() && this.getHandicaps().size() == 0){
 					Position goldCardPosition = getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					List<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					Set<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					//System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
 					for(Position currentPos : allPositionsForThisCard){

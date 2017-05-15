@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import saboteur.model.Game;
 import saboteur.model.Operation;
@@ -69,7 +70,7 @@ public class SaboteurAI extends AI {
 				else if(!((PathCard) o.getCard()).isCulDeSac()){
 					Position goldCardPosition = getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					List<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					Set<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(Position currentPos : allPositionsForThisCard){
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
@@ -88,7 +89,7 @@ public class SaboteurAI extends AI {
 					// Easy Saboteur AI starts playing cul-de-sac when there is only 2 "distance" left
 					Position goldCardPosition = getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					List<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					Set<Position> allPositionsForThisCard = getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(Position currentPos : allPositionsForThisCard){
 						int distance = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
