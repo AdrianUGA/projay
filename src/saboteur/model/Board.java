@@ -17,9 +17,9 @@ public class Board {
 			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y)};
 	
 	
-	private PathCard[][] board;
-	private List<Position> objectiveCards;
-	private Map<Position, PathCard> pathCardsPosition;
+	private PathCard[][] board; //NOT TO SAVE
+	private List<Position> objectiveCards; //TO SAVE
+	private Map<Position, PathCard> pathCardsPosition; //TO SAVE
 	
 	//private Map<Position, Position> childrenDad;
 	
