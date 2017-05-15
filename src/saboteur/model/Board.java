@@ -40,6 +40,8 @@ public class Board {
 	}
 	
 	public void addCard(PathCard card, Position position){
+		if(card == null)
+			return;
 		if(card.isGoal())
 			this.objectiveCards.add(position);
 		else
