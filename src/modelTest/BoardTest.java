@@ -36,9 +36,9 @@ public class BoardTest {
 		ArrayList<PathCard> startCards = new ArrayList<>();
 		startCards.add(start);
 		ArrayList<PathCard> goalCards = new ArrayList<>();
-		startCards.add(goal);
-		startCards.add(goal);
-		startCards.add(goalWithGold);
+		goalCards.add(goal);
+		goalCards.add(goal);
+		goalCards.add(goalWithGold);
 		Board boardTest = new Board(startCards, goalCards);
 		
 		assertEquals(true, boardTest.isPossible(crossCard, new Position(xStart,yStart-1)));

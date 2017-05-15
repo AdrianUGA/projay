@@ -5,14 +5,13 @@ import java.util.ArrayList;
 import saboteur.model.Card.*;
 
 public abstract class Player {
-	protected boolean saboteur;
-	protected Card selectedCard;
-	protected String name;
-	protected ArrayList<SabotageCard> handicaps;
-	protected ArrayList<GoldCard> gold;
-	protected ArrayList<Card> hand;
-	protected Game game;
-	protected Team team;
+	protected Card selectedCard; //NOT TO SAVE
+	protected String name; //TO SAVE
+	protected ArrayList<SabotageCard> handicaps; //TO SAVE
+	protected ArrayList<GoldCard> gold; //TO SAVE
+	protected ArrayList<Card> hand; //TO SAVE
+	protected Game game; //NOT TO SAVE
+	protected Team team; //TO SAVE
 	
 	public Card getSelectedCard() {
 		return selectedCard;
@@ -28,10 +27,6 @@ public abstract class Player {
 
 	public void setGame(Game game) {
 		this.game = game;
-	}
-
-	public void setSaboteur(boolean saboteur) {
-		this.saboteur = saboteur;
 	}
 
 	public void setHandicaps(ArrayList<SabotageCard> handicaps) {
@@ -51,10 +46,6 @@ public abstract class Player {
 		game.register(this);
 		this.handicaps = new ArrayList<SabotageCard>();
 		this.name = name;
-	}
-	
-	public boolean isSaboteur(){
-		return this.saboteur;
 	}
 	
 	public void playCard(Card card){
@@ -88,7 +79,7 @@ public abstract class Player {
 	
 	public void pickCard(){
 		if (!game.stackIsEmpty()){
-			Operation operation = new OperationPick(this);
+			Operation operation = new OperationPick(this, game.pick());
 			
 			this.game.playOperation(operation);
 		}
@@ -193,6 +184,10 @@ public abstract class Player {
 	
 	public void setTeam(Team team){
 		this.team = team;
+	}
+	
+	public Team getTeam(){
+		return this.team;
 	}
 
 	public boolean isHuman(){
