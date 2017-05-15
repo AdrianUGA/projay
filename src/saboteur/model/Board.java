@@ -112,7 +112,7 @@ public class Board {
 		}
 		
 		for(Position goalCard : this.objectiveCards){
-			if(goalCard.equals(card))
+			if(this.getCard(goalCard).equals(card))
 				return goalCard;
 		}
 		return null;
