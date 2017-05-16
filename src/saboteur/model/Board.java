@@ -80,7 +80,13 @@ public class Board implements Serializable {
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
-
+	public Set<Position> extractPositions(Set<OperationPathCard> operations){
+		Set<Position> positions = new HashSet<Position>();
+		for(OperationPathCard operation : operations){
+			positions.add(operation.getP());
+		}
+		return positions;
+	}
 	
 	public PathCard getCard(Position position){
 		if (!position.isValid())
