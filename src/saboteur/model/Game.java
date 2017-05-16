@@ -107,7 +107,7 @@ public class Game {
 		//TODO
 	}
 	
-	public void load(){
+	public void load(String filename){
 		//TODO
 	}
 	

@@ -77,7 +77,7 @@ public class LoadGameState implements State {
     @FXML
     private void startLoadableGameButtonAction() {
     	RadioButton selectedRadioButton = (RadioButton) this.radionButtonGroupe.getSelectedToggle();
-    	System.out.println(selectedRadioButton.getText());
+//    	this.game.load(selectedRadioButton.getText());
 //    	this.gsm.change("game");
     }
     
