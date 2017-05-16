@@ -1,10 +1,12 @@
 package saboteur.model;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
+import saboteur.ai.AI;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
@@ -55,6 +57,9 @@ public class Game {
 
 		this.currentPlayerIndex = 0;
 		this.newRound();
+		
+        save("test1");
+        load("test1");
 	}
 
 	public void newRound(){
@@ -103,12 +108,65 @@ public class Game {
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
 	}
 	
-	public void save(){
-		//TODO
+	public void save(String name) {
+		File dirSave = new File(Loader.savedFolder);
+		dirSave.mkdir();
+		File saveFile = new File(Loader.savedFolder+ "/" + name + ".save");
+		try {
+			if (saveFile.exists()){
+				saveFile.delete();
+			}
+			saveFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        try {
+            FileOutputStream fileOutput = new FileOutputStream(saveFile);
+            ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
+            objectOutput.writeObject(this.currentPlayerIndex);
+            objectOutput.writeObject(this.round);
+            objectOutput.writeObject(this.turn);
+            objectOutput.writeObject(this.goldCardStack);
+            objectOutput.writeObject(this.history);
+            objectOutput.writeObject(this.stack);
+            objectOutput.writeObject(this.trash);
+            objectOutput.writeObject(this.playerList);
+            objectOutput.writeObject(this.board);
+            objectOutput.writeObject(this.observers);
+            objectOutput.close();
+        } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void load(String filename){
-		//TODO
+	public void load(String name){
+		File saveFile = new File(Loader.savedFolder+ "/" + name + ".save");
+		FileInputStream fileInput;
+		try {
+			fileInput = new FileInputStream(saveFile);
+	        ObjectInputStream objectInputStream = new ObjectInputStream(fileInput);
+	        this.currentPlayerIndex = (int) objectInputStream.readObject();	        
+	        this.round = (int) objectInputStream.readObject();
+	        this.turn = (int) objectInputStream.readObject();
+	        this.goldCardStack = (LinkedList<GoldCard>) objectInputStream.readObject();
+            this.history = (LinkedList<Operation>) objectInputStream.readObject();
+            this.stack = (LinkedList<Card>) objectInputStream.readObject();
+            this.trash = (LinkedList<Card>) objectInputStream.readObject();
+            this.playerList = (LinkedList<Player>) objectInputStream.readObject();
+            this.board = (Board) objectInputStream.readObject();
+            this.observers = (LinkedList<Player>) objectInputStream.readObject();
+	        objectInputStream.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void draw(){
@@ -175,6 +233,29 @@ public class Game {
 	
 	public boolean dwarfsWon(){
 		return this.board.goalCardWithGoldIsVisible();
+	}
+	
+	public LinkedList<Player> getPlayers(ActionCardToPlayer card){
+		LinkedList<Player> result = new LinkedList<>();
+		boolean isPossible = false;
+		for (Player p : this.playerList){
+			switch (card.getType()) {
+				case SABOTAGE:
+					isPossible = p.canHandicap((SabotageCard)card);
+					break;
+				case RESCUE:
+					isPossible = p.canRescue((RescueCard)card);
+					break;
+				case DOUBLE_RESCUE:
+					isPossible = p.canRescueWithDoubleRescueCard((DoubleRescueCard)card);
+					break;
+				default:
+					break;
+			}
+			if (isPossible) result.add(p);
+		}
+		
+		return result;
 	}
 	
 	public void dealGold(){

@@ -7,4 +7,9 @@ public class PlanCard extends ActionCardToBoard {
 		return false;
 	}
 
+	@Override
+	public boolean isPlanCard() {
+		return true;
+	}
+	
 }
