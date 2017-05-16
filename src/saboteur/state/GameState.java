@@ -6,6 +6,7 @@ import java.util.HashMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,25 +25,25 @@ import saboteur.ai.AI;
 import saboteur.model.Board;
 import saboteur.model.Game;
 import saboteur.model.Player;
+import saboteur.model.Position;
+import saboteur.model.Card.Card;
+import saboteur.model.Card.PathCard;
 import saboteur.tools.Resources;
 import saboteur.view.PlayerArc;
 
 public class GameState implements State{
 
-	@FXML private AnchorPane boardAndCardContainer;
 	@FXML private Pane boardContainer;
 	@FXML private HBox cardContainer;
-	
 	@FXML private Circle gameBoard;
+		
+	ImageView[] handCards = new ImageView[6];
+	private Card selectedCard;
+	private ImageView imgSelectedCard = new ImageView();
+	private Resources resources = new Resources();
+	private HashMap<String, Image> allCards;
 	
-	@FXML private ImageView firstCard;
-	@FXML private ImageView secondCard;
-	@FXML private ImageView thirdCard;
-	@FXML private ImageView fourthCard;
-	@FXML private ImageView fifthCard;
-	@FXML private ImageView sixthCard;
-	
-	private ImageView selectedCard = new ImageView();
+	private GridPane boardGridPane;
 	
     private GameStateMachine gsm;
     private Game game;
@@ -97,25 +98,24 @@ public class GameState implements State{
     	 */
     	//Début du bloc à commenter
     	
-    	this.game.getPlayerList().clear();
-    	this.game.addPlayer(new AI(this.game, "Yves"));
-    	this.game.addPlayer(new AI(this.game, "Philippe"));
-    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
+//    	this.game.getPlayerList().clear();
+//    	this.game.addPlayer(new AI(this.game, "Yves"));
+//    	this.game.addPlayer(new AI(this.game, "Philippe"));
+//    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
 		
     	//Fin du bloc à commenter
     	
         this.game.newGame();
         
-        Resources resources = new Resources();
-        resources.loadImage();
-        resources.loadPicto();
-        HashMap<String, Image> allCards = resources.getImageCard();
+        this.resources.loadImage();
+        this.resources.loadPicto();
+        this.allCards = this.resources.getImageCard();
         
-        for(Player p : this.game.getPlayerList()){
-    		if(p.isAI()){
-    			((AI)p).initializeAI();
-    		}
-    	}
+//        for(Player p : this.game.getPlayerList()){
+//    		if(p.isAI()){
+//    			((AI)p).initializeAI();
+//    		}
+//    	}
         
         try{
             FXMLLoader loader = new FXMLLoader();
@@ -130,37 +130,28 @@ public class GameState implements State{
             double gameTableHalfSize = gameTableSize/2;
             double boardSize = gameTableHalfSize/2;
             
-            //For center cards
+            //For center cards hand Image
             this.cardContainer.setPrefWidth(gameTableSize);
+            for(int i = 0; i < 6; i++) {
+            	this.handCards[i] = new ImageView();
+            	this.handCards[i].setFitWidth(108);
+            	this.handCards[i].setFitHeight(166);
+            	this.cardContainer.getChildren().add(this.handCards[i]);
+            }
+            generateHandCardImage();
             
             //The game board
-            GridPane p = new GridPane();
-            
-            double cardWidth = 108/3;
-            double cardHeight = 166/3;
-			for(int i = 0; i < Board.getGridSize(); i++) {
-				for (int j = 0; j < Board.getGridSize(); j++) {
-					ImageView img = new ImageView();
-            		if(i>30 && i<40 && j>30 && j<40) {
-            			img.setFitHeight(cardHeight);
-    					img.setFitWidth(cardWidth);
-            			img.setImage(allCards.get("broken_cart_card.png"));
-            		}
-            		p.add(img, i, j);
-            	}
-            }
-			
-			double innerRadius = gameTableHalfSize/2;
+            double innerRadius = gameTableHalfSize/2;
 	        double radians = Math.toRadians(135);
 	        double XstartInner = (int)Math.round((Math.cos(radians) * innerRadius + gameTableHalfSize));
 	        double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + gameTableHalfSize));
-            p.setLayoutX(XstartInner);
-            p.setLayoutY(YstartInner);
-			
-            this.boardContainer.getChildren().add(p);
+            this.boardGridPane = new GridPane();
+            generateBoard();
+	        this.boardGridPane.setLayoutX(XstartInner);
+	        this.boardGridPane.setLayoutY(YstartInner);
+            this.boardContainer.getChildren().add(this.boardGridPane);
             
             //Create Specific arc for first player
-//            currentPlayerArcAndMiniCircle(gameTableHalfSize, gameTableHalfSize, boardSize);
         	addPlayerOnTheBoard(gameTableHalfSize, gameTableHalfSize, 100, -140.0);
             
             //Create arc for other player
@@ -184,12 +175,6 @@ public class GameState implements State{
             e.printStackTrace();
         }
         
-        this.firstCard.setImage(allCards.get("broken_cart_card.png"));
-        this.secondCard.setImage(allCards.get("collapse_card.png"));
-        this.thirdCard.setImage(allCards.get("path_card_17.png"));
-        this.fourthCard.setImage(allCards.get("path_card_29.png"));
-        this.fifthCard.setImage(allCards.get("path_card_40.png"));
-        this.sixthCard.setImage(allCards.get("plan_card.png"));
     }
     
     @Override
@@ -216,22 +201,118 @@ public class GameState implements State{
     	System.out.println("options");
     }
     
-    @FXML
-    private void selectCardButtonAction(MouseEvent event){
-    	ImageView newCard = (ImageView)event.getSource();
-    	if(!newCard.equals(this.selectedCard)) {
-    		this.selectedCard.setStyle(null);
-    		this.selectedCard = newCard;
-    		this.selectedCard.setStyle("-fx-effect : dropshadow(gaussian, black, 2, 2, 2, 2);");
+    @FXML void selectCardButtonAction(MouseEvent event) {
+    	ImageView newCard = null;
+    	HBox hb= (HBox)event.getSource();
+    	if (event.getTarget() == this.cardContainer) {
+            System.out.println("hBox! " + event.getTarget());
+        } else {
+        	newCard = (ImageView)event.getTarget();
+            System.out.println("hBox Ignored! " + event.getTarget());
+        }
+    	
+    	if(!newCard.equals(this.imgSelectedCard)) {
+    		this.imgSelectedCard.setStyle(null);
+    		this.imgSelectedCard = newCard;
+    		this.imgSelectedCard.setStyle("-fx-effect : dropshadow(gaussian, black, 2, 2, 2, 2);");
     	}
     	
-    	//TODO : si la carte est une carte sabotage
+    	int i = 0;
+    	for(Node nodeIn:hb.getChildren()){
+            if(((ImageView)nodeIn).equals(event.getSource())){
+            	this.selectedCard = this.game.getCurrentPlayer().getHand().get(i);
+            }
+            else{
+            	i++;
+            }
+        }
     	
-    	
+//	    if(this.selectedCard.isSabotage()) {
+//			
+//		}
+//		if(this.selectedCard.isRescue()) {
+//			
+//		}
+//		if(this.selectedCard.isDoubleRescue()) {
+//			
+//		}
+//		if(this.selectedCard.isPath()) {
+//			
+//		}
+//		if(this.selectedCard.isPlan()) {
+//			
+//		}
+//		if(this.selectedCard.isCollapse()) {
+//			
+//		}
     }
-        
+    
     private void addPlayerOnTheBoard(double sizeOfArc, double center, double length, double startAngle){
     	PlayerArc arc = new PlayerArc(sizeOfArc, center, length, startAngle);
     	this.boardContainer.getChildren().add(arc);
+    }
+    
+    private void generateHandCardImage() {
+    	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
+        	this.handCards[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getFrontImage()));
+        }
+    }
+    
+    private void generateBoard() {
+        double cardWidth = 108/3;
+        double cardHeight = 166/3;
+        
+        int xmin = Board.getGridSize();;
+        int xmax = 0;
+        int ymin = Board.getGridSize();
+        int ymax = 0;
+        
+        for(int i = 0; i < Board.getGridSize(); i++) {
+			for (int j = 0; j < Board.getGridSize(); j++) {
+				PathCard card = this.game.getBoard().getCard(new Position(i,j));
+				if( card != null) {
+					if(xmin > i) {
+						xmin = i;
+					}
+					if(xmax < i) {
+						xmax = i;
+					}
+					if(ymin > j) {
+						ymin = j;
+					}
+					if(ymax < j) {
+						ymax = j;
+					}
+				}
+			}
+        }
+        xmin--;
+        xmax++;
+        ymin--;
+        ymax++; 
+        
+    	for(int i = xmin; i <= xmax; i++) {
+    		for (int j = ymin; j <= ymax; j++) {
+				ImageView img = new ImageView();
+				PathCard card = this.game.getBoard().getCard(new Position(i,j));
+				
+				if(i>=xmin && i<=xmax && j>=ymin && j<=ymax) {
+					img.setFitHeight(cardHeight);
+					img.setFitWidth(cardWidth);
+					if( card != null) {
+						if(card.isVisible()) {
+	    					img.setImage(this.allCards.get(card.getFrontImage()));
+						}
+						else {
+	    					img.setImage(this.allCards.get(card.getBackImage()));
+						}
+					}
+					else{
+						img.setImage(this.allCards.get("broken_cart_card.png"));
+					}
+				}
+				this.boardGridPane.add(img, i, j);
+        	}
+        }
     }
 }
