@@ -15,7 +15,7 @@ import javafx.scene.transform.Rotate;
 public class PlayerArc extends Pane{
 	private Path path = new Path();
 	private Circle circle[] = new Circle[3];
-	
+
 	public PlayerArc(double sizeOfArc, double center, double lengthOfArc, double startAngle) {
 		
 		this.setPadding(new Insets(0, 0, 0, 0));
@@ -88,5 +88,9 @@ public class PlayerArc extends Pane{
         this.path.getElements().add(line2);
 
         this.getChildren().add(this.path);
+	}
+	
+	public Circle[] getCircle() {
+		return circle;
 	}
 }
