@@ -54,11 +54,8 @@ public class Game {
 
 		this.history = new LinkedList<>();
 
-		this.currentPlayerIndex = 0;
+		this.currentPlayerIndex = this.playerList.size()-1;
 		this.newRound();
-		
-        save("test1");
-        load("test1");
 	}
 
 	public void newRound(){
