@@ -84,7 +84,6 @@ public class GameState implements State{
                 }
             }
         }
-        System.out.println("coucou");
     }
 
     @Override
@@ -110,12 +109,12 @@ public class GameState implements State{
     	 */
 
     	//Début du bloc à commenter
-    	/*
+    	
     	this.game.getPlayerList().clear();
     	this.game.addPlayer(new AI(this.game, "Yves"));
     	this.game.addPlayer(new AI(this.game, "Philippe"));
     	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
-		*/
+		
     	//Fin du bloc à commenter
     	
         this.game.newGame();
@@ -126,12 +125,12 @@ public class GameState implements State{
         
         //NE PAS COMMENTER CETTE BOUCLE !!
         //IMPORTANT DANS TOUS LES CAS OU IL Y A UNE AI
-        /*
+        
         for(Player p : this.game.getPlayerList()){
     		if(p.isAI()){
     			((AI)p).initializeAI();
     		}
-    	}*/
+    	}
 
         try{
             FXMLLoader loader = new FXMLLoader();
