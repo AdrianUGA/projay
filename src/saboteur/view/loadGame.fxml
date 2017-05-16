@@ -34,30 +34,6 @@
                <content>
                   <VBox fx:id="loadableGameContainer" alignment="TOP_CENTER" prefHeight="500.0" prefWidth="835.0" style="-fx-background-color: rgba(0,0,0,0.7);">
                      <children>
-                        <RadioButton mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="155.0" text="Exemple1" textFill="WHITE">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </RadioButton>
-                        <RadioButton mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="155.0" text="Exemple1" textFill="WHITE">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </RadioButton>
-                        <RadioButton mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="17.0" prefWidth="155.0" text="Exe" textFill="WHITE">
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </RadioButton>
                      </children>
                   </VBox>
                </content>

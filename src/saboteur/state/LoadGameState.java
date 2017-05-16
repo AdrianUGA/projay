@@ -80,9 +80,10 @@ public class LoadGameState implements State {
     }
     
     private void loadableGames() {
-    	addLoadableGame("ma game");
-    	addLoadableGame("Adem game");
-    	addLoadableGame("Toto game");
+        Loader loaderSaves = new Loader();
+        for (String savedFile : loaderSaves.loadSavedFile()) {
+            addLoadableGame(savedFile);
+        }
     }
     
     private void addLoadableGame(String gameName) {
