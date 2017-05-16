@@ -67,6 +67,7 @@ public abstract class DwarfAI {
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					//Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCar());
 					System.out.println("Pour la carte " + o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
