@@ -49,6 +49,8 @@ public class GameState implements State{
     private Game game;
     private Stage primaryStage;
 
+    private boolean pause;
+
     public GameState(GameStateMachine gsm, Game game, Stage primaryStage){
         this.gsm = gsm;
         this.game = game;
@@ -59,7 +61,7 @@ public class GameState implements State{
     public void update() {
         if (this.game.gameIsFinished()){
             //fin de la partie
-        	if(game.dwarfsWon())System.out.println("Nains ont gagné");
+            if(game.dwarfsWon())System.out.println("Nains ont gagné");
             //this.gsm.change("annonce vainqueur");
             //System.out.println("fin de partie");
         } else {
@@ -73,15 +75,16 @@ public class GameState implements State{
                     this.game.getCurrentPlayer().playCard();
                     this.game.getCurrentPlayer().pickCard();
                     //System.out.println("AI has played");
-                    /*try{
-                        Thread.sleep(3000);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }*/
+                /*try{
+                    Thread.sleep(3000);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }*/
                     this.game.nextPlayer();
                 }
             }
         }
+        System.out.println("coucou");
     }
 
     @Override
@@ -91,18 +94,28 @@ public class GameState implements State{
 
     @Override
     public void onEnter(Object param) {
-    	/*
+    	initGame();
+    }
+    
+    @Override
+    public void onExit() {
+
+    }
+
+    private void initGame(){
+        /*
     	 * Pour Emmanuel qui fait des tests avec les IA
     	 * Pour pas être embêter par le problème de setTeam(),
     	 * commente son appel dans la méthode newRound de la classe Game
     	 */
+
     	//Début du bloc à commenter
-    	
-//    	this.game.getPlayerList().clear();
-//    	this.game.addPlayer(new AI(this.game, "Yves"));
-//    	this.game.addPlayer(new AI(this.game, "Philippe"));
-//    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
-		
+    	/*
+    	this.game.getPlayerList().clear();
+    	this.game.addPlayer(new AI(this.game, "Yves"));
+    	this.game.addPlayer(new AI(this.game, "Philippe"));
+    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
+		*/
     	//Fin du bloc à commenter
     	
         this.game.newGame();
@@ -111,25 +124,28 @@ public class GameState implements State{
         this.resources.loadPicto();
         this.allCards = this.resources.getImageCard();
         
-//        for(Player p : this.game.getPlayerList()){
-//    		if(p.isAI()){
-//    			((AI)p).initializeAI();
-//    		}
-//    	}
-        
+        //NE PAS COMMENTER CETTE BOUCLE !!
+        //IMPORTANT DANS TOUS LES CAS OU IL Y A UNE AI
+        /*
+        for(Player p : this.game.getPlayerList()){
+    		if(p.isAI()){
+    			((AI)p).initializeAI();
+    		}
+    	}*/
+
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
             loader.setController(this);
             Pane rootLayout = loader.load();
             Scene scene = new Scene(rootLayout);
-            
+
             //Take size of screen
             Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
             double gameTableSize = primaryScreenBounds.getHeight();
             double gameTableHalfSize = gameTableSize/2;
             double boardSize = gameTableHalfSize/2;
-            
+
             //For center cards hand Image
             this.cardContainer.setPrefWidth(gameTableSize);
             for(int i = 0; i < 6; i++) {
@@ -153,33 +169,27 @@ public class GameState implements State{
             
             //Create Specific arc for first player
         	addPlayerOnTheBoard(gameTableHalfSize, gameTableHalfSize, 100, -140.0);
-            
+
             //Create arc for other player
             int nbPlayer = this.game.getPlayerList().size()-1;
             double length = 260.0 / nbPlayer; // 260 = 360 - 100 (100 degree of the 1st player)
             double startAngle = -140.0;
             for (int i = 0; i<nbPlayer ; i++) {
-            	startAngle = startAngle - length;
-            	addPlayerOnTheBoard(gameTableHalfSize, gameTableHalfSize, length, startAngle);
+                startAngle = startAngle - length;
+                addPlayerOnTheBoard(gameTableHalfSize, gameTableHalfSize, length, startAngle);
             }
 
             //Create the circle of the game board
             this.gameBoard.setCenterX(gameTableHalfSize);
             this.gameBoard.setCenterY(gameTableHalfSize);
             this.gameBoard.setRadius(boardSize);
-            
+
             this.primaryStage.setScene(scene);
             this.primaryStage.setFullScreen(true);
             this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         } catch (IOException e){
             e.printStackTrace();
         }
-        
-    }
-    
-    @Override
-    public void onExit() {
-
     }
     
     //End of turn of the current player.
@@ -198,7 +208,8 @@ public class GameState implements State{
     
     @FXML
     private void optionsButtonAction(){
-    	System.out.println("options");
+        this.pause = true;
+        this.gsm.push("pauseMenu");
     }
     
     @FXML void selectCardButtonAction(MouseEvent event) {
