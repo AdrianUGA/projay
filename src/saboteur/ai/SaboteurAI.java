@@ -65,7 +65,7 @@ public abstract class SaboteurAI {
 					* Coefficients.SABOTEUR_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 				break;
 			case "saboteur.model.Card.PathCard":
-				if(artificialIntelligence.getHandicaps().size() == 0){
+				if(artificialIntelligence.getHandicaps().size() != 0){
 					// Trash
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
@@ -77,8 +77,12 @@ public abstract class SaboteurAI {
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(OperationPathCard currentOp : allOperationsForThisCard){
-						System.out.println("Pour la carte " + currentOp.getCard());
+						if(currentOp.getReversed())
+							System.out.println("Pour la carte " + ((PathCard)currentOp.getCard()).reversed() + " !R");
+						else
+							System.out.println("Pour la carte " + (PathCard)currentOp.getCard());
 						Position currentPos = currentOp.getP();
+						System.out.println("Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY());
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum

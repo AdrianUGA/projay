@@ -7,6 +7,8 @@ import saboteur.ai.AI;
 import saboteur.model.Card.*;
 
 public class Board implements Serializable {
+
+	private static final long serialVersionUID = -7481864881135990150L;
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
@@ -78,7 +80,13 @@ public class Board implements Serializable {
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
-
+	public Set<Position> extractPositions(Set<OperationPathCard> operations){
+		Set<Position> positions = new HashSet<Position>();
+		for(OperationPathCard operation : operations){
+			positions.add(operation.getP());
+		}
+		return positions;
+	}
 	
 	public PathCard getCard(Position position){
 		if (!position.isValid())
@@ -112,6 +120,16 @@ public class Board implements Serializable {
 		return positions;
 	}
 	
+	public List<Position> getAllEmptyNeighbors(Position position){
+		LinkedList<Position> positions = new LinkedList<Position>();
+		for(Cardinal cardinal : Cardinal.values()){
+			Position p = position.getNeighbor(cardinal);
+			if (p == null)
+				positions.add(p);
+		}
+		return positions;
+	}	
+	
 	public Position getPosition(PathCard card){
 		if (card == null)
 			return null;
@@ -144,8 +162,10 @@ public class Board implements Serializable {
 					continue;
 				
 				if(card == null){
-					possiblePlaces.add(operation);
-					possiblePlaces.add(operationReversed);
+					if(canPutAPathCardThere(neighbor)){
+						possiblePlaces.add(operation);
+						possiblePlaces.add(operationReversed);
+					}
 				}else if(this.isPossible(card, neighbor)){
 					possiblePlaces.add(operation);
 				}else if(this.isPossible(card.reversed(), neighbor)){
@@ -153,10 +173,23 @@ public class Board implements Serializable {
 				}
 			}
 		}
-		
 		return possiblePlaces;
 	}
 	
+	//TODO
+	private boolean canPutAPathCardThere(Position pos) {
+		int amountOfComingNeighbor = 0;
+		int amountOfAvailableNeighbor = 0;
+		for(Cardinal cardinal : Cardinal.values()){
+			if(getCard(pos.getNeighbor(cardinal)) == null){
+				amountOfAvailableNeighbor ++;
+			}else if(getCard(pos.getNeighbor(cardinal)).isOpen(cardinal.opposite())){
+				amountOfComingNeighbor++;
+			}
+		}
+		return (amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1);
+	}
+
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
 		List<Position> possible =  new ArrayList<Position>();
 		for(OperationPathCard o : this.getPossibleOperationPathCard(null,null)){

@@ -69,9 +69,11 @@ public abstract class DwarfAI {
 					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
-					//System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
 					for(OperationPathCard currentOp : allOperationsForThisCard){
-						System.out.println("Pour la carte " + currentOp.getCard());
+						if(currentOp.getReversed())
+							System.out.println("Pour la carte " + ((PathCard)currentOp.getCard()).reversed() + " !R");
+						else
+							System.out.println("Pour la carte " + (PathCard)currentOp.getCard());
 						Position currentPos = currentOp.getP();
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						System.out.println("Position gold = (" + goldCardPosition.getcX()+","+goldCardPosition.getcY() +") Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY() + " Distance min = " + distanceMin + " distanceDifference = " + distanceDifference);
