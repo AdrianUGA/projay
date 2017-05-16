@@ -26,8 +26,9 @@ public abstract class SaboteurAI {
 			case "saboteur.model.Card.PlanCard":
 				if(!artificialIntelligence.knowsTheGoldCardPosition()){
 					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(artificialIntelligence.getEstimatedGoldCardPosition()));
-					artificialIntelligence.operationsWeight.put(o, (float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.SABOTEUR_PLAN_TURN_EASY - artificialIntelligence.getGame().getTurn()))
-											* Coefficients.SABOTEUR_PLAN_EASY));
+					artificialIntelligence.operationsWeight.put(o, 
+						(float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.SABOTEUR_PLAN_TURN_EASY 
+								- artificialIntelligence.getGame().getTurn())) * Coefficients.SABOTEUR_PLAN_EASY));
 				}
 				else{
 					// Trash
@@ -37,7 +38,9 @@ public abstract class SaboteurAI {
 			case "saboteur.model.Card.RescueCard":
 				if(artificialIntelligence.canRescue((RescueCard)o.getCard())){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
-					artificialIntelligence.operationsWeight.put(o, (float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) * Coefficients.SABOTEUR_RESCUE_EASY);
+					artificialIntelligence.operationsWeight.put(o, 
+						(float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) 
+						* Coefficients.SABOTEUR_RESCUE_EASY);
 				}else{
 					// Trash
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
@@ -46,7 +49,9 @@ public abstract class SaboteurAI {
 			case "saboteur.model.Card.DoubleRescueCard":
 				if(artificialIntelligence.canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard())){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
-					artificialIntelligence.operationsWeight.put(o, (float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) * Coefficients.SABOTEUR_DOUBLERESCUE_EASY);
+					artificialIntelligence.operationsWeight.put(o, 
+						(float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) 
+						* Coefficients.SABOTEUR_DOUBLERESCUE_EASY);
 				}else{
 					// Trash
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
@@ -55,7 +60,9 @@ public abstract class SaboteurAI {
 			case "saboteur.model.Card.SabotageCard":
 				Player p = artificialIntelligence.mostLikelyADwarf();
 				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
-				artificialIntelligence.operationsWeight.put(o, (float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.SABOTEUR_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
+				artificialIntelligence.operationsWeight.put(o, 
+					(float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) 
+					* Coefficients.SABOTEUR_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 				break;
 			case "saboteur.model.Card.PathCard":
 				if(artificialIntelligence.getHandicaps().size() == 0){
@@ -89,16 +96,19 @@ public abstract class SaboteurAI {
 					// Easy Saboteur AI starts playing cul-de-sac when there is only 2 "distance" left
 
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
-					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossibleOperationPathCard(goldCardPosition);
-					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCard());
+					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
+					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
-					for(Position currentPos : allPositionsForThisCard){
+					for(OperationPathCard currentOp : allOperationsForThisCard){
+						Position currentPos = artificialIntelligence.getGame().getBoard().getPosition((PathCard)currentOp.getCard());
 						int distance = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distance >= -1){
 							// At most 1 position away from the minimum
-							((OperationPathCard) o).setP(currentPos);
-							artificialIntelligence.operationsWeight.put((OperationPathCard) o, (float) artificialIntelligence.ifNegativeZeroElseOne(Coefficients.SABOTEUR_DISTANCE_LEFT_EASY-currentPos.getTaxiDistance(goldCardPosition))*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distance - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.SABOTEUR_CUL_DE_SAC_EASY);
+							artificialIntelligence.operationsWeight.put((OperationPathCard) currentOp, 
+								(float) artificialIntelligence.ifNegativeZeroElseOne(Coefficients.SABOTEUR_DISTANCE_LEFT_EASY-currentPos.getTaxiDistance(goldCardPosition))
+								*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distance - ((PathCard) currentOp.getCard()).openSidesAmount()/5) 
+								* Coefficients.SABOTEUR_CUL_DE_SAC_EASY);
 						}else{
 							// Trash
 							artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);

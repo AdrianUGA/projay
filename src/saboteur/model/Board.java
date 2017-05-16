@@ -155,7 +155,7 @@ public class Board {
 		return possiblePlaces;
 	}
 	
-	public List<Position> getNearestPossibleOperationPathCard(Position position){
+	public List<Position> getNearestPossiblePathCardPlace(Position position){
 		List<Position> possible =  new ArrayList<Position>();
 		for(OperationPathCard o : this.getPossibleOperationPathCard(null)){
 			possible.add(o.getP());
@@ -291,5 +291,9 @@ public class Board {
 			if (card.hasGold() && card.isVisible()) return true;
 		}
 		return false;
+	}
+
+	public static int getGridSize() {
+		return GRID_SIZE;
 	}
 }
