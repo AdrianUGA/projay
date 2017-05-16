@@ -273,7 +273,9 @@ public class Graphe {
 
     public static class GrapheReaderException extends Exception {
 
-        public GrapheReaderException(String message, Throwable cause) {
+		private static final long serialVersionUID = 3543327563631427353L;
+
+		public GrapheReaderException(String message, Throwable cause) {
             super(message, cause);
         }
     }

@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-import saboteur.ai.AI;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 

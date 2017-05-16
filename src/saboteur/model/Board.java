@@ -7,6 +7,8 @@ import saboteur.ai.AI;
 import saboteur.model.Card.*;
 
 public class Board implements Serializable {
+
+	private static final long serialVersionUID = -7481864881135990150L;
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
