@@ -31,4 +31,12 @@ public abstract class Operation {
 		this.card = card;
 		return this;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Operation o = (Operation) obj;
+		return o.getCard() == this.card && o.getSourcePlayer().equals(this.sourcePlayer);
+	}
+	
+	
 }

@@ -129,16 +129,25 @@ public class Board {
 		return this.objectiveCards;
 	}
 	
-	/* Returns every free positions when card=null */
-	public Set<Position> getPossiblePathCardPlace(PathCard card){
-		Set<Position> possiblePlaces = new HashSet<Position>();
+	/* Returns actions on every free positions when card=null */
+	public Set<OperationPathCard> getPossibleOperationPathCard(PathCard card){
+		Set<OperationPathCard> possiblePlaces = new HashSet<OperationPathCard>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
+				OperationPathCard operation = new OperationPathCard(null, null, neighbor);
+				OperationPathCard operationReversed = new OperationPathCard(null, null, neighbor).setReversed(true);
+				
 				if (this.getCard(neighbor) != null)
 					continue;
-				if(card == null || this.isPossible(card, neighbor) || this.isPossible(card.reversed(), neighbor)){
-					possiblePlaces.add(neighbor);
+				
+				if(card == null){
+					possiblePlaces.add(operation);
+					possiblePlaces.add(operationReversed);
+				}else if(this.isPossible(card, neighbor)){
+					possiblePlaces.add(operation);
+				}else if(this.isPossible(card.reversed(), neighbor)){
+					possiblePlaces.add(operationReversed);
 				}
 			}
 		}
@@ -146,14 +155,14 @@ public class Board {
 		return possiblePlaces;
 	}
 	
-	public List<Position> getNearestPossiblePathCardPlace(Position position){
-		List<Position> possible =  new ArrayList<Position>(this.getPossiblePathCardPlace(null));
-		possible.sort(new PositionComparator(position));
+	public List<OperationPathCard> getNearestPossibleOperationPathCard(Position position){
+		List<OperationPathCard> possible =  new ArrayList<OperationPathCard>(this.getPossibleOperationPathCard(null));
+		possible.sort(new OperationPathCardComparator(new PositionComparator(position)));
 		
-		int min = position.getTaxiDistance(possible.get(possible.size()-1));
-		List<Position> ret = new LinkedList<Position>();
+		int min = position.getTaxiDistance(possible.get(possible.size()-1).getP());
+		List<OperationPathCard> ret = new LinkedList<OperationPathCard>();
 		for(int i=0; i<possible.size(); i++){
-			if(possible.get(i).getTaxiDistance(position) > min){
+			if(possible.get(i).getP().getTaxiDistance(position) > min){
 				break;
 			}
 			ret.add(possible.get(i));

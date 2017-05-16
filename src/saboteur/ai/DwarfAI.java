@@ -65,24 +65,20 @@ public abstract class DwarfAI {
 				if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
-					//Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCar());
+					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCard());
 					System.out.println("Pour la carte " + o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					//System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
-					//for(OperationPathCard currentOp : allOperationsForThisCard){
-					//Position currentPos = artificialIntelligence.getGame().getBoard().getPosition(currentOp.getCard());
-					for(Position currentPos : allPositionsForThisCard){
+					for(OperationPathCard currentOp : allOperationsForThisCard){
+						Position currentPos = artificialIntelligence.getGame().getBoard().getPosition((PathCard) currentOp.getCard());
 						System.out.println("Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY());
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
-							((OperationPathCard) o).setP(currentPos);//TODO remove this after we have allOperationsForThisCard
-							artificialIntelligence.operationsWeight.put((OperationPathCard) o, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
-									+ distanceDifference - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
-							//artificialIntelligence.operationsWeight.put(currentOp, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
-							//		+ distanceDifference - ((PathCard) currentOp.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
+							artificialIntelligence.operationsWeight.put(currentOp, 
+									(float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY + distanceDifference 
+									- ((PathCard) currentOp.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
 						}else{
 							// Trash
 							artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
