@@ -1,10 +1,12 @@
 package saboteur.model;
 
+import java.io.Serializable;
 import java.util.*;
 
+import saboteur.ai.AI;
 import saboteur.model.Card.*;
 
-public class Board {
+public class Board implements Serializable {
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
@@ -129,16 +131,25 @@ public class Board {
 		return this.objectiveCards;
 	}
 	
-	/* Returns every free positions when card=null */
-	public Set<Position> getPossiblePathCardPlace(PathCard card){
-		Set<Position> possiblePlaces = new HashSet<Position>();
+	/* Returns actions on every free positions when card=null */
+	public Set<OperationPathCard> getPossibleOperationPathCard(AI ai, PathCard card){
+		Set<OperationPathCard> possiblePlaces = new HashSet<OperationPathCard>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
+				OperationPathCard operation = new OperationPathCard(ai, card, neighbor);
+				OperationPathCard operationReversed = new OperationPathCard(ai, card, neighbor).setReversed(true);
+				
 				if (this.getCard(neighbor) != null)
 					continue;
-				if(card == null || this.isPossible(card, neighbor) || this.isPossible(card.reversed(), neighbor)){
-					possiblePlaces.add(neighbor);
+				
+				if(card == null){
+					possiblePlaces.add(operation);
+					possiblePlaces.add(operationReversed);
+				}else if(this.isPossible(card, neighbor)){
+					possiblePlaces.add(operation);
+				}else if(this.isPossible(card.reversed(), neighbor)){
+					possiblePlaces.add(operationReversed);
 				}
 			}
 		}
@@ -147,7 +158,11 @@ public class Board {
 	}
 	
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
-		List<Position> possible =  new ArrayList<Position>(this.getPossiblePathCardPlace(null));
+		List<Position> possible =  new ArrayList<Position>();
+		for(OperationPathCard o : this.getPossibleOperationPathCard(null,null)){
+			possible.add(o.getP());
+		}
+		
 		possible.sort(new PositionComparator(position));
 		
 		int min = position.getTaxiDistance(possible.get(possible.size()-1));

@@ -32,4 +32,9 @@ public class DoubleRescueCard extends ActionCardToPlayer {
 
 		return card;
 	}
+	
+	@Override
+	public boolean isDoubleRescueCard() {
+		return true;
+	}
 }
