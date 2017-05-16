@@ -1,8 +1,10 @@
 package saboteur.model;
 
+import java.io.Serializable;
+
 import saboteur.model.Card.Card;
 
-public abstract class Operation {
+public abstract class Operation implements Serializable {
 	private Player sourcePlayer; //TO SAVE
 	private Card card; //TO SAVE
 	

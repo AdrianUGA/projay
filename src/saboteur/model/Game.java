@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
+import saboteur.ai.AI;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
@@ -108,9 +109,9 @@ public class Game {
 	}
 	
 	public void save(String name) {
-		File dirSave = new File("./.saves");
+		File dirSave = new File(Loader.savedFolder);
 		dirSave.mkdir();
-		File saveFile = new File("./.saves/" + name + ".save");
+		File saveFile = new File(Loader.savedFolder+ "/" + name + ".save");
 		try {
 			if (saveFile.exists()){
 				saveFile.delete();
@@ -122,9 +123,16 @@ public class Game {
         try {
             FileOutputStream fileOutput = new FileOutputStream(saveFile);
             ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
-            if (playerList.getFirst() == null) System.out.println("est nul");
-            System.out.println(playerList.getFirst().getName() + "  " + playerList.getFirst().getHand().size() + "fin");
-            objectOutput.writeObject(playerList.getFirst());
+            objectOutput.writeObject(this.currentPlayer);
+            objectOutput.writeObject(this.round);
+            objectOutput.writeObject(this.turn);
+            objectOutput.writeObject(this.goldCardStack);
+            objectOutput.writeObject(this.history);
+            objectOutput.writeObject(this.stack);
+            objectOutput.writeObject(this.trash);
+            objectOutput.writeObject(this.playerList);
+            objectOutput.writeObject(this.board);
+            objectOutput.writeObject(this.observers);
             objectOutput.close();
         } catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -133,13 +141,21 @@ public class Game {
 	}
 	
 	public void load(String name){
-		File saveFile = new File("./.saves/" + name + ".save");
+		File saveFile = new File(Loader.savedFolder+ "/" + name + ".save");
 		FileInputStream fileInput;
 		try {
 			fileInput = new FileInputStream(saveFile);
 	        ObjectInputStream objectInputStream = new ObjectInputStream(fileInput);
-	        Player test = (Player) objectInputStream.readObject();
-	        System.out.println(test.name + "humain : " + test.isHuman());
+	        this.currentPlayer = (Player) objectInputStream.readObject();	        
+	        this.round = (int) objectInputStream.readObject();
+	        this.turn = (int) objectInputStream.readObject();
+	        this.goldCardStack = (LinkedList<GoldCard>) objectInputStream.readObject();
+            this.history = (LinkedList<Operation>) objectInputStream.readObject();
+            this.stack = (LinkedList<Card>) objectInputStream.readObject();
+            this.trash = (LinkedList<Card>) objectInputStream.readObject();
+            this.playerList = (LinkedList<Player>) objectInputStream.readObject();
+            this.board = (Board) objectInputStream.readObject();
+            this.observers = (LinkedList<Player>) objectInputStream.readObject();
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

@@ -1,6 +1,8 @@
 package saboteur.model.Card;
 
-public abstract class Card implements Cloneable{
+import java.io.Serializable;
+
+public abstract class Card implements Cloneable, Serializable{
 
     protected String frontImage;
     protected String backImage;

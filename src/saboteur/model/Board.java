@@ -1,10 +1,11 @@
 package saboteur.model;
 
+import java.io.Serializable;
 import java.util.*;
 
 import saboteur.model.Card.*;
 
-public class Board {
+public class Board implements Serializable {
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
