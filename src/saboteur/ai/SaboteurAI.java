@@ -65,8 +65,8 @@ public abstract class SaboteurAI {
 				else if(!((PathCard) o.getCard()).isCulDeSac()){
 
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
-					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossibleOperationPathCard(goldCardPosition);
+					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(Position currentPos : allPositionsForThisCard){
@@ -86,8 +86,8 @@ public abstract class SaboteurAI {
 					// Easy Saboteur AI starts playing cul-de-sac when there is only 2 "distance" left
 
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
-					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossibleOperationPathCard(goldCardPosition);
+					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(Position currentPos : allPositionsForThisCard){
