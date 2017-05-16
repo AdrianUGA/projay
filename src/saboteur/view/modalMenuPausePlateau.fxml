@@ -12,7 +12,7 @@
 <VBox alignment="TOP_CENTER" opacity="0.7" prefHeight="400.0" prefWidth="385.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane prefHeight="200.0" prefWidth="200.0" />
-      <HBox alignment="CENTER">
+      <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
          <children>
             <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
