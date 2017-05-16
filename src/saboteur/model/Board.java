@@ -137,7 +137,7 @@ public class Board {
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
 				OperationPathCard operation = new OperationPathCard(null, null, neighbor);
 				OperationPathCard operationReversed = new OperationPathCard(null, null, neighbor).setReversed(true);
-				
+
 				if (this.getCard(neighbor) != null)
 					continue;
 				
