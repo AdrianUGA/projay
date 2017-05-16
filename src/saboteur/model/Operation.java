@@ -38,5 +38,24 @@ public abstract class Operation {
 		return o.getCard() == this.card && o.getSourcePlayer().equals(this.sourcePlayer);
 	}
 	
+	public boolean isOperationActionCardToBoard(){
+		return false;
+	}
+	
+	public boolean isOperationActionCardToPlayer(){
+		return false;
+	}
+	
+	public boolean isOperationPathCard(){
+		return false;
+	}
+	
+	public boolean isOperationPick(){
+		return false;
+	}
+	
+	public boolean isOperationTrash(){
+		return false;
+	}
 	
 }

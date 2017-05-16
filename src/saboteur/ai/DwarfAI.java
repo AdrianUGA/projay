@@ -26,7 +26,8 @@ public abstract class DwarfAI {
 			case "saboteur.model.Card.PlanCard":
 				if(!artificialIntelligence.knowsTheGoldCardPosition()){
 					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(artificialIntelligence.getEstimatedGoldCardPosition()));
-					artificialIntelligence.operationsWeight.put(o, (float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - artificialIntelligence.getGame().getTurn()))
+					artificialIntelligence.operationsWeight.put(o, 
+							(float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - artificialIntelligence.getGame().getTurn()))
 											* Coefficients.DWARF_PLAN_EASY));
 				}
 				else{
@@ -65,15 +66,15 @@ public abstract class DwarfAI {
 				if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCard());
+					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 					System.out.println("Pour la carte " + o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					//System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
 					for(OperationPathCard currentOp : allOperationsForThisCard){
-						Position currentPos = artificialIntelligence.getGame().getBoard().getPosition((PathCard) currentOp.getCard());
-						System.out.println("Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY());
+						Position currentPos = currentOp.getP();
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
+						System.out.println("Position gold = (" + goldCardPosition.getcX()+","+goldCardPosition.getcY() +") Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY() + " Distance min = " + distanceMin + " distanceDifference = " + distanceDifference);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
 							artificialIntelligence.operationsWeight.put(currentOp, 

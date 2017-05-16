@@ -73,11 +73,11 @@ public abstract class SaboteurAI {
 
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCard());
+					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(OperationPathCard currentOp : allOperationsForThisCard){
-						Position currentPos = artificialIntelligence.getGame().getBoard().getPosition((PathCard)currentOp.getCard());
+						Position currentPos = currentOp.getP();
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
@@ -97,11 +97,11 @@ public abstract class SaboteurAI {
 
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCard());
+					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(OperationPathCard currentOp : allOperationsForThisCard){
-						Position currentPos = artificialIntelligence.getGame().getBoard().getPosition((PathCard)currentOp.getCard());
+						Position currentPos = currentOp.getP();
 						int distance = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distance >= -1){
 							// At most 1 position away from the minimum

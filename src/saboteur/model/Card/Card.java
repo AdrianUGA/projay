@@ -34,4 +34,29 @@ public abstract class Card implements Cloneable{
         }
         return card;
     }
+    
+    public boolean isCollapseCard(){
+    	return false;
+    }
+    
+    public boolean isRescueCard(){
+    	return false;
+    }
+    
+    public boolean isDoubleRescueCard(){
+    	return false;
+    }
+    
+    public boolean isPathCard(){
+    	return false;
+    }
+    
+    public boolean isPlanCard(){
+    	return false;
+    }
+    
+    public boolean isSabotageCard(){
+    	return false;
+    }
+    
 }
