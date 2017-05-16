@@ -25,4 +25,9 @@ public class RescueCard extends ActionCardToPlayer {
 
 		return card;
 	}
+	
+	@Override
+	public boolean isRescueCard() {
+		return true;
+	}
 }

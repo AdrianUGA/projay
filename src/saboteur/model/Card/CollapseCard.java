@@ -7,4 +7,9 @@ public class CollapseCard extends ActionCardToBoard {
 		return true;
 	}
 	
+	@Override
+	public boolean isCollapseCard() {
+		return true;
+	}
+	
 }

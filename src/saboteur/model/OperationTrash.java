@@ -17,5 +17,10 @@ public class OperationTrash extends Operation {
 	public void execReverse(Game game) {
 		this.getSourcePlayer().addHandCard(this.getCard());
 	}
+	
+	@Override
+	public boolean isOperationTrash(){
+		return true;
+	}
 
 }

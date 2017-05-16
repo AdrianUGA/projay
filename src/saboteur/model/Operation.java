@@ -1,8 +1,10 @@
 package saboteur.model;
 
+import java.io.Serializable;
+
 import saboteur.model.Card.Card;
 
-public abstract class Operation {
+public abstract class Operation implements Serializable {
 	private Player sourcePlayer; //TO SAVE
 	private Card card; //TO SAVE
 	
@@ -31,4 +33,31 @@ public abstract class Operation {
 		this.card = card;
 		return this;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Operation o = (Operation) obj;
+		return o.getCard() == this.card && o.getSourcePlayer().equals(this.sourcePlayer);
+	}
+	
+	public boolean isOperationActionCardToBoard(){
+		return false;
+	}
+	
+	public boolean isOperationActionCardToPlayer(){
+		return false;
+	}
+	
+	public boolean isOperationPathCard(){
+		return false;
+	}
+	
+	public boolean isOperationPick(){
+		return false;
+	}
+	
+	public boolean isOperationTrash(){
+		return false;
+	}
+	
 }
