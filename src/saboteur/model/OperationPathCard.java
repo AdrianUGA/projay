@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import saboteur.model.Card.*;
 
 public class OperationPathCard extends Operation {
+	private static final long serialVersionUID = -2843575527220989261L;
 	private Position p; //TO SAVE
 	private ArrayList<Position> goalCardsToFlip; //TO SAVE
 	private boolean reversed;
