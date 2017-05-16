@@ -235,6 +235,29 @@ public class Game {
 		return this.board.goalCardWithGoldIsVisible();
 	}
 	
+	public LinkedList<Player> getPlayers(ActionCardToPlayer card){
+		LinkedList<Player> result = new LinkedList<>();
+		boolean isPossible = false;
+		for (Player p : this.playerList){
+			switch (card.getType()) {
+				case SABOTAGE:
+					isPossible = p.canHandicap((SabotageCard)card);
+					break;
+				case RESCUE:
+					isPossible = p.canRescue((RescueCard)card);
+					break;
+				case DOUBLE_RESCUE:
+					isPossible = p.canRescueWithDoubleRescueCard((DoubleRescueCard)card);
+					break;
+				default:
+					break;
+			}
+			if (isPossible) result.add(p);
+		}
+		
+		return result;
+	}
+	
 	public void dealGold(){
 		if (dwarfsWon()){
 			Player current;
