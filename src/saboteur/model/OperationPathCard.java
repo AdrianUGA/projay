@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import saboteur.model.Card.*;
 
 public class OperationPathCard extends Operation {
-	private Position p;
-	private ArrayList<Position> goalCardsToFlip;
+	private Position p; //TO SAVE
+	private ArrayList<Position> goalCardsToFlip; //TO SAVE
 	
 	public Position getP() {
 		return p;
@@ -32,8 +32,7 @@ public class OperationPathCard extends Operation {
 				toFlip.setVisible(true);
 
 				if (!toFlip.hasGold() && !game.getBoard().isPossible(toFlip, p)){
-					game.getBoard().removeCard(p);
-					game.getBoard().addCard(toFlip.reversed(), p);
+					toFlip.reverse();
 				}
 			}
 		}

@@ -2,7 +2,6 @@ package saboteur.ai;
 import saboteur.model.Game;
 import saboteur.model.Operation;
 
-import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -15,10 +14,11 @@ import saboteur.model.OperationActionCardToPlayer;
 import saboteur.model.OperationPathCard;
 import saboteur.model.Player;
 import saboteur.model.Position;
+import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 
-public abstract class AI extends Player {
+public class AI extends Player {
 	
 	protected final int AVERAGE_TRUST = 50;
 	
@@ -45,7 +45,7 @@ public abstract class AI extends Player {
 		for(Player p : game.getPlayerList()){
 			isDwarf.put(p, (float) AVERAGE_TRUST);
 		}
-		if(isSaboteur()){
+		if(getTeam() == Team.SABOTEUR){
 			isDwarf.put(this, (float) -1073741824);
 		}
 		else{
@@ -310,9 +310,9 @@ public abstract class AI extends Player {
 			}
 		}
 		Operation o = bestOperations.get(r.nextInt(bestOperations.size()));
+		System.out.println("Opération joué par " + this.name + " de type" + o.getClass().getName() + " ... " + o.getCard().getClassName() + " rôle = " + this.getTeam() + " with weight = "+ operationsWeight.get(o));
 		if(o.getClass().getName() == "saboteur.model.OperationPathCard"){
-			System.out.println("Opération joué par " + this.name);
-			System.out.println("x =" + ((OperationPathCard) o).getP().getcX() + " y= " +((OperationPathCard) o).getP().getcY() + "with weight = "+ operationsWeight.get(o));
+			System.out.println("x =" + ((OperationPathCard) o).getP().getcX() + " y= " +((OperationPathCard) o).getP().getcY());
 		}
 		return o;
 	}
@@ -327,25 +327,35 @@ public abstract class AI extends Player {
 	
 	public Operation selectOperation(){
 		resetProbabilitiesToPlayEachOperation();
-		switch(this.getDifficulty()){
-		case EASY:
-			computeOperationWeightEasyAI();
+		switch(this.team){
+		case DWARF:
+			switch(this.getDifficulty()){
+			case EASY:
+				DwarfAI.computeOperationWeightEasyAI(this);
+				break;
+			case MEDIUM:
+				DwarfAI.computeOperationWeightMediumAI(this);
+				break;
+			case HARD:
+				DwarfAI.computeOperationWeightHardAI(this);
+				break;
+			}
 			break;
-		case MEDIUM:
-			computeOperationWeightMediumAI();
-			break;
-		case HARD:
-			computeOperationWeightHardAI();
-			break;
+		case SABOTEUR:
+			switch(this.getDifficulty()){
+			case EASY:
+				SaboteurAI.computeOperationWeightEasyAI(this);
+				break;
+			case MEDIUM:
+				SaboteurAI.computeOperationWeightMediumAI(this);
+				break;
+			case HARD:
+				SaboteurAI.computeOperationWeightHardAI(this);
+				break;
+			}
 		}
 		removeOperationWithNullTarget();
-		
 		return bestOperationToPlay();
 	}
 
-	protected abstract void computeOperationWeightHardAI();
-
-	protected abstract void computeOperationWeightMediumAI();
-
-	protected abstract void computeOperationWeightEasyAI();
 }

@@ -17,9 +17,9 @@ public class Board {
 			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y)};
 	
 	
-	private PathCard[][] board;
-	private List<Position> objectiveCards;
-	private Map<Position, PathCard> pathCardsPosition;
+	private PathCard[][] board; //NOT TO SAVE
+	private List<Position> objectiveCards; //TO SAVE
+	private Map<Position, PathCard> pathCardsPosition; //TO SAVE
 	
 	//private Map<Position, Position> childrenDad;
 	
@@ -33,7 +33,7 @@ public class Board {
 		this.objectiveCards = new LinkedList<Position>();
 		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
-		Collections.shuffle(goalPathCard);
+		Collections.shuffle(goalPathCard, new Random(Game.seed));
 		
 		for(int i=0; i<3; i++)
 			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);
@@ -130,12 +130,14 @@ public class Board {
 	}
 	
 	/* Returns every free positions when card=null */
-	public List<Position> getPossiblePathCardPlace(PathCard card){
-		List<Position> possiblePlaces = new LinkedList<Position>();
+	public Set<Position> getPossiblePathCardPlace(PathCard card){
+		Set<Position> possiblePlaces = new HashSet<Position>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
-				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){
+				if (this.getCard(neighbor) != null)
+					continue;
+				if(card == null || this.isPossible(card, neighbor) || this.isPossible(card.reversed(), neighbor)){
 					possiblePlaces.add(neighbor);
 				}
 			}
@@ -145,7 +147,7 @@ public class Board {
 	}
 	
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
-		List<Position> possible = this.getPossiblePathCardPlace(null);
+		List<Position> possible =  new ArrayList<Position>(this.getPossiblePathCardPlace(null));
 		possible.sort(new PositionComparator(position));
 		
 		int min = position.getTaxiDistance(possible.get(possible.size()-1));

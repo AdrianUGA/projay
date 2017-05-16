@@ -3,8 +3,8 @@ package saboteur.model;
 import saboteur.model.Card.*;
 
 public class OperationActionCardToBoard extends Operation {
-	private PathCard destinationCard;
-	private Position positionDestination;
+	private PathCard destinationCard; //TO SAVE
+	private Position positionDestination; //TO SAVE
 	
 	public OperationActionCardToBoard(Player sourcePlayer, Card card, PathCard destinationCard) {
 		super(sourcePlayer, card);
