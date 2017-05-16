@@ -11,6 +11,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
@@ -89,6 +91,8 @@ public class LoadGameState implements State {
     private void addLoadableGame(String gameName) {
     	RadioButton savedGame = new RadioButton(gameName);
     	savedGame.setToggleGroup(this.radionButtonGroupe);
+    	savedGame.setTextFill(Color.WHITE);
+    	savedGame.setStyle("-fx-padding:10px ; -fx-font-size:18px ;");
     	loadableGameContainer.getChildren().add(savedGame);
     }
 }

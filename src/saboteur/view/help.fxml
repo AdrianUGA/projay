@@ -2,33 +2,319 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: url(..\..\resources\mine.jpg);" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" style="-fx-background-image: url(@../../resources/mine.jpg); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" opacity="0.7" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: black;">
+      <VBox alignment="CENTER" prefHeight="786.0" prefWidth="823.0" style="-fx-background-color: rgba(0,0,0,0.7);">
          <HBox.margin>
             <Insets />
          </HBox.margin>
          <children>
-            <ImageView fitHeight="54.0" fitWidth="275.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="99.0" fitWidth="844.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/aideLogo.png" />
+                  <Image url="@../../resources/AideLogo.png" />
                </image>
                <VBox.margin>
                   <Insets bottom="40.0" top="20.0" />
                </VBox.margin>
             </ImageView>
-            <Pane prefHeight="200.0" prefWidth="200.0" />
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <ScrollPane prefHeight="479.0" prefWidth="724.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="2431.0" prefWidth="805.0">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="38.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/nainchercheurdor.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="340.0" text="Principe du jeu">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Text layoutX="177.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Les joueurs jouent soit le rôle d'un chercheur d'or qui creuse de profondes galeries dans la montage, soit le rôle d'un saboteur qui entrave la recherche d'or. Les deux groupes doivent se soutenir en essayant de savoir quel est le rôle de chacun. Si les chercheurs d'or arrivent à se frayer un chemin jusqu'au trésor, ils gagneront des pépites d'or et les saboteurs de gagneront rien. Mais si les chercheurs d'or n'atteignent pas le trésor, ce sont les saboteurs qui gagneront des pépites. Lorsque l'on arrive au partage de l'or, chacun révêle son rôle. Après 3 manches, le joueur qui a gagné le plus de pépites remporte la partie." textAlignment="JUSTIFY" wrappingWidth="446.66664123535156">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="670.0" layoutY="72.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/nainsaboteur.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="53.0" layoutY="227.0" text="Chercheur d'or">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="690.0" layoutY="225.0" text="Saboteur">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="310.0" layoutY="295.0" text="Combien de Saboteurs ?">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Text layoutX="87.0" layoutY="358.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3 et 4 joueurs : Au maximum 1 saboteur (ou pas du tout)">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="88.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5 et 6 joueurs : Entre 1 et 2 saboteurs">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="86.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" text="7 à 9 joueurs : Entre 2 et 3 saboteurs">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="88.0" layoutY="434.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10 joueurs : Entre 3 et 4 saboteurs">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Label layoutX="337.0" layoutY="444.0" text="Le plateau de jeu">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="418.0" fitWidth="724.0" layoutX="64.0" layoutY="474.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/PlateauAide.JPG" />
+                           </image>
+                        </ImageView>
+                        <Text fill="#ff7b00" layoutX="103.0" layoutY="908.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Accès au menu (sauvegarder la partie, Avoir de l'aide, Quitter la partie)">
+                           <font>
+                              <Font name="System Bold Italic" size="15.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#ffcc00" layoutX="100.0" layoutY="931.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rôle du joueur courant (saboteur ou chercheur d'or)">
+                           <font>
+                              <Font name="System Bold Italic" size="15.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#16680c" layoutX="103.0" layoutY="956.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Les différentes cartes en main du joueur courant">
+                           <font>
+                              <Font name="System Bold Italic" size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="103.0" layoutY="986.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Le bouton fin de tour sert à signaler qu'on a fini son tour. Un joueur qui fini son tour ne reverra plus ses cartes avant son prochain tour." wrappingWidth="688.2885818481445">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="276.0" fitWidth="411.0" layoutX="19.0" layoutY="1018.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/PlateauSchemaAide.JPG" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="137.0" fitWidth="188.0" layoutX="460.0" layoutY="1071.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/goal_card_gold.png" />
+                           </image>
+                        </ImageView>
+                        <Text layoutX="574.0" layoutY="1064.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Derrière une des cartes arrivé, il y a la carte avec la pépite d'or. L'objectif pour un chercheur d'or est de trouver cette carte. L'objectif pour un saboteur est d'empecher les chercheurs d'or à trouver cette carte." wrappingWidth="194.66468811035156">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Label layoutX="330.0" layoutY="1323.0" text="Déroulement du jeu">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Text layoutX="78.0" layoutY="1382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Le joueur dont c'est le tour doit d'abord jouer une carte. Jouer signifie : ">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="67.0" layoutY="1422.0" strokeType="OUTSIDE" strokeWidth="0.0" text="- Soit poser une carte chemin dans le labyrinthe" wrappingWidth="173.42462158203125">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="419.0" layoutY="1418.0" strokeType="OUTSIDE" strokeWidth="0.0" text="- Soit poser une carte action à l'un des joueurs" wrappingWidth="144.45245361328125">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="250.0" layoutY="1532.0" strokeType="OUTSIDE" strokeWidth="0.0" text="- Soit on jette une carte à la poubelle/défosse">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="62.0" fitWidth="40.0" layoutX="263.0" layoutY="1402.0" opacity="0.73" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/path_card_20.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="43.0" layoutX="281.0" layoutY="1409.0" opacity="0.87" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/path_card_4.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="43.0" layoutX="299.0" layoutY="1417.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/path_card_17.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="43.0" layoutX="604.0" layoutY="1394.0" opacity="0.57" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/broken_lantern_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="43.0" layoutX="624.0" layoutY="1405.0" opacity="0.67" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/cart_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="62.0" fitWidth="43.0" layoutX="642.0" layoutY="1418.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/lantern_cart_card.png" />
+                           </image>
+                        </ImageView>
+                        <Text layoutX="94.0" layoutY="1567.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ensuite le joueur doit piocher une carte, et finir son tour. Son tour est alors terminé et c'est au tour du joueur suivant. Quand la pioche est vide, il suffit de finir son tour." wrappingWidth="640.1476211547852">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Label layoutX="335.0" layoutY="1640.0" text="Les cartes du jeu">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="53.0" layoutY="1703.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/lantern_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="297.0" layoutY="1703.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/cart_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="554.0" layoutY="1701.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/pickaxe_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="671.0" layoutY="1699.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/broken_pickaxe_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="159.0" layoutY="1705.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/broken_lantern_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="411.0" layoutY="1700.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/broken_cart_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="46.0" layoutY="1996.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/collapse_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="676.0" layoutY="1998.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/plan_card.png" />
+                           </image>
+                        </ImageView>
+                        <Text layoutX="76.0" layoutY="1866.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lanterne réparée et lanterne cassée" wrappingWidth="141.3053436279297">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="334.0" layoutY="1866.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Chariot réparé et chariot cassé" wrappingWidth="141.3053436279297">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="599.0" layoutY="1870.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pioche réparée et pioche cassée" wrappingWidth="141.3053436279297">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="161.0" layoutY="2005.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Carte éboulement" wrappingWidth="141.3053436279297">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="519.0" layoutY="2010.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Carte plan" textAlignment="RIGHT" wrappingWidth="141.3053436279297">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Label layoutX="34.0" layoutY="1663.0" text="Les cartes actions">
+                           <font>
+                              <Font name="System Bold Italic" size="19.0" />
+                           </font>
+                        </Label>
+                        <Text layoutX="29.0" layoutY="1921.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Si un joueur a au moins un de ces trois objet cassé, il ne peut pas poser de carte chemin tant qu'il ne s'est pas débarasser de l'objet cassée en question (il faut pour cela jouer une carte de l'objet réparé)." textAlignment="CENTER" wrappingWidth="750.8891792297363">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="158.0" layoutY="2035.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Une fois jouer, cette carte permet d'écrouler un chemin du plateau, c'est-à-dire de supprimer une carte chemin au choix (exceptée la carte de départ et l'une des trois cartes objectifs)." textAlignment="JUSTIFY" wrappingWidth="201.6314697265625">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="466.0" layoutY="2036.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Une fois jouer, cette carte permet de regarder une seule fois une des cartes objectif au choix. Seul le joueur qui joue cette carte voit la carte objectif dévoilée." textAlignment="JUSTIFY" wrappingWidth="201.6314697265625">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="2174.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/pickaxe_lantern_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="178.0" layoutY="2173.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/lantern_cart_card.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="293.0" layoutY="2171.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/cards/pickaxe_cart_card.png" />
+                           </image>
+                        </ImageView>
+                        <Text layoutX="404.0" layoutY="2214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ces trois cartes ne peuvent apparaitre qu'une seule fois dans le jeu. Elles servent à se débarasser d'un et un seul objet cassé. Elles ont deux possibilité de réparation chacune. Le joueur qui joue cette carte doit choisir quel objet il veut réparer." textAlignment="JUSTIFY" wrappingWidth="369.6314697265625">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <AnchorPane prefHeight="85.0" prefWidth="900.0">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="59.0" mnemonicParsing="false" onAction="#okButtonAction" onMouseClicked="#okButtonAction" prefHeight="25.0" prefWidth="81.0" text="OK" AnchorPane.rightAnchor="109.0" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="345.0" layoutY="-5.0" mnemonicParsing="false" onAction="#okButtonAction" onMouseClicked="#okButtonAction" prefHeight="44.0" prefWidth="135.0" text="OK">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Button>
                </children>
+               <VBox.margin>
+                  <Insets bottom="20.0" top="50.0" />
+               </VBox.margin>
             </AnchorPane>
          </children>
       </VBox>
