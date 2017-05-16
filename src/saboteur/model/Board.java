@@ -155,14 +155,18 @@ public class Board {
 		return possiblePlaces;
 	}
 	
-	public List<OperationPathCard> getNearestPossibleOperationPathCard(Position position){
-		List<OperationPathCard> possible =  new ArrayList<OperationPathCard>(this.getPossibleOperationPathCard(null));
-		possible.sort(new OperationPathCardComparator(new PositionComparator(position)));
+	public List<Position> getNearestPossibleOperationPathCard(Position position){
+		List<Position> possible =  new ArrayList<Position>();
+		for(OperationPathCard o : this.getPossibleOperationPathCard(null)){
+			possible.add(o.getP());
+		}
 		
-		int min = position.getTaxiDistance(possible.get(possible.size()-1).getP());
-		List<OperationPathCard> ret = new LinkedList<OperationPathCard>();
+		possible.sort(new PositionComparator(position));
+		
+		int min = position.getTaxiDistance(possible.get(possible.size()-1));
+		List<Position> ret = new LinkedList<Position>();
 		for(int i=0; i<possible.size(); i++){
-			if(possible.get(i).getP().getTaxiDistance(position) > min){
+			if(possible.get(i).getTaxiDistance(position) > min){
 				break;
 			}
 			ret.add(possible.get(i));
@@ -287,9 +291,5 @@ public class Board {
 			if (card.hasGold() && card.isVisible()) return true;
 		}
 		return false;
-	}
-
-	public static int getGridSize() {
-		return GRID_SIZE;
 	}
 }
