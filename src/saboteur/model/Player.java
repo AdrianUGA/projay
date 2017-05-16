@@ -199,4 +199,13 @@ public abstract class Player implements Serializable {
 		return false;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		Player p = (Player) obj;
+		return p.getName() == this.name
+				&& p.getGold() == this.getGold()
+				&& p.getHand().equals(this.hand)
+				&& p.getHandicaps().equals(this.handicaps);
+	}
+
 }

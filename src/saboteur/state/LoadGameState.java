@@ -77,15 +77,15 @@ public class LoadGameState implements State {
     @FXML
     private void startLoadableGameButtonAction() {
     	RadioButton selectedRadioButton = (RadioButton) this.radionButtonGroupe.getSelectedToggle();
-    	System.out.println(selectedRadioButton.getText());
+//    	this.game.load(selectedRadioButton.getText());
 //    	this.gsm.change("game");
     }
     
     private void loadableGames() {
-    	addLoadableGame("ma game");
-    	addLoadableGame("Adem game");
-    	addLoadableGame("Toto game");
-    	addLoadableGame("coucouTest");
+        Loader loaderSaves = new Loader();
+        for (String savedFile : loaderSaves.loadSavedFile()) {
+            addLoadableGame(savedFile);
+        }
     }
     
     private void addLoadableGame(String gameName) {

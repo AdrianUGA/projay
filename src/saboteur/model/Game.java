@@ -12,7 +12,7 @@ import saboteur.tools.Loader;
 
 public class Game {
 
-	private Player currentPlayer; //TO SAVE
+	private int currentPlayerIndex; //TO SAVE
 	private int round; //TO SAVE
 	private int turn; //TO SAVE
 	public final static long seed = 123456789;
@@ -55,6 +55,7 @@ public class Game {
 
 		this.history = new LinkedList<>();
 
+		this.currentPlayerIndex = 0;
 		this.newRound();
 		
         save("test1");
@@ -100,12 +101,11 @@ public class Game {
 	}
 
 	public Player getCurrentPlayer(){
-		return this.currentPlayer;
+		return this.playerList.get(this.currentPlayerIndex);
 	}
 
 	public void nextPlayer(){
-		this.currentPlayer = this.playerList.removeFirst();
-		this.playerList.addLast(this.currentPlayer);
+		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
 	}
 	
 	public void save(String name) {
@@ -123,7 +123,7 @@ public class Game {
         try {
             FileOutputStream fileOutput = new FileOutputStream(saveFile);
             ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
-            objectOutput.writeObject(this.currentPlayer);
+            objectOutput.writeObject(this.currentPlayerIndex);
             objectOutput.writeObject(this.round);
             objectOutput.writeObject(this.turn);
             objectOutput.writeObject(this.goldCardStack);
@@ -146,7 +146,7 @@ public class Game {
 		try {
 			fileInput = new FileInputStream(saveFile);
 	        ObjectInputStream objectInputStream = new ObjectInputStream(fileInput);
-	        this.currentPlayer = (Player) objectInputStream.readObject();	        
+	        this.currentPlayerIndex = (int) objectInputStream.readObject();	        
 	        this.round = (int) objectInputStream.readObject();
 	        this.turn = (int) objectInputStream.readObject();
 	        this.goldCardStack = (LinkedList<GoldCard>) objectInputStream.readObject();
@@ -174,17 +174,11 @@ public class Game {
 	}
 	
 	public boolean gameIsFinished(){
-		if (round == 3 && roundIsFinished()){
-			return true;
-		}
-		return false;
+		return round == 3 && roundIsFinished();
 	}
 	
 	public boolean roundIsFinished(){
-		if (this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers()){
-			return true;
-		}
-		return false;
+		return this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers();
 	}
 
 	private boolean emptyHandsPlayers() {
@@ -238,15 +232,14 @@ public class Game {
 	}
 	
 	public boolean dwarfsWon(){
-		if (this.board.goalCardWithGoldIsVisible()) return true;
-		return false;
+		return this.board.goalCardWithGoldIsVisible();
 	}
 	
 	public void dealGold(){
 		if (dwarfsWon()){
 			Player current;
 			GoldCard goldCard;
-			int currentNumber = playerList.indexOf(currentPlayer);
+			int currentNumber = this.currentPlayerIndex;
 			int nbCardsDealt = 0;
 			while (nbCardsDealt <= (playerList.size()%9)){
 				current = playerList.get(currentNumber);
@@ -261,7 +254,7 @@ public class Game {
 			int nbSaboteurs = 0;
 			int valueToDeal = 0;
 			Player current;
-			
+
 			for (int i=0; i<this.playerList.size(); i++){
 				if (this.playerList.get(i).getTeam() == Team.SABOTEUR) nbSaboteurs++;
 			}
@@ -294,7 +287,7 @@ public class Game {
 		}
 	}
 	
-	public ArrayList<GoldCard> getCardsToValue(int value){
+	private ArrayList<GoldCard> getCardsToValue(int value){
 		//TODO Improve this method
 		ArrayList<GoldCard> result = new ArrayList<>();
 		boolean finished;
@@ -371,7 +364,7 @@ public class Game {
 		return result;
 	}
 
-	public void setTeam(){
+	private void setTeam(){
 		ArrayList<Team> team = new ArrayList<>();
 		int nbPlayer = this.playerList.size();
 		team.add(Team.DWARF);
@@ -402,9 +395,9 @@ public class Game {
 
 		Collections.shuffle(team, new Random(Game.seed));
 
-		for(int i = 0; i < this.playerList.size(); i++){
+		for (Player aPlayerList : this.playerList) {
 			Team role = team.remove(0);
-			this.playerList.get(i).setTeam(role);
+			aPlayerList.setTeam(role);
 		}
 	}
 }
