@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import saboteur.model.Game;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
@@ -68,16 +67,25 @@ public abstract class SaboteurAI {
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
+					//Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard((PathCard) o.getCar());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
+					//for(OperationPathCard currentOp : allOperationsForThisCard){
+					//Position currentPos = artificialIntelligence.getGame().getBoard().getPosition(currentOp.getCard());
 					for(Position currentPos : allPositionsForThisCard){
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
-							((OperationPathCard) o).setP(currentPos);
+							((OperationPathCard) o).setP(currentPos); //TODO to remove
 							// If there is < 2 distance left, it put 0 as weight.
-							artificialIntelligence.operationsWeight.put((OperationPathCard) o, (float) artificialIntelligence.ifNegativeZeroElseOne(currentPos.getTaxiDistance(goldCardPosition)-Coefficients.SABOTEUR_DISTANCE_LEFT_EASY)*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY 
-									+ distanceDifference - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.SABOTEUR_PATHCARD_EASY);
+							artificialIntelligence.operationsWeight.put((OperationPathCard) o, 
+									(float) artificialIntelligence.ifNegativeZeroElseOne(currentPos.getTaxiDistance(goldCardPosition)-Coefficients.SABOTEUR_DISTANCE_LEFT_EASY)
+									*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distanceDifference - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.SABOTEUR_PATHCARD_EASY);
+							// artificialIntelligence.operationsWeight.put(currentOp, 
+							// (float) artificialIntelligence.ifNegativeZeroElseOne(currentPos.getTaxiDistance(goldCardPosition)-Coefficients.SABOTEUR_DISTANCE_LEFT_EASY)
+							// *(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distanceDifference - ((PathCard) currentOp.getCard()).openSidesAmount()/5) * Coefficients.SABOTEUR_PATHCARD_EASY);
+
+							
 						}else{
 							// Trash
 							artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);

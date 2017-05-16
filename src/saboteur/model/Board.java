@@ -279,4 +279,8 @@ public class Board {
 		}
 		return false;
 	}
+
+	public static int getGridSize() {
+		return GRID_SIZE;
+	}
 }
