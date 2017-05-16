@@ -11,12 +11,16 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Rotate;
+import saboteur.model.Player;
 
 public class PlayerArc extends Pane{
+	private Player player;
 	private Path path = new Path();
 	private Circle circle[] = new Circle[3];
+	private boolean malus[] = new boolean[3];
 
-	public PlayerArc(double sizeOfArc, double center, double lengthOfArc, double startAngle) {
+	public PlayerArc(double sizeOfArc, double center, double lengthOfArc, double startAngle, Player player) {
+		this.player = player;
 		
 		this.setPadding(new Insets(0, 0, 0, 0));
 		createArc(sizeOfArc, center, lengthOfArc, startAngle);
@@ -29,12 +33,13 @@ public class PlayerArc extends Pane{
 		
 		for (int i = 0; i<3; i++) {  
 			double angle = -startAngle-x*i-x/2;
-            this.circle[i] = new Circle(center + centerDistance, center, circleRadius, Color.web("blue", 0.5));
+            this.circle[i] = new Circle(center + centerDistance, center, circleRadius, Color.web("#a4a4a4"));
             Rotate rotate = new Rotate(angle, center, center);
             this.circle[i].getTransforms().add(rotate);
             this.circle[i].setStroke(Color.BLACK);
             this.circle[i].setStrokeWidth(3);
             this.getChildren().add(this.circle[i]);
+            malus[i] = false;
 		}		
 	}
 	
@@ -92,5 +97,13 @@ public class PlayerArc extends Pane{
 	
 	public Circle[] getCircle() {
 		return circle;
+	}
+	
+	public boolean getMalus(int index) {
+		return this.malus[index];
+	}
+	
+	public Player getPlayer() {
+		return this.player;
 	}
 }

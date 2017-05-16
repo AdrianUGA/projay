@@ -26,6 +26,10 @@ public class RescueCard extends ActionCardToPlayer {
 		return card;
 	}
 	
+	public Tool getTool(){
+		return rescueType;
+	}
+	
 	@Override
 	public boolean isRescueCard() {
 		return true;
