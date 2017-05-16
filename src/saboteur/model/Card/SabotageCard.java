@@ -25,4 +25,9 @@ public class SabotageCard extends ActionCardToPlayer {
 
 		return card;
 	}
+	
+	@Override
+	public boolean isSabotageCard() {
+		return true;
+	}
 }

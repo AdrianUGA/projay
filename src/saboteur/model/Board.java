@@ -3,6 +3,7 @@ package saboteur.model;
 import java.io.Serializable;
 import java.util.*;
 
+import saboteur.ai.AI;
 import saboteur.model.Card.*;
 
 public class Board implements Serializable {
@@ -131,13 +132,13 @@ public class Board implements Serializable {
 	}
 	
 	/* Returns actions on every free positions when card=null */
-	public Set<OperationPathCard> getPossibleOperationPathCard(PathCard card){
+	public Set<OperationPathCard> getPossibleOperationPathCard(AI ai, PathCard card){
 		Set<OperationPathCard> possiblePlaces = new HashSet<OperationPathCard>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
-				OperationPathCard operation = new OperationPathCard(null, null, neighbor);
-				OperationPathCard operationReversed = new OperationPathCard(null, null, neighbor).setReversed(true);
+				OperationPathCard operation = new OperationPathCard(ai, card, neighbor);
+				OperationPathCard operationReversed = new OperationPathCard(ai, card, neighbor).setReversed(true);
 				
 				if (this.getCard(neighbor) != null)
 					continue;
@@ -158,7 +159,7 @@ public class Board implements Serializable {
 	
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
 		List<Position> possible =  new ArrayList<Position>();
-		for(OperationPathCard o : this.getPossibleOperationPathCard(null)){
+		for(OperationPathCard o : this.getPossibleOperationPathCard(null,null)){
 			possible.add(o.getP());
 		}
 		
@@ -292,5 +293,9 @@ public class Board implements Serializable {
 			if (card.hasGold() && card.isVisible()) return true;
 		}
 		return false;
+	}
+
+	public static int getGridSize() {
+		return GRID_SIZE;
 	}
 }

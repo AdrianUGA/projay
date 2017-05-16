@@ -123,4 +123,9 @@ public class PathCard extends Card {
 
 		return card;
 	}
+	
+	@Override
+	public boolean isPathCard() {
+		return true;
+	}
 }

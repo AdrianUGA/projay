@@ -22,4 +22,9 @@ public class OperationPick extends Operation {
 		this.getSourcePlayer().removeHandCard(this.cardPicked);
 	}
 
+	@Override
+	public boolean isOperationPick(){
+		return true;
+	}
+	
 }

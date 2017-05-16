@@ -21,6 +21,9 @@ public class OperationPathCard extends Operation {
 
 	@Override
 	public void exec(Game game) {
+		if (reversed){
+			((PathCard) this.getCard()).reverse();
+		}
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		game.getBoard().addCard((PathCard)this.getCard(), p);
 		System.out.println("carte posé en x= " + p.getcX() + " y= " +p.getcY());
@@ -80,5 +83,8 @@ public class OperationPathCard extends Operation {
 		return this;
 	}
 	
-	
+	@Override
+	public boolean isOperationPathCard(){
+		return true;
+	}
 }
