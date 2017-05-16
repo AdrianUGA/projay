@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import saboteur.App;
 import saboteur.model.Card.*;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +15,21 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Loader {
+
+    public final static String savedFolder = ".saves/";
+
+    public ArrayList<String> loadSavedFile(){
+        ArrayList<String> savedFiles = new ArrayList<>();
+        Path savesPath = Paths.get(savedFolder);
+        try{
+            Files.walk(savesPath)
+                    .filter(Files::isRegularFile)
+                    .forEach(path -> savedFiles.add(path.getFileName().toString()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return savedFiles;
+    }
 
     public Deck loadCard(){
         try{

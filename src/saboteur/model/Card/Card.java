@@ -1,6 +1,6 @@
 package saboteur.model.Card;
 
-public abstract class Card {
+public abstract class Card implements Cloneable{
 
     protected String frontImage;
     protected String backImage;
@@ -23,5 +23,15 @@ public abstract class Card {
 
     public String getClassName() {
         return this.getClass().getName();
+    }
+
+    public Card clone(){
+        Card card = null;
+        try{
+            card = (Card) super.clone();
+        } catch(CloneNotSupportedException cnse){
+            cnse.printStackTrace();
+        }
+        return card;
     }
 }

@@ -30,19 +30,51 @@ public class Deck {
         this.goldCards = goldCards;
     }
 
-    public LinkedList<Card> getOtherCards() {
-        return otherCards;
+    public LinkedList<Card> getCopyOtherCards() {
+        LinkedList<Card> newOtherCards = new LinkedList<>();
+        for(Card card: otherCards){
+            newOtherCards.add(card.clone());
+        }
+        return newOtherCards;
+    }
+
+    public LinkedList<Card> getOtherCards(){
+        return new LinkedList<>(otherCards);
+    }
+
+    public ArrayList<PathCard> getCopyStartPathCard() {
+        ArrayList<PathCard> newStartPathCard = new ArrayList<>();
+        for(PathCard card: startPathCard){
+            newStartPathCard.add(card.clone());
+        }
+        return newStartPathCard;
     }
 
     public ArrayList<PathCard> getStartPathCard() {
-        return startPathCard;
+        return new ArrayList<>(startPathCard);
+    }
+
+    public ArrayList<PathCard> getCopyGoalPathCards() {
+        ArrayList<PathCard> newGoalPathCards = new ArrayList<>();
+        for(PathCard card: goalPathCards){
+            newGoalPathCards.add(card.clone());
+        }
+        return newGoalPathCards;
     }
 
     public ArrayList<PathCard> getGoalPathCards() {
-        return goalPathCards;
+        return new ArrayList<>(goalPathCards);
+    }
+
+    public LinkedList<GoldCard> getCopyGoldCards() {
+        LinkedList<GoldCard> newGoldCards = new LinkedList<>();
+        for(GoldCard card: goldCards){
+            newGoldCards.add(card.clone());
+        }
+        return newGoldCards;
     }
 
     public LinkedList<GoldCard> getGoldCards() {
-        return goldCards;
+        return new LinkedList<>(goldCards);
     }
 }

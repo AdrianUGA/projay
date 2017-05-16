@@ -67,4 +67,9 @@ public class Position {
 		return Math.abs(this.getcY() - p.getcY()) + Math.abs(this.getcX() - p.getcX());
 	}
 
+	@Override
+	public String toString() {
+		return "(" + this.cX + "," + this.cY + ")";
+	}
+
 }

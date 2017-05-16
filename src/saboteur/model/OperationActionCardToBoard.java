@@ -3,7 +3,8 @@ package saboteur.model;
 import saboteur.model.Card.*;
 
 public class OperationActionCardToBoard extends Operation {
-	private PathCard destinationCard;
+	private PathCard destinationCard; //TO SAVE
+	private Position positionDestination; //TO SAVE
 	
 	public OperationActionCardToBoard(Player sourcePlayer, Card card, PathCard destinationCard) {
 		super(sourcePlayer, card);
@@ -18,12 +19,25 @@ public class OperationActionCardToBoard extends Operation {
 		//Execution different if actionCard is a collapseCard or a planCard
 		if (sourceCard.isCollapse()){
 			if (!destinationCard.isStart() && !destinationCard.isGoal()){
-				Position positionCard = game.getBoard().getPosition(destinationCard);		
-				game.getBoard().removeCard(positionCard);
+				this.positionDestination = game.getBoard().getPosition(destinationCard);		
+				game.getBoard().removeCard(this.positionDestination);
 			}
 		} else {
 			if (destinationCard.isGoal()){
 				this.getSourcePlayer().viewGoalCard(destinationCard);
+			}
+		}
+	}
+	
+	@Override
+	public void execReverse(Game game) {
+		ActionCardToBoard sourceCard = (ActionCardToBoard) this.getCard();
+		this.getSourcePlayer().addHandCard(this.getCard());
+		
+		//Execution different if actionCard is a collapseCard or a planCard
+		if (sourceCard.isCollapse()){
+			if (!destinationCard.isStart() && !destinationCard.isGoal()){	
+				game.getBoard().addCard(destinationCard, this.positionDestination);
 			}
 		}
 	}

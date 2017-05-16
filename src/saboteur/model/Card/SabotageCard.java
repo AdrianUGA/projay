@@ -10,4 +10,19 @@ public class SabotageCard extends ActionCardToPlayer {
 	public Tool getSabotageType(){
 		return this.sabotageType;
 	}
+
+	@Override
+	public ActionCardToPlayerType getType() {
+		return ActionCardToPlayerType.SABOTAGE;
+	}
+
+	public SabotageCard clone(){
+		SabotageCard card;
+
+		card = (SabotageCard) super.clone();
+
+		card.sabotageType = sabotageType;
+
+		return card;
+	}
 }

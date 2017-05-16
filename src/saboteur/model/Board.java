@@ -11,12 +11,17 @@ public class Board {
 	public static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
 	public static final int DISTANCE_START_OBJECTIVE_X = 7;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
+	private static final Position[] goalCardsPositions = new Position[] {
+			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()),
+			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y),
+			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y)};
 	
-	private PathCard[][] board;
-	private List<Position> objectiveCards;
+	
+	private PathCard[][] board; //NOT TO SAVE
+	private List<Position> objectiveCards; //TO SAVE
+	private Map<Position, PathCard> pathCardsPosition; //TO SAVE
 	
 	//private Map<Position, Position> childrenDad;
-	private Map<Position, PathCard> pathCardsPosition;
 	
 	public Board(ArrayList<PathCard> startPathCard, ArrayList<PathCard> goalPathCard){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
@@ -28,25 +33,36 @@ public class Board {
 		this.objectiveCards = new LinkedList<Position>();
 		this.pathCardsPosition = new HashMap<Position, PathCard>();
 		
-		Collections.shuffle(goalPathCard);
-
-		this.addCard(goalPathCard.get(0), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()));
-		this.addCard(goalPathCard.get(1), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y));
-		this.addCard(goalPathCard.get(2), new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y));
+		Collections.shuffle(goalPathCard, new Random(Game.seed));
 		
+		for(int i=0; i<3; i++)
+			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);
 		this.addCard(startPathCard.get(0), START);
 	}
 	
 	public void addCard(PathCard card, Position position){
+		System.out.println("carte =" +card);
+		if(card == null)
+			return;
 		if(card.isGoal())
 			this.objectiveCards.add(position);
-		this.pathCardsPosition.put(position, card);
+		else
+			this.pathCardsPosition.put(position, card);
+		
+		/* Adding the goal cards when reached */
+		for(Position p : this.getNeighbors(position)){
+			if (this.getCard(position) != null)
+				this.pathCardsPosition.put(p, this.getCard(position));
+		}
 		//this.childrenDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
 	}
 
 	public void removeCard(Position position){
-		this.pathCardsPosition.remove(position);
+		if(this.getCard(position).isGoal())
+			this.objectiveCards.remove(position);
+		else
+			this.pathCardsPosition.remove(position);
 		/*
 		childrenDad.clear();
 		for(Position current : pathCardsPosition.keySet()){
@@ -95,23 +111,33 @@ public class Board {
 	}
 	
 	public Position getPosition(PathCard card){
+		if (card == null)
+			return null;
 		for(Position position : this.pathCardsPosition.keySet()){
 			if(this.pathCardsPosition.get(position).equals(card))
 				return position;
 		}
+		
+		for(Position goalCard : this.objectiveCards){
+			if(this.getCard(goalCard).equals(card))
+				return goalCard;
+		}
 		return null;
 	}
 	
-	public List<Position> getGoldCards(){
+	public List<Position> getGoalCards(){
 		return this.objectiveCards;
 	}
 	
-	public List<Position> getPossiblePathCardPlace(PathCard card){
-		List<Position> possiblePlaces = new LinkedList<Position>();
+	/* Returns every free positions when card=null */
+	public Set<Position> getPossiblePathCardPlace(PathCard card){
+		Set<Position> possiblePlaces = new HashSet<Position>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
-				if(card != null && this.isPossible(card, neighbor) || card == null && this.getCard(neighbor) == null){
+				if (this.getCard(neighbor) != null)
+					continue;
+				if(card == null || this.isPossible(card, neighbor) || this.isPossible(card.reversed(), neighbor)){
 					possiblePlaces.add(neighbor);
 				}
 			}
@@ -121,10 +147,10 @@ public class Board {
 	}
 	
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
-		List<Position> possible = this.getPossiblePathCardPlace(null);
+		List<Position> possible =  new ArrayList<Position>(this.getPossiblePathCardPlace(null));
 		possible.sort(new PositionComparator(position));
 		
-		int min = position.getTaxiDistance(possible.get(possible.size()));
+		int min = position.getTaxiDistance(possible.get(possible.size()-1));
 		List<Position> ret = new LinkedList<Position>();
 		for(int i=0; i<possible.size(); i++){
 			if(possible.get(i).getTaxiDistance(position) > min){
@@ -133,8 +159,6 @@ public class Board {
 			ret.add(possible.get(i));
 		}
 		return ret;
-		
-		
 	}
 
 	public boolean isPossible(PathCard card, Position position){
@@ -176,7 +200,7 @@ public class Board {
 		positionsAlreadyExplored.add(indice(currentPosition));
 		
 		while (!positionsToExplore.isEmpty()){
-			currentPosition = positionsToExplore.remove(positionsToExplore.size());
+			currentPosition = positionsToExplore.remove(positionsToExplore.size()-1);
 			currentCard = this.getCard(currentPosition);
 			for(Cardinal cardinal : Cardinal.values()){
 				posNeighbor = p.getNeighbor(cardinal);
@@ -214,8 +238,12 @@ public class Board {
 	}
 	
 	public List<Position> allCulDeSac(){
-		//TODO 
-		return null;
+		List<Position> list = new LinkedList<Position>();
+		for(Position position : this.pathCardsPosition.keySet()){
+			if(this.pathCardsPosition.get(position).isCulDeSac())
+				list.add(position);
+		}
+		return list;
 	}
 	
 /* Union find stuff */

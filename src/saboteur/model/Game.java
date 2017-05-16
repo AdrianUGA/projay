@@ -5,27 +5,27 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-import saboteur.ai.TemporarAI;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
 public class Game {
-	private Player currentPlayer;
-	private int round;
-	private int turn;
-	private final long seed;
 
-	private final Deck deck;
+	private Player currentPlayer; //TO SAVE
+	private int round; //TO SAVE
+	private int turn; //TO SAVE
+	public final static long seed = 123456789;
 
-	private LinkedList<GoldCard> goldCardStack;
-	private LinkedList<Operation> history;
+	private final Deck deck;//NOT TO SAVE
 
-	private LinkedList<Card> stack;
-	private LinkedList<Card> trash;
+	private LinkedList<GoldCard> goldCardStack;//TO SAVE
+	private LinkedList<Operation> history;//TO SAVE
 
-	private LinkedList<Player> playerList;
+	private LinkedList<Card> stack;//TO SAVE
+	private LinkedList<Card> trash;//TO SAVE
 
-	private Board board;
+	private LinkedList<Player> playerList;//TO SAVE
+
+	private Board board;//TO SAVE
 	
 	private LinkedList<Player> observers;
 
@@ -34,7 +34,6 @@ public class Game {
         deck = loader.loadCard();
         this.observers = new LinkedList<>();
         this.playerList = new LinkedList<>();
-        this.seed = 123456789;
     }
 	
 	public void addPlayer(Player player){
@@ -49,8 +48,8 @@ public class Game {
 	public void newGame(){
 		this.round = 0;
 
-		this.goldCardStack = this.deck.getGoldCards();
-		Collections.shuffle(this.goldCardStack);
+		this.goldCardStack = this.deck.getCopyGoldCards();
+		Collections.shuffle(this.goldCardStack, new Random(Game.seed));
 
 		this.history = new LinkedList<>();
 
@@ -62,12 +61,13 @@ public class Game {
 		this.turn = 1;
 
 		this.trash = new LinkedList<>();
-		this.stack = this.deck.getOtherCards();
-		Collections.shuffle(this.stack);
+		this.stack = this.deck.getCopyOtherCards();
+		Collections.shuffle(this.stack, new Random(Game.seed));
 
-		this.board = new Board(this.deck.getStartPathCard(), this.deck.getGoalPathCards());
+		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 
 		this.setTeam();
+		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
 		this.dealCardsToPlayer();
 
 		this.nextPlayer();
@@ -85,8 +85,10 @@ public class Game {
 		}
 		for (Player player: this.playerList) {
 			ArrayList<Card> hand = new ArrayList<>();
-			for (int i = 0; i < nbCards; i++){
-				hand.add(this.stack.removeFirst());
+			if(!this.stackIsEmpty()){
+				for (int i = 0; i < nbCards; i++){
+					hand.add(this.stack.removeFirst());
+				}
 			}
 			player.setHand(hand);
 		}
@@ -114,12 +116,16 @@ public class Game {
 	}
 	
 	public boolean gameIsFinished(){
-		if (round == 3 && roundIsFinished()) return true;
+		if (round == 3 && roundIsFinished()){
+			return true;
+		}
 		return false;
 	}
 	
 	public boolean roundIsFinished(){
-		if (this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers()) return true;
+		if (this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers()){
+			return true;
+		}
 		return false;
 	}
 
@@ -161,6 +167,18 @@ public class Game {
 		return turn;
 	}
 	
+	public Card pick(){
+		return this.stack.removeFirst();
+	}
+	
+	public boolean stackIsEmpty(){
+		return this.stack.isEmpty();
+	}
+	
+	public void addCardToStack(Card card){
+		this.stack.addFirst(card);
+	}
+	
 	public boolean dwarfsWon(){
 		if (this.board.goalCardWithGoldIsVisible()) return true;
 		return false;
@@ -174,7 +192,7 @@ public class Game {
 			int nbCardsDealt = 0;
 			while (nbCardsDealt <= (playerList.size()%9)){
 				current = playerList.get(currentNumber);
-				if (!current.isSaboteur()){
+				if (current.getTeam() == Team.DWARF){
 					goldCard = goldCardStack.removeFirst();
 					current.addGold(goldCard);
 					nbCardsDealt++;
@@ -187,7 +205,7 @@ public class Game {
 			Player current;
 			
 			for (int i=0; i<this.playerList.size(); i++){
-				if (this.playerList.get(i).isSaboteur()) nbSaboteurs++;
+				if (this.playerList.get(i).getTeam() == Team.SABOTEUR) nbSaboteurs++;
 			}
 			
 			switch (nbSaboteurs){
@@ -209,7 +227,7 @@ public class Game {
 			
 			for (int i=0; i<this.playerList.size(); i++){
 				current = this.playerList.get(i);
-				if (current.isSaboteur()){
+				if (current.getTeam() == Team.SABOTEUR){
 					for (GoldCard card : getCardsToValue(valueToDeal)){
 						current.addGold(card);
 					}
@@ -323,16 +341,12 @@ public class Game {
 		if (nbPlayer > 9){
 			team.add(Team.SABOTEUR);
 		}
-		Collections.shuffle(team);
+
+		Collections.shuffle(team, new Random(Game.seed));
+
 		for(int i = 0; i < this.playerList.size(); i++){
-			Team role = team.get(0);
+			Team role = team.remove(0);
 			this.playerList.get(i).setTeam(role);
-			//TODO MARCHE PAS !!!!!
-			//une fois la manche une terminée, un saboteur doit pouvoir devenir un nain et inversement !
-			//conclusion: TemporarAI sert a rien...
-			if (this.playerList.get(i).isAI()){
-				this.playerList.set(i, ((TemporarAI)this.playerList.get(i)).getNewAI(role));
-			}
 		}
 	}
 }

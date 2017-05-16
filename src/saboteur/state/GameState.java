@@ -15,15 +15,15 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
-import saboteur.ai.DwarfAI;
+import saboteur.ai.AI;
 import saboteur.model.Board;
 import saboteur.model.Game;
+import saboteur.model.Player;
 import saboteur.tools.Resources;
 import saboteur.view.PlayerArc;
 
@@ -56,29 +56,31 @@ public class GameState implements State{
 
     @Override
     public void update() {
-//        if (this.game.gameIsFinished()){
-//            //fin de la partie
-//            //this.gsm.change("annonce vainqueur");
-//            System.out.println("fin de partie");
-//        } else {
-//            if (this.game.roundIsFinished()){
-//                //fin de la manche
-//                //Distribution des cartes gold
-//                this.game.newRound();
-//            } else{
-//                //la manche continue
-//                if (this.game.getCurrentPlayer().isAI()){
-//                    this.game.getCurrentPlayer().playCard();
-//                    System.out.println("AI has played");
-//                    try{
-//                        Thread.sleep(3000);
-//                    } catch (Exception e){
-//                        e.printStackTrace();
-//                    }
-//                    this.game.nextPlayer();
-//                }
-//            }
-//        }
+        if (this.game.gameIsFinished()){
+            //fin de la partie
+        	if(game.dwarfsWon())System.out.println("Nains ont gagné");
+            //this.gsm.change("annonce vainqueur");
+            //System.out.println("fin de partie");
+        } else {
+            if (this.game.roundIsFinished()){
+                //fin de la manche
+                //Distribution des cartes gold
+                this.game.newRound();
+            } else{
+                //la manche continue
+                if (this.game.getCurrentPlayer().isAI()){
+                    this.game.getCurrentPlayer().playCard();
+                    this.game.getCurrentPlayer().pickCard();
+                    //System.out.println("AI has played");
+                    /*try{
+                        Thread.sleep(3000);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }*/
+                    this.game.nextPlayer();
+                }
+            }
+        }
     }
 
     @Override
@@ -92,18 +94,28 @@ public class GameState implements State{
     	 * Pour Emmanuel qui fait des tests avec les IA
     	 * Pour pas être embêter par le problème de setTeam(),
     	 * commente son appel dans la méthode newRound de la classe Game
-    	 *
+    	 */
+    	//Début du bloc à commenter
+    	
     	this.game.getPlayerList().clear();
-    	this.game.addPlayer(new DwarfAI(this.game));
-    	this.game.addPlayer(new DwarfAI(this.game));
-    	this.game.addPlayer(new DwarfAI(this.game));
-    	*/
-
+    	this.game.addPlayer(new AI(this.game, "Yves"));
+    	this.game.addPlayer(new AI(this.game, "Philippe"));
+    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
+		
+    	//Fin du bloc à commenter
+    	
         this.game.newGame();
         
         Resources resources = new Resources();
         resources.loadImage();
+        resources.loadPicto();
         HashMap<String, Image> allCards = resources.getImageCard();
+        
+        for(Player p : this.game.getPlayerList()){
+    		if(p.isAI()){
+    			((AI)p).initializeAI();
+    		}
+    	}
         
         try{
             FXMLLoader loader = new FXMLLoader();
@@ -171,7 +183,7 @@ public class GameState implements State{
         } catch (IOException e){
             e.printStackTrace();
         }
-
+        
         this.firstCard.setImage(allCards.get("broken_cart_card.png"));
         this.secondCard.setImage(allCards.get("collapse_card.png"));
         this.thirdCard.setImage(allCards.get("path_card_17.png"));

@@ -12,6 +12,7 @@ public class PathCard extends Card {
     private final boolean isStart;
     private final boolean hasGold;
     private boolean isVisible;
+    private boolean isReversed;
 
 	public PathCard(String[] cardinal, boolean isCulDeSac, boolean isStart, boolean isGoal, boolean hasGold){
         this.openSides = new LinkedList<>();
@@ -22,6 +23,7 @@ public class PathCard extends Card {
         this.isCulDeSac = isCulDeSac;
         this.isStart = isStart;
         this.isGoal = isGoal;
+        this.isReversed = false;
         this.isVisible = true;
 	}
 	
@@ -50,25 +52,51 @@ public class PathCard extends Card {
 		return (this.isCulDeSac);
 	}
 	
-	public PathCard reversed(){
-		List<Cardinal> openSides = new LinkedList<>();
+//	public PathCard reversed(){
+//		List<Cardinal> openSides = new LinkedList<>();
+//		for(Cardinal cardinal : this.openSides){
+//			openSides.add(cardinal.opposite());
+//		}
+//
+//		try {
+//			return ((PathCard) this.clone()).setOpenSides(openSides);
+//		} catch (CloneNotSupportedException e) {
+//			System.err.println("Impossible to clone pathcard. That is NOT supposed to happen, like ever");
+//			e.printStackTrace();
+//		}
+//		return null; /* that never happen */
+//	}
+
+	public void reverse(){
+		List<Cardinal> newOpenSides = new LinkedList<>();
 		for(Cardinal cardinal : this.openSides){
-			openSides.add(cardinal.opposite());
+			newOpenSides.add(cardinal.opposite());
 		}
+		this.openSides = newOpenSides;
+		this.isReversed = false;
 		
-		try {
-			return ((PathCard) this.clone()).setOpenSides(openSides);
-		} catch (CloneNotSupportedException e) {
-			System.err.println("Impossible to clone pathcard. That is NOT supposed to happen, like ever");
-			e.printStackTrace();
-		}
-		return null; /* that never happen */
+	}
+	
+	public PathCard reversed(){
+		List<Cardinal> newOpenSides = new LinkedList<Cardinal>();
+		for(Cardinal cardinal : this.openSides)
+			newOpenSides.add(cardinal.opposite());
+		return ((PathCard) this.clone()).setCardinal(newOpenSides);
 	}
 
-	private PathCard setOpenSides(List<Cardinal> openSides) {
-		this.openSides = openSides;
+	private PathCard setCardinal(List<Cardinal> newOpenSides) {
+		this.openSides = newOpenSides;
 		return this;
 	}
+
+	public boolean isReversed(){
+		return this.isReversed;
+	}
+
+//	private PathCard setOpenSides(List<Cardinal> openSides) {
+//		this.openSides = openSides;
+//		return this;
+//	}
 	
 	public boolean isOpen(Cardinal cardinal){
 		for (Cardinal current : this.openSides){
@@ -79,5 +107,20 @@ public class PathCard extends Card {
 	
 	public int openSidesAmount(){
 		return this.openSides.size();
+	}
+
+	@Override
+	public String toString() {
+		return "Paths : " + this.openSides;
+	}
+
+	public PathCard clone(){
+		PathCard card;
+
+		card = (PathCard) super.clone();
+
+		card.openSides = new LinkedList<>(openSides);
+
+		return card;
 	}
 }
