@@ -5,6 +5,8 @@ import java.io.Serializable;
 import saboteur.model.Card.Cardinal;
 
 public class Position implements Serializable {
+
+	private static final long serialVersionUID = 1720404680998285328L;
 	private static final int MAX_COORDINATE = 61;
 	private int cX;
 	private int cY;
