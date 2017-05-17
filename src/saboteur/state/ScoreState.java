@@ -56,7 +56,7 @@ public class ScoreState implements State {
     }
     
     @FXML
-    private void backButtonAction() {
+    private void okScoresButtonAction() {
     	this.gsm.change("mainMenu");
     }
 }

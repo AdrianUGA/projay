@@ -2,10 +2,13 @@ package saboteur;
 
 import javafx.application.Application;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import saboteur.model.Game;
 import saboteur.state.*;
 import saboteur.tools.Loader;
+import saboteur.tools.Resources;
 
 
 public class App extends Application {
@@ -22,6 +25,8 @@ public class App extends Application {
         primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.show();
+
+        Resources.loadMusic().play();
 
         GameStateMachine gsm = new GameStateMachine();
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
