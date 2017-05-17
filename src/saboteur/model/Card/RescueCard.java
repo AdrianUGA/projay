@@ -34,4 +34,9 @@ public class RescueCard extends ActionCardToPlayer {
 	public boolean isRescueCard() {
 		return true;
 	}
+	
+	@Override
+	public void displayCardType(){
+    	System.out.println("RescueCard");
+    }
 }

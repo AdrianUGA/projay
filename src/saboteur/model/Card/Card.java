@@ -61,4 +61,8 @@ public abstract class Card implements Cloneable, Serializable{
     	return false;
     }
     
+    public void displayCardType(){
+    	System.out.println("UnspecifiedCard");
+    }
+    
 }

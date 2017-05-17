@@ -28,8 +28,8 @@ public abstract class DwarfAI {
 				if(!artificialIntelligence.knowsTheGoldCardPosition()){
 					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(artificialIntelligence.getEstimatedGoldCardPosition()));
 					artificialIntelligence.operationsWeight.put(o, 
-							(float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - artificialIntelligence.getGame().getTurn()))
-											* Coefficients.DWARF_PLAN_EASY));
+							(float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY 
+									- artificialIntelligence.getGame().getTurn())) * Coefficients.DWARF_PLAN_EASY));
 				}
 				else{
 					// Trash

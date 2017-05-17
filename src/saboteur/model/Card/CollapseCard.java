@@ -12,4 +12,9 @@ public class CollapseCard extends ActionCardToBoard {
 		return true;
 	}
 	
+	@Override
+	public void displayCardType(){
+    	System.out.println("CollapseCard");
+    }
+	
 }

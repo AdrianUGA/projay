@@ -67,7 +67,11 @@ public class Game {
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getCopyOtherCards();
 		Collections.shuffle(this.stack, new Random(Game.seed));
-
+		/*
+		for(Card c : this.stack){
+			c.displayCardType();
+		}
+		*/
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 
 		this.setTeam();
