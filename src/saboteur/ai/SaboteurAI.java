@@ -86,7 +86,7 @@ public abstract class SaboteurAI {
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
-							// If there is < 2 distance left, it put 0 as weight.
+							// If there is < SABOTEUR_DISTANCE_LEFT_EASY distance left, it put 0 as weight.
 							artificialIntelligence.operationsWeight.put(currentOp, 
 									(float) artificialIntelligence.ifNegativeZeroElseOne(currentPos.getTaxiDistance(goldCardPosition)-Coefficients.SABOTEUR_DISTANCE_LEFT_EASY)
 									*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distanceDifference - ((PathCard) currentOp.getCard()).openSidesAmount()/5) * Coefficients.SABOTEUR_PATHCARD_EASY);

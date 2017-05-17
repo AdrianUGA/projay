@@ -64,15 +64,16 @@ public class Board implements Serializable {
 	
 	//Used by AI to test what happens if it put a card somewhere
 	//So we don't want goal cards to be shown
-	public void temporarAddCard(PathCard card, Position position){
-		if(card == null)
+	public void temporarAddCard(OperationPathCard o){
+		if(o.getCard() == null)
 			return;
-		if(card.isGoal())
-			this.objectiveCards.add(position);
-		else
-			this.pathCardsPosition.put(position, card);
-		
-		this.board[position.getcY()][position.getcX()] = card;
+		if(o.getReversed()){
+			this.pathCardsPosition.put(o.getP(),((PathCard) o.getCard()).reversed());
+			this.board[o.getP().getcY()][o.getP().getcX()] = ((PathCard) o.getCard()).reversed();
+		}else{
+			this.pathCardsPosition.put(o.getP(),(PathCard) o.getCard());
+			this.board[o.getP().getcY()][o.getP().getcX()] = (PathCard) o.getCard();
+		}
 	}
 
 	public void removeCard(Position position){
