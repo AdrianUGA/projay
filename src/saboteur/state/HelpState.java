@@ -4,24 +4,17 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 
-public class HelpState implements State {
-
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
+public class HelpState extends State {
 
     public HelpState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override
@@ -40,11 +33,8 @@ public class HelpState implements State {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/help.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            Pane pane = loader.load();
+            this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
         }

@@ -7,31 +7,24 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
-import saboteur.ai.AI;
 import saboteur.model.Board;
 import saboteur.model.Game;
-import saboteur.model.Player;
 import saboteur.model.Position;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 import saboteur.tools.Resources;
 import saboteur.view.PlayerArc;
 
-public class GameState implements State{
+public class GameState extends State{
 
 	@FXML private Pane boardContainer;
 	@FXML private HBox cardContainer;
@@ -44,17 +37,9 @@ public class GameState implements State{
 	private HashMap<String, Image> allCards;
 	
 	private GridPane boardGridPane;
-	
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
-
-    private boolean pause;
 
     public GameState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override
@@ -137,8 +122,7 @@ public class GameState implements State{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
+            Pane pane = loader.load();
 
             //Take size of screen
             Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -184,9 +168,7 @@ public class GameState implements State{
             this.gameBoard.setCenterY(gameTableHalfSize);
             this.gameBoard.setRadius(boardSize);
 
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -208,7 +190,6 @@ public class GameState implements State{
     
     @FXML
     private void optionsButtonAction(){
-        this.pause = true;
         this.gsm.push("pauseMenu");
     }
     
