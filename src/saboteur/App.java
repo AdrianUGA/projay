@@ -3,10 +3,11 @@ package saboteur;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import saboteur.model.Game;
 import saboteur.state.*;
+import saboteur.tools.Resources;
+import javafx.scene.layout.StackPane;
 
 
 public class App extends Application {
@@ -23,6 +24,8 @@ public class App extends Application {
 
         primaryStage = stage;
         initStage();
+
+        Resources.loadMusic().play();
 
         GameStateMachine gsm = new GameStateMachine();
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
