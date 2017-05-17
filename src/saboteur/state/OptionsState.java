@@ -2,6 +2,8 @@ package saboteur.state;
 
 import java.io.IOException;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Slider;
@@ -11,14 +13,13 @@ import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.tools.Icon;
 import saboteur.tools.Resources;
 
 public class OptionsState extends State {
 
     @FXML private Slider sliderMusic;
-    @FXML private SVGPath volumeOff;
-    @FXML private SVGPath volumeOn;
-    @FXML private SVGPath volumeDown;
+    @FXML private SVGPath volume;
 
     public OptionsState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -40,8 +41,15 @@ public class OptionsState extends State {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/options.fxml"));
             loader.setController(this);
-            sliderMusic.setValue(Resources.volume*100);
             Pane pane = loader.load();
+            sliderMusic.setValue(Resources.volume*100);
+            changeVolume(Resources.volume*100);
+            sliderMusic.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    changeVolume(sliderMusic.getValue());
+                }
+            });
             this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
@@ -52,43 +60,38 @@ public class OptionsState extends State {
     public void onExit() {
 
     }
-    
+
     @FXML
-    private void cancelOptionButtonAction() {
-    	this.gsm.change("mainMenu");
+    private void okOptionButtonAction() {
+        this.gsm.change("mainMenu");
     }
 
     @FXML
-    private void okOptionButtonAction() { this.gsm.change("mainMenu"); }
-
-    @FXML
     private void music(){
-        if(sliderMusic.getValue() <= 5) //volume fermé/très faible
-        {
-           volumeOff.setVisible(true);
-           volumeOn.setVisible(false);
-           volumeDown.setVisible(false);
+        changeVolume(sliderMusic.getValue());
+    }
 
-           Resources.loadMusic().setMute(true);
+    private void changeVolume(double newVolume){
+        if(newVolume <= 5) //volume fermé/très faible
+        {
+            volume.setContent(Icon.volumeOff);
+            Resources.loadMusic().setMute(true);
+            Resources.volume = 0;
 
         }
-        else if(sliderMusic.getValue() >50) //volume fort
+        else if(newVolume >50) //volume fort
         {
-            volumeOff.setVisible(false);
-            volumeOn.setVisible(true);
-            volumeDown.setVisible(false);
+            volume.setContent(Icon.volumeOn);
             Resources.loadMusic().setMute(false);
-            Resources.loadMusic().setVolume(calculVolume(sliderMusic.getValue()));
-            Resources.volume = calculVolume(sliderMusic.getValue());
+            Resources.loadMusic().setVolume(calculVolume(newVolume));
+            Resources.volume = calculVolume(newVolume);
         }
         else //volume pas très fort
         {
-            volumeOff.setVisible(false);
-            volumeOn.setVisible(false);
-            volumeDown.setVisible(true);
+            volume.setContent(Icon.volumeDown);
             Resources.loadMusic().setMute(false);
-            Resources.loadMusic().setVolume(calculVolume(sliderMusic.getValue()));
-            Resources.volume = calculVolume(sliderMusic.getValue());
+            Resources.loadMusic().setVolume(calculVolume(newVolume));
+            Resources.volume = calculVolume(newVolume);
         }
     }
 

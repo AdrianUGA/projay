@@ -80,7 +80,7 @@ public class PauseMenuState extends State {
 
     @FXML
     private void optionButtonAction(){
-        this.gsm.push("saveGame");
+        
     }
 
     @FXML
