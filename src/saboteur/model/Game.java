@@ -15,7 +15,7 @@ public class Game {
 	private int currentPlayerIndex; //TO SAVE
 	private int round; //TO SAVE
 	private int turn; //TO SAVE
-	public final static long seed = 123456789;
+	public final static long seed = 223456789;
 
 	private final Deck deck;//NOT TO SAVE
 

@@ -3,6 +3,7 @@ package saboteur.state;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,8 +18,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import saboteur.App;
@@ -52,6 +55,7 @@ public class GameState implements State{
 	private HashMap<String, Image> allCards;
 	
 	private GridPane boardGridPane;
+	private int xmin, xmax, ymin, ymax;
 	
     private GameStateMachine gsm;
     private Game game;
@@ -292,16 +296,40 @@ public class GameState implements State{
         	
         	
     		if(this.selectedCard.isPathCard()) {
-    			
+    			PathCard card = (PathCard) this.selectedCard;
+    			Set<Position> postionPathCard = this.game.getBoard().getPossiblePositionPathCard(card);
+    			for(Position posiCard : postionPathCard) {
+    				int x = posiCard.getcX() - xmin;
+    				int y = posiCard.getcY() - ymin;
+    				int dx;
+    				if (x == 0){
+    					dx = x * (ymax-ymin);
+    				}
+    				else {
+    					dx = x * (ymax-ymin+1);
+    				}
+    				ImageView img = (ImageView)this.boardGridPane.getChildren().get(dx+y);
+    				img.setImage(this.allCards.get(card.getFrontImage()));
+    			}
     		}
     		
     		if(this.selectedCard.isPlanCard()) {
+    			PathCard card = (PathCard) this.selectedCard;
+                this.gameBoard.toFront();
+                VBox vb = new VBox(10);
+                for (i = 0; i<3; i++) {
+                	ImageView img = new ImageView(this.allCards.get(card.getBackImage()));
+                	img.setFitWidth(108/3);
+                	img.setFitHeight(166/3);
+                }
     			List<Position> goalCards = this.game.getBoard().getGoalCards();
     			for (Position posiCard : goalCards) {
+    				
     			}
     		}
     		
     		if(this.selectedCard.isCollapseCard()) {
+    			System.out.println("hey");
     			
     		}
         }
@@ -325,41 +353,41 @@ public class GameState implements State{
         double cardWidth = 108/3;
         double cardHeight = 166/3;
         
-        int xmin = Board.getGridSize();;
-        int xmax = 0;
-        int ymin = Board.getGridSize();
-        int ymax = 0;
+        this.xmin = Board.getGridSize();;
+        this.xmax = 0;
+        this.ymin = Board.getGridSize();
+        this.ymax = 0;
         
         for(int i = 0; i < Board.getGridSize(); i++) {
 			for (int j = 0; j < Board.getGridSize(); j++) {
 				PathCard card = this.game.getBoard().getCard(new Position(i,j));
 				if( card != null) {
-					if(xmin > i) {
-						xmin = i;
+					if(this.xmin > i) {
+						this.xmin = i;
 					}
-					if(xmax < i) {
-						xmax = i;
+					if(this.xmax < i) {
+						this.xmax = i;
 					}
-					if(ymin > j) {
-						ymin = j;
+					if(this.ymin > j) {
+						this.ymin = j;
 					}
-					if(ymax < j) {
-						ymax = j;
+					if(this.ymax < j) {
+						this.ymax = j;
 					}
 				}
 			}
         }
-        xmin--;
-        xmax++;
-        ymin--;
-        ymax++; 
+        this.xmin--;
+        this.xmax++;
+        this.ymin--;
+        this.ymax++; 
         
-    	for(int i = xmin; i <= xmax; i++) {
-    		for (int j = ymin; j <= ymax; j++) {
+    	for(int i = this.xmin; i <= this.xmax; i++) {
+    		for (int j = this.ymin; j <= this.ymax; j++) {
 				ImageView img = new ImageView();
 				PathCard card = this.game.getBoard().getCard(new Position(i,j));
 				
-				if(i>=xmin && i<=xmax && j>=ymin && j<=ymax) {
+				if(i >= this.xmin && i <= this.xmax && j >= this.ymin && j <= this.ymax) {
 					img.setFitHeight(cardHeight);
 					img.setFitWidth(cardWidth);
 					if( card != null) {
@@ -371,7 +399,7 @@ public class GameState implements State{
 						}
 					}
 					else{
-						img.setImage(this.allCards.get("broken_cart_card.png"));
+//						img.setImage(this.allCards.get("broken_cart_card.png"));
 					}
 				}
 				this.boardGridPane.add(img, i, j);
