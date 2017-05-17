@@ -111,10 +111,10 @@ public class GameState extends State{
 
     	//Début du bloc à commenter
     	
-//    	this.game.getPlayerList().clear();
-//    	this.game.addPlayer(new AI(this.game, "Yves"));
-//    	this.game.addPlayer(new AI(this.game, "Philippe"));
-//    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
+    	this.game.getPlayerList().clear();
+    	this.game.addPlayer(new AI(this.game, "Yves"));
+    	this.game.addPlayer(new AI(this.game, "Philippe"));
+    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
 		
     	//Fin du bloc à commenter
     	

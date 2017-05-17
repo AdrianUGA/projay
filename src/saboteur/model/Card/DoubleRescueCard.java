@@ -45,4 +45,9 @@ public class DoubleRescueCard extends ActionCardToPlayer {
 	public boolean isDoubleRescueCard() {
 		return true;
 	}
+	
+	@Override
+	public void displayCardType(){
+    	System.out.println("DoubleRescueCard");
+    }
 }

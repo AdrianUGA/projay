@@ -9,6 +9,7 @@ import java.util.Random;
 import javafx.scene.input.KeyCombination;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
+import saboteur.ai.AI;
 
 public class Game {
 
@@ -66,11 +67,21 @@ public class Game {
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getCopyOtherCards();
 		Collections.shuffle(this.stack, new Random(Game.seed));
-
+		/*
+		for(Card c : this.stack){
+			c.displayCardType();
+		}
+		*/
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 
 		this.setTeam();
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+		for(Player p : this.playerList){
+			p.resetHandicaps();
+			if(p.isAI()){
+				((AI) p).initializeAI();
+			}
+		}
 		this.dealCardsToPlayer();
 
 		this.nextPlayer();
