@@ -4,14 +4,20 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" opacity="0.7" prefHeight="400.0" prefWidth="385.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.8);" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane prefHeight="200.0" prefWidth="200.0" />
+      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../resources/PauseLogo.png" />
+         </image>
+         <VBox.margin>
+            <Insets bottom="40.0" top="20.0" />
+         </VBox.margin>
+      </ImageView>
       <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
          <children>
             <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
@@ -34,8 +40,11 @@
          <padding>
             <Insets bottom="5.0" top="5.0" />
          </padding>
+         <VBox.margin>
+            <Insets bottom="40.0" right="55.0" />
+         </VBox.margin>
       </HBox>
-      <HBox alignment="CENTER">
+      <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
          <children>
             <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
@@ -45,7 +54,7 @@
                   <Image url="@../../resources/pioche.png" />
                </image>
             </ImageView>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Sauvegarder la partie" textAlignment="CENTER">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Recommencer" textAlignment="CENTER">
                <font>
                   <Font size="20.0" />
                </font>
@@ -57,8 +66,37 @@
          <padding>
             <Insets bottom="5.0" top="5.0" />
          </padding>
+         <VBox.margin>
+            <Insets right="55.0" />
+         </VBox.margin>
       </HBox>
-      <HBox alignment="CENTER">
+      <HBox alignment="CENTER" onMouseClicked="#saveButtonAction">
+         <children>
+            <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+               <image>
+                  <Image url="@../../resources/pioche.png" />
+               </image>
+            </ImageView>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Sauvegarder" textAlignment="CENTER">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <HBox.margin>
+                  <Insets bottom="5.0" />
+               </HBox.margin>
+            </Text>
+         </children>
+         <padding>
+            <Insets bottom="5.0" top="5.0" />
+         </padding>
+         <VBox.margin>
+            <Insets right="55.0" />
+         </VBox.margin>
+      </HBox>
+      <HBox alignment="CENTER" onMouseClicked="#optionButtonAction">
          <children>
             <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
@@ -80,9 +118,11 @@
          <padding>
             <Insets bottom="5.0" top="5.0" />
          </padding>
+         <VBox.margin>
+            <Insets right="55.0" />
+         </VBox.margin>
       </HBox>
-      <Pane prefHeight="200.0" prefWidth="200.0" />
-      <HBox alignment="CENTER">
+      <HBox alignment="CENTER" onMouseClicked="#mainMenuButtonAction">
          <children>
             <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
@@ -104,7 +144,12 @@
          <padding>
             <Insets bottom="5.0" top="5.0" />
          </padding>
+         <VBox.margin>
+            <Insets right="55.0" top="40.0" />
+         </VBox.margin>
       </HBox>
-      <Pane prefHeight="200.0" prefWidth="200.0" />
    </children>
+   <padding>
+      <Insets left="20.0" right="20.0" />
+   </padding>
 </VBox>

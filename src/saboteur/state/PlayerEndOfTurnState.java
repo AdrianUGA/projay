@@ -4,16 +4,10 @@ import javafx.stage.Stage;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 
-public class PlayerEndOfTurnState implements State{
-
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
+public class PlayerEndOfTurnState extends State{
 
     public PlayerEndOfTurnState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override

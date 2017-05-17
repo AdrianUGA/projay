@@ -4,16 +4,14 @@ import javafx.stage.Stage;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 
-public class PlayerDrawCardState implements State{
+public class PlayerDrawCardState extends State{
 
     private GameStateMachine gsm;
     private Game game;
     private Stage primaryStage;
 
     public PlayerDrawCardState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override

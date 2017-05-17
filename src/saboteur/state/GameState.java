@@ -2,20 +2,20 @@ package saboteur.state;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
@@ -33,11 +33,10 @@ import saboteur.model.Card.DoubleRescueCard;
 import saboteur.model.Card.PathCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.SabotageCard;
-import saboteur.model.Card.Tool;
 import saboteur.tools.Resources;
 import saboteur.view.PlayerArc;
 
-public class GameState implements State{
+public class GameState extends State{
 
 	@FXML private Pane boardContainer;
 	@FXML private HBox cardContainer;
@@ -51,17 +50,10 @@ public class GameState implements State{
 	private HashMap<String, Image> allCards;
 	
 	private GridPane boardGridPane;
-	
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
-
-    private boolean pause;
+	private int xmin, xmax, ymin, ymax;
 
     public GameState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override
@@ -145,8 +137,7 @@ public class GameState implements State{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
+            Pane pane = loader.load();
 
             this.players = new PlayerArc[this.game.getPlayerList().size()];
             //Take size of screen
@@ -193,9 +184,7 @@ public class GameState implements State{
             this.gameBoard.setCenterY(gameTableHalfSize);
             this.gameBoard.setRadius(boardSize);
 
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -217,7 +206,6 @@ public class GameState implements State{
     
     @FXML
     private void optionsButtonAction(){
-        this.pause = true;
         this.gsm.push("pauseMenu");
     }
     
@@ -291,17 +279,42 @@ public class GameState implements State{
         	
         	
     		if(this.selectedCard.isPathCard()) {
+    			PathCard card = (PathCard) this.selectedCard;
+    			Set<Position> postionPathCard = this.game.getBoard().getPossiblePositionPathCard(card);
+    			for(Position posiCard : postionPathCard) {
+    				int x = posiCard.getcX() - xmin;
+    				int y = posiCard.getcY() - ymin;
+    				int dx;
+    				if (x == 0){
+    					dx = x * (ymax-ymin);
+    				}
+    				else {
+    					dx = x * (ymax-ymin+1);
+    				}
+    				ImageView img = (ImageView)this.boardGridPane.getChildren().get(dx+y);
+    				img.setImage(this.allCards.get(card.getFrontImage()));
+    			}
+    		}
+    		
+    		if(this.selectedCard.isPlanCard()) {
+    			PathCard card = (PathCard) this.selectedCard;
+                this.gameBoard.toFront();
+                VBox vb = new VBox(10);
+                for (i = 0; i<3; i++) {
+                	ImageView img = new ImageView(this.allCards.get(card.getBackImage()));
+                	img.setFitWidth(108/3);
+                	img.setFitHeight(166/3);
+                }
+    			List<Position> goalCards = this.game.getBoard().getGoalCards();
+    			for (Position posiCard : goalCards) {
+    				
+    			}
+    		}
+    		
+    		if(this.selectedCard.isCollapseCard()) {
+    			System.out.println("hey");
     			
     		}
-//        	
-//        	
-//        	
-//    		if(this.selectedCard.isPlanCard()) {
-//    			
-//    		}
-//    		if(this.selectedCard.isCollapseCard()) {
-//    			
-//    		}
         }
     	else {
             System.out.println("hBox! " + event.getTarget());
@@ -323,41 +336,41 @@ public class GameState implements State{
         double cardWidth = 108/3;
         double cardHeight = 166/3;
         
-        int xmin = Board.getGridSize();;
-        int xmax = 0;
-        int ymin = Board.getGridSize();
-        int ymax = 0;
+        this.xmin = Board.getGridSize();;
+        this.xmax = 0;
+        this.ymin = Board.getGridSize();
+        this.ymax = 0;
         
         for(int i = 0; i < Board.getGridSize(); i++) {
 			for (int j = 0; j < Board.getGridSize(); j++) {
 				PathCard card = this.game.getBoard().getCard(new Position(i,j));
 				if( card != null) {
-					if(xmin > i) {
-						xmin = i;
+					if(this.xmin > i) {
+						this.xmin = i;
 					}
-					if(xmax < i) {
-						xmax = i;
+					if(this.xmax < i) {
+						this.xmax = i;
 					}
-					if(ymin > j) {
-						ymin = j;
+					if(this.ymin > j) {
+						this.ymin = j;
 					}
-					if(ymax < j) {
-						ymax = j;
+					if(this.ymax < j) {
+						this.ymax = j;
 					}
 				}
 			}
         }
-        xmin--;
-        xmax++;
-        ymin--;
-        ymax++; 
+        this.xmin--;
+        this.xmax++;
+        this.ymin--;
+        this.ymax++; 
         
-    	for(int i = xmin; i <= xmax; i++) {
-    		for (int j = ymin; j <= ymax; j++) {
+    	for(int i = this.xmin; i <= this.xmax; i++) {
+    		for (int j = this.ymin; j <= this.ymax; j++) {
 				ImageView img = new ImageView();
 				PathCard card = this.game.getBoard().getCard(new Position(i,j));
 				
-				if(i>=xmin && i<=xmax && j>=ymin && j<=ymax) {
+				if(i >= this.xmin && i <= this.xmax && j >= this.ymin && j <= this.ymax) {
 					img.setFitHeight(cardHeight);
 					img.setFitWidth(cardWidth);
 					if( card != null) {
@@ -369,7 +382,7 @@ public class GameState implements State{
 						}
 					}
 					else{
-						img.setImage(this.allCards.get("broken_cart_card.png"));
+//						img.setImage(this.allCards.get("broken_cart_card.png"));
 					}
 				}
 				this.boardGridPane.add(img, i, j);

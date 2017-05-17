@@ -10,13 +10,14 @@ import javafx.scene.input.KeyCombination;
 import saboteur.ai.AI;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
+import saboteur.ai.AI;
 
 public class Game {
 
 	private int currentPlayerIndex; //TO SAVE
 	private int round; //TO SAVE
 	private int turn; //TO SAVE
-	public final static long seed = 123456789;
+	public final static long seed = 223456789;
 
 	private final Deck deck;//NOT TO SAVE
 
@@ -176,11 +177,23 @@ public class Game {
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getCopyOtherCards();
 		Collections.shuffle(this.stack, new Random(Game.seed));
-
+		/*
+		for(Card c : this.stack){
+			c.displayCardType();
+		}
+		*/
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 
 		this.setTeam();
-		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size()+ " nb joueurs = "+ this.playerList.size());
+
+		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+		for(Player p : this.playerList){
+			p.resetHandicaps();
+			if(p.isAI()){
+				((AI) p).initializeAI();
+			}
+		}
+		
 		this.dealCardsToPlayer();
 		
 		this.nextPlayer();
@@ -550,15 +563,4 @@ public class Game {
 		}
 	}
 
-	public Player getWinner() {
-		int maxGold = 0;
-		Player winner = null;
-		for(Player p : this.playerList){
-			if(p.getGold()>maxGold){
-				maxGold = p.getGold();
-				winner = p;
-			}
-		}
-		return winner;
-	}
 }

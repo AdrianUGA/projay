@@ -50,6 +50,7 @@ public abstract class Player implements Serializable {
 		this.handicaps = new ArrayList<SabotageCard>();
 		this.hand = new ArrayList<>();
 		this.name = name;
+		this.gold = new ArrayList<GoldCard>();
 	}
 	
 	public void playCard(Card card){
@@ -209,6 +210,10 @@ public abstract class Player implements Serializable {
 				&& p.getGold() == this.getGold()
 				&& p.getHand().equals(this.hand)
 				&& p.getHandicaps().equals(this.handicaps);
+	}
+
+	public void resetHandicaps() {
+		this.handicaps.clear();
 	}
 
 }

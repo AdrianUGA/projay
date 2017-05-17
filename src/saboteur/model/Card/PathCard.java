@@ -128,4 +128,9 @@ public class PathCard extends Card {
 	public boolean isPathCard() {
 		return true;
 	}
+	
+	@Override
+	public void displayCardType(){
+    	System.out.println("PathCard");
+    }
 }
