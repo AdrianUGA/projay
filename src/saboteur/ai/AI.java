@@ -19,7 +19,8 @@ import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 
 public class AI extends Player {
-	
+	static final long serialVersionUID = 6519358301134674963L;
+
 	protected final int AVERAGE_TRUST = 50;
 	
 	protected Map<Player,Float> isDwarf;	

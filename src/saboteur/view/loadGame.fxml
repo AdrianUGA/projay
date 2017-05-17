@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" style="-fx-background-image: url(@../../resources/mine.jpg); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="CENTER" prefHeight="786.0" prefWidth="823.0" style="-fx-background-color: rgba(0,0,0,0.7);">
          <HBox.margin>
@@ -40,7 +40,7 @@
                   </VBox>
                </content>
             </ScrollPane>
-            <AnchorPane prefHeight="85.0" prefWidth="900.0">
+            <AnchorPane>
                <children>
                   <Button alignment="CENTER" layoutX="125.0" layoutY="3.0" mnemonicParsing="false" onAction="#backButtonAction" prefHeight="44.0" prefWidth="135.0" text="Annuler" AnchorPane.leftAnchor="125.0">
                      <font>

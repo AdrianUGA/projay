@@ -1,16 +1,19 @@
 package saboteur.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import saboteur.model.Card.*;
 
-public abstract class Player {
+public abstract class Player implements Serializable {
+
+	private static final long serialVersionUID = -7234436527409826249L;
 	protected Card selectedCard; //NOT TO SAVE
 	protected String name; //TO SAVE
 	protected ArrayList<SabotageCard> handicaps; //TO SAVE
 	protected ArrayList<GoldCard> gold; //TO SAVE
 	protected ArrayList<Card> hand; //TO SAVE
-	protected Game game; //NOT TO SAVE
+	transient protected Game game; //NOT TO SAVE
 	protected Team team; //TO SAVE
 	
 	public Card getSelectedCard() {
@@ -46,6 +49,7 @@ public abstract class Player {
 		game.register(this);
 		this.handicaps = new ArrayList<SabotageCard>();
 		this.name = name;
+		this.gold = new ArrayList<GoldCard>();
 	}
 	
 	public void playCard(Card card){
@@ -196,6 +200,15 @@ public abstract class Player {
 
 	public boolean isAI(){
 		return false;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Player p = (Player) obj;
+		return p.getName() == this.name
+				&& p.getGold() == this.getGold()
+				&& p.getHand().equals(this.hand)
+				&& p.getHandicaps().equals(this.handicaps);
 	}
 
 }

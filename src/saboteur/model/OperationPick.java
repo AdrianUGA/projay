@@ -3,6 +3,8 @@ package saboteur.model;
 import saboteur.model.Card.*;
 
 public class OperationPick extends Operation {
+
+	private static final long serialVersionUID = -2773080524392347028L;
 	private Card cardPicked; //TO SAVE
 	
 	public OperationPick(Player sourcePlayer, Card cardPicked) {
@@ -22,4 +24,9 @@ public class OperationPick extends Operation {
 		this.getSourcePlayer().removeHandCard(this.cardPicked);
 	}
 
+	@Override
+	public boolean isOperationPick(){
+		return true;
+	}
+	
 }

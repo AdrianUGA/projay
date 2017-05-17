@@ -1,44 +1,53 @@
 package saboteur;
 
+import javafx.stage.Stage;
 import saboteur.state.State;
 
 import java.util.HashMap;
+import java.util.Stack;
 
 public class GameStateMachine {
 
     private HashMap<String, State> states;
-    private State currentState;
+    private Stack<State> statesStack;
 
     public GameStateMachine(){
         this.states = new HashMap<>();
-        this.currentState = null;
+        this.statesStack = new Stack<>();
     }
 
     public void add(String name, State state){
         this.states.put(name, state);
     }
 
-    public void change(String name, Object params){
-        if (this.currentState != null){
-            this.currentState.onExit();
-        }
-        this.currentState = this.states.get(name);
-        this.currentState.onEnter(params);
+    public void push(String name){
+        this.statesStack.push(this.states.get(name));
+        this.statesStack.peek().onEnter(null);
+    }
+
+    public void push(String name, Stage parentStage){
+        this.statesStack.push(this.states.get(name));
+        this.statesStack.peek().onEnter(parentStage);
+    }
+
+    public void pop(){
+        this.statesStack.pop().onExit();
     }
 
     public void change(String name){
-        if (this.currentState != null){
-            this.currentState.onExit();
+        if (!this.statesStack.empty()){
+            this.pop();
         }
-        this.currentState = this.states.get(name);
-        this.currentState.onEnter(null);
+        this.statesStack.clear();
+        this.push(name);
+
     }
 
     public void render(){
-        this.currentState.render();
+        this.statesStack.peek().render();
     }
 
     public void update(){
-        this.currentState.update();
+        this.statesStack.peek().update();
     }
 }

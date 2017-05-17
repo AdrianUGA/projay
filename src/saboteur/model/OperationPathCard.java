@@ -7,6 +7,7 @@ import saboteur.model.Card.*;
 public class OperationPathCard extends Operation {
 	private Position p; //TO SAVE
 	private ArrayList<Position> goalCardsToFlip; //TO SAVE
+	private boolean reversed;
 	
 	public Position getP() {
 		return p;
@@ -15,10 +16,14 @@ public class OperationPathCard extends Operation {
 	public OperationPathCard(Player sourcePlayer, Card card, Position position) {
 		super(sourcePlayer, card);
 		this.p = position;
+		this.reversed = false;
 	}
 
 	@Override
 	public void exec(Game game) {
+		if (reversed){
+			((PathCard) this.getCard()).reverse();
+		}
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		game.getBoard().addCard((PathCard)this.getCard(), p);
 		System.out.println("carte posé en x= " + p.getcX() + " y= " +p.getcY());
@@ -61,6 +66,25 @@ public class OperationPathCard extends Operation {
 		this.p = p;
 		return this;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		OperationPathCard o = (OperationPathCard) obj;
+		
+		return super.equals(obj) && o.getP() == this.getP() && o.getReversed() == this.getReversed();
+	}
+
+	public boolean getReversed() {
+		return this.reversed;
+	}
+
+	public OperationPathCard setReversed(boolean reversed) {
+			this.reversed = reversed;
+		return this;
+	}
 	
-	
+	@Override
+	public boolean isOperationPathCard(){
+		return true;
+	}
 }

@@ -60,5 +60,9 @@ public class OperationActionCardToPlayer extends Operation {
 		return this;
 	}
 	
+	@Override
+	public boolean isOperationActionCardToPlayer(){
+		return true;
+	}
 	
 }

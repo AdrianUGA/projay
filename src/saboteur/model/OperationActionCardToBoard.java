@@ -51,5 +51,9 @@ public class OperationActionCardToBoard extends Operation {
 		return this;
 	}
 	
+	@Override
+	public boolean isOperationActionCardToBoard(){
+		return true;
+	}
 	
 }

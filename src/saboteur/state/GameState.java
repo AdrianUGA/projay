@@ -2,67 +2,73 @@ package saboteur.state;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Arc;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.ai.AI;
-import saboteur.ai.DwarfAI;
-import saboteur.ai.SaboteurAI;
+import saboteur.model.Board;
 import saboteur.model.Game;
 import saboteur.model.Player;
-import saboteur.model.Team;
+import saboteur.model.Position;
+import saboteur.model.Card.ActionCardToPlayer;
+import saboteur.model.Card.Card;
+import saboteur.model.Card.DoubleRescueCard;
+import saboteur.model.Card.PathCard;
+import saboteur.model.Card.RescueCard;
+import saboteur.model.Card.SabotageCard;
 import saboteur.tools.Resources;
 import saboteur.view.PlayerArc;
 
-public class GameState implements State{
+public class GameState extends State{
 
-	@FXML private AnchorPane boardAndCardContainer;
 	@FXML private Pane boardContainer;
 	@FXML private HBox cardContainer;
-	@FXML private Arc currentPlayerArc;
 	@FXML private Circle gameBoard;
-	@FXML private ImageView firstCard;
-	@FXML private ImageView secondCard;
-	@FXML private ImageView thirdCard;
-	@FXML private ImageView fourthCard;
-	@FXML private ImageView fifthCard;
-	@FXML private ImageView sixthCard;
 	
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
+	private PlayerArc[] players;
+	private ImageView[] handCards = new ImageView[6];
+	private Card selectedCard;
+	private ImageView imgSelectedCard = new ImageView();
+	private Resources resources = new Resources();
+	private HashMap<String, Image> allCards;
+	
+	private GridPane boardGridPane;
+	private int xmin, xmax, ymin, ymax;
 
     public GameState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override
     public void update() {
         if (this.game.gameIsFinished()){
             //fin de la partie
-        	if(game.dwarfsWon())System.out.println("Nains ont gagné");
             //this.gsm.change("annonce vainqueur");
+        	if(game.dwarfsWon())System.out.println("Nains ont gagné");
+        	//System.out.println("Le joueur "+this.game.getWinner().getName()+" a gagné ! (Avec "+this.game.getWinner().getGold()+ " or).");
             //System.out.println("fin de partie");
         } else {
             if (this.game.roundIsFinished()){
                 //fin de la manche
                 //Distribution des cartes gold
+            	if(game.dwarfsWon())System.out.println("Nains ont gagné");
                 this.game.newRound();
             } else{
                 //la manche continue
@@ -70,11 +76,11 @@ public class GameState implements State{
                     this.game.getCurrentPlayer().playCard();
                     this.game.getCurrentPlayer().pickCard();
                     //System.out.println("AI has played");
-                    /*try{
-                        Thread.sleep(3000);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }*/
+                /*try{
+                    Thread.sleep(3000);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }*/
                     this.game.nextPlayer();
                 }
             }
@@ -88,84 +94,299 @@ public class GameState implements State{
 
     @Override
     public void onEnter(Object param) {
-    	/*
-    	 * Pour Emmanuel qui fait des tests avec les IA
-    	 * Pour pas être embêter par le problème de setTeam(),
-    	 * commente son appel dans la méthode newRound de la classe Game
-    	 */
-    	//Début du bloc à commenter
-    	
-    	this.game.getPlayerList().clear();
-    	this.game.addPlayer(new AI(this.game, "Yves"));
-    	this.game.addPlayer(new AI(this.game, "Philippe"));
-    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
-		
-    	//Fin du bloc à commenter
-    	
-        this.game.newGame();
-
-        for(Player p : this.game.getPlayerList()){
-    		if(p.isAI()){
-    			((AI)p).initializeAI();
-    		}
-    	}
-        
-        try{
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
-            loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
-            
-            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-            double boardSize = primaryScreenBounds.getHeight();
-            double halfBoardSize = boardSize/2;
-            
-            this.cardContainer.setPrefWidth(boardSize);
-            
-            this.currentPlayerArc.setRadiusX(halfBoardSize);
-            this.currentPlayerArc.setRadiusY(halfBoardSize);
-            this.currentPlayerArc.setCenterX(halfBoardSize);
-            this.currentPlayerArc.setCenterY(halfBoardSize);
-            
-            int nbPlayer = this.game.getPlayerList().size()-1;
-            double length = 260.0 / nbPlayer;
-            double startAngle = -140.0;
-            for (int i = 0; i<nbPlayer ; i++) {
-            	startAngle = startAngle - length;
-            	addPlayerOnTheBoard(halfBoardSize, length, startAngle);
-            }
-            
-//            this.gameBoard.setCenterX(halfBoardSize);
-//            this.gameBoard.setCenterY(halfBoardSize);
-//            this.gameBoard.setRadius(halfBoardSize/2);
-//            this.gameBoard.toFront();
-                        
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        Resources resources = new Resources();
-        resources.loadImage();
-        resources.loadPicto();
-        HashMap<String, Image> allCards = resources.getImageCard();
-        this.firstCard.setImage(allCards.get("broken_cart_card.png"));
-        this.secondCard.setImage(allCards.get("collapse_card.png"));
-        this.thirdCard.setImage(allCards.get("path_card_17.png"));
-        this.fourthCard.setImage(allCards.get("path_card_29.png"));
-        this.fifthCard.setImage(allCards.get("path_card_40.png"));
-        this.sixthCard.setImage(allCards.get("plan_card.png"));
+    	initGame();
     }
     
     @Override
     public void onExit() {
 
     }
+
+    private void initGame(){
+        /*
+    	 * Pour Emmanuel qui fait des tests avec les IA
+    	 * Pour pas être embêter par le problème de setTeam(),
+    	 * commente son appel dans la méthode newRound de la classe Game
+    	 */
+
+    	//Début du bloc à commenter
+    	
+//    	this.game.getPlayerList().clear();
+//    	this.game.addPlayer(new AI(this.game, "Yves"));
+//    	this.game.addPlayer(new AI(this.game, "Philippe"));
+//    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
+		
+    	//Fin du bloc à commenter
+    	
+        this.game.newGame();
+        
+        this.resources.loadImage();
+        this.resources.loadPicto();
+        this.allCards = this.resources.getImageCard();
+        
+        //NE PAS COMMENTER CETTE BOUCLE !!
+        //IMPORTANT DANS TOUS LES CAS OU IL Y A UNE AI
+        
+        for(Player p : this.game.getPlayerList()){
+    		if(p.isAI()){
+    			((AI)p).initializeAI();
+    		}
+    	}
+
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
+            loader.setController(this);
+            Pane pane = loader.load();
+
+            this.players = new PlayerArc[this.game.getPlayerList().size()];
+            //Take size of screen
+            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+            double gameTableSize = primaryScreenBounds.getHeight();
+            double gameTableHalfSize = gameTableSize/2;
+            double boardSize = gameTableHalfSize/2;
+
+            //For center cards hand Image
+            this.cardContainer.setPrefWidth(gameTableSize);
+            for(int i = 0; i < 6; i++) {
+            	this.handCards[i] = new ImageView();
+            	this.handCards[i].setFitWidth(108);
+            	this.handCards[i].setFitHeight(166);
+            	this.cardContainer.getChildren().add(this.handCards[i]);
+            }
+            generateHandCardImage();
+            
+            //The game board
+            double innerRadius = gameTableHalfSize/2;
+	        double radians = Math.toRadians(135);
+	        double XstartInner = (int)Math.round((Math.cos(radians) * innerRadius + gameTableHalfSize));
+	        double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + gameTableHalfSize));
+            this.boardGridPane = new GridPane();
+            generateBoard();
+	        this.boardGridPane.setLayoutX(XstartInner);
+	        this.boardGridPane.setLayoutY(YstartInner);
+            this.boardContainer.getChildren().add(this.boardGridPane);
+            
+            //Create Specific arc for first player
+        	addPlayerOnTheBoard(gameTableHalfSize, gameTableHalfSize, 100, -140.0, 0);
+
+            //Create arc for other player
+            int nbPlayer = this.game.getPlayerList().size()-1;
+            double length = 260.0 / nbPlayer; // 260 = 360 - 100 (100 degree of the 1st player)
+            double startAngle = -140.0;
+            for (int i = 1; i<=nbPlayer ; i++) {
+                startAngle = startAngle - length;
+                addPlayerOnTheBoard(gameTableHalfSize, gameTableHalfSize, length, startAngle, i);
+            }
+
+            //Create the circle of the game board
+            this.gameBoard.setCenterX(gameTableHalfSize);
+            this.gameBoard.setCenterY(gameTableHalfSize);
+            this.gameBoard.setRadius(boardSize);
+
+            this.changeLayout(pane);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
     
-    private void addPlayerOnTheBoard(double size, double length, double startAngle){
-    	PlayerArc arc = new PlayerArc(size, length, startAngle);
-    	this.boardContainer.getChildren().add(arc);
+    //End of turn of the current player.
+    @FXML
+    private void endOfTurnButtonAction(){
+    	System.out.println("end of turn");
+    }
+    @FXML
+    private void takeCardOfStackButtonAction(){
+    	System.out.println("pioche");
+    }
+    @FXML
+    private void trashCardButtonAction(){
+    	System.out.println("jetter");
+    }
+    
+    @FXML
+    private void optionsButtonAction(){
+        this.gsm.push("pauseMenu");
+    }
+    
+    @FXML void selectCardButtonAction(MouseEvent event) {
+    	ImageView newCard = null;
+    	HBox hb= (HBox)event.getSource();    	
+    	if (event.getTarget() != this.cardContainer) {
+    		
+        	newCard = (ImageView)event.getTarget();
+//            System.out.println("hBox Ignored! " + event.getTarget());
+            
+            if(!newCard.equals(this.imgSelectedCard)) {
+        		this.imgSelectedCard.setStyle(null);
+        		this.imgSelectedCard = newCard;
+        		this.imgSelectedCard.setStyle("-fx-effect : dropshadow(gaussian, black, 2, 2, 2, 2);");
+        	}
+            
+        	int i = 0;
+        	for(Node nodeIn:hb.getChildren()){
+                if(((ImageView)nodeIn).equals(event.getTarget())){
+//                	System.out.println(this.game.getCurrentPlayer().getHand().get(i));
+                	this.selectedCard = this.game.getCurrentPlayer().getHand().get(i);
+                }
+                else{
+                	i++;
+                }
+            }
+        	        	
+        	if(this.selectedCard.isSabotageCard()) {
+        		ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
+        		int malus = ((SabotageCard)this.selectedCard).getTool().getValue();
+        		for(PlayerArc player : this.players) {
+        			for(Player p : this.game.getPlayers(card)) {
+        				if(p == player.getPlayer()) {
+        					player.getCircle()[malus].setStroke(Color.RED);
+        					break;
+        				}
+        			}
+        		}
+    		}
+        	
+    		if(this.selectedCard.isRescueCard()) {
+    			ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
+    			int malus = ((RescueCard)this.selectedCard).getTool().getValue();
+    			for(PlayerArc player : this.players) {
+        			for(Player p : this.game.getPlayers(card)) {
+        				if(p == player.getPlayer()) {
+        					player.getCircle()[malus].setStroke(Color.GREEN);
+        					break;
+        				}
+        			}
+        		}
+    		}
+        	
+        	//TODO : A revoir ici
+    		if(this.selectedCard.isDoubleRescueCard()) {
+    			ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
+    			int malus1 = ((DoubleRescueCard)this.selectedCard).getTool1().getValue();
+    			int malus2 = ((DoubleRescueCard)this.selectedCard).getTool2().getValue();
+    			
+    			for(PlayerArc player : this.players) {
+        			for(Player p : this.game.getPlayers(card)) {
+        				if(p == player.getPlayer()) {
+        					player.getCircle()[malus1].setStroke(Color.GREEN);
+        					player.getCircle()[malus2].setStroke(Color.GREEN);
+        					break;
+        				}
+        			}
+        		}
+    		}
+        	
+        	
+    		if(this.selectedCard.isPathCard()) {
+    			PathCard card = (PathCard) this.selectedCard;
+    			Set<Position> postionPathCard = this.game.getBoard().getPossiblePositionPathCard(card);
+    			for(Position posiCard : postionPathCard) {
+    				int x = posiCard.getcX() - xmin;
+    				int y = posiCard.getcY() - ymin;
+    				int dx;
+    				if (x == 0){
+    					dx = x * (ymax-ymin);
+    				}
+    				else {
+    					dx = x * (ymax-ymin+1);
+    				}
+    				ImageView img = (ImageView)this.boardGridPane.getChildren().get(dx+y);
+    				img.setImage(this.allCards.get(card.getFrontImage()));
+    			}
+    		}
+    		
+    		if(this.selectedCard.isPlanCard()) {
+    			PathCard card = (PathCard) this.selectedCard;
+                this.gameBoard.toFront();
+                VBox vb = new VBox(10);
+                for (i = 0; i<3; i++) {
+                	ImageView img = new ImageView(this.allCards.get(card.getBackImage()));
+                	img.setFitWidth(108/3);
+                	img.setFitHeight(166/3);
+                }
+    			List<Position> goalCards = this.game.getBoard().getGoalCards();
+    			for (Position posiCard : goalCards) {
+    				
+    			}
+    		}
+    		
+    		if(this.selectedCard.isCollapseCard()) {
+    			System.out.println("hey");
+    			
+    		}
+        }
+    	else {
+            System.out.println("hBox! " + event.getTarget());
+        }
+    }
+    
+    private void addPlayerOnTheBoard(double sizeOfArc, double center, double length, double startAngle, int idPlayer){
+    	this.players[idPlayer] = new PlayerArc(sizeOfArc, center, length, startAngle, this.game.getPlayerList().get(idPlayer));
+    	this.boardContainer.getChildren().add(this.players[idPlayer]);
+    }
+    
+    private void generateHandCardImage() {
+    	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
+        	this.handCards[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getFrontImage()));
+        }
+    }
+    
+    private void generateBoard() {
+        double cardWidth = 108/3;
+        double cardHeight = 166/3;
+        
+        this.xmin = Board.getGridSize();;
+        this.xmax = 0;
+        this.ymin = Board.getGridSize();
+        this.ymax = 0;
+        
+        for(int i = 0; i < Board.getGridSize(); i++) {
+			for (int j = 0; j < Board.getGridSize(); j++) {
+				PathCard card = this.game.getBoard().getCard(new Position(i,j));
+				if( card != null) {
+					if(this.xmin > i) {
+						this.xmin = i;
+					}
+					if(this.xmax < i) {
+						this.xmax = i;
+					}
+					if(this.ymin > j) {
+						this.ymin = j;
+					}
+					if(this.ymax < j) {
+						this.ymax = j;
+					}
+				}
+			}
+        }
+        this.xmin--;
+        this.xmax++;
+        this.ymin--;
+        this.ymax++; 
+        
+    	for(int i = this.xmin; i <= this.xmax; i++) {
+    		for (int j = this.ymin; j <= this.ymax; j++) {
+				ImageView img = new ImageView();
+				PathCard card = this.game.getBoard().getCard(new Position(i,j));
+				
+				if(i >= this.xmin && i <= this.xmax && j >= this.ymin && j <= this.ymax) {
+					img.setFitHeight(cardHeight);
+					img.setFitWidth(cardWidth);
+					if( card != null) {
+						if(card.isVisible()) {
+	    					img.setImage(this.allCards.get(card.getFrontImage()));
+						}
+						else {
+	    					img.setImage(this.allCards.get(card.getBackImage()));
+						}
+					}
+					else{
+//						img.setImage(this.allCards.get("broken_cart_card.png"));
+					}
+				}
+				this.boardGridPane.add(img, i, j);
+        	}
+        }
     }
 }

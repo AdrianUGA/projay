@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import saboteur.model.Game;
+import saboteur.model.Board;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
@@ -27,7 +27,8 @@ public abstract class DwarfAI {
 			case "saboteur.model.Card.PlanCard":
 				if(!artificialIntelligence.knowsTheGoldCardPosition()){
 					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(artificialIntelligence.getEstimatedGoldCardPosition()));
-					artificialIntelligence.operationsWeight.put(o, (float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - artificialIntelligence.getGame().getTurn()))
+					artificialIntelligence.operationsWeight.put(o, 
+							(float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY - artificialIntelligence.getGame().getTurn()))
 											* Coefficients.DWARF_PLAN_EASY));
 				}
 				else{
@@ -54,11 +55,11 @@ public abstract class DwarfAI {
 				}
 				break;
 			case "saboteur.model.Card.SabotageCard":
+				//TODO refaire
 				Player p = artificialIntelligence.mostLikelyASaboteur();
-				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
-				//System.out.println("Nb joueur = " + getGame().getPlayerList().size());
-				//System.out.println("Size isDwarf = " + isDwarf.size());
-				artificialIntelligence.operationsWeight.put(o, (float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
+				//((OperationActionCardToPlayer) o).setDestinationPlayer(p);
+				//artificialIntelligence.operationsWeight.put(o, (float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
+				//artificialIntelligence.operationsWeight.put((OperationTrash) o, (float) -1);
 				break;
 			case "saboteur.model.Card.PathCard":
 				// R�cup�rer la case la plus proche � vol d'oiseau sur laquelle on peut mettre une carte (= presque dans tous les cas la meilleure case)
@@ -66,19 +67,38 @@ public abstract class DwarfAI {
 				if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
 					Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-					Set<Position> allPositionsForThisCard = artificialIntelligence.getGame().getBoard().getPossiblePathCardPlace((PathCard) o.getCard());
-					System.out.println("Pour la carte " + o.getCard());
+					Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
-					//System.out.println("closest position x= " + allClosestPosition.get(0).getcX() + " y= " + allClosestPosition.get(0).getcY());
-					for(Position currentPos : allPositionsForThisCard){
-						System.out.println("Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY());
+					for(OperationPathCard currentOp : allOperationsForThisCard){
+						//Débugage
+						if(currentOp.getReversed())
+							System.out.println("Pour la carte " + ((PathCard)currentOp.getCard()).reversed() + " !R");
+						else
+							System.out.println("Pour la carte " + (PathCard)currentOp.getCard());
+						//
+						Position currentPos = currentOp.getP();
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
+						System.out.println("Position gold = (" + goldCardPosition.getcX()+","+goldCardPosition.getcY() +") Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY() + " Distance min = " + distanceMin + " distanceDifference = " + distanceDifference);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
-							((OperationPathCard) o).setP(currentPos);
-							artificialIntelligence.operationsWeight.put((OperationPathCard) o, (float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY 
-									+ distanceDifference - ((PathCard) o.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
+							
+							//Checking new minimum taxiDistance if AI put the card
+							artificialIntelligence.getGame().getBoard().temporarAddCard(currentOp);		
+							allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
+							int newDistanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
+							artificialIntelligence.getGame().getBoard().removeCard(currentOp.getP());
+							if(distanceMin - newDistanceMin ==1){
+								System.out.println("Better with this card");
+								artificialIntelligence.operationsWeight.put(currentOp, 
+										(float) ((Coefficients.DWARF_DISTANCE_PATHCARD_EASY + distanceDifference 
+										+ ((PathCard) currentOp.getCard()).openSidesAmount()/5f) * Coefficients.DWARF_PATHCARD_EASY) + Coefficients.DWARF_BETTER_DISTANCE_MIN);
+							}else{
+								artificialIntelligence.operationsWeight.put(currentOp, 
+										(float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY + distanceDifference 
+										- ((PathCard) currentOp.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
+							}
+							
 						}else{
 							// Trash
 							artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);

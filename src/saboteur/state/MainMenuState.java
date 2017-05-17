@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -22,22 +21,16 @@ import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 
-public class MainMenuState implements State {
+public class MainMenuState extends State {
 
     @FXML private Button noQuitGameBtn;
 
     @FXML private Button yesQuitGameBtn;
     
     @FXML private HBox quitGameButton;
-    
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
 
     public MainMenuState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override
@@ -56,11 +49,8 @@ public class MainMenuState implements State {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/mainMenu.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            Pane pane = loader.load();
+            this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -131,8 +121,8 @@ public class MainMenuState implements State {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/modalQuitGame.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout,400, 400, Color.TRANSPARENT);
+            Pane modalPane = loader.load();
+            Scene scene = new Scene(modalPane,400, 400, Color.TRANSPARENT);
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();

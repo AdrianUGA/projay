@@ -32,4 +32,17 @@ public class DoubleRescueCard extends ActionCardToPlayer {
 
 		return card;
 	}
+	
+	public Tool getTool1(){
+		return rescueType1;
+	}
+	
+	public Tool getTool2(){
+		return rescueType2;
+	}
+	
+	@Override
+	public boolean isDoubleRescueCard() {
+		return true;
+	}
 }

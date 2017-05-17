@@ -4,12 +4,8 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Slider;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import saboteur.App;
@@ -17,11 +13,7 @@ import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.tools.Resources;
 
-public class OptionsState implements State {
-
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
+public class OptionsState extends State {
 
     @FXML private Slider sliderMusic;
     @FXML private SVGPath volumeOff;
@@ -29,9 +21,7 @@ public class OptionsState implements State {
     @FXML private SVGPath volumeDown;
 
     public OptionsState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override
@@ -50,12 +40,9 @@ public class OptionsState implements State {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/options.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
             sliderMusic.setValue(Resources.volume*100);
+            Pane pane = loader.load();
+            this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
         }

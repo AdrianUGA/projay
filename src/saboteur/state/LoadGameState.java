@@ -10,6 +10,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
@@ -19,20 +20,14 @@ import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.tools.Loader;
 
-public class LoadGameState implements State {
+public class LoadGameState extends State {
 
 	@FXML private VBox loadableGameContainer;
-	
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
     
     private final ToggleGroup radionButtonGroupe = new ToggleGroup();
 
-    public LoadGameState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+    public LoadGameState(GameStateMachine gsm, Game game, Stage primaryStage) {
+        super(gsm, game, primaryStage);
     }
 
     @Override
@@ -51,11 +46,8 @@ public class LoadGameState implements State {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/loadGame.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            Pane pane = loader.load();
+            this.changeLayout(pane);
             
             loadableGames();
             
@@ -77,15 +69,15 @@ public class LoadGameState implements State {
     @FXML
     private void startLoadableGameButtonAction() {
     	RadioButton selectedRadioButton = (RadioButton) this.radionButtonGroupe.getSelectedToggle();
-    	System.out.println(selectedRadioButton.getText());
+//    	this.game.load(selectedRadioButton.getText());
 //    	this.gsm.change("game");
     }
     
     private void loadableGames() {
-    	addLoadableGame("ma game");
-    	addLoadableGame("Adem game");
-    	addLoadableGame("Toto game");
-    	addLoadableGame("coucouTest");
+        Loader loaderSaves = new Loader();
+        for (String savedFile : loaderSaves.loadSavedFile()) {
+            addLoadableGame(savedFile);
+        }
     }
     
     private void addLoadableGame(String gameName) {

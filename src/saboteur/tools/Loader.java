@@ -124,8 +124,8 @@ public class Loader {
             JSONObject collapseCardObj = cardsObj.getJSONObject("collapseCard");
             for (int i = 0; i < collapseCardObj.getInt("number"); i++){
                 CollapseCard collapseCard = new CollapseCard();
-                collapseCard.setFrontImage(planCardObj.getString("frontImage"));
-                collapseCard.setBackImage(planCardObj.getString("backImage"));
+                collapseCard.setFrontImage(collapseCardObj.getString("frontImage"));
+                collapseCard.setBackImage(collapseCardObj.getString("backImage"));
                 otherCards.add(collapseCard);
             }
 

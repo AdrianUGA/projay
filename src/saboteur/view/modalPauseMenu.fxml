@@ -4,15 +4,18 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" opacity="0.7" prefHeight="400.0" prefWidth="385.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" style="-fx-background-color: rgba(0,0,0,0.8);" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane prefHeight="200.0" prefWidth="200.0" />
-      <HBox alignment="CENTER">
+      <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 4em;" text="Pause">
+         <VBox.margin>
+            <Insets bottom="60.0" />
+         </VBox.margin>
+      </Text>
+      <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
          <children>
             <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
@@ -35,7 +38,7 @@
             <Insets bottom="5.0" top="5.0" />
          </padding>
       </HBox>
-      <HBox alignment="CENTER">
+      <HBox alignment="CENTER" onMouseClicked="#saveButtonAction">
          <children>
             <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
@@ -58,7 +61,7 @@
             <Insets bottom="5.0" top="5.0" />
          </padding>
       </HBox>
-      <HBox alignment="CENTER">
+      <HBox alignment="CENTER" onMouseClicked="#optionButtonAction">
          <children>
             <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
@@ -81,8 +84,7 @@
             <Insets bottom="5.0" top="5.0" />
          </padding>
       </HBox>
-      <Pane prefHeight="200.0" prefWidth="200.0" />
-      <HBox alignment="CENTER">
+      <HBox alignment="CENTER" onMouseClicked="#mainMenuButtonAction">
          <children>
             <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                <HBox.margin>
@@ -105,6 +107,8 @@
             <Insets bottom="5.0" top="5.0" />
          </padding>
       </HBox>
-      <Pane prefHeight="200.0" prefWidth="200.0" />
    </children>
+   <padding>
+      <Insets bottom="40.0" left="20.0" right="20.0" top="40.0" />
+   </padding>
 </VBox>
