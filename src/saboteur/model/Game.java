@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import javafx.scene.input.KeyCombination;
+import saboteur.ai.AI;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
@@ -57,8 +58,117 @@ public class Game {
 
 		this.currentPlayerIndex = this.playerList.size()-1;
 		this.newRound();
+		//this.loadConfig("editeur");
 	}
 
+	public void loadConfig(String name){
+		
+		this.round++;
+		this.turn = 1;
+
+		this.trash = new LinkedList<>();
+		this.stack = this.deck.getCopyOtherCards();
+		Collections.shuffle(this.stack, new Random(Game.seed));
+		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
+		
+		File configFile = new File(Loader.configFolder+ "/" + name + ".config");
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(configFile));
+			String chaine;
+			
+			this.playerList.clear();
+			//To each player
+			while (!(chaine = reader.readLine()).equals("###")){
+				this.playerList.add(createPlayerFromConfig(chaine));
+			}
+			
+			//To each card to play on board
+			while (!(chaine = reader.readLine()).equals("###")){
+				addCardToBoardFromConfig(chaine);
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//this.currentPlayerIndex = this.playerList.size()-1;
+		this.currentPlayerIndex = 1;
+		this.setTeam();
+		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+		this.nextPlayer();
+		System.out.println("Nom = " + this.getCurrentPlayer().name);
+		for (Card firstCard : this.getCurrentPlayer().getHand()){
+			System.out.println("XXX id = " + firstCard.getId());
+			if (firstCard.isPathCard()){
+				PathCard temp = (PathCard) firstCard;
+				System.out.println("XXX id = " + firstCard.getId() + temp.isOpen(Cardinal.NORTH) + temp.isOpen(Cardinal.EAST) + temp.isOpen(Cardinal.SOUTH) + temp.isOpen(Cardinal.WEST));
+			}
+		}
+	}
+
+	private void addCardToBoardFromConfig(String chaine) {
+		String stringCard[] = chaine.split(" ");
+		PathCard cardToAdd = (PathCard) getCard(stringCard[Loader.indexIdCardToPlay]);
+		this.stack.remove(cardToAdd);
+		int posX = Board.START.getcX() + Integer.parseInt(stringCard[Loader.indexPositionX]);
+		int posY = Board.START.getcY() + Integer.parseInt(stringCard[Loader.indexPositionY]);
+		Position position = new Position(posX, posY);
+		if (stringCard[Loader.indexReverseOrNot].equals("R")) cardToAdd.reverse();
+		
+		this.board.addCard(cardToAdd, position);
+	}
+
+	private Player createPlayerFromConfig(String chaine) {
+		Player toAdd;
+		String stringPlayer[] = chaine.split(" ");
+		
+		//Name and type
+		if (stringPlayer[Loader.indexPlayerType].equals("Human")){
+			toAdd = new Human(this, stringPlayer[Loader.indexPlayerName]);
+		} else {
+			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName]);
+		}
+		
+		//Hand
+		ArrayList<Card> hand = new ArrayList<>();
+		int indexHand = Loader.beginIndexPlayerHand;
+		while (!stringPlayer[indexHand].equals(";")){
+			Card cardToAdd = getCard(stringPlayer[indexHand]);
+			this.stack.remove(cardToAdd);
+			hand.add(cardToAdd);
+			
+			indexHand++;
+		}
+		toAdd.setHand(hand);
+		
+		//Handicaps
+		int indexHandicap = indexHand + 1;
+		while (indexHandicap < stringPlayer.length){
+			SabotageCard cardToAdd = (SabotageCard) getCard(stringPlayer[indexHandicap]);
+			this.stack.remove(cardToAdd);
+			toAdd.addHandicapCard(cardToAdd);
+			
+			indexHandicap++;
+		}
+		
+		return toAdd;
+	}
+	
+	private Card getCard(String id){
+		Card firstCard = null;
+		for (Card card : this.stack){
+			if (card.getId() == Integer.parseInt(id)){
+				firstCard = card;
+				break;
+			}
+		}		
+		return firstCard;
+	}
+	
 	public void newRound(){
 		this.round++;
 		this.turn = 1;
@@ -70,9 +180,9 @@ public class Game {
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 
 		this.setTeam();
-		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size()+ " nb joueurs = "+ this.playerList.size());
 		this.dealCardsToPlayer();
-
+		
 		this.nextPlayer();
 	}
 

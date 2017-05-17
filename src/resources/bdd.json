@@ -2,6 +2,7 @@
   "cards": {
     "pathCards": [
       {
+      	"id" : 1,
         "frontImage": "start_card.png",
         "backImage": "goal_card_verso.png",
         "cardinal": [
@@ -16,6 +17,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 2,
         "frontImage": "goal_card_rock_1.png",
         "backImage": "goal_card_verso.png",
         "cardinal": [
@@ -28,6 +30,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 3,
         "frontImage": "goal_card_rock_2.png",
         "backImage": "goal_card_verso.png",
         "cardinal": [
@@ -40,6 +43,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 4,
         "frontImage": "goal_card_gold.png",
         "backImage": "goal_card_verso.png",
         "cardinal": [
@@ -54,6 +58,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 5,
         "frontImage": "path_card_16.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -68,6 +73,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 6,
         "frontImage": "path_card_19.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -82,6 +88,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 7,
         "frontImage": "path_card_18.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -96,6 +103,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 8,
         "frontImage": "path_card_17.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -110,6 +118,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 9,
         "frontImage": "path_card_28.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -124,6 +133,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 10,
         "frontImage": "path_card_36.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -137,6 +147,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 11,
         "frontImage": "path_card_30.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -150,6 +161,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 12,
         "frontImage": "path_card_24.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -163,6 +175,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 13,
         "frontImage": "path_card_37.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -176,6 +189,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 14,
         "frontImage": "path_card_29.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -189,6 +203,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 15,
         "frontImage": "path_card_40.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -202,6 +217,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 16,
         "frontImage": "path_card_34.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -215,6 +231,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 17,
         "frontImage": "path_card_31.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -228,6 +245,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 18,
         "frontImage": "path_card_15.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -241,6 +259,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 19,
         "frontImage": "path_card_32.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -254,6 +273,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 20,
         "frontImage": "path_card_25.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -266,6 +286,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 21,
         "frontImage": "path_card_35.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -278,6 +299,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 22,
         "frontImage": "path_card_26.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -290,6 +312,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 23,
         "frontImage": "path_card_1.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -302,6 +325,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 24,
         "frontImage": "path_card_5.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -314,6 +338,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 25,
         "frontImage": "path_card_3.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -326,6 +351,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 26,
         "frontImage": "path_card_4.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -338,6 +364,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 27,
         "frontImage": "path_card_39.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -350,6 +377,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 28,
         "frontImage": "path_card_23.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -362,6 +390,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 29,
         "frontImage": "path_card_38.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -374,6 +403,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 30,
         "frontImage": "path_card_20.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -386,6 +416,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 31,
         "frontImage": "path_card_21.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -398,6 +429,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 32,
         "frontImage": "path_card_22.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -410,6 +442,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 33,
         "frontImage": "path_card_14.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -422,6 +455,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 34,
         "frontImage": "path_card_33.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -434,6 +468,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 35,
         "frontImage": "path_card_27.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -446,6 +481,7 @@
         "isCulDeSac": false
       },
       {
+      	"id" : 36,
         "frontImage": "path_card_6.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -457,6 +493,7 @@
         "isCulDeSac": true
       },
       {
+      	"id" : 37,
         "frontImage": "path_card_10.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -471,19 +508,8 @@
         "isCulDeSac": true
       },
       {
+      	"id" : 38,
         "frontImage": "path_card_7.png",
-        "backImage": "card_verso.png",
-        "cardinal": [
-          "EAST",
-          "SOUTH"
-        ],
-        "isStart": false,
-        "isGoal": false,
-        "hasGold": false,
-        "isCulDeSac": true
-      },
-      {
-        "frontImage": "path_card_13.png",
         "backImage": "card_verso.png",
         "cardinal": [
           "EAST",
@@ -495,6 +521,20 @@
         "isCulDeSac": true
       },
       {
+      	"id" : 39,
+        "frontImage": "path_card_13.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "EAST",
+          "SOUTH"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
+      },
+      {
+      	"id" : 40,
         "frontImage": "path_card_11.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -506,6 +546,7 @@
         "isCulDeSac": true
       },
       {
+      	"id" : 41,
         "frontImage": "path_card_12.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -518,6 +559,7 @@
         "isCulDeSac": true
       },
       {
+      	"id" : 42,
         "frontImage": "path_card_9.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -531,6 +573,7 @@
         "isCulDeSac": true
       },
       {
+      	"id" : 43,
         "frontImage": "path_card_8.png",
         "backImage": "card_verso.png",
         "cardinal": [
@@ -541,20 +584,37 @@
         "isGoal": false,
         "hasGold": false,
         "isCulDeSac": true
+      },
+      {
+      	"id" : 44,
+        "frontImage": "path_card_2.png",
+        "backImage": "card_verso.png",
+        "cardinal": [
+          "NORTH",
+          "WEST",
+          "EAST"
+        ],
+        "isStart": false,
+        "isGoal": false,
+        "hasGold": false,
+        "isCulDeSac": true
       }
     ],
     "goldCards": [
       {
+      	"id" : 45,
         "frontImage": "gold_card_1.png",
         "value": 1,
         "number": 16
       },
       {
+      	"id" : 46,
         "frontImage": "gold_card_2.png",
         "value": 2,
         "number": 8
       },
       {
+      	"id" : 47,
         "frontImage": "gold_card_3.png",
         "value": 3,
         "number": 4
@@ -562,18 +622,21 @@
     ],
     "sabotageCards": [
       {
+      	"id" : 48,
         "frontImage": "broken_lantern_card.png",
         "backImage": "card_verso.png",
         "type": "LANTERN",
         "number": 3
       },
       {
+      	"id" : 49,
         "frontImage": "broken_cart_card.png",
         "backImage": "card_verso.png",
         "type": "CART",
         "number": 3
       },
       {
+      	"id" : 50,
         "frontImage": "broken_pickaxe_card.png",
         "backImage": "card_verso.png",
         "type": "PICKAXE",
@@ -582,18 +645,21 @@
     ],
     "rescueCards": [
       {
+      	"id" : 51,
         "frontImage": "lantern_card.png",
         "backImage": "card_verso.png",
         "type": "LANTERN",
         "number": 2
       },
       {
+      	"id" : 52,
         "frontImage": "cart_card.png",
         "backImage": "card_verso.png",
         "type": "CART",
         "number": 2
       },
       {
+      	"id" : 53,
         "frontImage": "pickaxe_card.png",
         "backImage": "card_verso.png",
         "type": "PICKAXE",
@@ -602,6 +668,7 @@
     ],
     "doubleRescueCards": [
       {
+      	"id" : 54,
         "frontImage": "pickaxe_cart_card.png",
         "backImage": "card_verso.png",
         "type1": "PICKAXE",
@@ -609,6 +676,7 @@
         "number": 1
       },
       {
+      	"id" : 55,
         "frontImage": "pickaxe_lantern_card.png",
         "backImage": "card_verso.png",
         "type1": "PICKAXE",
@@ -616,6 +684,7 @@
         "number": 1
       },
       {
+      	"id" : 56,
         "frontImage": "lantern_cart_card.png",
         "backImage": "card_verso.png",
         "type1": "CART",
@@ -624,11 +693,13 @@
       }
     ],
     "planCard": {
+    	"id" : 57,
       "frontImage": "plan_card.png",
       "backImage": "card_verso.png",
       "number": 6
     },
     "collapseCard": {
+    	"id" : 58,
       "frontImage": "collapse_card.png",
       "backImage": "card_verso.png",
       "number": 3

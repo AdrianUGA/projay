@@ -4,9 +4,16 @@ import java.io.Serializable;
 
 public abstract class Card implements Cloneable, Serializable{
 
+	//To load config
+	protected int id;
+	
     protected String frontImage;
     protected String backImage;
 
+    public void setId(int id){
+    	this.id = id;
+    }
+    
     public void setFrontImage(String frontImage){
         this.frontImage = frontImage;
     }
@@ -15,6 +22,10 @@ public abstract class Card implements Cloneable, Serializable{
         this.backImage = backImage;
     }
 
+    public int getId(){
+    	return this.id;
+    }
+    
     public String getFrontImage(){
         return this.frontImage;
     }

@@ -17,6 +17,16 @@ import java.util.LinkedList;
 public class Loader {
 
     public final static String savedFolder = ".saves/";
+    public final static String configFolder = ".config/";
+    
+    //To load config :
+    public final static int indexPlayerType = 0;
+    public final static int indexPlayerName = 1;
+    public final static int beginIndexPlayerHand = 3;
+    public final static int indexIdCardToPlay = 0;
+    public final static int indexPositionX = 2;
+    public final static int indexPositionY = 3;
+    public final static int indexReverseOrNot = 4;
 
     public ArrayList<String> loadSavedFile(){
         ArrayList<String> savedFiles = new ArrayList<>();
@@ -51,6 +61,7 @@ public class Loader {
                     cardinal[i] = cardinalObj.getString(i);
                 }
                 PathCard pathCard = new PathCard(cardinal, obj.getBoolean("isCulDeSac"), obj.getBoolean("isStart"), obj.getBoolean("isGoal"), obj.getBoolean("hasGold"));
+                pathCard.setId(obj.getInt("id"));
                 pathCard.setFrontImage(obj.getString("frontImage"));
                 pathCard.setBackImage(obj.getString("backImage"));
                 if(pathCard.isStart()){
@@ -70,6 +81,7 @@ public class Loader {
                 JSONObject obj = (JSONObject) item;
                 for (int i = 0; i < obj.getInt("number"); i++){
                     GoldCard goldCard = new GoldCard(obj.getInt("value"));
+                    goldCard.setId(obj.getInt("id"));
                     goldCard.setFrontImage(obj.getString("frontImage"));
                     goldCards.add(goldCard);
                 }
@@ -81,6 +93,7 @@ public class Loader {
                 JSONObject obj = (JSONObject) item;
                 for (int i = 0; i < obj.getInt("number"); i++){
                     SabotageCard sabotageCard = new SabotageCard(Tool.valueOf(obj.getString("type")));
+                    sabotageCard.setId(obj.getInt("id"));
                     sabotageCard.setFrontImage(obj.getString("frontImage"));
                     sabotageCard.setBackImage(obj.getString("backImage"));
                     otherCards.add(sabotageCard);
@@ -93,6 +106,7 @@ public class Loader {
                 JSONObject obj = (JSONObject) item;
                 for (int i = 0; i < obj.getInt("number"); i++){
                     RescueCard rescueCard = new RescueCard(Tool.valueOf(obj.getString("type")));
+                    rescueCard.setId(obj.getInt("id"));
                     rescueCard.setFrontImage(obj.getString("frontImage"));
                     rescueCard.setBackImage(obj.getString("backImage"));
                     otherCards.add(rescueCard);
@@ -105,6 +119,7 @@ public class Loader {
                 JSONObject obj = (JSONObject) item;
                 for (int i = 0; i < obj.getInt("number"); i++){
                     DoubleRescueCard doubleRescueCard = new DoubleRescueCard(Tool.valueOf(obj.getString("type1")), Tool.valueOf(obj.getString("type2")));
+                    doubleRescueCard.setId(obj.getInt("id"));
                     doubleRescueCard.setFrontImage(obj.getString("frontImage"));
                     doubleRescueCard.setBackImage(obj.getString("backImage"));
                     otherCards.add(doubleRescueCard);
@@ -115,6 +130,7 @@ public class Loader {
             JSONObject planCardObj = cardsObj.getJSONObject("planCard");
             for (int i = 0; i < planCardObj.getInt("number"); i++){
                 PlanCard planCard = new PlanCard();
+                planCard.setId(planCardObj.getInt("id"));
                 planCard.setFrontImage(planCardObj.getString("frontImage"));
                 planCard.setBackImage(planCardObj.getString("backImage"));
                 otherCards.add(planCard);
@@ -124,6 +140,7 @@ public class Loader {
             JSONObject collapseCardObj = cardsObj.getJSONObject("collapseCard");
             for (int i = 0; i < collapseCardObj.getInt("number"); i++){
                 CollapseCard collapseCard = new CollapseCard();
+                collapseCard.setId(planCardObj.getInt("id"));
                 collapseCard.setFrontImage(planCardObj.getString("frontImage"));
                 collapseCard.setBackImage(planCardObj.getString("backImage"));
                 otherCards.add(collapseCard);

@@ -98,7 +98,7 @@ public class NewGameMenuState implements State{
             String playerType = playerBox.getSelectPlayerMenu().getValue();
             Player player;
             if (playerType.equals("Humain")){
-                player = new Human(this.game);
+                player = new Human(this.game, playerName);
             } else{
                 player = new AI(this.game, "temp");
             }

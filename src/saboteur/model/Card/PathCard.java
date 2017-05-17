@@ -73,7 +73,7 @@ public class PathCard extends Card {
 			newOpenSides.add(cardinal.opposite());
 		}
 		this.openSides = newOpenSides;
-		this.isReversed = false;
+		this.isReversed = !this.isReversed;
 		
 	}
 	
