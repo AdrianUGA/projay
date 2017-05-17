@@ -2,10 +2,12 @@ package saboteur.state;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import saboteur.App;
@@ -46,16 +48,18 @@ public class PauseMenuState extends State {
             loader.setLocation(App.class.getResource("/saboteur/view/modalPauseMenu.fxml"));
             loader.setController(this);
             Pane modalPane = loader.load();
-            Scene scene = new Scene(modalPane, Color.TRANSPARENT);
+            Scene scene = new Scene(modalPane, 400, 500, Color.TRANSPARENT);
             this.modalStage.setScene(scene);
+
+            this.modalStage.setX(primaryStage.getWidth()/2d - 400/2d);
+            this.modalStage.setY(primaryStage.getHeight()/2d - 500/2d);
+
+            this.modalStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.modalStage.setX(primaryStage.getWidth()/2 - 200);
-        this.modalStage.setY(primaryStage.getHeight()/2 - 200);
 
-        this.modalStage.show();
     }
 
     @Override

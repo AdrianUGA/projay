@@ -48,16 +48,18 @@ public class SaveGameState extends State {
             loader.setLocation(App.class.getResource("/saboteur/view/modalSave.fxml"));
             loader.setController(this);
             Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout, 400, 400, Color.TRANSPARENT);
+            Scene scene = new Scene(rootLayout, 400, 500, Color.TRANSPARENT);
             this.modalStage.setScene(scene);
+
+            this.modalStage.setX(primaryStage.getWidth()/2d - 400/2d);
+            this.modalStage.setY(primaryStage.getHeight()/2d - 500/2d);
+
+            this.modalStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.modalStage.setX(primaryStage.getWidth() - (primaryStage.getWidth()/2) - 400);
-        this.modalStage.setY(0);
 
-        this.modalStage.show();
     }
 
     @Override
