@@ -151,8 +151,10 @@ public class Game {
             this.stack = (LinkedList<Card>) objectInputStream.readObject();
             this.trash = (LinkedList<Card>) objectInputStream.readObject();
             this.playerList = (LinkedList<Player>) objectInputStream.readObject();
+            if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE PAS");
             this.board = (Board) objectInputStream.readObject();
             this.observers = (LinkedList<Player>) objectInputStream.readObject();
+            if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE");
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -230,6 +232,23 @@ public class Game {
 	
 	public boolean dwarfsWon(){
 		return this.board.goalCardWithGoldIsVisible();
+	}
+	
+	public LinkedList<Player> getWinners(){
+		LinkedList<Player> winners = new LinkedList<>();
+		int maxGold = 0;
+		int currentGold;
+		for (Player current : playerList){
+			currentGold = current.getGold();
+			if (maxGold == currentGold){
+				winners.add(current);
+			} else if (maxGold < currentGold){
+				winners.clear();
+				winners.add(current);
+				maxGold = currentGold;
+			}
+		}
+		return winners;
 	}
 	
 	public LinkedList<Player> getPlayers(ActionCardToPlayer card){
@@ -421,15 +440,4 @@ public class Game {
 		}
 	}
 
-	public Player getWinner() {
-		int maxGold = 0;
-		Player winner = null;
-		for(Player p : this.playerList){
-			if(p.getGold()>maxGold){
-				maxGold = p.getGold();
-				winner = p;
-			}
-		}
-		return winner;
-	}
 }
