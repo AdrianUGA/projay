@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import saboteur.model.Board;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
@@ -70,18 +71,26 @@ public abstract class DwarfAI {
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(OperationPathCard currentOp : allOperationsForThisCard){
+						//Débugage
 						if(currentOp.getReversed())
 							System.out.println("Pour la carte " + ((PathCard)currentOp.getCard()).reversed() + " !R");
 						else
 							System.out.println("Pour la carte " + (PathCard)currentOp.getCard());
+						//
 						Position currentPos = currentOp.getP();
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						System.out.println("Position gold = (" + goldCardPosition.getcX()+","+goldCardPosition.getcY() +") Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY() + " Distance min = " + distanceMin + " distanceDifference = " + distanceDifference);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
+							System.out.println("Avant = " +artificialIntelligence.getGame().getBoard().amountOfCards());;
+							artificialIntelligence.getGame().getBoard().temporarAddCard((PathCard) currentOp.getCard(), currentOp.getP());
+							System.out.println("Pendant = " +artificialIntelligence.getGame().getBoard().amountOfCards());
+							artificialIntelligence.getGame().getBoard().removeCard(currentOp.getP());
+							System.out.println("Après1 = " +artificialIntelligence.getGame().getBoard().amountOfCards());
 							artificialIntelligence.operationsWeight.put(currentOp, 
 									(float) (Coefficients.DWARF_DISTANCE_PATHCARD_EASY + distanceDifference 
 									- ((PathCard) currentOp.getCard()).openSidesAmount()/5) * Coefficients.DWARF_PATHCARD_EASY);
+							
 						}else{
 							// Trash
 							artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);

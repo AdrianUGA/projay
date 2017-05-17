@@ -61,6 +61,19 @@ public class Board implements Serializable {
 		//this.childrenDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
 	}
+	
+	//Used by AI to test what happens if it put a card somewhere
+	//So we don't want goal cards to be shown
+	public void temporarAddCard(PathCard card, Position position){
+		if(card == null)
+			return;
+		if(card.isGoal())
+			this.objectiveCards.add(position);
+		else
+			this.pathCardsPosition.put(position, card);
+		
+		this.board[position.getcY()][position.getcX()] = card;
+	}
 
 	public void removeCard(Position position){
 		if(this.getCard(position).isGoal())
@@ -351,5 +364,10 @@ public class Board implements Serializable {
 
 	public static int getGridSize() {
 		return GRID_SIZE;
+	}
+	
+	//TODO Remove this method, just needed it for test
+	public int amountOfCards(){
+		return this.pathCardsPosition.size();
 	}
 }

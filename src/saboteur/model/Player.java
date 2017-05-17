@@ -49,6 +49,7 @@ public abstract class Player implements Serializable {
 		game.register(this);
 		this.handicaps = new ArrayList<SabotageCard>();
 		this.name = name;
+		this.gold = new ArrayList<GoldCard>();
 	}
 	
 	public void playCard(Card card){

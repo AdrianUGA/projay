@@ -440,15 +440,4 @@ public class Game {
 		}
 	}
 
-	public Player getWinner() {
-		int maxGold = 0;
-		Player winner = null;
-		for(Player p : this.playerList){
-			if(p.getGold()>maxGold){
-				maxGold = p.getGold();
-				winner = p;
-			}
-		}
-		return winner;
-	}
 }
