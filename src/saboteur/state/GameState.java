@@ -68,13 +68,15 @@ public class GameState implements State{
     public void update() {
         if (this.game.gameIsFinished()){
             //fin de la partie
-            if(game.dwarfsWon())System.out.println("Nains ont gagné");
             //this.gsm.change("annonce vainqueur");
+        	if(game.dwarfsWon())System.out.println("Nains ont gagné");
+        	//System.out.println("Le joueur "+this.game.getWinner().getName()+" a gagné ! (Avec "+this.game.getWinner().getGold()+ " or).");
             //System.out.println("fin de partie");
         } else {
             if (this.game.roundIsFinished()){
                 //fin de la manche
                 //Distribution des cartes gold
+            	if(game.dwarfsWon())System.out.println("Nains ont gagné");
                 this.game.newRound();
             } else{
                 //la manche continue
