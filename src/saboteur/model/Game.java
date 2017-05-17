@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-import saboteur.ai.AI;
+import javafx.scene.input.KeyCombination;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
@@ -15,7 +15,7 @@ public class Game {
 	private int currentPlayerIndex; //TO SAVE
 	private int round; //TO SAVE
 	private int turn; //TO SAVE
-	public final static long seed = 123456789;
+	public final static long seed = 223456789;
 
 	private final Deck deck;//NOT TO SAVE
 
@@ -151,8 +151,10 @@ public class Game {
             this.stack = (LinkedList<Card>) objectInputStream.readObject();
             this.trash = (LinkedList<Card>) objectInputStream.readObject();
             this.playerList = (LinkedList<Player>) objectInputStream.readObject();
+            if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE PAS");
             this.board = (Board) objectInputStream.readObject();
             this.observers = (LinkedList<Player>) objectInputStream.readObject();
+            if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE");
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -230,6 +232,23 @@ public class Game {
 	
 	public boolean dwarfsWon(){
 		return this.board.goalCardWithGoldIsVisible();
+	}
+	
+	public LinkedList<Player> getWinners(){
+		LinkedList<Player> winners = new LinkedList<>();
+		int maxGold = 0;
+		int currentGold;
+		for (Player current : playerList){
+			currentGold = current.getGold();
+			if (maxGold == currentGold){
+				winners.add(current);
+			} else if (maxGold < currentGold){
+				winners.clear();
+				winners.add(current);
+				maxGold = currentGold;
+			}
+		}
+		return winners;
 	}
 	
 	public LinkedList<Player> getPlayers(ActionCardToPlayer card){
@@ -420,4 +439,5 @@ public class Game {
 			aPlayerList.setTeam(role);
 		}
 	}
+
 }

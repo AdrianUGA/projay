@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import saboteur.model.Card.*;
 
 public abstract class Player implements Serializable {
+
+	private static final long serialVersionUID = -7234436527409826249L;
 	protected Card selectedCard; //NOT TO SAVE
 	protected String name; //TO SAVE
 	protected ArrayList<SabotageCard> handicaps; //TO SAVE
@@ -47,6 +49,7 @@ public abstract class Player implements Serializable {
 		game.register(this);
 		this.handicaps = new ArrayList<SabotageCard>();
 		this.name = name;
+		this.gold = new ArrayList<GoldCard>();
 	}
 	
 	public void playCard(Card card){

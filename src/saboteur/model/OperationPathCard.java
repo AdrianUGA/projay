@@ -74,7 +74,7 @@ public class OperationPathCard extends Operation {
 		return super.equals(obj) && o.getP() == this.getP() && o.getReversed() == this.getReversed();
 	}
 
-	private Object getReversed() {
+	public boolean getReversed() {
 		return this.reversed;
 	}
 
