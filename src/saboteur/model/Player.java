@@ -211,4 +211,8 @@ public abstract class Player implements Serializable {
 				&& p.getHandicaps().equals(this.handicaps);
 	}
 
+	public void resetHandicaps() {
+		this.handicaps.clear();
+	}
+
 }
