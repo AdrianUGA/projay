@@ -48,18 +48,16 @@ public class PauseMenuState extends State {
             loader.setLocation(App.class.getResource("/saboteur/view/modalPauseMenu.fxml"));
             loader.setController(this);
             Pane modalPane = loader.load();
-            Scene scene = new Scene(modalPane, 400, 500, Color.TRANSPARENT);
+            Scene scene = new Scene(modalPane, 900, primaryStage.getHeight(), Color.TRANSPARENT);
             this.modalStage.setScene(scene);
 
-            this.modalStage.setX(primaryStage.getWidth()/2d - 400/2d);
-            this.modalStage.setY(primaryStage.getHeight()/2d - 500/2d);
+            this.modalStage.setX(primaryStage.getWidth()/2d - 900/2d);
+            this.modalStage.setY(0);
 
             this.modalStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -80,7 +78,7 @@ public class PauseMenuState extends State {
 
     @FXML
     private void optionButtonAction(){
-        
+
     }
 
     @FXML

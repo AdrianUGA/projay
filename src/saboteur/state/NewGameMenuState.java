@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -24,6 +25,9 @@ import saboteur.view.NewPlayerHBox;
 public class NewGameMenuState extends State{
 	
 	@FXML private VBox playerContainer;
+	@FXML private Button addPlayerButton;
+
+
 	
 	private int nbPlayer = 3;
 
@@ -77,9 +81,13 @@ public class NewGameMenuState extends State{
 					Pane p = (Pane)event.getSource();
                     NewPlayerHBox h = (NewPlayerHBox)p.getParent();
 					playerContainer.getChildren().remove(h);
+                    addPlayerButton.setDisable(false);
 			    }
 			};
         	addPlayer(nbPlayer, false, deleteEvent);
+        	if (nbPlayer == 10){
+        	    addPlayerButton.setDisable(true);
+            }
     	}
     }
     
