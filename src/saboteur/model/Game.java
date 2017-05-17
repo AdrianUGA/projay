@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
+import javafx.scene.input.KeyCombination;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
@@ -418,5 +419,17 @@ public class Game {
 			Team role = team.remove(0);
 			aPlayerList.setTeam(role);
 		}
+	}
+
+	public Player getWinner() {
+		int maxGold = 0;
+		Player winner = null;
+		for(Player p : this.playerList){
+			if(p.getGold()>maxGold){
+				maxGold = p.getGold();
+				winner = p;
+			}
+		}
+		return winner;
 	}
 }

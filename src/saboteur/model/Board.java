@@ -176,7 +176,28 @@ public class Board implements Serializable {
 		return possiblePlaces;
 	}
 	
-	//TODO
+	/* Returns every free positions for a PathCard*/
+	public Set<Position> getPossiblePositionPathCard(PathCard card){
+		Set<Position> possiblePlaces = new HashSet<Position>();
+		
+		for(PathCard pathCard : this.pathCardsPosition.values()){
+			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
+				
+				if (this.getCard(neighbor) != null)
+					continue;
+				
+				if(card == null){
+					System.err.println("Carte null ! (getPossiblePositionPathCard)");
+				}else if(this.isPossible(card, neighbor)){
+					possiblePlaces.add(neighbor);
+				}else if(this.isPossible(card.reversed(), neighbor)){
+					possiblePlaces.add(neighbor);
+				}
+			}
+		}
+		return possiblePlaces;
+	}
+	
 	private boolean canPutAPathCardThere(Position pos) {
 		int amountOfComingNeighbor = 0;
 		int amountOfAvailableNeighbor = 0;
