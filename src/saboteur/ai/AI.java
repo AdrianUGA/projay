@@ -38,6 +38,9 @@ public class AI extends Player {
 	}
 	
 	public void initializeAI(){
+		this.operationsWeight.clear();
+		this.isDwarf.clear();
+		this.estimatedGoldCardPosition.clear();
 		//Initialize estimated gold card position
 		for (Position position : game.getBoard().getGoalCards()){
 			this.estimatedGoldCardPosition.put(position, 1f/3f);
