@@ -2,6 +2,7 @@ package saboteur.state;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -117,10 +118,10 @@ public class GameState implements State{
 
     	//Début du bloc à commenter
     	
-    	this.game.getPlayerList().clear();
-    	this.game.addPlayer(new AI(this.game, "Yves"));
-    	this.game.addPlayer(new AI(this.game, "Philippe"));
-    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
+//    	this.game.getPlayerList().clear();
+//    	this.game.addPlayer(new AI(this.game, "Yves"));
+//    	this.game.addPlayer(new AI(this.game, "Philippe"));
+//    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
 		
     	//Fin du bloc à commenter
     	
@@ -291,15 +292,16 @@ public class GameState implements State{
     		if(this.selectedCard.isPathCard()) {
     			
     		}
-//        	
-//        	
-//        	
-//    		if(this.selectedCard.isPlanCard()) {
-//    			
-//    		}
-//    		if(this.selectedCard.isCollapseCard()) {
-//    			
-//    		}
+    		
+    		if(this.selectedCard.isPlanCard()) {
+    			List<Position> goalCards = this.game.getBoard().getGoalCards();
+    			for (Position posiCard : goalCards) {
+    			}
+    		}
+    		
+    		if(this.selectedCard.isCollapseCard()) {
+    			
+    		}
         }
     	else {
             System.out.println("hBox! " + event.getTarget());
