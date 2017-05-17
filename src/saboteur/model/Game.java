@@ -101,14 +101,14 @@ public class Game {
 		this.setTeam();
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
 		this.nextPlayer();
-		System.out.println("Nom = " + this.getCurrentPlayer().name);
+		/*System.out.println("Nom = " + this.getCurrentPlayer().name);
 		for (Card firstCard : this.getCurrentPlayer().getHand()){
 			System.out.println("XXX id = " + firstCard.getId());
 			if (firstCard.isPathCard()){
 				PathCard temp = (PathCard) firstCard;
 				System.out.println("XXX id = " + firstCard.getId() + temp.isOpen(Cardinal.NORTH) + temp.isOpen(Cardinal.EAST) + temp.isOpen(Cardinal.SOUTH) + temp.isOpen(Cardinal.WEST));
 			}
-		}
+		}*/
 	}
 
 	private void addCardToBoardFromConfig(String chaine) {
