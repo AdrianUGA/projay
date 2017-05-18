@@ -43,6 +43,8 @@ public class OperationActionCardToPlayer extends Operation {
 				break;
 			default:
 		}
+		
+		game.notify(this);
 	}
 	
 	@Override

@@ -32,6 +32,7 @@ public class Game {
 	
 	private boolean teamWinnerAlreadyAnnounced;
 	private boolean playerWinnerAlreadyAnnounced;
+	private boolean roundFinished;
 
 	private LinkedList<Player> observers;
 
@@ -49,6 +50,10 @@ public class Game {
 	public void playOperation(Operation op){
 		this.history.add(op);
 		op.exec(this);
+		if ( (this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers()) && !this.roundFinished){
+			dealGold();
+			this.roundFinished = true;
+		}
 	}
 
 	public void newGame(){
@@ -67,6 +72,7 @@ public class Game {
 
 	public void loadConfig(String name){
 		this.playerWinnerAlreadyAnnounced = false;
+		this.roundFinished = false;
 		this.round++;
 		this.turn = 1;
 
@@ -185,6 +191,7 @@ public class Game {
 	
 	public void newRound(){
 		this.teamWinnerAlreadyAnnounced = false;
+		this.roundFinished = false;
 		this.round++;
 		this.turn = 1;
 
@@ -314,7 +321,7 @@ public class Game {
 	}
 	
 	public boolean roundIsFinished(){
-		return this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers();
+		return this.roundFinished;
 	}
 
 	private boolean emptyHandsPlayers() {
@@ -347,7 +354,8 @@ public class Game {
 	
 	public void notify(Operation operation){
 		for(Player player: this.observers){
-			player.notify(operation);
+			if(player.isAI())
+				((AI) player).notify(operation);
 		}
 	}
 	
@@ -417,6 +425,7 @@ public class Game {
 			GoldCard goldCard;
 			int currentNumber = this.currentPlayerIndex;
 			int nbCardsDealt = 0;
+			System.out.println("Nb joueurs : " + playerList);
 			while (nbCardsDealt < (playerList.size()%9)){
 				current = playerList.get(currentNumber);
 				if (current.getTeam() == Team.DWARF){
@@ -639,5 +648,9 @@ public class Game {
 			return 4;
 		}
 		return 0; // should never happen
+	}
+
+	public LinkedList<Player> getObservers() {
+		return observers;
 	}
 }

@@ -107,7 +107,12 @@ public class GameState extends State{
 			if (winners.size()>1){
 				System.out.print("Les joueurs ");
 				for (Player p : winners){
-					System.out.print(p.getName() + " ");
+					if (winners.indexOf(p) == winners.size()-2)
+						System.out.print(p.getName() + " et ");
+					else if (winners.indexOf(p) == winners.size()-1)
+						System.out.print(p.getName() + " ");
+					else
+						System.out.print(p.getName() + ", ");
 				}
 				System.out.print("sont gagnants ex aequo ");
 			} else {
@@ -152,10 +157,12 @@ public class GameState extends State{
     	//Début du bloc à commenter
     	
     	this.game.getPlayerList().clear();
+    	this.game.getObservers().clear();
+    	
     	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY));
     	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY));
     	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY));
-		
+    	
     	//Fin du bloc à commenter
     	
         this.game.newGame();

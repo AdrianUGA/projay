@@ -62,19 +62,13 @@ public class AI extends Player {
 
 	@Override
 	public void notify(Operation o){
-		switch(o.getClass().getName()){
-		case "saboteur.model.Operation.OperationActionCardToBoard":
+		if(o.isOperationActionCardToBoard())
 			updateTrust((OperationActionCardToBoard) o);
-			break;
-		case "saboteur.model.Operation.OperationActionCardToPlayer":
+		else if(o.isOperationActionCardToPlayer())
 			updateTrust((OperationActionCardToPlayer) o);
-			break;
-		case "saboteur.model.Operation.OperationPathCard":
+		else if(o.isOperationPathCard())
 			updateTrust((OperationPathCard) o);
-			break;
-		default:
-			//System.err.println("Opération non reconnue");
-		}
+		else System.err.println("Opération non reconnue");
 	}
 
 	// Plan & Collapse card
@@ -355,7 +349,7 @@ public class AI extends Player {
 		//System.out.println("It now has " + hand.size() + " cards");
 	}
 	
-	public Operation selectOperation(){
+	protected Operation selectOperation(){
 		resetProbabilitiesToPlayEachOperation();
 		switch(this.team){
 		case DWARF:
@@ -392,8 +386,17 @@ public class AI extends Player {
 		this.estimatedGoldCardPosition.put(p, 0f);
 	}
 
-	public Map<Player,Float> getIsDwarf(){
+	protected Map<Player,Float> getIsDwarf(){
 		return this.isDwarf;
+	}
+
+	protected boolean canPlayThere(Position position) {
+		for(Card card : this.hand){
+			if(card.isPathCard()){
+				if(this.getGame().getBoard().isPossible((PathCard) card, position)) return true;
+			}
+		}
+		return false;
 	}
 	
 }

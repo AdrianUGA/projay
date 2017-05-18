@@ -40,5 +40,7 @@ public class Coefficients {
 	public static int DWARF_RESCUE_HARD = 20;
 	public static int DWARF_DOUBLERESCUE_HARD = 19;
 	public static int DWARF_PLAN_HARD = 150;
+	public static int DWARF_COLLAPSE_CAN_REPLACE_HARD = 40;
+	public static int DWARF_COLLAPSE_CDS_HARD = 25;
 	
 }
