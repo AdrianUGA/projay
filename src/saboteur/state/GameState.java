@@ -3,16 +3,13 @@ package saboteur.state;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -31,12 +28,7 @@ import saboteur.model.Board;
 import saboteur.model.Game;
 import saboteur.model.Player;
 import saboteur.model.Position;
-import saboteur.model.Card.ActionCardToPlayer;
-import saboteur.model.Card.Card;
-import saboteur.model.Card.DoubleRescueCard;
 import saboteur.model.Card.PathCard;
-import saboteur.model.Card.RescueCard;
-import saboteur.model.Card.SabotageCard;
 import saboteur.tools.Icon;
 import saboteur.tools.Resources;
 import saboteur.view.PlayerArc;
@@ -51,10 +43,6 @@ public class GameState extends State{
 	private FXMLLoader loader;
 	
 	private PlayerArc[] playersArc;
-	private ImageView[] handCardsImages = new ImageView[6];
-	private Card selectedCard = null;
-	private ImageView imgSelectedCard = new ImageView();
-	private List<Object> boardEffect;
 	private Resources resources = new Resources();
 	private HashMap<String, Image> allCards;
 	
@@ -183,7 +171,7 @@ public class GameState extends State{
             this.loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
             this.loader.setController(this);
             Pane pane = this.loader.load();
-
+            
             this.playersArc = new PlayerArc[this.game.getPlayerList().size()];
             //Take size of screen
             Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
@@ -193,14 +181,6 @@ public class GameState extends State{
 
             //For center cards hand Image
             this.cardContainer.setPrefWidth(gameTableSize);
-            for(int i = 0; i < 6; i++) {
-            	this.handCardsImages[i] = new ImageView();
-            	this.handCardsImages[i].setFitWidth(108);
-            	this.handCardsImages[i].setFitHeight(166);
-            	this.cardContainer.getChildren().add(this.handCardsImages[i]);
-            }
-            generateHandCardImage(); 
-            
             
             //Create the goal card for the planCardActcion
             this.goalCardContainer.setPrefSize(gameTableSize, gameTableSize);
@@ -227,6 +207,7 @@ public class GameState extends State{
             generateBoard();
 	        this.boardGridPane.setLayoutX(XstartInner);
 	        this.boardGridPane.setLayoutY(YstartInner);
+            this.boardGridPane.setId("boardGridPane");
             this.boardContainer.getChildren().add(this.boardGridPane);
             
             //Create Specific arc for first player
@@ -270,170 +251,15 @@ public class GameState extends State{
     private void optionsButtonAction(){
         this.gsm.push("pauseMenu");
     }
-    
-    @FXML void selectCardButtonAction(MouseEvent event) {
-    	ImageView newCard = null;
-    	HBox hb= (HBox)event.getSource();    	
-    	if (event.getTarget() != this.cardContainer) {
-    		
-        	newCard = (ImageView)event.getTarget();
-            
-            if(!newCard.equals(this.imgSelectedCard)) {
-        		cancelPreviousSelection();
-        		
-            	//style on the image of the selected card
-//        		this.imgSelectedCard.setStyle(null);
-        		this.imgSelectedCard = newCard;
-        		this.imgSelectedCard.setStyle("-fx-effect : dropshadow(gaussian, black, 2, 2, 2, 2);");
-        		
-        		//take the ref. of the card.
-	        	int i = 0;
-	        	for(Node nodeIn:hb.getChildren()) {
-	                if(((ImageView)nodeIn).equals(event.getTarget())){
-	                	this.selectedCard = this.game.getCurrentPlayer().getHand().get(i);
-	                }
-	                else {
-	                	i++;
-	                }
-	            }
-	        	        	
-	        	if(this.selectedCard.isSabotageCard()) {
-	        		ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
-	        		int sabotage = ((SabotageCard)this.selectedCard).getTool().getValue();
-	        		for(PlayerArc player : this.playersArc) {
-	        			for(Player p : this.game.getPlayers(card)) {
-	        				if(p == player.getPlayer()) {
-	        					player.getCircle()[sabotage].setStroke(Color.RED);
-	        					break;
-	        				}
-	        			}
-	        		}
-	    		}
-	        	
-	    		if(this.selectedCard.isRescueCard()) {
-	    			ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
-	    			int rescue = ((RescueCard)this.selectedCard).getTool().getValue();
-	    			for(PlayerArc player : this.playersArc) {
-	        			for(Player p : this.game.getPlayers(card)) {
-	        				if(p == player.getPlayer()) {
-	        					player.getCircle()[rescue].setStroke(Color.GREEN);
-	        					break;
-	        				}
-	        			}
-	        		}
-	    		}
-	        	
-	        	//TODO : A revoir ici
-	    		if(this.selectedCard.isDoubleRescueCard()) {
-	    			ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
-	    			int sabotage1 = ((DoubleRescueCard)this.selectedCard).getTool1().getValue();
-	    			int sabotage2 = ((DoubleRescueCard)this.selectedCard).getTool2().getValue();
-	    			
-	    			for(PlayerArc player : this.playersArc) {
-	        			for(Player p : this.game.getPlayers(card)) {
-	        				if(p == player.getPlayer()) {
-	        					player.getCircle()[sabotage1].setStroke(Color.GREEN);
-	        					player.getCircle()[sabotage2].setStroke(Color.GREEN);
-	        					break;
-	        				}
-	        			}
-	        		}
-	    		}
-	        	
-	        	
-	    		if(this.selectedCard.isPathCard()) {
-	    			PathCard card = (PathCard) this.selectedCard;
-	    			List<Position> possiblePositionList = this.game.getBoard().getPossiblePositionPathCard(card);
-	    			this.boardEffect = new LinkedList<>();
-	    			for(Position posiCard : possiblePositionList) {
-	    				SVGPath svg = new SVGPath();
-						svg.setFill(Color.GREEN);
-						svg.setContent(Icon.plus);
-						GridPane.setHalignment(svg, HPos.CENTER);
-						this.boardEffect.add(svg);
-						this.boardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
-	    			}
-	    		}
-	    		
-	    		if(this.selectedCard.isCollapseCard()) {
-	    			List<Position> cantCollaps = this.game.getBoard().getGoalCards();
-	    			cantCollaps.add(Board.START);
-
-	    			this.boardEffect = new LinkedList<>();
-	    			boolean cancollaps;
-	    			//For all Posi between xmin/xman and ymin/ymax
-	    			for(int x = this.xmin; x < this.xmax; x++) {
-	    				for(int y = this.xmin; y < this.ymax; y++) {
-	    					cancollaps = true;
-	    					Position posiCard = new Position(x, y);
-	    					// if the position have card
-	    					if(this.game.getBoard().getCard(posiCard) != null) {
-	    						// Search if the card is a goal card or the start card
-	    						for(Position p : cantCollaps) {
-	    							if(posiCard.getcX() == p.getcX() && posiCard.getcY() == p.getcY()) {
-	    								cancollaps = false;
-	    							}
-	    						}
-	    						// if it's not one of this card :
-	    						if(cancollaps) {
-	    							SVGPath svg = new SVGPath();
-	    							svg.setFill(Color.RED);
-	    							svg.setContent(Icon.minus);
-	    							GridPane.setHalignment(svg, HPos.CENTER);
-	    							this.boardEffect.add(svg);
-	    							this.boardGridPane.add(svg, x, y);
-	    						}
-	    					}
-	    				}
-	    			}
-	    		}
-	    		
-	    		if(this.selectedCard.isPlanCard()) {
-	                this.gameBoard.toFront();
-	                this.goalCardContainer.toFront();
-                	this.goalCardContainer.setVisible(true);
-	    		}
-            }
-        }
-    }
-    
-    private void cancelPreviousSelection() {
-
-    	if(this.selectedCard != null) {
-			if(this.selectedCard.isRescueCard() || this.selectedCard.isDoubleRescueCard() || this.selectedCard.isSabotageCard()) {
-				for(PlayerArc player : this.playersArc) {
-					for(int i = 0; i < 3; i++) {
-						player.getCircle()[i].setStroke(Color.BLACK);
-					}
-	    		}
-			}
-			if(this.selectedCard.isCollapseCard() || this.selectedCard.isPathCard()) {
-				for(Object obj : this.boardEffect) {
-					this.boardGridPane.getChildren().remove(obj);
-				}
-				this.boardEffect = null;
-			}
-			
-			if(this.selectedCard.isPlanCard()) {
-	            this.gameBoard.toBack();
-	            this.goalCardContainer.setVisible(false);
-			}
-			
-			this.imgSelectedCard.setStyle(null);
-			this.imgSelectedCard = null;
-			this.selectedCard = null;
-    	}
-	}
-
+        
 	private void addPlayerOnTheBoard(double sizeOfArc, double center, double length, double startAngle, int idPlayer){
     	this.playersArc[idPlayer] = new PlayerArc(sizeOfArc, center, length, startAngle, this.game.getPlayerList().get(idPlayer));
+    	
+    	String name = this.game.getPlayerList().get(idPlayer).getName()+idPlayer;
+    	name = name.replaceAll("\\s+","");
+    	this.playersArc[idPlayer].setId(name);
+    	
     	this.boardContainer.getChildren().add(this.playersArc[idPlayer]);
-    }
-    
-    private void generateHandCardImage() {
-    	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
-        	this.handCardsImages[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getFrontImage()));
-        }
     }
     
     private void generateBoard() {
@@ -502,6 +328,5 @@ public class GameState extends State{
 			dx = x * (ymax-ymin+1);
 		}
 		return dx + y;
-    	
     }
 }
