@@ -2,6 +2,7 @@ package saboteur.state;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -61,14 +62,13 @@ public class GameState extends State{
         if (this.game.gameIsFinished()){
             //fin de la partie
             //this.gsm.change("annonce vainqueur");
-        	if(game.dwarfsWon())System.out.println("Nains ont gagné");
+        	announceTeamWinner();
+        	announcePlayerWinner();
         	//System.out.println("Le joueur "+this.game.getWinner().getName()+" a gagné ! (Avec "+this.game.getWinner().getGold()+ " or).");
             //System.out.println("fin de partie");
         } else {
             if (this.game.roundIsFinished()){
-                //fin de la manche
-                //Distribution des cartes gold
-            	if(game.dwarfsWon())System.out.println("Nains ont gagné");
+                announceTeamWinner();
                 this.game.newRound();
             } else{
                 //la manche continue
@@ -86,6 +86,33 @@ public class GameState extends State{
             }
         }
     }
+
+    //For console mode
+    private void announcePlayerWinner() {
+		if (!this.game.isPlayerWinnerAlreadyAnnounced()){
+			LinkedList<Player> winners =  this.game.getWinners();
+			if (winners.size()>1){
+				System.out.print("Les joueurs ");
+				for (Player p : winners){
+					System.out.print(p.getName() + " ");
+				}
+				System.out.print("sont gagnants ex aequo ");
+			} else {
+				System.out.print(winners.getFirst() + " a gagné la partie ");
+			}
+			System.out.println("avec " + winners.getFirst().getGold() + " pépites d'or !");
+			this.game.setPlayerWinnerAlreadyAnnounced(true);
+		}
+	}
+
+	//For console mode
+	private void announceTeamWinner() {
+		if (!this.game.isTeamWinnerAlreadyAnnounced()){
+			if(this.game.dwarfsWon()) System.out.println("Les nains ont gagné !");
+			else System.out.println("Les saboteurs ont gagné !");
+			this.game.setTeamWinnerAlreadyAnnounced(true);
+		}
+	}
 
     @Override
     public void render() {

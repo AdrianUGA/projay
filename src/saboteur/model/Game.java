@@ -31,6 +31,9 @@ public class Game {
 
 	private Board board;//TO SAVE
 	
+	private boolean teamWinnerAlreadyAnnounced;
+	private boolean playerWinnerAlreadyAnnounced;
+
 	private LinkedList<Player> observers;
 
 	public Game(){
@@ -50,6 +53,7 @@ public class Game {
 	}
 
 	public void newGame(){
+		this.teamWinnerAlreadyAnnounced = false;
 		this.round = 0;
 
 		this.goldCardStack = this.deck.getCopyGoldCards();
@@ -63,7 +67,7 @@ public class Game {
 	}
 
 	public void loadConfig(String name){
-		
+		this.playerWinnerAlreadyAnnounced = false;
 		this.round++;
 		this.turn = 1;
 
@@ -171,6 +175,7 @@ public class Game {
 	}
 	
 	public void newRound(){
+		this.teamWinnerAlreadyAnnounced = false;
 		this.round++;
 		this.turn = 1;
 
@@ -408,6 +413,7 @@ public class Game {
 				if (current.getTeam() == Team.DWARF){
 					goldCard = goldCardStack.removeFirst();
 					current.addGold(goldCard);
+					System.out.println("On ajoute une carte de valeur "+goldCard.getValue()+" au joueur " + current.getName());
 					nbCardsDealt++;
 				}
 				currentNumber = (currentNumber+1)%playerList.size();
@@ -443,6 +449,7 @@ public class Game {
 				if (current.getTeam() == Team.SABOTEUR){
 					for (GoldCard card : getCardsToValue(valueToDeal)){
 						current.addGold(card);
+						System.out.println("On ajoute une carte de valeur "+card.getValue()+" au joueur " + current.getName());
 					}
 				}
 			}
@@ -561,6 +568,22 @@ public class Game {
 			Team role = team.remove(0);
 			aPlayerList.setTeam(role);
 		}
+	}
+	
+	public boolean isTeamWinnerAlreadyAnnounced() {
+		return teamWinnerAlreadyAnnounced;
+	}
+
+	public void setTeamWinnerAlreadyAnnounced(boolean teamWinnerAlreadyAnnounced) {
+		this.teamWinnerAlreadyAnnounced = teamWinnerAlreadyAnnounced;
+	}
+
+	public boolean isPlayerWinnerAlreadyAnnounced() {
+		return playerWinnerAlreadyAnnounced;
+	}
+
+	public void setPlayerWinnerAlreadyAnnounced(boolean playerWinnerAlreadyAnnounced) {
+		this.playerWinnerAlreadyAnnounced = playerWinnerAlreadyAnnounced;
 	}
 
 }
