@@ -1,5 +1,9 @@
 package saboteur.model.Card;
 
+import java.util.Random;
+
+import saboteur.model.Game;
+
 public class DoubleRescueCard extends ActionCardToPlayer {
 
 	private static final long serialVersionUID = -1679910142473555687L;
@@ -52,4 +56,9 @@ public class DoubleRescueCard extends ActionCardToPlayer {
 	public void displayCardType(){
     	System.out.println("DoubleRescueCard");
     }
+	
+	public Tool getOneOfTheTwoType(){
+		Random r = new Random(Game.seed);
+		return (r.nextInt(2) == 0 ? getRescueType1() : getRescueType2());
+	}
 }

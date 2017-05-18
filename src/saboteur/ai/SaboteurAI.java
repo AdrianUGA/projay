@@ -16,6 +16,7 @@ import saboteur.model.Position;
 import saboteur.model.Card.DoubleRescueCard;
 import saboteur.model.Card.PathCard;
 import saboteur.model.Card.RescueCard;
+import saboteur.model.Card.SabotageCard;
 
 public abstract class SaboteurAI {
 	
@@ -40,6 +41,7 @@ public abstract class SaboteurAI {
 			case "saboteur.model.Card.RescueCard":
 				if(artificialIntelligence.canRescue((RescueCard)o.getCard())){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
+					((OperationActionCardToPlayer) o).setToolDestination(((RescueCard)o.getCard()).getRescueType());
 					artificialIntelligence.operationsWeight.put(o, 
 						(float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) 
 						* Coefficients.SABOTEUR_RESCUE_EASY);
@@ -51,6 +53,15 @@ public abstract class SaboteurAI {
 			case "saboteur.model.Card.DoubleRescueCard":
 				if(artificialIntelligence.canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard())){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
+					if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1()) && artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType2())){
+						((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getOneOfTheTwoType());
+					}
+					else if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1())){
+						((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getRescueType1());
+					}
+					else{
+						((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getRescueType2());
+					}
 					artificialIntelligence.operationsWeight.put(o, 
 						(float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) 
 						* Coefficients.SABOTEUR_DOUBLERESCUE_EASY);
@@ -61,10 +72,15 @@ public abstract class SaboteurAI {
 				break;
 			case "saboteur.model.Card.SabotageCard":
 				Player p = artificialIntelligence.mostLikelyADwarf();
-				((OperationActionCardToPlayer) o).setDestinationPlayer(p);
-				artificialIntelligence.operationsWeight.put(o, 
-					(float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) 
-					* Coefficients.SABOTEUR_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
+				if(artificialIntelligence.isDwarf.get(p) >= Coefficients.SABOTEUR_LIMIT_ESTIMATED_DWARF_EASY && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
+					((OperationActionCardToPlayer) o).setDestinationPlayer(p);
+					artificialIntelligence.operationsWeight.put(o, 
+						(float) (artificialIntelligence.positiveOrZero(artificialIntelligence.isDwarf.get(p) - artificialIntelligence.AVERAGE_TRUST) 
+						* Coefficients.SABOTEUR_SABOTAGE_EASY) * ((float)(3-p.getHandicaps().size())/3));
+				}
+				else{
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
+				}
 				break;
 			case "saboteur.model.Card.PathCard":
 				if(artificialIntelligence.getHandicaps().size() != 0){
@@ -143,8 +159,7 @@ public abstract class SaboteurAI {
 	}
 	
 	public static void computeOperationWeightHardAI(AI artificialIntelligence) {
-		// TODO Auto-generated method stub
-		
+		// TODO
 	}
 	
 }

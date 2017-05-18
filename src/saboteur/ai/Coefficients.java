@@ -17,6 +17,7 @@ public class Coefficients {
 	
 	public static int SABOTEUR_SABOTAGE_EASY = 1;
 	public static float SABOTEUR_HANDICAP_SIZE_EASY = 0.25f;
+	public static int SABOTEUR_LIMIT_ESTIMATED_DWARF_EASY = 50;
 	public static int SABOTEUR_RESCUE_EASY = 8;
 	public static int SABOTEUR_DOUBLERESCUE_EASY = 7;
 	public static int SABOTEUR_PLAN_TURN_EASY = 3;
@@ -30,5 +31,16 @@ public class Coefficients {
 	// Medium AI coefficients
 	
 	// Hard AI coefficients
+	
+	public static int MINIMUM_TRUST_DWARF_HARD = 65;
+	public static int MINIMUM_TRUST_SABOTEUR_HARD = 35;
+	
+	public static int DWARF_RESCUE_ITSELF_HARD = 30;
+	public static float DWARF_HANDICAP_SIZE_HARD = 0.5f;
+	public static int DWARF_RESCUE_HARD = 20;
+	public static int DWARF_DOUBLERESCUE_HARD = 19;
+	public static int DWARF_PLAN_HARD = 150;
+	public static int DWARF_COLLAPSE_CAN_REPLACE_HARD = 40;
+	public static int DWARF_COLLAPSE_CDS_HARD = 25;
 	
 }
