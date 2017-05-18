@@ -107,7 +107,12 @@ public class GameState extends State{
 			if (winners.size()>1){
 				System.out.print("Les joueurs ");
 				for (Player p : winners){
-					System.out.print(p.getName() + " ");
+					if (winners.indexOf(p) == winners.size()-2)
+						System.out.print(p.getName() + " et ");
+					else if (winners.indexOf(p) == winners.size()-1)
+						System.out.print(p.getName() + " ");
+					else
+						System.out.print(p.getName() + ", ");
 				}
 				System.out.print("sont gagnants ex aequo ");
 			} else {

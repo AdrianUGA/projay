@@ -34,13 +34,10 @@ public class OperationPathCard extends Operation {
 			toFlip = game.getBoard().getCard(p);
 			if (toFlip.isGoal()){
 				game.notifyAINoGoldThere(p);
+				
+				if (!toFlip.hasGold() && !game.getBoard().isPossible(toFlip, p)) toFlip.reverse();
+				
 				toFlip.setVisible(true);
-
-				if (!toFlip.hasGold()){
-					if (!game.getBoard().isPossible(toFlip, p)) toFlip.reverse();
-				} else {
-					game.dealGold();
-				}
 			}
 		}
 	}
