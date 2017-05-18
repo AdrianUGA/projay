@@ -273,6 +273,9 @@ public class Game {
             objectOutput.writeObject(this.trash);
             objectOutput.writeObject(this.playerList);
             objectOutput.writeObject(this.board);
+            objectOutput.writeObject(this.teamWinnerAlreadyAnnounced);
+            objectOutput.writeObject(this.playerWinnerAlreadyAnnounced);
+            objectOutput.writeObject(this.roundFinished);
             objectOutput.writeObject(this.observers);
             objectOutput.close();
         } catch (IOException e) {
@@ -297,6 +300,9 @@ public class Game {
             this.playerList = (LinkedList<Player>) objectInputStream.readObject();
             if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE PAS");
             this.board = (Board) objectInputStream.readObject();
+            this.teamWinnerAlreadyAnnounced = (boolean) objectInputStream.readObject();
+            this.playerWinnerAlreadyAnnounced = (boolean) objectInputStream.readObject();
+            this.roundFinished = (boolean) objectInputStream.readObject();
             this.observers = (LinkedList<Player>) objectInputStream.readObject();
             if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE");
 	        objectInputStream.close();
