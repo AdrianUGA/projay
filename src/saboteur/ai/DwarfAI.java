@@ -1,6 +1,7 @@
 package saboteur.ai;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -120,13 +121,42 @@ public abstract class DwarfAI {
 		
 	}
 	
-	public static void computeOperationWeightMediumAI(AI ai) {
+	public static void computeOperationWeightMediumAI(AI artificialIntelligence) {
 		// TODO Auto-generated method stub
 		
 	}
 	
-	public static void computeOperationWeightHardAI(AI ai) {
-		// TODO Auto-generated method stub
+	public static void computeOperationWeightHardAI(AI artificialIntelligence) {
+		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(artificialIntelligence.operationsWeight);
+		for(Operation o : cloneOperationsWeight.keySet()){
+			if(o.getCard().isPlanCard()){ // PLAN CARD
+				if(!artificialIntelligence.knowsTheGoldCardPosition()){
+					Position estimatedGoldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
+					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(estimatedGoldCardPosition));
+					((OperationActionCardToBoard) o).setPositionDestination(estimatedGoldCardPosition);
+					artificialIntelligence.operationsWeight.put(o, (float) (Coefficients.DWARF_PLAN_HARD));
+				}
+				else{
+					// Trash
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -50f);
+				}
+			}
+			else if(o.getCard().isRescueCard()){
+				LinkedList<Player> mostLikelyDwarfPlayers = artificialIntelligence.getAllMostLikelyDwarfPlayersHardAI();
+				for(Player p : mostLikelyDwarfPlayers){
+					if(artificialIntelligence.canRescue((RescueCard)o.getCard(), p)){
+						((OperationActionCardToPlayer) o).setDestinationPlayer(p);
+						if(p == artificialIntelligence){
+							//Rescue itself
+							artificialIntelligence.operationsWeight.put(o, (float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.DWARF_HANDICAP_SIZE_HARD) * Coefficients.DWARF_RESCUE_HARD + Coefficients.DWARF_RESCUE_ITSELF_HARD);
+						}else{
+							//Rescue ally
+							artificialIntelligence.operationsWeight.put(o, (float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.DWARF_HANDICAP_SIZE_HARD) * Coefficients.DWARF_RESCUE_HARD + (artificialIntelligence.getIsDwarf().get(p) - artificialIntelligence.AVERAGE_TRUST) );
+						}
+					}
+				}
+			}
+		}
 		
 	}
 

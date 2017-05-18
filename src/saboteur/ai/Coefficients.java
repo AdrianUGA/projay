@@ -31,4 +31,11 @@ public class Coefficients {
 	
 	// Hard AI coefficients
 	
+	public static int MINIMUM_TRUST_DWARF_HARD = 65;
+	
+	public static int DWARF_RESCUE_ITSELF_HARD = 30;
+	public static float DWARF_HANDICAP_SIZE_HARD = 0.5f;
+	public static int DWARF_RESCUE_HARD = 20;
+	public static int DWARF_PLAN_HARD = 150;
+	
 }

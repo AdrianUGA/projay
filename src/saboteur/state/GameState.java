@@ -2,6 +2,8 @@ package saboteur.state;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -21,6 +23,7 @@ import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.ai.AI;
+import saboteur.ai.Difficulty;
 import saboteur.model.Board;
 import saboteur.model.Game;
 import saboteur.model.Player;
@@ -57,14 +60,13 @@ public class GameState extends State{
         if (this.game.gameIsFinished()){
             //fin de la partie
             //this.gsm.change("annonce vainqueur");
-        	if(game.dwarfsWon())System.out.println("Nains ont gagné");
+        	announceTeamWinner();
+        	announcePlayerWinner();
         	//System.out.println("Le joueur "+this.game.getWinner().getName()+" a gagné ! (Avec "+this.game.getWinner().getGold()+ " or).");
             //System.out.println("fin de partie");
         } else {
             if (this.game.roundIsFinished()){
-                //fin de la manche
-                //Distribution des cartes gold
-            	if(game.dwarfsWon())System.out.println("Nains ont gagné");
+                announceTeamWinner();
                 this.game.newRound();
             } else{
                 //la manche continue
@@ -85,6 +87,38 @@ public class GameState extends State{
             }
         }
     }
+
+    //For console mode
+    private void announcePlayerWinner() {
+		if (!this.game.isPlayerWinnerAlreadyAnnounced()){
+			LinkedList<Player> winners =  this.game.getWinners();
+			if (winners.size()>1){
+				System.out.print("Les joueurs ");
+				for (Player p : winners){
+					if (winners.indexOf(p) == winners.size()-2)
+						System.out.print(p.getName() + " et ");
+					else if (winners.indexOf(p) == winners.size()-1)
+						System.out.print(p.getName() + " ");
+					else
+						System.out.print(p.getName() + ", ");
+				}
+				System.out.print("sont gagnants ex aequo ");
+			} else {
+				System.out.print(winners.getFirst().getName() + " a gagné la partie ");
+			}
+			System.out.println("avec " + winners.getFirst().getGold() + " pépites d'or !");
+			this.game.setPlayerWinnerAlreadyAnnounced(true);
+		}
+	}
+
+	//For console mode
+	private void announceTeamWinner() {
+		if (!this.game.isTeamWinnerAlreadyAnnounced()){
+			if(this.game.dwarfsWon()) System.out.println("Les nains ont gagné !");
+			else System.out.println("Les saboteurs ont gagné !");
+			this.game.setTeamWinnerAlreadyAnnounced(true);
+		}
+	}
 
     @Override
     public void render() {
@@ -110,10 +144,10 @@ public class GameState extends State{
 
     	//Début du bloc à commenter
     	
-//    	this.game.getPlayerList().clear();
-//    	this.game.addPlayer(new AI(this.game, "Yves"));
-//    	this.game.addPlayer(new AI(this.game, "Philippe"));
-//    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
+    	this.game.getPlayerList().clear();
+    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY));
+    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY));
+    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY));
 		
     	//Fin du bloc à commenter
     	

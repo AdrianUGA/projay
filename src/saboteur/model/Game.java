@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import saboteur.ai.AI;
+import saboteur.ai.Difficulty;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
@@ -29,6 +30,10 @@ public class Game {
 
 	private Board board;//TO SAVE
 	
+	private boolean teamWinnerAlreadyAnnounced;
+	private boolean playerWinnerAlreadyAnnounced;
+	private boolean roundFinished;
+
 	private LinkedList<Player> observers;
 
 	public Game(){
@@ -45,9 +50,14 @@ public class Game {
 	public void playOperation(Operation op){
 		this.history.add(op);
 		op.exec(this);
+		if ( (this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers()) && !this.roundFinished){
+			dealGold();
+			this.roundFinished = true;
+		}
 	}
 
 	public void newGame(){
+		this.teamWinnerAlreadyAnnounced = false;
 		this.round = 0;
 
 		this.goldCardStack = this.deck.getCopyGoldCards();
@@ -61,7 +71,8 @@ public class Game {
 	}
 
 	public void loadConfig(String name){
-		
+		this.playerWinnerAlreadyAnnounced = false;
+		this.roundFinished = false;
 		this.round++;
 		this.turn = 1;
 
@@ -139,7 +150,7 @@ public class Game {
 		if (stringPlayer[Loader.indexPlayerType].equals("Human")){
 			toAdd = new Human(this, stringPlayer[Loader.indexPlayerName]);
 		} else {
-			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName]);
+			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName], Difficulty.EASY);
 		}
 		
 		//Hand
@@ -179,6 +190,8 @@ public class Game {
 	}
 	
 	public void newRound(){
+		this.teamWinnerAlreadyAnnounced = false;
+		this.roundFinished = false;
 		this.round++;
 		this.turn = 1;
 
@@ -308,7 +321,7 @@ public class Game {
 	}
 	
 	public boolean roundIsFinished(){
-		return this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers();
+		return this.roundFinished;
 	}
 
 	private boolean emptyHandsPlayers() {
@@ -411,11 +424,13 @@ public class Game {
 			GoldCard goldCard;
 			int currentNumber = this.currentPlayerIndex;
 			int nbCardsDealt = 0;
-			while (nbCardsDealt <= (playerList.size()%9)){
+			System.out.println("Nb joueurs : " + playerList);
+			while (nbCardsDealt < (playerList.size()%9)){
 				current = playerList.get(currentNumber);
 				if (current.getTeam() == Team.DWARF){
 					goldCard = goldCardStack.removeFirst();
 					current.addGold(goldCard);
+					System.out.println("On ajoute une carte de valeur "+goldCard.getValue()+" au joueur " + current.getName());
 					nbCardsDealt++;
 				}
 				currentNumber = (currentNumber+1)%playerList.size();
@@ -451,6 +466,7 @@ public class Game {
 				if (current.getTeam() == Team.SABOTEUR){
 					for (GoldCard card : getCardsToValue(valueToDeal)){
 						current.addGold(card);
+						System.out.println("On ajoute une carte de valeur "+card.getValue()+" au joueur " + current.getName());
 					}
 				}
 			}
@@ -570,5 +586,49 @@ public class Game {
 			aPlayerList.setTeam(role);
 		}
 	}
+	
+	public boolean isTeamWinnerAlreadyAnnounced() {
+		return teamWinnerAlreadyAnnounced;
+	}
 
+	public void setTeamWinnerAlreadyAnnounced(boolean teamWinnerAlreadyAnnounced) {
+		this.teamWinnerAlreadyAnnounced = teamWinnerAlreadyAnnounced;
+	}
+
+	public boolean isPlayerWinnerAlreadyAnnounced() {
+		return playerWinnerAlreadyAnnounced;
+	}
+
+	public void setPlayerWinnerAlreadyAnnounced(boolean playerWinnerAlreadyAnnounced) {
+		this.playerWinnerAlreadyAnnounced = playerWinnerAlreadyAnnounced;
+	}
+
+	public void notifyAINoGoldThere(Position p) {
+		for(Player player : playerList){
+			if(player.isAI()){
+				((AI) player).noGoldThere(p);
+			}
+		}
+		
+	}
+	
+	public int minimumAmountOfDwarf(){
+		int nbPlayer = this.playerList.size();
+		if(nbPlayer <= 3){
+			return 2;
+		}
+		if(nbPlayer <= 4){
+			return 3;
+		}
+		if(nbPlayer <= 6){
+			return 4;
+		}
+		if(nbPlayer <= 8){
+			return 5;
+		}
+		if(nbPlayer >= 9){
+			return 6;
+		}
+		return 2; // should never happen
+	}
 }

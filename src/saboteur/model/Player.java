@@ -134,6 +134,16 @@ public abstract class Player implements Serializable {
 		}
 		return false;
 	}
+	
+	public boolean canRescue(RescueCard card, Player player){
+		for (SabotageCard sabotageCard : player.handicaps){
+			if (sabotageCard.getSabotageType() == card.getRescueType()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card){
 		Tool currentType;
 		for (SabotageCard sabotageCard : this.handicaps){
