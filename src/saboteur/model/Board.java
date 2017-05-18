@@ -195,8 +195,8 @@ public class Board implements Serializable {
 	}
 	
 	/* Returns every free positions for a PathCard*/
-	public Set<Position> getPossiblePositionPathCard(PathCard card){
-		Set<Position> possiblePlaces = new HashSet<Position>();
+	public List<Position> getPossiblePositionPathCard(PathCard card){
+		List<Position> possiblePlaces = new LinkedList<Position>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
