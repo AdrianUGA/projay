@@ -88,11 +88,12 @@ public class Game {
 			String chaine;
 			
 			this.playerList.clear();
+			this.observers.clear();
 			//To each player
 			while (!(chaine = reader.readLine()).equals("###")){
 				this.playerList.add(createPlayerFromConfig(chaine));
 			}
-			
+	        
 			//To each card to play on board
 			while (!(chaine = reader.readLine()).equals("###")){
 				addCardToBoardFromConfig(chaine);
@@ -118,17 +119,19 @@ public class Game {
 		//this.currentPlayerIndex = this.playerList.size()-1;
 		this.currentPlayerIndex = 1;
 		this.setTeam();
-        initAI();
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+        initAI();
 		this.nextPlayer();
-		System.out.println("Nom = " + this.getCurrentPlayer().name);
-		for (Card firstCard : this.getCurrentPlayer().getHand()){
-			System.out.println("XXX id = " + firstCard.getId());
-			if (firstCard.isPathCard()){
-				PathCard temp = (PathCard) firstCard;
-				System.out.println("XXX id = " + firstCard.getId() + temp.isOpen(Cardinal.NORTH) + temp.isOpen(Cardinal.EAST) + temp.isOpen(Cardinal.SOUTH) + temp.isOpen(Cardinal.WEST));
+		/*for (Player p : this.playerList){
+			System.out.println("Nom = " + p.name);
+			for (Card firstCard : p.getHand()){
+				System.out.println("XXX id = " + firstCard.getId());
+				if (firstCard.isPathCard()){
+					PathCard temp = (PathCard) firstCard;
+					System.out.println("XXX id = " + firstCard.getId() + temp.isOpen(Cardinal.NORTH) + temp.isOpen(Cardinal.EAST) + temp.isOpen(Cardinal.SOUTH) + temp.isOpen(Cardinal.WEST));
+				}
 			}
-		}
+		}*/
 	}
 
 	private void addCardToBoardFromConfig(String chaine) {
@@ -434,13 +437,12 @@ public class Game {
 			GoldCard goldCard;
 			int currentNumber = this.currentPlayerIndex;
 			int nbCardsDealt = 0;
-			System.out.println("Nb joueurs : " + playerList);
 			while (nbCardsDealt < (playerList.size()%9)){
 				current = playerList.get(currentNumber);
 				if (current.getTeam() == Team.DWARF){
 					goldCard = goldCardStack.removeFirst();
 					current.addGold(goldCard);
-					System.out.println("On ajoute une carte de valeur "+goldCard.getValue()+" au joueur " + current.getName());
+					//System.out.println("On ajoute une carte de valeur "+goldCard.getValue()+" au joueur " + current.getName());
 					nbCardsDealt++;
 				}
 				currentNumber = (currentNumber+1)%playerList.size();
@@ -476,7 +478,7 @@ public class Game {
 				if (current.getTeam() == Team.SABOTEUR){
 					for (GoldCard card : getCardsToValue(valueToDeal)){
 						current.addGold(card);
-						System.out.println("On ajoute une carte de valeur "+card.getValue()+" au joueur " + current.getName());
+						//System.out.println("On ajoute une carte de valeur "+card.getValue()+" au joueur " + current.getName());
 					}
 				}
 			}
