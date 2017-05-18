@@ -32,8 +32,8 @@ public class OperationPathCard extends Operation {
 		PathCard toFlip;
 		for (Position p : this.goalCardsToFlip){
 			toFlip = game.getBoard().getCard(p);
-			
 			if (toFlip.isGoal()){
+				game.notifyAINoGoldThere(p);
 				toFlip.setVisible(true);
 
 				if (!toFlip.hasGold() && !game.getBoard().isPossible(toFlip, p)){

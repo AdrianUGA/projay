@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.Random;
 
 import saboteur.ai.AI;
+import saboteur.ai.Difficulty;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
 
@@ -139,7 +140,7 @@ public class Game {
 		if (stringPlayer[Loader.indexPlayerType].equals("Human")){
 			toAdd = new Human(this, stringPlayer[Loader.indexPlayerName]);
 		} else {
-			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName]);
+			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName], Difficulty.EASY);
 		}
 		
 		//Hand
@@ -569,6 +570,15 @@ public class Game {
 			Team role = team.remove(0);
 			aPlayerList.setTeam(role);
 		}
+	}
+
+	public void notifyAINoGoldThere(Position p) {
+		for(Player player : playerList){
+			if(player.isAI()){
+				((AI) player).noGoldThere(p);
+			}
+		}
+		
 	}
 
 }

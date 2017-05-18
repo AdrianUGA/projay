@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.ai.AI;
+import saboteur.ai.Difficulty;
 import saboteur.model.Board;
 import saboteur.model.Game;
 import saboteur.model.Player;
@@ -112,9 +113,9 @@ public class GameState extends State{
     	//Début du bloc à commenter
     	
     	this.game.getPlayerList().clear();
-    	this.game.addPlayer(new AI(this.game, "Yves"));
-    	this.game.addPlayer(new AI(this.game, "Philippe"));
-    	this.game.addPlayer(new AI(this.game, "Jean-Marie"));
+    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY));
+    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY));
+    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY));
 		
     	//Fin du bloc à commenter
     	
