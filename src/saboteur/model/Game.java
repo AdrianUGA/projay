@@ -417,7 +417,7 @@ public class Game {
 			GoldCard goldCard;
 			int currentNumber = this.currentPlayerIndex;
 			int nbCardsDealt = 0;
-			while (nbCardsDealt <= (playerList.size()%9)){
+			while (nbCardsDealt < (playerList.size()%9)){
 				current = playerList.get(currentNumber);
 				if (current.getTeam() == Team.DWARF){
 					goldCard = goldCardStack.removeFirst();

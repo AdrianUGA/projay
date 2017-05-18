@@ -111,7 +111,7 @@ public class GameState extends State{
 				}
 				System.out.print("sont gagnants ex aequo ");
 			} else {
-				System.out.print(winners.getFirst() + " a gagné la partie ");
+				System.out.print(winners.getFirst().getName() + " a gagné la partie ");
 			}
 			System.out.println("avec " + winners.getFirst().getGold() + " pépites d'or !");
 			this.game.setPlayerWinnerAlreadyAnnounced(true);
