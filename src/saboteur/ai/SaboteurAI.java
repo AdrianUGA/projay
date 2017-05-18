@@ -143,8 +143,7 @@ public abstract class SaboteurAI {
 	}
 	
 	public static void computeOperationWeightHardAI(AI artificialIntelligence) {
-		// TODO Auto-generated method stub
-		
+		// TODO
 	}
 	
 }

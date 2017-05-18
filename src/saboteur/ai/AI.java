@@ -351,4 +351,25 @@ public class AI extends Player {
 		this.estimatedGoldCardPosition.put(p, 0f);
 	}
 
+	public LinkedList<Player> getAllMostLikelyDwarfPlayersHardAI() {
+		int minAmountOfDwarf = game.minimumAmountOfDwarf();
+		int minTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
+		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
+		
+		do{
+			for(Player p : this.isDwarf.keySet()){
+				if(this.isDwarf.get(p) >= minTrust || p == this){
+					likelyDwarf.add(p);
+				}
+			}
+			minTrust = minTrust + 5;
+		}while(likelyDwarf.size() <= minAmountOfDwarf);
+		
+		return likelyDwarf;
+	}
+
+	public Map<Player,Float> getIsDwarf(){
+		return this.isDwarf;
+	}
+	
 }

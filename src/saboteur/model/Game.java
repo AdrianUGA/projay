@@ -580,5 +580,24 @@ public class Game {
 		}
 		
 	}
-
+	
+	public int minimumAmountOfDwarf(){
+		int nbPlayer = this.playerList.size();
+		if(nbPlayer <= 3){
+			return 2;
+		}
+		if(nbPlayer <= 4){
+			return 3;
+		}
+		if(nbPlayer <= 6){
+			return 4;
+		}
+		if(nbPlayer <= 8){
+			return 5;
+		}
+		if(nbPlayer >= 9){
+			return 6;
+		}
+		return 2; // should never happen
+	}
 }
