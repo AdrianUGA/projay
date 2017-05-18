@@ -62,4 +62,8 @@ public abstract class Operation implements Serializable {
 		return false;
 	}
 	
+	public void displayOperationInformation(){
+		System.out.print("OperationNonReconnue");
+	}
+	
 }

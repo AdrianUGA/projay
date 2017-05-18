@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import saboteur.model.Card.*;
 
 public class OperationPathCard extends Operation {
+	private static final long serialVersionUID = -2843575527220989261L;
 	private Position p; //TO SAVE
 	private ArrayList<Position> goalCardsToFlip; //TO SAVE
 	private boolean reversed;
@@ -26,14 +27,13 @@ public class OperationPathCard extends Operation {
 		}
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		game.getBoard().addCard((PathCard)this.getCard(), p);
-		System.out.println("carte posé en x= " + p.getcX() + " y= " +p.getcY());
 		
 		this.goalCardsToFlip = game.getBoard().getGoalCardsToFlip((PathCard)this.getCard(), p);
 		PathCard toFlip;
 		for (Position p : this.goalCardsToFlip){
 			toFlip = game.getBoard().getCard(p);
-			
 			if (toFlip.isGoal()){
+				game.notifyAINoGoldThere(p);
 				toFlip.setVisible(true);
 
 				if (!toFlip.hasGold()){
@@ -88,5 +88,10 @@ public class OperationPathCard extends Operation {
 	@Override
 	public boolean isOperationPathCard(){
 		return true;
+	}
+	
+	@Override
+	public void displayOperationInformation(){
+		System.out.print("OperationPathCard : Position cX = "+getP().getcX() + " cY = " + getP().getcY() + " " + ((PathCard) getCard()).toString());
 	}
 }

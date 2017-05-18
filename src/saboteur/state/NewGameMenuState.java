@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.ai.AI;
+import saboteur.ai.Difficulty;
 import saboteur.model.Game;
 import saboteur.model.Human;
 import saboteur.model.Player;
@@ -102,7 +103,7 @@ public class NewGameMenuState extends State{
             if (playerType.equals("Humain")){
                 player = new Human(this.game, playerName);
             } else{
-                player = new AI(this.game, "temp");
+                player = new AI(this.game, "temp", Difficulty.EASY);
             }
             player.setName(playerName);
             this.game.addPlayer(player);

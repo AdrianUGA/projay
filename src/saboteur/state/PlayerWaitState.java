@@ -22,7 +22,7 @@ public class PlayerWaitState extends State{
 
     @Override
     public void onEnter(Object param) {
-
+        System.out.println("wait");
     }
 
     @Override

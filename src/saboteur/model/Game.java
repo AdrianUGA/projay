@@ -6,18 +6,17 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javafx.scene.input.KeyCombination;
 import saboteur.ai.AI;
+import saboteur.ai.Difficulty;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
-import saboteur.ai.AI;
 
 public class Game {
 
 	private int currentPlayerIndex; //TO SAVE
 	private int round; //TO SAVE
 	private int turn; //TO SAVE
-	public final static long seed = 223456789;
+	public final static long seed = 123456789;
 
 	private final Deck deck;//NOT TO SAVE
 
@@ -77,8 +76,9 @@ public class Game {
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 		
 		File configFile = new File(Loader.configFolder+ "/" + name + ".config");
+		BufferedReader reader = null;
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(configFile));
+			reader = new BufferedReader(new FileReader(configFile));
 			String chaine;
 			
 			this.playerList.clear();
@@ -98,6 +98,15 @@ public class Game {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			if (reader != null){
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		//this.currentPlayerIndex = this.playerList.size()-1;
@@ -135,7 +144,7 @@ public class Game {
 		if (stringPlayer[Loader.indexPlayerType].equals("Human")){
 			toAdd = new Human(this, stringPlayer[Loader.indexPlayerName]);
 		} else {
-			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName]);
+			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName], Difficulty.EASY);
 		}
 		
 		//Hand
@@ -586,4 +595,32 @@ public class Game {
 		this.playerWinnerAlreadyAnnounced = playerWinnerAlreadyAnnounced;
 	}
 
+	public void notifyAINoGoldThere(Position p) {
+		for(Player player : playerList){
+			if(player.isAI()){
+				((AI) player).noGoldThere(p);
+			}
+		}
+		
+	}
+	
+	public int minimumAmountOfDwarf(){
+		int nbPlayer = this.playerList.size();
+		if(nbPlayer <= 3){
+			return 2;
+		}
+		if(nbPlayer <= 4){
+			return 3;
+		}
+		if(nbPlayer <= 6){
+			return 4;
+		}
+		if(nbPlayer <= 8){
+			return 5;
+		}
+		if(nbPlayer >= 9){
+			return 6;
+		}
+		return 2; // should never happen
+	}
 }

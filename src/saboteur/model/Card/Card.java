@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public abstract class Card implements Cloneable, Serializable{
 
+	private static final long serialVersionUID = 4483534282280465205L;
+
 	//To load config
 	protected int id;
 	

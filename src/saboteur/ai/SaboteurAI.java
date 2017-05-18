@@ -25,7 +25,9 @@ public abstract class SaboteurAI {
 			switch(o.getCard().getClassName()){
 			case "saboteur.model.Card.PlanCard":
 				if(!artificialIntelligence.knowsTheGoldCardPosition()){
-					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(artificialIntelligence.getEstimatedGoldCardPosition()));
+					Position estimatedGoldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
+					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(estimatedGoldCardPosition));
+					((OperationActionCardToBoard) o).setPositionDestination(estimatedGoldCardPosition);
 					artificialIntelligence.operationsWeight.put(o, 
 						(float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.SABOTEUR_PLAN_TURN_EASY 
 								- artificialIntelligence.getGame().getTurn())) * Coefficients.SABOTEUR_PLAN_EASY));
@@ -77,12 +79,7 @@ public abstract class SaboteurAI {
 
 					int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 					for(OperationPathCard currentOp : allOperationsForThisCard){
-						if(currentOp.getReversed())
-							System.out.println("Pour la carte " + ((PathCard)currentOp.getCard()).reversed() + " !R");
-						else
-							System.out.println("Pour la carte " + (PathCard)currentOp.getCard());
 						Position currentPos = currentOp.getP();
-						System.out.println("Position : x = " + currentPos.getcX() + " y = " + currentPos.getcY());
 						int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 						if(distanceDifference >= -1){
 							// At most 1 position away from the minimum
@@ -128,9 +125,11 @@ public abstract class SaboteurAI {
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				else{
+					//TODO change
 					Random r = new Random(artificialIntelligence.getGame().getSeed());
 					Position randomPos = allCulDeSac.get(r.nextInt(allCulDeSac.size()));
 					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(randomPos));
+					((OperationActionCardToBoard) o).setPositionDestination(randomPos);
 					artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_EASY);
 				}
 			}
@@ -144,8 +143,7 @@ public abstract class SaboteurAI {
 	}
 	
 	public static void computeOperationWeightHardAI(AI artificialIntelligence) {
-		// TODO Auto-generated method stub
-		
+		// TODO
 	}
 	
 }

@@ -4,152 +4,167 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.8);" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../resources/PauseLogo.png" />
-         </image>
-         <VBox.margin>
-            <Insets bottom="40.0" top="20.0" />
-         </VBox.margin>
-      </ImageView>
-      <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
+      <Pane style="-fx-background-image: url(@../../resources/wood.jpg); -fx-background-size: cover; -fx-background-repeat: none;">
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
+      </Pane>
+      <VBox alignment="TOP_CENTER" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.8);">
          <children>
-            <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets right="20.0" />
-               </HBox.margin>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../resources/pioche.png" />
+                  <Image url="@../../resources/PauseLogo.png" />
                </image>
+               <VBox.margin>
+                  <Insets bottom="100.0" top="150.0" />
+               </VBox.margin>
             </ImageView>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Reprendre" textAlignment="CENTER">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <HBox.margin>
-                  <Insets bottom="5.0" />
-               </HBox.margin>
-            </Text>
+            <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Reprendre" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="40.0" right="55.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Recommencer" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets right="55.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" onMouseClicked="#saveButtonAction">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Sauvegarder" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets right="55.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" onMouseClicked="#optionButtonAction">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Options" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets right="55.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" onMouseClicked="#mainMenuButtonAction">
+               <children>
+                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                     <image>
+                        <Image url="@../../resources/pioche.png" />
+                     </image>
+                  </ImageView>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Menu principal" textAlignment="CENTER">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets bottom="5.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets right="55.0" top="40.0" />
+               </VBox.margin>
+            </HBox>
          </children>
          <padding>
-            <Insets bottom="5.0" top="5.0" />
+            <Insets left="20.0" right="20.0" />
          </padding>
-         <VBox.margin>
-            <Insets bottom="40.0" right="55.0" />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
-         <children>
-            <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets right="20.0" />
-               </HBox.margin>
-               <image>
-                  <Image url="@../../resources/pioche.png" />
-               </image>
-            </ImageView>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Recommencer" textAlignment="CENTER">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <HBox.margin>
-                  <Insets bottom="5.0" />
-               </HBox.margin>
-            </Text>
-         </children>
+      </VBox>
+      <Pane style="-fx-background-image: url(@../../resources/wood.jpg); -fx-background-size: cover; -fx-background-repeat: none;">
          <padding>
-            <Insets bottom="5.0" top="5.0" />
+            <Insets left="20.0" right="20.0" />
          </padding>
-         <VBox.margin>
-            <Insets right="55.0" />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" onMouseClicked="#saveButtonAction">
-         <children>
-            <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets right="20.0" />
-               </HBox.margin>
-               <image>
-                  <Image url="@../../resources/pioche.png" />
-               </image>
-            </ImageView>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Sauvegarder" textAlignment="CENTER">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <HBox.margin>
-                  <Insets bottom="5.0" />
-               </HBox.margin>
-            </Text>
-         </children>
-         <padding>
-            <Insets bottom="5.0" top="5.0" />
-         </padding>
-         <VBox.margin>
-            <Insets right="55.0" />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" onMouseClicked="#optionButtonAction">
-         <children>
-            <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets right="20.0" />
-               </HBox.margin>
-               <image>
-                  <Image url="@../../resources/pioche.png" />
-               </image>
-            </ImageView>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Options" textAlignment="CENTER">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <HBox.margin>
-                  <Insets bottom="5.0" />
-               </HBox.margin>
-            </Text>
-         </children>
-         <padding>
-            <Insets bottom="5.0" top="5.0" />
-         </padding>
-         <VBox.margin>
-            <Insets right="55.0" />
-         </VBox.margin>
-      </HBox>
-      <HBox alignment="CENTER" onMouseClicked="#mainMenuButtonAction">
-         <children>
-            <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
-               <HBox.margin>
-                  <Insets right="20.0" />
-               </HBox.margin>
-               <image>
-                  <Image url="@../../resources/pioche.png" />
-               </image>
-            </ImageView>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.5em;" text="Menu principal" textAlignment="CENTER">
-               <font>
-                  <Font size="20.0" />
-               </font>
-               <HBox.margin>
-                  <Insets bottom="5.0" />
-               </HBox.margin>
-            </Text>
-         </children>
-         <padding>
-            <Insets bottom="5.0" top="5.0" />
-         </padding>
-         <VBox.margin>
-            <Insets right="55.0" top="40.0" />
-         </VBox.margin>
-      </HBox>
+      </Pane>
    </children>
-   <padding>
-      <Insets left="20.0" right="20.0" />
-   </padding>
-</VBox>
+</HBox>

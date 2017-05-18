@@ -5,7 +5,8 @@ import java.util.List;
 
 public class PathCard extends Card {
 	//OPENUP(1), OPENRIGHT(2), OPENDOWN(4), OPENLEFT(8));
-	
+
+	private static final long serialVersionUID = -2735810986215991517L;
 	private List<Cardinal> openSides;
     private final boolean isCulDeSac;
     private final boolean isGoal;

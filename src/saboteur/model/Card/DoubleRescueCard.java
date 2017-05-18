@@ -1,6 +1,8 @@
 package saboteur.model.Card;
 
 public class DoubleRescueCard extends ActionCardToPlayer {
+
+	private static final long serialVersionUID = -1679910142473555687L;
 	public Tool rescueType1;
 	public Tool rescueType2;
 	
