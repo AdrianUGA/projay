@@ -70,5 +70,17 @@ public class OperationActionCardToPlayer extends Operation {
 	public void displayOperationInformation(){
 		System.out.print("OperationActionCardToPlayer : destination Player = " + getDestinationPlayer().getName());
 	}
+	public Tool getToolDestination() {
+		return toolDestination;
+	}
+	public void setToolDestination(Tool toolDestination) {
+		this.toolDestination = toolDestination;
+	}
+	public SabotageCard getDestinationCard() {
+		return destinationCard;
+	}
+	public void setDestinationCard(SabotageCard destinationCard) {
+		this.destinationCard = destinationCard;
+	}
 	
 }

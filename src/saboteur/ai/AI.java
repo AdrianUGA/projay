@@ -16,7 +16,10 @@ import saboteur.model.Player;
 import saboteur.model.Position;
 import saboteur.model.Team;
 import saboteur.model.Card.Card;
+import saboteur.model.Card.DoubleRescueCard;
 import saboteur.model.Card.PathCard;
+import saboteur.model.Card.SabotageCard;
+import saboteur.model.Card.Tool;
 
 public class AI extends Player {
 	static final long serialVersionUID = 6519358301134674963L;
@@ -278,6 +281,44 @@ public class AI extends Player {
 		}
 		return leastTrustfulPlayer;
 	}
+	
+	//If parameter is true, it'll add the AI who calls the method anyway
+	public LinkedList<Player> getAllMostLikelyDwarfPlayersHardAI(boolean withAI) {
+		int minAmountOfDwarf = game.minimumAmountOfDwarf();
+		int minTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
+		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
+		
+		do{
+			likelyDwarf.clear();
+			for(Player p : this.isDwarf.keySet()){
+				if(this.isDwarf.get(p) >= minTrust || (withAI && p == this)){
+					likelyDwarf.add(p);
+				}
+			}
+			minTrust = minTrust + 5;
+		}while(likelyDwarf.size() >= minAmountOfDwarf);
+		
+		return likelyDwarf;
+	}
+	
+	//If parameter is true, it'll add the AI who calls the method anyway
+	public LinkedList<Player> getAllMostLikelySaboteurPlayersHardAI(boolean withAI) {
+		int maxAmountOfSaboteur = game.maximumAmountOfSaboteur();
+		int maxTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
+		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
+		
+		do{
+			likelyDwarf.clear();
+			for(Player p : this.isDwarf.keySet()){
+				if(this.isDwarf.get(p) <= maxTrust || (withAI && p == this)){
+					likelyDwarf.add(p);
+				}
+			}
+			maxTrust = maxTrust - 5;
+		}while(likelyDwarf.size() >= maxAmountOfSaboteur);
+		
+		return likelyDwarf;
+	}
 
 	public boolean isAI(){
 		return true;
@@ -349,23 +390,6 @@ public class AI extends Player {
 
 	public void noGoldThere(Position p) {
 		this.estimatedGoldCardPosition.put(p, 0f);
-	}
-
-	public LinkedList<Player> getAllMostLikelyDwarfPlayersHardAI() {
-		int minAmountOfDwarf = game.minimumAmountOfDwarf();
-		int minTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
-		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
-		
-		do{
-			for(Player p : this.isDwarf.keySet()){
-				if(this.isDwarf.get(p) >= minTrust || p == this){
-					likelyDwarf.add(p);
-				}
-			}
-			minTrust = minTrust + 5;
-		}while(likelyDwarf.size() <= minAmountOfDwarf);
-		
-		return likelyDwarf;
 	}
 
 	public Map<Player,Float> getIsDwarf(){

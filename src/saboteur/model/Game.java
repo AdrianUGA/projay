@@ -394,7 +394,7 @@ public class Game {
 		for (Player p : this.playerList){
 			switch (card.getType()) {
 				case SABOTAGE:
-					isPossible = p.canHandicap((SabotageCard)card);
+					isPossible = p.canHandicap((SabotageCard)card, p);
 					break;
 				case RESCUE:
 					isPossible = p.canRescue((RescueCard)card);
@@ -622,5 +622,22 @@ public class Game {
 			return 6;
 		}
 		return 2; // should never happen
+	}
+
+	public int maximumAmountOfSaboteur() {
+		int nbPlayer = this.playerList.size();
+		if(nbPlayer <= 4){
+			return 1;
+		}
+		if(nbPlayer <= 6){
+			return 2;
+		}
+		if(nbPlayer <= 9){
+			return 3;
+		}
+		if(nbPlayer >= 10){
+			return 4;
+		}
+		return 0; // should never happen
 	}
 }
