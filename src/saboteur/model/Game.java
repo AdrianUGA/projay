@@ -118,6 +118,7 @@ public class Game {
 		//this.currentPlayerIndex = this.playerList.size()-1;
 		this.currentPlayerIndex = 1;
 		this.setTeam();
+        initAI();
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
 		this.nextPlayer();
 		/*System.out.println("Nom = " + this.getCurrentPlayer().name);
@@ -208,16 +209,20 @@ public class Game {
 		this.setTeam();
 
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+		initAI();
+		
+		this.dealCardsToPlayer();
+		
+		this.nextPlayer();
+	}
+
+	public void initAI() {
 		for(Player p : this.playerList){
 			p.resetHandicaps();
 			if(p.isAI()){
 				((AI) p).initializeAI();
 			}
 		}
-		
-		this.dealCardsToPlayer();
-		
-		this.nextPlayer();
 	}
 
 	private void dealCardsToPlayer(){
@@ -298,13 +303,11 @@ public class Game {
             this.stack = (LinkedList<Card>) objectInputStream.readObject();
             this.trash = (LinkedList<Card>) objectInputStream.readObject();
             this.playerList = (LinkedList<Player>) objectInputStream.readObject();
-            if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE PAS");
             this.board = (Board) objectInputStream.readObject();
             this.teamWinnerAlreadyAnnounced = (boolean) objectInputStream.readObject();
             this.playerWinnerAlreadyAnnounced = (boolean) objectInputStream.readObject();
             this.roundFinished = (boolean) objectInputStream.readObject();
             this.observers = (LinkedList<Player>) objectInputStream.readObject();
-            if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE");
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

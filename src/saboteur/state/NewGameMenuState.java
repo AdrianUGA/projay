@@ -108,6 +108,7 @@ public class NewGameMenuState extends State{
             player.setName(playerName);
             this.game.addPlayer(player);
         }
+        this.game.newGame();
         this.gsm.change("game");
     }
     

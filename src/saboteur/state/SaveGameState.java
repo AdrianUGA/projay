@@ -3,6 +3,7 @@ package saboteur.state;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -18,6 +19,7 @@ public class SaveGameState extends State {
 
     private Stage modalStage;
     private Stage parentStage;
+    @FXML private TextField newGameName;
 
     public SaveGameState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -75,6 +77,6 @@ public class SaveGameState extends State {
 
     @FXML
     private void okSaveModalButtonAction(){
-
+    	this.game.save(this.newGameName.getText());
     }
 }
