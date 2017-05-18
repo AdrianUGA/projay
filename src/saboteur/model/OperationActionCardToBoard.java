@@ -53,9 +53,22 @@ public class OperationActionCardToBoard extends Operation {
 		return this;
 	}
 	
+	public Position getPositionDestination(){
+		return this.positionDestination;
+	}
+	
+	public void setPositionDestination(Position positionDestination){
+		this.positionDestination = positionDestination;
+	}
+	
 	@Override
 	public boolean isOperationActionCardToBoard(){
 		return true;
+	}
+	
+	@Override
+	public void displayOperationInformation(){
+		System.out.print("OperationActionCardToBoard : destination cX = " + this.getPositionDestination().getcX() + " cY = " + this.getPositionDestination().getcY());
 	}
 	
 }

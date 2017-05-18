@@ -25,5 +25,10 @@ public class OperationTrash extends Operation {
 	public boolean isOperationTrash(){
 		return true;
 	}
+	
+	@Override
+	public void displayOperationInformation(){
+		System.out.print("OperationTrash : Card = " + this.getCard().getClassName());
+	}
 
 }

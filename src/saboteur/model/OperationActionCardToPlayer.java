@@ -66,4 +66,9 @@ public class OperationActionCardToPlayer extends Operation {
 		return true;
 	}
 	
+	@Override
+	public void displayOperationInformation(){
+		System.out.print("OperationActionCardToPlayer : destination Player = " + getDestinationPlayer().getName());
+	}
+	
 }
