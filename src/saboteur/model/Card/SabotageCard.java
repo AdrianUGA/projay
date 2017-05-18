@@ -1,6 +1,8 @@
 package saboteur.model.Card;
 
 public class SabotageCard extends ActionCardToPlayer {
+
+	private static final long serialVersionUID = -8851818492796619397L;
 	private Tool sabotageType;
 	
 	public SabotageCard(Tool type){
@@ -34,4 +36,9 @@ public class SabotageCard extends ActionCardToPlayer {
 	public boolean isSabotageCard() {
 		return true;
 	}
+	
+	@Override
+	public void displayCardType(){
+    	System.out.println("SabotageCard");
+    }
 }

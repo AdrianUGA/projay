@@ -2,6 +2,8 @@ package saboteur.model.Card;
 
 public class PlanCard extends ActionCardToBoard {
 
+	private static final long serialVersionUID = 3449539183494327840L;
+
 	@Override
 	public boolean isCollapse() {
 		return false;
@@ -11,5 +13,10 @@ public class PlanCard extends ActionCardToBoard {
 	public boolean isPlanCard() {
 		return true;
 	}
+	
+	@Override
+	public void displayCardType(){
+    	System.out.println("PlanCard");
+    }
 	
 }

@@ -3,10 +3,11 @@ package saboteur;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import saboteur.model.Game;
 import saboteur.state.*;
+import saboteur.tools.Resources;
+import javafx.scene.layout.StackPane;
 
 
 public class App extends Application {
@@ -24,6 +25,8 @@ public class App extends Application {
         primaryStage = stage;
         initStage();
 
+        //Resources.loadMusic().play();
+
         GameStateMachine gsm = new GameStateMachine();
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
         gsm.add("newGameMenu", new NewGameMenuState(gsm, game, primaryStage));
@@ -35,6 +38,12 @@ public class App extends Application {
         gsm.add("gameOptions", new GameOptionsState(gsm, game, primaryStage));
         gsm.add("score", new ScoreState(gsm, game, primaryStage));
         gsm.add("help", new HelpState(gsm, game, primaryStage));
+        gsm.add("playerWait", new PlayerWaitState(gsm, game, primaryStage));
+        gsm.add("playerSelectedPath", new PlayerSelectedPathCardState(gsm, game, primaryStage));
+        gsm.add("playerSelectedAction", new PlayerSelectedActionCardToPlayerState(gsm, game, primaryStage));
+        gsm.add("playerSelectedPlan", new PlayerSelectedPlanCardState(gsm, game, primaryStage));
+        gsm.add("playerEndOfTurn", new PlayerEndOfTurnState(gsm, game, primaryStage));
+
         gsm.change("mainMenu");
 
         GameLoop gameLoop = new GameLoop(gsm);

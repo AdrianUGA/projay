@@ -3,6 +3,7 @@ package saboteur.model;
 import saboteur.model.Card.*;
 
 public class OperationActionCardToPlayer extends Operation {
+	private static final long serialVersionUID = -655657832529547829L;
 	private Player destinationPlayer; //TO SAVE
 	private Tool toolDestination; //TO SAVE
 	private SabotageCard destinationCard; //TO SAVE
@@ -63,6 +64,11 @@ public class OperationActionCardToPlayer extends Operation {
 	@Override
 	public boolean isOperationActionCardToPlayer(){
 		return true;
+	}
+	
+	@Override
+	public void displayOperationInformation(){
+		System.out.print("OperationActionCardToPlayer : destination Player = " + getDestinationPlayer().getName());
 	}
 	
 }

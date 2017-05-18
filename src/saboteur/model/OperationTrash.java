@@ -4,6 +4,9 @@ import saboteur.model.Card.Card;
 
 public class OperationTrash extends Operation {
 
+
+	private static final long serialVersionUID = -5255213409983264528L;
+
 	public OperationTrash(Player sourcePlayer, Card card) {
 		super(sourcePlayer, card);
 	}
@@ -21,6 +24,11 @@ public class OperationTrash extends Operation {
 	@Override
 	public boolean isOperationTrash(){
 		return true;
+	}
+	
+	@Override
+	public void displayOperationInformation(){
+		System.out.print("OperationTrash : Card = " + this.getCard().getClassName());
 	}
 
 }

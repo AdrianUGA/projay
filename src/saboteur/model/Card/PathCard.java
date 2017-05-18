@@ -5,7 +5,8 @@ import java.util.List;
 
 public class PathCard extends Card {
 	//OPENUP(1), OPENRIGHT(2), OPENDOWN(4), OPENLEFT(8));
-	
+
+	private static final long serialVersionUID = -2735810986215991517L;
 	private List<Cardinal> openSides;
     private final boolean isCulDeSac;
     private final boolean isGoal;
@@ -73,7 +74,7 @@ public class PathCard extends Card {
 			newOpenSides.add(cardinal.opposite());
 		}
 		this.openSides = newOpenSides;
-		this.isReversed = false;
+		this.isReversed = !this.isReversed;
 		
 	}
 	
@@ -128,4 +129,9 @@ public class PathCard extends Card {
 	public boolean isPathCard() {
 		return true;
 	}
+	
+	@Override
+	public void displayCardType(){
+    	System.out.println("PathCard");
+    }
 }

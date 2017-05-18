@@ -45,7 +45,6 @@ public class Board implements Serializable {
 	}
 	
 	public void addCard(PathCard card, Position position){
-		System.out.println("carte =" +card);
 		if(card == null)
 			return;
 		if(card.isGoal())

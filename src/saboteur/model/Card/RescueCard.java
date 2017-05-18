@@ -1,6 +1,8 @@
 package saboteur.model.Card;
 
 public class RescueCard extends ActionCardToPlayer {
+
+	private static final long serialVersionUID = 3465799595171860044L;
 	private Tool rescueType;
 	
 	public RescueCard(Tool type){
@@ -34,4 +36,9 @@ public class RescueCard extends ActionCardToPlayer {
 	public boolean isRescueCard() {
 		return true;
 	}
+	
+	@Override
+	public void displayCardType(){
+    	System.out.println("RescueCard");
+    }
 }

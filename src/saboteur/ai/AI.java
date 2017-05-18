@@ -38,6 +38,9 @@ public class AI extends Player {
 	}
 	
 	public void initializeAI(){
+		this.operationsWeight.clear();
+		this.isDwarf.clear();
+		this.estimatedGoldCardPosition.clear();
 		//Initialize estimated gold card position
 		for (Position position : game.getBoard().getGoalCards()){
 			this.estimatedGoldCardPosition.put(position, 1f/3f);
@@ -71,29 +74,27 @@ public class AI extends Player {
 		}
 	}
 
-	// Collapse card
+	// Plan & Collapse card
 	public void updateTrust(OperationActionCardToBoard o){
-		switch(o.getCard().getClass().getName()){
-		case "saboteur.model.Card.PlanCard":
+		if(o.getCard().isPlanCard()){
 			// Nothing to update
-			break;
-		case "saboteur.model.Card.CollapseCard":
-			if(((PathCard) o.getCard()).isCulDeSac()){
-				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) + 20);
+		}
+		else if(o.getCard().isCollapseCard()){
+			if(((PathCard) o.getDestinationCard()).isCulDeSac()){
+				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) + 10);
 			}
 			else{
 				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) - 20);
 			}
-			break;
-		default:
-			//System.err.println("Operation ActionCardToBoard undetected");
+		}
+		else{
+			System.err.println("Operation ActionCardToBoard undetected");
 		}
 	}
 	
 	// Sabotage & Rescue card
 	public void updateTrust(OperationActionCardToPlayer o){
-		switch(o.getCard().getClassName()){
-		case "saboteur.model.Card.SobotageCard":
+		if(o.getCard().isSabotageCard()){
 			if(isDwarf.get(o.getSourcePlayer()) > isDwarf.get(o.getDestinationPlayer()) && (isDwarf.get(o.getDestinationPlayer()) <= 40)){
 				// Ennemies of our ennemies are our allies
 				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) + 10);
@@ -102,9 +103,8 @@ public class AI extends Player {
 				// Ennemies of our allies are our ennemies
 				isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) - 10);
 			}
-			break;
-		case "saboteur.model.Card.RescueCard":
-		case "saboteur.model.Card.DoubleRescueCard":
+		}
+		else if(o.getCard().isRescueCard() || o.getCard().isDoubleRescueCard()){
 			if(!o.getSourcePlayer().equals(o.getDestinationPlayer())){
 				if(isDwarf.get(o.getDestinationPlayer()) <= 40){
 					// Allies of our ennemies are our ennemies
@@ -115,9 +115,9 @@ public class AI extends Player {
 					isDwarf.put(o.getSourcePlayer(), isDwarf.get(o.getSourcePlayer()) + 10);
 				}
 			}
-			break;
-		default:
-			//System.err.println("Operation ActionCarToPlayer undetected");
+		}
+		else{
+			System.err.println("Operation ActionCarToPlayer undetected");
 		}
 	}
 	
@@ -205,21 +205,15 @@ public class AI extends Player {
 	protected void resetProbabilitiesToPlayEachOperation(){
 		operationsWeight.clear();
 		for(Card c : getHand()){
-			////System.out.println("name = " +c.getClassName());
-			switch(c.getClassName()){
-			case "saboteur.model.Card.PathCard" :
+			if(c.isPathCard()){
 				operationsWeight.put(new OperationPathCard(this, c, null), 0f);
-				break;
-			case "saboteur.model.Card.CollapseCard" :
-			case "saboteur.model.Card.PlanCard" :
-				operationsWeight.put(new OperationActionCardToBoard(this, c, null), 0f);
-				break;
-			case "saboteur.model.Card.RescueCard":
-			case "saboteur.model.Card.DoubleRescueCard":
-			case "saboteur.model.Card.SabotageCard":
-				operationsWeight.put(new OperationActionCardToPlayer(this, c, null), 0f);
-				break;
 			}
+			else if(c.isCollapseCard() || c.isPlanCard()){
+				operationsWeight.put(new OperationActionCardToBoard(this, c, null), 0f);
+			}
+			else if(c.isRescueCard() || c.isDoubleRescueCard() || c.isSabotageCard()){
+				operationsWeight.put(new OperationActionCardToPlayer(this, c, null), 0f);
+			}	
 		}
 	}
 	
@@ -227,22 +221,17 @@ public class AI extends Player {
 		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			if(o.getClass().getName() != "saboteur.model.OperationTrash"){
-				switch(o.getCard().getClassName()){
-				case "saboteur.model.Card.PathCard" :
+				if(o.getCard().isPathCard()){
 					if(((OperationPathCard) o).getP() == null)
 						operationsWeight.remove((OperationPathCard) o);
-					break;
-				case "saboteur.model.Card.CollapseCard" :
-				case "saboteur.model.Card.PlanCard" :
+				}
+				else if(o.getCard().isCollapseCard() || o.getCard().isPlanCard()){
 					if(((OperationActionCardToBoard) o).getDestinationCard() == null)
 						operationsWeight.remove((OperationActionCardToBoard) o);
-					break;
-				case "saboteur.model.Card.RescueCard":
-				case "saboteur.model.Card.DoubleRescueCard":
-				case "saboteur.model.Card.SabotageCard":
+				}
+				else if(o.getCard().isRescueCard() || o.getCard().isDoubleRescueCard() || o.getCard().isSabotageCard()){
 					if(((OperationActionCardToPlayer) o).getDestinationPlayer() == null)
 						operationsWeight.remove((OperationActionCardToPlayer) o);
-					break;
 				}
 			}
 		}
@@ -311,10 +300,9 @@ public class AI extends Player {
 			}
 		}
 		Operation o = bestOperations.get(r.nextInt(bestOperations.size()));
-		System.out.println("Opération joué par " + this.name + " de type" + o.getClass().getName() + " ... " + o.getCard().getClassName() + " rôle = " + this.getTeam() + " with weight = "+ operationsWeight.get(o));
-		if(o.getClass().getName() == "saboteur.model.OperationPathCard"){
-			System.out.println("x =" + ((OperationPathCard) o).getP().getcX() + " y= " +((OperationPathCard) o).getP().getcY());
-		}
+		System.out.print("Opération joué par " + this.name + " ==> ");
+		o.displayOperationInformation();
+		System.out.println(" ==> rôle = " + this.getTeam() + " with weight = "+ operationsWeight.get(o));
 		return o;
 	}
 	

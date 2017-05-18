@@ -12,7 +12,7 @@
 
 <HBox alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" prefHeight="786.0" prefWidth="823.0" style="-fx-background-color: rgba(0,0,0,0.7);">
+      <VBox alignment="CENTER" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.7);">
          <HBox.margin>
             <Insets />
          </HBox.margin>
@@ -25,12 +25,12 @@
                   <Insets bottom="40.0" top="20.0" />
                </VBox.margin>
             </ImageView>
-            <ScrollPane prefHeight="371.0" prefWidth="691.0" style="-fx-background-color: transparent;">
+            <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="25.0" left="40.0" right="40.0" top="25.0" />
                </VBox.margin>
                <content>
-                  <VBox fx:id="loadableGameContainer" prefHeight="500.0" prefWidth="748.0" style="-fx-background-color: rgba(0,0,0,0.7);">
+                  <VBox fx:id="loadableGameContainer" style="-fx-background-color: rgba(0,0,0,0.7);">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
@@ -56,6 +56,9 @@
                </VBox.margin>
             </AnchorPane>
          </children>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </VBox>
    </children>
 </HBox>

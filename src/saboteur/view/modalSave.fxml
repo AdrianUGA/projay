@@ -32,7 +32,7 @@
          </VBox.margin>
       </ScrollPane>
       <Pane prefHeight="99.0" prefWidth="300.0" />
-      <TextField opacity="0.7" promptText="Nouveau nom de partie" style="-fx-background-color: transparent; -fx-border-color: transparent transparent white transparent; -fx-border-width: 2;">
+      <TextField promptText="Nouveau nom de partie" style="-fx-background-color: transparent; -fx-border-color: transparent transparent white transparent; -fx-border-width: 2; -fx-text-fill: white;">
          <font>
             <Font size="14.0" />
          </font>
