@@ -25,9 +25,9 @@ public class GameStateMachine {
         this.statesStack.peek().onEnter(null);
     }
 
-    public void push(String name, Stage parentStage){
+    public void push(String name, Object param){
         this.statesStack.push(this.states.get(name));
-        this.statesStack.peek().onEnter(parentStage);
+        this.statesStack.peek().onEnter(param);
     }
 
     public void pop(){

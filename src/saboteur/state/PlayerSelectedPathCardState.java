@@ -22,6 +22,7 @@ public class PlayerSelectedPathCardState extends State{
 
     @Override
     public void onEnter(Object param) {
+        System.out.println("path card");
 
     }
 
