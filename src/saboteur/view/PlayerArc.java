@@ -17,7 +17,6 @@ public class PlayerArc extends Pane{
 	private Player player;
 	private Path path = new Path();
 	private Circle circle[] = new Circle[3];
-	private boolean malus[] = new boolean[3];
 
 	public PlayerArc(double sizeOfArc, double center, double lengthOfArc, double startAngle, Player player) {
 		this.player = player;
@@ -39,7 +38,6 @@ public class PlayerArc extends Pane{
             this.circle[i].setStroke(Color.BLACK);
             this.circle[i].setStrokeWidth(3);
             this.getChildren().add(this.circle[i]);
-            malus[i] = false;
 		}		
 	}
 	
@@ -97,10 +95,6 @@ public class PlayerArc extends Pane{
 	
 	public Circle[] getCircle() {
 		return circle;
-	}
-	
-	public boolean getMalus(int index) {
-		return this.malus[index];
 	}
 	
 	public Player getPlayer() {

@@ -22,6 +22,7 @@ public class PlayerSelectedPlanCardState extends State{
 
     @Override
     public void onEnter(Object param) {
+        System.out.println("plan card");
 
     }
 
