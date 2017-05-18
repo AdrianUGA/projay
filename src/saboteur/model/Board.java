@@ -98,6 +98,13 @@ public class Board implements Serializable {
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
+	//Used by AI
+	public PathCard temporarRemoveCard(Position position){
+		PathCard removed = this.pathCardsPosition.remove(position);
+		this.board[position.getcY()][position.getcX()] = null;
+		return removed;
+	}
+	
 	public Set<Position> extractPositions(Set<OperationPathCard> operations){
 		Set<Position> positions = new HashSet<Position>();
 		for(OperationPathCard operation : operations){
@@ -374,5 +381,9 @@ public class Board implements Serializable {
 	//TODO Remove this method, just needed it for test
 	public int amountOfCards(){
 		return this.pathCardsPosition.size();
+	}
+
+	public Map<Position, PathCard> getPathCardsPosition() {
+		return pathCardsPosition;
 	}
 }

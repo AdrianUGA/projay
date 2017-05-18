@@ -154,8 +154,42 @@ public abstract class Player implements Serializable {
 		}
 		return false;
 	}
-	public boolean canHandicap(SabotageCard card){
+	
+	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card, Player player) {
+		Tool currentType;
+		for (SabotageCard sabotageCard : player.handicaps){
+			currentType = sabotageCard.getSabotageType();
+			if (currentType == card.getRescueType1() || currentType == card.getRescueType2()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean canRescueType(Tool rescueType) {
+		Tool currentType;
 		for (SabotageCard sabotageCard : this.handicaps){
+			currentType = sabotageCard.getSabotageType();
+			if (currentType == rescueType){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean canRescueType(Tool rescueType, Player player) {
+		Tool currentType;
+		for (SabotageCard sabotageCard : player.handicaps){
+			currentType = sabotageCard.getSabotageType();
+			if (currentType == rescueType){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean canHandicap(SabotageCard card, Player p){
+		for (SabotageCard sabotageCard : p.handicaps){
 			if (sabotageCard.getSabotageType() == card.getSabotageType()){
 				return false;
 			}

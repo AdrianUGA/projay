@@ -95,6 +95,7 @@ public class NewGameMenuState extends State{
     @FXML
     private void startNewGameButtonAction() {
     	game.getPlayerList().clear();
+    	game.getObservers().clear();
         for (Node n: this.playerContainer.getChildren()) {
             NewPlayerHBox playerBox = (NewPlayerHBox) n;
             String playerName = playerBox.getPlayerName().getCharacters().toString();
