@@ -52,6 +52,8 @@ public class GameState extends State{
 	private GridPane boardGridPane;
 	private int xmin, xmax, ymin, ymax;
 
+	GameStateMachine psm;
+
     public GameState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
     }
@@ -83,6 +85,9 @@ public class GameState extends State{
                 }*/
                     this.game.nextPlayer();
                 }
+                else{
+                	this.gsm.push("playerWait");
+				}
             }
         }
     }
