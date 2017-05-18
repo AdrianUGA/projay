@@ -61,6 +61,20 @@ public class Board implements Serializable {
 		//this.childrenDad.put(position, find(position));
 		this.board[position.getcY()][position.getcX()] = card;
 	}
+	
+	//Used by AI to test what happens if it put a card somewhere
+	//So we don't want goal cards to be shown
+	public void temporarAddCard(OperationPathCard o){
+		if(o.getCard() == null)
+			return;
+		if(o.getReversed()){
+			this.pathCardsPosition.put(o.getP(),((PathCard) o.getCard()).reversed());
+			this.board[o.getP().getcY()][o.getP().getcX()] = ((PathCard) o.getCard()).reversed();
+		}else{
+			this.pathCardsPosition.put(o.getP(),(PathCard) o.getCard());
+			this.board[o.getP().getcY()][o.getP().getcX()] = (PathCard) o.getCard();
+		}
+	}
 
 	public void removeCard(Position position){
 		if(this.getCard(position).isGoal())
@@ -120,6 +134,16 @@ public class Board implements Serializable {
 		return positions;
 	}
 	
+	public List<Position> getAllEmptyNeighbors(Position position){
+		LinkedList<Position> positions = new LinkedList<Position>();
+		for(Cardinal cardinal : Cardinal.values()){
+			Position p = position.getNeighbor(cardinal);
+			if (p == null)
+				positions.add(p);
+		}
+		return positions;
+	}	
+	
 	public Position getPosition(PathCard card){
 		if (card == null)
 			return null;
@@ -152,8 +176,10 @@ public class Board implements Serializable {
 					continue;
 				
 				if(card == null){
-					possiblePlaces.add(operation);
-					possiblePlaces.add(operationReversed);
+					if(canPutAPathCardThere(neighbor)){
+						possiblePlaces.add(operation);
+						possiblePlaces.add(operationReversed);
+					}
 				}else if(this.isPossible(card, neighbor)){
 					possiblePlaces.add(operation);
 				}else if(this.isPossible(card.reversed(), neighbor)){
@@ -161,10 +187,44 @@ public class Board implements Serializable {
 				}
 			}
 		}
-		
 		return possiblePlaces;
 	}
 	
+	/* Returns every free positions for a PathCard*/
+	public Set<Position> getPossiblePositionPathCard(PathCard card){
+		Set<Position> possiblePlaces = new HashSet<Position>();
+		
+		for(PathCard pathCard : this.pathCardsPosition.values()){
+			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
+				
+				if (this.getCard(neighbor) != null)
+					continue;
+				
+				if(card == null){
+					System.err.println("Carte null ! (getPossiblePositionPathCard)");
+				}else if(this.isPossible(card, neighbor)){
+					possiblePlaces.add(neighbor);
+				}else if(this.isPossible(card.reversed(), neighbor)){
+					possiblePlaces.add(neighbor);
+				}
+			}
+		}
+		return possiblePlaces;
+	}
+	
+	private boolean canPutAPathCardThere(Position pos) {
+		int amountOfComingNeighbor = 0;
+		int amountOfAvailableNeighbor = 0;
+		for(Cardinal cardinal : Cardinal.values()){
+			if(getCard(pos.getNeighbor(cardinal)) == null){
+				amountOfAvailableNeighbor ++;
+			}else if(getCard(pos.getNeighbor(cardinal)).isOpen(cardinal.opposite())){
+				amountOfComingNeighbor++;
+			}
+		}
+		return (amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1);
+	}
+
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
 		List<Position> possible =  new ArrayList<Position>();
 		for(OperationPathCard o : this.getPossibleOperationPathCard(null,null)){
@@ -305,5 +365,10 @@ public class Board implements Serializable {
 
 	public static int getGridSize() {
 		return GRID_SIZE;
+	}
+	
+	//TODO Remove this method, just needed it for test
+	public int amountOfCards(){
+		return this.pathCardsPosition.size();
 	}
 }

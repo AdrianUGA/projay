@@ -1,5 +1,6 @@
 package saboteur;
 
+import javafx.stage.Stage;
 import saboteur.state.State;
 
 import java.util.HashMap;
@@ -22,6 +23,11 @@ public class GameStateMachine {
     public void push(String name){
         this.statesStack.push(this.states.get(name));
         this.statesStack.peek().onEnter(null);
+    }
+
+    public void push(String name, Stage parentStage){
+        this.statesStack.push(this.states.get(name));
+        this.statesStack.peek().onEnter(parentStage);
     }
 
     public void pop(){

@@ -2,26 +2,27 @@ package saboteur.state;
 
 import java.io.IOException;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.tools.Icon;
+import saboteur.tools.Resources;
 
-public class OptionsState implements State {
+public class OptionsState extends State {
 
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
+    @FXML private Slider sliderMusic;
+    @FXML private SVGPath volume;
 
     public OptionsState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override
@@ -40,11 +41,16 @@ public class OptionsState implements State {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/options.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            Pane pane = loader.load();
+            sliderMusic.setValue(Resources.volume*100);
+            changeVolume(Resources.volume*100);
+            sliderMusic.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
+                @Override
+                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                    changeVolume(sliderMusic.getValue());
+                }
+            });
+            this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -54,9 +60,42 @@ public class OptionsState implements State {
     public void onExit() {
 
     }
-    
+
     @FXML
-    private void backButtonAction() {
-    	this.gsm.change("mainMenu");
+    private void okOptionButtonAction() {
+        this.gsm.change("mainMenu");
+    }
+
+    @FXML
+    private void music(){
+        changeVolume(sliderMusic.getValue());
+    }
+
+    private void changeVolume(double newVolume){
+        if(newVolume <= 5) //volume fermé/très faible
+        {
+            volume.setContent(Icon.volumeOff);
+            Resources.loadMusic().setMute(true);
+            Resources.volume = 0;
+
+        }
+        else if(newVolume >50) //volume fort
+        {
+            volume.setContent(Icon.volumeOn);
+            Resources.loadMusic().setMute(false);
+            Resources.loadMusic().setVolume(calculVolume(newVolume));
+            Resources.volume = calculVolume(newVolume);
+        }
+        else //volume pas très fort
+        {
+            volume.setContent(Icon.volumeDown);
+            Resources.loadMusic().setMute(false);
+            Resources.loadMusic().setVolume(calculVolume(newVolume));
+            Resources.volume = calculVolume(newVolume);
+        }
+    }
+
+    private double calculVolume(double value) {
+        return value/100.0;
     }
 }

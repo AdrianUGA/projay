@@ -7,9 +7,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import saboteur.App;
@@ -20,19 +22,17 @@ import saboteur.model.Human;
 import saboteur.model.Player;
 import saboteur.view.NewPlayerHBox;
 
-public class NewGameMenuState implements State{
+public class NewGameMenuState extends State{
 	
 	@FXML private VBox playerContainer;
+	@FXML private Button addPlayerButton;
+
+
 	
 	private int nbPlayer = 3;
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
 
     public NewGameMenuState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override
@@ -51,14 +51,11 @@ public class NewGameMenuState implements State{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/newGameMenu.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
+            Pane pane = loader.load();
+            this.changeLayout(pane);
             addPlayer(1, true);
             addPlayer(2, false);
             addPlayer(3, false);
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -84,9 +81,13 @@ public class NewGameMenuState implements State{
 					Pane p = (Pane)event.getSource();
                     NewPlayerHBox h = (NewPlayerHBox)p.getParent();
 					playerContainer.getChildren().remove(h);
+                    addPlayerButton.setDisable(false);
 			    }
 			};
         	addPlayer(nbPlayer, false, deleteEvent);
+        	if (nbPlayer == 10){
+        	    addPlayerButton.setDisable(true);
+            }
     	}
     }
     
@@ -98,7 +99,7 @@ public class NewGameMenuState implements State{
             String playerType = playerBox.getSelectPlayerMenu().getValue();
             Player player;
             if (playerType.equals("Humain")){
-                player = new Human(this.game);
+                player = new Human(this.game, playerName);
             } else{
                 player = new AI(this.game, "temp");
             }

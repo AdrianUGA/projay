@@ -12,9 +12,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox alignment="CENTER" style="-fx-background-image: url(@../../resources/mine.jpg); -fx-background-size: cover;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" prefHeight="786.0" prefWidth="823.0" style="-fx-background-color: rgba(0,0,0,0.7);">
+      <VBox alignment="CENTER" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.7);">
          <HBox.margin>
             <Insets />
          </HBox.margin>
@@ -27,9 +27,9 @@
                   <Insets bottom="40.0" top="20.0" />
                </VBox.margin>
             </ImageView>
-            <ScrollPane prefHeight="479.0" prefWidth="724.0">
+            <ScrollPane hbarPolicy="NEVER" prefHeight="479.0" VBox.vgrow="ALWAYS">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="2431.0" prefWidth="805.0">
+                <AnchorPane>
                      <children>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="38.0" layoutY="74.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -111,7 +111,7 @@
                               <Font name="System Bold Italic" size="15.0" />
                            </font>
                         </Text>
-                        <Text layoutX="103.0" layoutY="986.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Le bouton fin de tour sert à signaler qu'on a fini son tour. Un joueur qui fini son tour ne reverra plus ses cartes avant son prochain tour." wrappingWidth="688.2885818481445">
+                        <Text layoutX="66.0" layoutY="985.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Le bouton fin de tour sert à signaler qu'on a fini son tour. Un joueur qui fini son tour ne reverra plus ses cartes avant son prochain tour." wrappingWidth="688.2885818481445">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -211,7 +211,7 @@
                               <Image url="@../../resources/cards/pickaxe_card.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="671.0" layoutY="1699.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="665.0" layoutY="1701.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../resources/cards/broken_pickaxe_card.png" />
                            </image>
@@ -231,7 +231,7 @@
                               <Image url="@../../resources/cards/collapse_card.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="676.0" layoutY="1998.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="651.0" layoutY="1998.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../resources/cards/plan_card.png" />
                            </image>
@@ -256,7 +256,7 @@
                               <Font size="15.0" />
                            </font>
                         </Text>
-                        <Text layoutX="519.0" layoutY="2010.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Carte plan" textAlignment="RIGHT" wrappingWidth="141.3053436279297">
+                        <Text layoutX="494.0" layoutY="2010.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Carte plan" textAlignment="RIGHT" wrappingWidth="141.3053436279297">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -266,7 +266,7 @@
                               <Font name="System Bold Italic" size="19.0" />
                            </font>
                         </Label>
-                        <Text layoutX="29.0" layoutY="1921.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Si un joueur a au moins un de ces trois objet cassé, il ne peut pas poser de carte chemin tant qu'il ne s'est pas débarasser de l'objet cassée en question (il faut pour cela jouer une carte de l'objet réparé)." textAlignment="CENTER" wrappingWidth="750.8891792297363">
+                        <Text layoutX="19.0" layoutY="1923.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Si un joueur a au moins un de ces trois objet cassé, il ne peut pas poser de carte chemin tant qu'il ne s'est pas débarasser de l'objet cassée en question (il faut pour cela jouer une carte de l'objet réparé)." textAlignment="CENTER" wrappingWidth="750.8891792297363">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -276,27 +276,27 @@
                               <Font size="15.0" />
                            </font>
                         </Text>
-                        <Text layoutX="466.0" layoutY="2036.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Une fois jouer, cette carte permet de regarder une seule fois une des cartes objectif au choix. Seul le joueur qui joue cette carte voit la carte objectif dévoilée." textAlignment="JUSTIFY" wrappingWidth="201.6314697265625">
+                        <Text layoutX="441.0" layoutY="2036.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Une fois jouer, cette carte permet de regarder une seule fois une des cartes objectif au choix. Seul le joueur qui joue cette carte voit la carte objectif dévoilée." textAlignment="JUSTIFY" wrappingWidth="201.6314697265625">
                            <font>
                               <Font size="15.0" />
                            </font>
                         </Text>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="61.0" layoutY="2174.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="29.0" layoutY="2174.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../resources/cards/pickaxe_lantern_card.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="178.0" layoutY="2173.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="146.0" layoutY="2173.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../resources/cards/lantern_cart_card.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="293.0" layoutY="2171.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="261.0" layoutY="2171.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../resources/cards/pickaxe_cart_card.png" />
                            </image>
                         </ImageView>
-                        <Text layoutX="404.0" layoutY="2214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ces trois cartes ne peuvent apparaitre qu'une seule fois dans le jeu. Elles servent à se débarasser d'un et un seul objet cassé. Elles ont deux possibilité de réparation chacune. Le joueur qui joue cette carte doit choisir quel objet il veut réparer." textAlignment="JUSTIFY" wrappingWidth="369.6314697265625">
+                        <Text layoutX="372.0" layoutY="2214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ces trois cartes ne peuvent apparaitre qu'une seule fois dans le jeu. Elles servent à se débarasser d'un et un seul objet cassé. Elles ont deux possibilité de réparation chacune. Le joueur qui joue cette carte doit choisir quel objet il veut réparer." textAlignment="JUSTIFY" wrappingWidth="369.6314697265625">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -305,18 +305,26 @@
                   </AnchorPane>
               </content>
             </ScrollPane>
-            <AnchorPane prefHeight="85.0" prefWidth="900.0">
-               <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" layoutX="345.0" layoutY="-5.0" mnemonicParsing="false" onAction="#okButtonAction" onMouseClicked="#okButtonAction" prefHeight="44.0" prefWidth="135.0" text="OK">
-                     <font>
-                        <Font size="20.0" />
-                     </font></Button>
-               </children>
+            <AnchorPane>
                <VBox.margin>
                   <Insets bottom="20.0" top="50.0" />
                </VBox.margin>
             </AnchorPane>
+            <HBox alignment="CENTER">
+               <VBox.margin>
+                  <Insets bottom="20.0" top="50.0" />
+               </VBox.margin>
+               <children>
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#okButtonAction" onMouseClicked="#okButtonAction" prefHeight="44.0" prefWidth="135.0" text="OK">
+                     <font>
+                        <Font size="20.0" />
+                     </font></Button>
+               </children>
+            </HBox>
          </children>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </VBox>
    </children>
 </HBox>

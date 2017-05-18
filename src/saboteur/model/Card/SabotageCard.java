@@ -26,8 +26,17 @@ public class SabotageCard extends ActionCardToPlayer {
 		return card;
 	}
 	
+	public Tool getTool(){
+		return sabotageType;
+	}
+	
 	@Override
 	public boolean isSabotageCard() {
 		return true;
 	}
+	
+	@Override
+	public void displayCardType(){
+    	System.out.println("SabotageCard");
+    }
 }

@@ -7,21 +7,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 
-public class ScoreState implements State {
-
-    private GameStateMachine gsm;
-    private Game game;
-    private Stage primaryStage;
+public class ScoreState extends State {
 
     public ScoreState(GameStateMachine gsm, Game game, Stage primaryStage){
-        this.gsm = gsm;
-        this.game = game;
-        this.primaryStage = primaryStage;
+        super(gsm, game, primaryStage);
     }
 
     @Override
@@ -40,11 +35,8 @@ public class ScoreState implements State {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/score.fxml"));
             loader.setController(this);
-            Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout);
-            this.primaryStage.setScene(scene);
-            this.primaryStage.setFullScreen(true);
-            this.primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+            Pane pane = loader.load();
+            this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -56,7 +48,7 @@ public class ScoreState implements State {
     }
     
     @FXML
-    private void backButtonAction() {
+    private void okScoresButtonAction() {
     	this.gsm.change("mainMenu");
     }
 }

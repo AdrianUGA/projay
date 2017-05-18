@@ -12,4 +12,9 @@ public class PlanCard extends ActionCardToBoard {
 		return true;
 	}
 	
+	@Override
+	public void displayCardType(){
+    	System.out.println("PlanCard");
+    }
+	
 }

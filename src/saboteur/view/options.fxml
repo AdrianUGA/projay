@@ -2,19 +2,18 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox alignment="CENTER" style="-fx-background-image: url(@../../resources/mine.jpg);" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" opacity="0.7" style="-fx-background-color: black;">
+      <VBox alignment="CENTER" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.7);">
          <HBox.margin>
             <Insets />
          </HBox.margin>
@@ -27,26 +26,40 @@
                   <Insets bottom="40.0" top="20.0" />
                </VBox.margin>
             </ImageView>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox VBox.vgrow="ALWAYS">
                <children>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER">
                      <children>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Musique" />
-                        <SVGPath content="M40,60 C42,48 44,30 25,32" />
-                        <Slider />
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Musique">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Text>
+                        <Slider fx:id="sliderMusic" onMouseClicked="#music" onMouseDragReleased="#music" value="50.0">
+                           <HBox.margin>
+                              <Insets left="50.0" right="50.0" />
+                           </HBox.margin>
+                        </Slider>
+                        <SVGPath fx:id="volume" content="M12 5.5v17c0 0.547-0.453 1-1 1-0.266 0-0.516-0.109-0.703-0.297l-5.203-5.203h-4.094c-0.547 0-1-0.453-1-1v-6c0-0.547 0.453-1 1-1h4.094l5.203-5.203c0.187-0.187 0.438-0.297 0.703-0.297 0.547 0 1 0.453 1 1zM18 14c0 1.563-0.953 3.078-2.422 3.672-0.125 0.063-0.266 0.078-0.391 0.078-0.547 0-1-0.438-1-1 0-1.188 1.813-0.859 1.813-2.75s-1.813-1.563-1.813-2.75c0-0.562 0.453-1 1-1 0.125 0 0.266 0.016 0.391 0.078 1.469 0.578 2.422 2.109 2.422 3.672zM22 14c0 3.172-1.906 6.125-4.844 7.359-0.125 0.047-0.266 0.078-0.391 0.078-0.562 0-1.016-0.453-1.016-1 0-0.438 0.25-0.734 0.609-0.922 0.422-0.219 0.812-0.406 1.188-0.688 1.547-1.125 2.453-2.922 2.453-4.828s-0.906-3.703-2.453-4.828c-0.375-0.281-0.766-0.469-1.188-0.688-0.359-0.187-0.609-0.484-0.609-0.922 0-0.547 0.453-1 1-1 0.141 0 0.281 0.031 0.406 0.078 2.938 1.234 4.844 4.188 4.844 7.359zM26 14c0 4.797-2.859 9.141-7.266 11.031-0.125 0.047-0.266 0.078-0.406 0.078-0.547 0-1-0.453-1-1 0-0.453 0.234-0.703 0.609-0.922 0.219-0.125 0.469-0.203 0.703-0.328 0.438-0.234 0.875-0.5 1.281-0.797 2.562-1.891 4.078-4.875 4.078-8.062s-1.516-6.172-4.078-8.062c-0.406-0.297-0.844-0.562-1.281-0.797-0.234-0.125-0.484-0.203-0.703-0.328-0.375-0.219-0.609-0.469-0.609-0.922 0-0.547 0.453-1 1-1 0.141 0 0.281 0.031 0.406 0.078 4.406 1.891 7.266 6.234 7.266 11.031z" fill="WHITE" />
                      </children>
                   </HBox>
-                  <RadioButton mnemonicParsing="false" selected="true" text="Français" />
-                  <RadioButton mnemonicParsing="false" text="Anglais" />
                </children>
             </VBox>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <HBox alignment="CENTER">
                <children>
-                  <Button fx:id="backButtonAction" alignment="CENTER" layoutX="24.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#cancelOptionButtonAction" prefHeight="25.0" prefWidth="81.0" text="Annuler" AnchorPane.leftAnchor="24.0" />
-                  <Button fx:id="okOptionButton" alignment="CENTER" contentDisplay="CENTER" layoutX="205.0" layoutY="80.0" mnemonicParsing="false" onMouseClicked="#okOptionButtonAction" prefHeight="25.0" prefWidth="81.0" text="OK" AnchorPane.rightAnchor="24.0" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onMouseClicked="#okOptionButtonAction" prefHeight="31.0" prefWidth="109.0" text="OK">
+                     <font>
+                        <Font size="15.0" />
+                     </font></Button>
                </children>
-            </AnchorPane>
+               <VBox.margin>
+                  <Insets bottom="20.0" top="50.0" />
+               </VBox.margin>
+            </HBox>
          </children>
+         <padding>
+            <Insets left="20.0" right="20.0" />
+         </padding>
       </VBox>
    </children>
 </HBox>

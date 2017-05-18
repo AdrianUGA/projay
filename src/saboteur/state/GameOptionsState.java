@@ -2,12 +2,11 @@ package saboteur.state;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import saboteur.App;
@@ -16,11 +15,11 @@ import saboteur.model.Game;
 
 import java.io.IOException;
 
-public class PauseMenuState extends State {
+public class GameOptionsState extends State {
 
     private Stage modalStage;
 
-    public PauseMenuState(GameStateMachine gsm, Game game, Stage primaryStage){
+    public GameOptionsState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
     }
 
@@ -43,46 +42,31 @@ public class PauseMenuState extends State {
         this.modalStage.initOwner(primaryStage);
         this.modalStage.setTitle("modal");
 
+        //add a modal box from builder (exit game confirmation)
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(App.class.getResource("/saboteur/view/modalPauseMenu.fxml"));
+            loader.setLocation(App.class.getResource("/saboteur/view/modalOptions.fxml"));
             loader.setController(this);
-            Pane modalPane = loader.load();
-            Scene scene = new Scene(modalPane, 900, primaryStage.getHeight(), Color.TRANSPARENT);
+            Pane rootLayout = loader.load();
+            Scene scene = new Scene(rootLayout,400, 400, Color.TRANSPARENT);
             this.modalStage.setScene(scene);
-
-            this.modalStage.setX(primaryStage.getWidth()/2d - 900/2d);
-            this.modalStage.setY(0);
-
-            this.modalStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        this.modalStage.setX(primaryStage.getWidth() - (primaryStage.getWidth()/2) - 200);
+        this.modalStage.setY(primaryStage.getHeight() - (primaryStage.getHeight()/2) - 200);
+
+        this.modalStage.show();
     }
 
     @Override
     public void onExit() {
         this.modalStage.close();
     }
-
+    
     @FXML
-    private void resumeButtonAction(){
-        this.gsm.pop();
-    }
-
-    @FXML
-    private void saveButtonAction(){
-        this.modalStage.close();
-        this.gsm.push("saveGame", this.modalStage);
-    }
-
-    @FXML
-    private void optionButtonAction(){
-
-    }
-
-    @FXML
-    private void mainMenuButtonAction(){
-        this.gsm.change("mainMenu");
+    private void backButtonAction() {
+    	this.gsm.change("mainMenu");
     }
 }
