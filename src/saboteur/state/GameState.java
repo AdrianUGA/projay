@@ -141,17 +141,6 @@ public class GameState extends State{
     	 * Pour pas être embêter par le problème de setTeam(),
     	 * commente son appel dans la méthode newRound de la classe Game
     	 */
-
-    	//Début du bloc à commenter
-    	
-    	this.game.getPlayerList().clear();
-    	this.game.getObservers().clear();
-    	
-    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY));
-    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY));
-    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY));
-    	
-    	//Fin du bloc à commenter
         
         this.resources.loadImage();
         this.resources.loadPicto();
