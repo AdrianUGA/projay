@@ -3,6 +3,7 @@ package saboteur.state;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -12,6 +13,7 @@ import javafx.stage.StageStyle;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.tools.Loader;
 
 import java.io.IOException;
 
@@ -20,6 +22,7 @@ public class SaveGameState extends State {
     private Stage modalStage;
     private Stage parentStage;
     @FXML private TextField newGameName;
+    @FXML private ListView<String> listFile;
 
     public SaveGameState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -50,13 +53,25 @@ public class SaveGameState extends State {
             loader.setLocation(App.class.getResource("/saboteur/view/modalSave.fxml"));
             loader.setController(this);
             Pane rootLayout = loader.load();
-            Scene scene = new Scene(rootLayout, 400, 500, Color.TRANSPARENT);
+            Scene scene = new Scene(rootLayout, 900, primaryStage.getHeight(), Color.TRANSPARENT);
+
+            String stylesheet = App.class.getResource("/resources/style.css").toExternalForm();
+            scene.getStylesheets().add(stylesheet);
+
             this.modalStage.setScene(scene);
 
-            this.modalStage.setX(primaryStage.getWidth()/2d - 400/2d);
-            this.modalStage.setY(primaryStage.getHeight()/2d - 500/2d);
+            this.modalStage.setX(primaryStage.getWidth()/2d - 900/2d);
+            this.modalStage.setY(0);
 
             this.modalStage.show();
+
+            listFile.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> newGameName.setText(newValue));
+
+            Loader loaderSaves = new Loader();
+            for (String savedFile : loaderSaves.loadSavedFile()) {
+                listFile.getItems().add(savedFile);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

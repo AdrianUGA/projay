@@ -9,6 +9,10 @@ import saboteur.state.*;
 import saboteur.tools.Resources;
 import javafx.scene.layout.StackPane;
 
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 
 public class App extends Application {
 
@@ -25,7 +29,7 @@ public class App extends Application {
         primaryStage = stage;
         initStage();
 
-        //Resources.loadMusic().play();
+        Resources.loadMusic().play();
 
         GameStateMachine gsm = new GameStateMachine();
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));
@@ -53,7 +57,10 @@ public class App extends Application {
     private void initStage(){
         primaryStage.setTitle("Saboteur");
         StackPane rootLayout = new StackPane();
-        rootLayout.setStyle("-fx-background-image:  url(@../../resources/mine.jpg); -fx-background-size: cover;");
+
+        String stylesheet = App.class.getResource("/resources/style.css").toExternalForm();
+        rootLayout.getStylesheets().add(stylesheet);
+
         primaryStage.setScene(new Scene(rootLayout));
         primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);

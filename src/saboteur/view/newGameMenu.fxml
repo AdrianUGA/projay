@@ -12,31 +12,31 @@
 
 <HBox alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="TOP_CENTER" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.7); -fx-background-size: cover;">
+      <VBox alignment="TOP_CENTER" prefWidth="900.0" styleClass="modal-pane-content">
          <children>
             <ImageView fitHeight="150.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../resources/nouvelePartieLogo.png" />
                </image>
                <VBox.margin>
-                  <Insets bottom="40.0" top="20.0" />
+                  <Insets bottom="50.0" top="150.0" />
                </VBox.margin>
             </ImageView>
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2em;" text="Les joueurs" textAlignment="CENTER">
                <VBox.margin>
                   <Insets />
                </VBox.margin></Text>
-            <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+            <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
                <VBox.margin>
                   <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
                </VBox.margin>
                <content>
-                  <VBox fx:id="playerContainer" alignment="TOP_CENTER" style="-fx-background-color: rgba(0,0,0,0.7);" />
+                  <VBox fx:id="playerContainer" alignment="TOP_CENTER" />
                </content>
             </ScrollPane>
             <HBox alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#backButtonAction" text="Annuler" textAlignment="CENTER">
+                  <Button mnemonicParsing="false" onAction="#backButtonAction" styleClass="btn" text="Annuler" textAlignment="CENTER">
                      <HBox.margin>
                         <Insets right="50.0" top="20.0" />
                      </HBox.margin>
@@ -44,7 +44,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="addPlayerButton" mnemonicParsing="false" onAction="#addPlayerButtonAction" text="Ajouter un nouveau joueur" textAlignment="CENTER">
+                  <Button fx:id="addPlayerButton" mnemonicParsing="false" onAction="#addPlayerButtonAction" styleClass="btn" text="Ajouter un nouveau joueur" textAlignment="CENTER">
                      <HBox.margin>
                         <Insets bottom="20.0" />
                      </HBox.margin>
@@ -52,7 +52,7 @@
                         <Font size="20.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#startNewGameButtonAction" text="Commencer" textAlignment="CENTER">
+                  <Button mnemonicParsing="false" onAction="#startNewGameButtonAction" styleClass="btn" text="Commencer" textAlignment="CENTER">
                      <HBox.margin>
                         <Insets left="50.0" top="20.0" />
                      </HBox.margin>
@@ -62,7 +62,7 @@
                   </Button>
                </children>
                <VBox.margin>
-                  <Insets bottom="20.0" top="25.0" />
+                  <Insets bottom="100.0" top="50.0" />
                </VBox.margin>
             </HBox>
          </children>
