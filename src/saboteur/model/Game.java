@@ -6,11 +6,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javafx.scene.input.KeyCombination;
 import saboteur.ai.AI;
 import saboteur.model.Card.*;
 import saboteur.tools.Loader;
-import saboteur.ai.AI;
 
 public class Game {
 
@@ -73,8 +71,9 @@ public class Game {
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 		
 		File configFile = new File(Loader.configFolder+ "/" + name + ".config");
+		BufferedReader reader = null;
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(configFile));
+			reader = new BufferedReader(new FileReader(configFile));
 			String chaine;
 			
 			this.playerList.clear();
@@ -94,6 +93,15 @@ public class Game {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally {
+			if (reader != null){
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		//this.currentPlayerIndex = this.playerList.size()-1;
