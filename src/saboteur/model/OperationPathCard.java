@@ -26,7 +26,6 @@ public class OperationPathCard extends Operation {
 		}
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		game.getBoard().addCard((PathCard)this.getCard(), p);
-		System.out.println("carte posé en x= " + p.getcX() + " y= " +p.getcY());
 		
 		this.goalCardsToFlip = game.getBoard().getGoalCardsToFlip((PathCard)this.getCard(), p);
 		PathCard toFlip;
@@ -86,5 +85,10 @@ public class OperationPathCard extends Operation {
 	@Override
 	public boolean isOperationPathCard(){
 		return true;
+	}
+	
+	@Override
+	public void displayOperationInformation(){
+		System.out.print("OperationPathCard : Position cX = "+getP().getcX() + " cY = " + getP().getcY() + " " + ((PathCard) getCard()).toString());
 	}
 }
