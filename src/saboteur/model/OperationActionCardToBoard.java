@@ -3,6 +3,8 @@ package saboteur.model;
 import saboteur.model.Card.*;
 
 public class OperationActionCardToBoard extends Operation {
+
+	private static final long serialVersionUID = 1105275240537798093L;
 	private PathCard destinationCard; //TO SAVE
 	private Position positionDestination; //TO SAVE
 	
@@ -51,9 +53,22 @@ public class OperationActionCardToBoard extends Operation {
 		return this;
 	}
 	
+	public Position getPositionDestination(){
+		return this.positionDestination;
+	}
+	
+	public void setPositionDestination(Position positionDestination){
+		this.positionDestination = positionDestination;
+	}
+	
 	@Override
 	public boolean isOperationActionCardToBoard(){
 		return true;
+	}
+	
+	@Override
+	public void displayOperationInformation(){
+		System.out.print("OperationActionCardToBoard : destination cX = " + this.getPositionDestination().getcX() + " cY = " + this.getPositionDestination().getcY());
 	}
 	
 }
