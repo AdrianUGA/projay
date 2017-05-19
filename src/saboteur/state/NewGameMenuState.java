@@ -95,6 +95,7 @@ public class NewGameMenuState extends State{
     @FXML
     private void startNewGameButtonAction() {
     	game.getPlayerList().clear();
+    	game.getObservers().clear();
         for (Node n: this.playerContainer.getChildren()) {
             NewPlayerHBox playerBox = (NewPlayerHBox) n;
             String playerName = playerBox.getPlayerName().getCharacters().toString();
@@ -108,6 +109,19 @@ public class NewGameMenuState extends State{
             player.setName(playerName);
             this.game.addPlayer(player);
         }
+        
+    	//Début du bloc à commenter
+    	
+    	this.game.getPlayerList().clear();
+    	this.game.getObservers().clear();
+    	
+    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY));
+    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY));
+    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY));
+    	
+    	//Fin du bloc à commenter
+        
+        this.game.newGame();
         this.gsm.change("game");
     }
     

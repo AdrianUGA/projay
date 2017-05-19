@@ -29,6 +29,8 @@ public class OperationActionCardToBoard extends Operation {
 				this.getSourcePlayer().viewGoalCard(destinationCard);
 			}
 		}
+		
+		game.notify(this);
 	}
 	
 	@Override
@@ -42,6 +44,7 @@ public class OperationActionCardToBoard extends Operation {
 				game.getBoard().addCard(destinationCard, this.positionDestination);
 			}
 		}
+		
 	}
 
 	public PathCard getDestinationCard() {

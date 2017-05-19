@@ -40,6 +40,8 @@ public class OperationPathCard extends Operation {
 				toFlip.setVisible(true);
 			}
 		}
+		
+		game.notify(this);
 	}
 	
 	@Override

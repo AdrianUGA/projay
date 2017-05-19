@@ -88,11 +88,12 @@ public class Game {
 			String chaine;
 			
 			this.playerList.clear();
+			this.observers.clear();
 			//To each player
 			while (!(chaine = reader.readLine()).equals("###")){
 				this.playerList.add(createPlayerFromConfig(chaine));
 			}
-			
+	        
 			//To each card to play on board
 			while (!(chaine = reader.readLine()).equals("###")){
 				addCardToBoardFromConfig(chaine);
@@ -119,13 +120,16 @@ public class Game {
 		this.currentPlayerIndex = 1;
 		this.setTeam();
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+        initAI();
 		this.nextPlayer();
-		/*System.out.println("Nom = " + this.getCurrentPlayer().name);
-		for (Card firstCard : this.getCurrentPlayer().getHand()){
-			System.out.println("XXX id = " + firstCard.getId());
-			if (firstCard.isPathCard()){
-				PathCard temp = (PathCard) firstCard;
-				System.out.println("XXX id = " + firstCard.getId() + temp.isOpen(Cardinal.NORTH) + temp.isOpen(Cardinal.EAST) + temp.isOpen(Cardinal.SOUTH) + temp.isOpen(Cardinal.WEST));
+		/*for (Player p : this.playerList){
+			System.out.println("Nom = " + p.name);
+			for (Card firstCard : p.getHand()){
+				System.out.println("XXX id = " + firstCard.getId());
+				if (firstCard.isPathCard()){
+					PathCard temp = (PathCard) firstCard;
+					System.out.println("XXX id = " + firstCard.getId() + temp.isOpen(Cardinal.NORTH) + temp.isOpen(Cardinal.EAST) + temp.isOpen(Cardinal.SOUTH) + temp.isOpen(Cardinal.WEST));
+				}
 			}
 		}*/
 	}
@@ -134,8 +138,8 @@ public class Game {
 		String stringCard[] = chaine.split(" ");
 		PathCard cardToAdd = (PathCard) getCard(stringCard[Loader.indexIdCardToPlay]);
 		this.stack.remove(cardToAdd);
-		int posX = Board.START.getcX() + Integer.parseInt(stringCard[Loader.indexPositionX]);
-		int posY = Board.START.getcY() + Integer.parseInt(stringCard[Loader.indexPositionY]);
+		int posX = Board.getStart().getcX() + Integer.parseInt(stringCard[Loader.indexPositionX]);
+		int posY = Board.getStart().getcY() + Integer.parseInt(stringCard[Loader.indexPositionY]);
 		Position position = new Position(posX, posY);
 		if (stringCard[Loader.indexReverseOrNot].equals("R")) cardToAdd.reverse();
 		
@@ -208,16 +212,20 @@ public class Game {
 		this.setTeam();
 
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+		initAI();
+		
+		this.dealCardsToPlayer();
+		
+		this.nextPlayer();
+	}
+
+	public void initAI() {
 		for(Player p : this.playerList){
 			p.resetHandicaps();
 			if(p.isAI()){
 				((AI) p).initializeAI();
 			}
 		}
-		
-		this.dealCardsToPlayer();
-		
-		this.nextPlayer();
 	}
 
 	private void dealCardsToPlayer(){
@@ -273,6 +281,9 @@ public class Game {
             objectOutput.writeObject(this.trash);
             objectOutput.writeObject(this.playerList);
             objectOutput.writeObject(this.board);
+            objectOutput.writeObject(this.teamWinnerAlreadyAnnounced);
+            objectOutput.writeObject(this.playerWinnerAlreadyAnnounced);
+            objectOutput.writeObject(this.roundFinished);
             objectOutput.writeObject(this.observers);
             objectOutput.close();
         } catch (IOException e) {
@@ -295,10 +306,11 @@ public class Game {
             this.stack = (LinkedList<Card>) objectInputStream.readObject();
             this.trash = (LinkedList<Card>) objectInputStream.readObject();
             this.playerList = (LinkedList<Player>) objectInputStream.readObject();
-            if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE PAS");
             this.board = (Board) objectInputStream.readObject();
+            this.teamWinnerAlreadyAnnounced = (boolean) objectInputStream.readObject();
+            this.playerWinnerAlreadyAnnounced = (boolean) objectInputStream.readObject();
+            this.roundFinished = (boolean) objectInputStream.readObject();
             this.observers = (LinkedList<Player>) objectInputStream.readObject();
-            if (playerList.get(2) == observers.get(2)) System.out.println("MARCHE");
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -354,7 +366,8 @@ public class Game {
 	
 	public void notify(Operation operation){
 		for(Player player: this.observers){
-			player.notify(operation);
+			if(player.isAI())
+				((AI) player).notify(operation);
 		}
 	}
 	
@@ -401,7 +414,7 @@ public class Game {
 		for (Player p : this.playerList){
 			switch (card.getType()) {
 				case SABOTAGE:
-					isPossible = p.canHandicap((SabotageCard)card);
+					isPossible = p.canHandicap((SabotageCard)card, p);
 					break;
 				case RESCUE:
 					isPossible = p.canRescue((RescueCard)card);
@@ -424,13 +437,12 @@ public class Game {
 			GoldCard goldCard;
 			int currentNumber = this.currentPlayerIndex;
 			int nbCardsDealt = 0;
-			System.out.println("Nb joueurs : " + playerList);
 			while (nbCardsDealt < (playerList.size()%9)){
 				current = playerList.get(currentNumber);
 				if (current.getTeam() == Team.DWARF){
 					goldCard = goldCardStack.removeFirst();
 					current.addGold(goldCard);
-					System.out.println("On ajoute une carte de valeur "+goldCard.getValue()+" au joueur " + current.getName());
+					//System.out.println("On ajoute une carte de valeur "+goldCard.getValue()+" au joueur " + current.getName());
 					nbCardsDealt++;
 				}
 				currentNumber = (currentNumber+1)%playerList.size();
@@ -466,7 +478,7 @@ public class Game {
 				if (current.getTeam() == Team.SABOTEUR){
 					for (GoldCard card : getCardsToValue(valueToDeal)){
 						current.addGold(card);
-						System.out.println("On ajoute une carte de valeur "+card.getValue()+" au joueur " + current.getName());
+						//System.out.println("On ajoute une carte de valeur "+card.getValue()+" au joueur " + current.getName());
 					}
 				}
 			}
@@ -630,5 +642,26 @@ public class Game {
 			return 6;
 		}
 		return 2; // should never happen
+	}
+
+	public int maximumAmountOfSaboteur() {
+		int nbPlayer = this.playerList.size();
+		if(nbPlayer <= 4){
+			return 1;
+		}
+		if(nbPlayer <= 6){
+			return 2;
+		}
+		if(nbPlayer <= 9){
+			return 3;
+		}
+		if(nbPlayer >= 10){
+			return 4;
+		}
+		return 0; // should never happen
+	}
+
+	public LinkedList<Player> getObservers() {
+		return observers;
 	}
 }

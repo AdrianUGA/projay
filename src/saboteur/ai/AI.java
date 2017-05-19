@@ -18,6 +18,7 @@ import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 
+
 public class AI extends Player {
 	static final long serialVersionUID = 6519358301134674963L;
 
@@ -59,19 +60,13 @@ public class AI extends Player {
 
 	@Override
 	public void notify(Operation o){
-		switch(o.getClass().getName()){
-		case "saboteur.model.Operation.OperationActionCardToBoard":
+		if(o.isOperationActionCardToBoard())
 			updateTrust((OperationActionCardToBoard) o);
-			break;
-		case "saboteur.model.Operation.OperationActionCardToPlayer":
+		else if(o.isOperationActionCardToPlayer())
 			updateTrust((OperationActionCardToPlayer) o);
-			break;
-		case "saboteur.model.Operation.OperationPathCard":
+		else if(o.isOperationPathCard())
 			updateTrust((OperationPathCard) o);
-			break;
-		default:
-			//System.err.println("Opération non reconnue");
-		}
+		else System.err.println("Opération non reconnue");
 	}
 
 	// Plan & Collapse card
@@ -278,6 +273,44 @@ public class AI extends Player {
 		}
 		return leastTrustfulPlayer;
 	}
+	
+	//If parameter is true, it'll add the AI who calls the method anyway
+	public LinkedList<Player> getAllMostLikelyDwarfPlayersHardAI(boolean withAI) {
+		int minAmountOfDwarf = game.minimumAmountOfDwarf();
+		int minTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
+		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
+		
+		do{
+			likelyDwarf.clear();
+			for(Player p : this.isDwarf.keySet()){
+				if(this.isDwarf.get(p) >= minTrust || (withAI && p == this)){
+					likelyDwarf.add(p);
+				}
+			}
+			minTrust = minTrust + 5;
+		}while(likelyDwarf.size() >= minAmountOfDwarf);
+		
+		return likelyDwarf;
+	}
+	
+	//If parameter is true, it'll add the AI who calls the method anyway
+	public LinkedList<Player> getAllMostLikelySaboteurPlayersHardAI(boolean withAI) {
+		int maxAmountOfSaboteur = game.maximumAmountOfSaboteur();
+		int maxTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
+		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
+		
+		do{
+			likelyDwarf.clear();
+			for(Player p : this.isDwarf.keySet()){
+				if(this.isDwarf.get(p) <= maxTrust || (withAI && p == this)){
+					likelyDwarf.add(p);
+				}
+			}
+			maxTrust = maxTrust - 5;
+		}while(likelyDwarf.size() >= maxAmountOfSaboteur);
+		
+		return likelyDwarf;
+	}
 
 	public boolean isAI(){
 		return true;
@@ -314,7 +347,7 @@ public class AI extends Player {
 		//System.out.println("It now has " + hand.size() + " cards");
 	}
 	
-	public Operation selectOperation(){
+	protected Operation selectOperation(){
 		resetProbabilitiesToPlayEachOperation();
 		switch(this.team){
 		case DWARF:
@@ -351,25 +384,18 @@ public class AI extends Player {
 		this.estimatedGoldCardPosition.put(p, 0f);
 	}
 
-	public LinkedList<Player> getAllMostLikelyDwarfPlayersHardAI() {
-		int minAmountOfDwarf = game.minimumAmountOfDwarf();
-		int minTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
-		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
-		
-		do{
-			for(Player p : this.isDwarf.keySet()){
-				if(this.isDwarf.get(p) >= minTrust || p == this){
-					likelyDwarf.add(p);
-				}
-			}
-			minTrust = minTrust + 5;
-		}while(likelyDwarf.size() <= minAmountOfDwarf);
-		
-		return likelyDwarf;
+	protected Map<Player,Float> getIsDwarf(){
+		return this.isDwarf;
 	}
 
-	public Map<Player,Float> getIsDwarf(){
-		return this.isDwarf;
+	protected boolean canPlayThere(Position position) {
+		for(Card card : this.hand){
+			if(card.isPathCard()){
+				if(this.getGame().getBoard().isPossible((PathCard) card, position) 
+						|| this.getGame().getBoard().isPossible(((PathCard) card).reversed(), position)) return true;
+			}
+		}
+		return false;
 	}
 	
 }

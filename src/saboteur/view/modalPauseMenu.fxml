@@ -4,31 +4,25 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane style="-fx-background-image: url(@../../resources/wood.jpg); -fx-background-size: cover; -fx-background-repeat: none;">
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-      </Pane>
       <VBox alignment="TOP_CENTER" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.8);">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="101.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../resources/PauseLogo.png" />
                </image>
                <VBox.margin>
-                  <Insets bottom="100.0" top="150.0" />
+                  <Insets bottom="50.0" top="150.0" />
                </VBox.margin>
             </ImageView>
-            <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
+            <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="55.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
@@ -46,15 +40,15 @@
                   </Text>
                </children>
                <padding>
-                  <Insets bottom="5.0" top="5.0" />
+                  <Insets bottom="5.0" right="55.0" top="5.0" />
                </padding>
                <VBox.margin>
-                  <Insets bottom="40.0" right="55.0" />
+                  <Insets bottom="40.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction">
+            <HBox alignment="CENTER" onMouseClicked="#resumeButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="55.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
@@ -72,15 +66,15 @@
                   </Text>
                </children>
                <padding>
-                  <Insets bottom="5.0" top="5.0" />
+                  <Insets bottom="5.0" right="55.0" top="5.0" />
                </padding>
                <VBox.margin>
-                  <Insets right="55.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" onMouseClicked="#saveButtonAction">
+            <HBox alignment="CENTER" onMouseClicked="#saveButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="55.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
@@ -98,15 +92,15 @@
                   </Text>
                </children>
                <padding>
-                  <Insets bottom="5.0" top="5.0" />
+                  <Insets bottom="5.0" right="55.0" top="5.0" />
                </padding>
                <VBox.margin>
-                  <Insets right="55.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" onMouseClicked="#optionButtonAction">
+            <HBox alignment="CENTER" onMouseClicked="#optionButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="55.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
@@ -124,15 +118,15 @@
                   </Text>
                </children>
                <padding>
-                  <Insets bottom="5.0" top="5.0" />
+                  <Insets bottom="5.0" right="55.0" top="5.0" />
                </padding>
                <VBox.margin>
-                  <Insets right="55.0" />
+                  <Insets />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" onMouseClicked="#mainMenuButtonAction">
+            <HBox alignment="CENTER" onMouseClicked="#mainMenuButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
-                  <ImageView fitHeight="50.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="50.0" fitWidth="55.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
                      <HBox.margin>
                         <Insets right="20.0" />
                      </HBox.margin>
@@ -150,10 +144,10 @@
                   </Text>
                </children>
                <padding>
-                  <Insets bottom="5.0" top="5.0" />
+                  <Insets bottom="5.0" right="55.0" top="5.0" />
                </padding>
                <VBox.margin>
-                  <Insets right="55.0" top="40.0" />
+                  <Insets top="40.0" />
                </VBox.margin>
             </HBox>
          </children>
@@ -161,10 +155,5 @@
             <Insets left="20.0" right="20.0" />
          </padding>
       </VBox>
-      <Pane style="-fx-background-image: url(@../../resources/wood.jpg); -fx-background-size: cover; -fx-background-repeat: none;">
-         <padding>
-            <Insets left="20.0" right="20.0" />
-         </padding>
-      </Pane>
    </children>
 </HBox>

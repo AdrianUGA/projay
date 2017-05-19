@@ -8,24 +8,23 @@ import saboteur.model.Card.*;
 
 public class Board implements Serializable {
 
+	public static final int IMPOSSIBLE_PATH = 8192;
 	private static final long serialVersionUID = -7481864881135990150L;
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
-	public static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
+	private static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
 	public static final int DISTANCE_START_OBJECTIVE_X = 7;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	private static final Position[] goalCardsPositions = new Position[] {
-			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()),
-			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y),
-			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y)};
+			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY()),
+			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY() + DISTANCE_START_OBJECTIVE_Y),
+			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY() - DISTANCE_START_OBJECTIVE_Y)};
 	
 	
 	private PathCard[][] board; //NOT TO SAVE
 	private List<Position> objectiveCards; //TO SAVE
 	private Map<Position, PathCard> pathCardsPosition; //TO SAVE
-	
-	//private Map<Position, Position> childrenDad;
 	
 	public Board(ArrayList<PathCard> startPathCard, ArrayList<PathCard> goalPathCard){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
@@ -41,7 +40,7 @@ public class Board implements Serializable {
 		
 		for(int i=0; i<3; i++)
 			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);
-		this.addCard(startPathCard.get(0), START);
+		this.addCard(startPathCard.get(0), getStart());
 	}
 	
 	public void addCard(PathCard card, Position position){
@@ -85,17 +84,14 @@ public class Board implements Serializable {
 			this.objectiveCards.remove(position);
 		else
 			this.pathCardsPosition.remove(position);
-		/*
-		childrenDad.clear();
-		for(Position current : pathCardsPosition.keySet()){
-			for(Position neighbor : getAllNeighbors(current)){
-				if(!areConnected(current,neighbor)){
-					connect(current,neighbor);
-				}
-			}
-		}
-		*/
 		this.board[position.getcY()][position.getcX()] = null;
+	}
+	
+	//Used by AI
+	public PathCard temporarRemoveCard(Position position){
+		PathCard removed = this.pathCardsPosition.remove(position);
+		this.board[position.getcY()][position.getcX()] = null;
+		return removed;
 	}
 	
 	public Set<Position> extractPositions(Set<OperationPathCard> operations){
@@ -228,6 +224,20 @@ public class Board implements Serializable {
 		}
 		return (amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1);
 	}
+	
+	//A bit different from the previous method, return true if it's possible, even if not interesting
+	private boolean canPutAnyPathCardThere(Position pos) {
+		int amountOfComingNeighbor = 0;
+		int amountOfAvailableNeighbor = 0;
+		for(Cardinal cardinal : Cardinal.values()){
+			if(getCard(pos.getNeighbor(cardinal)) == null){
+				amountOfAvailableNeighbor ++;
+			}else if(getCard(pos.getNeighbor(cardinal)).isOpen(cardinal.opposite())){
+				amountOfComingNeighbor++;
+			}
+		}
+		return ((amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1) || amountOfComingNeighbor >=2);
+	}
 
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
 		List<Position> possible =  new ArrayList<Position>();
@@ -282,7 +292,7 @@ public class Board implements Serializable {
 		
 		ArrayList<Integer> positionsAlreadyExplored = new ArrayList<>();
 		
-		currentPosition = START;
+		currentPosition = getStart();
 		positionsToExplore.add(currentPosition);
 		positionsAlreadyExplored.add(indice(currentPosition));
 		
@@ -320,6 +330,10 @@ public class Board implements Serializable {
 		return result;
 	}
 	
+	public static Position getStart() {
+		return START;
+	}
+
 	public int indice(Position pos){
 		return pos.getcY() * 60 + pos.getcX();
 	}
@@ -332,31 +346,6 @@ public class Board implements Serializable {
 		}
 		return list;
 	}
-	
-/* Union find stuff */
-	
-	/*private Position find(Position position) {
-		Position currentPos = position;
-		while(childrenDad.get(currentPos) != currentPos){
-			currentPos = childrenDad.get(currentPos);
-		}
-		return currentPos;
-	}
-	
-	private boolean areConnected(Position pos1, Position pos2){
-		return find(childrenDad.get(pos1)).equals(find(childrenDad.get(pos2)));
-	}
-	
-	private void connect(Position pos1, Position pos2){
-		if(!areConnected(pos1, pos2)){
-			if(indice(pos1)<indice(pos2)){
-				childrenDad.put(find(pos1), find(pos2));
-			}
-			else{
-				childrenDad.put(find(pos2), find(pos1));
-			}
-		}
-	}*/
 
 	public boolean goalCardWithGoldIsVisible() {
 		PathCard card;
@@ -375,4 +364,127 @@ public class Board implements Serializable {
 	public int amountOfCards(){
 		return this.pathCardsPosition.size();
 	}
+
+	public Map<Position, PathCard> getPathCardsPosition() {
+		return pathCardsPosition;
+	}
+	
+	public ArrayList<Position> allPlacablePositionFromStart(){
+		ArrayList<Position> positionsToExplore = new ArrayList<Position>();
+		ArrayList<Position> positionsExplored = new ArrayList<Position>();
+		ArrayList<Position> allPlacablePositionFromStart = new ArrayList<Position>();
+		
+		positionsToExplore.add(Board.START);
+		positionsExplored.add(Board.START);
+		
+		while(!positionsToExplore.isEmpty()){
+			Position currentPos = positionsToExplore.remove(0);
+			for(Cardinal cardinal : Cardinal.values()){
+				Position currentNeighbor = currentPos.getNeighbor(cardinal);
+				//Position is null if it's outside from the board
+				if(currentNeighbor != null){
+					if(this.getCard(currentNeighbor) == null && this.getCard(currentPos).isOpen(cardinal)){
+						if(canPutAnyPathCardThere(currentNeighbor)){
+							allPlacablePositionFromStart.add(currentNeighbor);
+						}
+					}else{
+						if(!positionsExplored.contains(currentNeighbor) && !this.getCard(currentNeighbor).isCulDeSac()
+							  && this.getCard(currentNeighbor).isOpen(cardinal.opposite())){
+							positionsToExplore.add(currentNeighbor);
+						}
+					}
+				}
+			}
+		}
+		
+		return allPlacablePositionFromStart;
+		
+	}
+	
+	private ArrayList<Position> allEmptyReachablePositions(){
+		ArrayList<Position> allEmptyReachablePositions = new ArrayList<Position>();
+		for(Position p : this.pathCardsPosition.keySet()){
+			if(!getCard(p).isGoal()){
+				for(Cardinal cardinal : getCard(p).getOpenSides()){
+					if(getCard(p.getNeighbor(cardinal)) == null && canPutAnyPathCardThere(p.getNeighbor(cardinal))){
+						allEmptyReachablePositions.add(p.getNeighbor(cardinal));
+					}
+				}
+			}
+		}
+		return allEmptyReachablePositions;
+	}
+	
+	public int minFromAnyEmptyPositionToGoldCard(Position estimatedGoldCardPosition){
+		ArrayList<Position> availablePositions = allEmptyReachablePositions();
+		int distanceToTravelFromAPosition;
+		int min = IMPOSSIBLE_PATH;
+		
+		for(Position currentPos : availablePositions){
+			distanceToTravelFromAPosition = aStarOnEmptyCard(currentPos, estimatedGoldCardPosition);
+			if(distanceToTravelFromAPosition != -1 && distanceToTravelFromAPosition < min){
+				min = distanceToTravelFromAPosition;
+			}
+		}
+		
+		return min;
+	}
+	
+	public int minFromEmptyReachablePathCardToGoldCard(Position estimatedGoldCardPosition){
+		ArrayList<Position> availablePositions = allPlacablePositionFromStart();
+		int distanceToTravelFromAPosition;
+		int min = IMPOSSIBLE_PATH;
+		
+		for(Position currentPos : availablePositions){
+			distanceToTravelFromAPosition = aStarOnEmptyCard(currentPos, estimatedGoldCardPosition);
+			if(distanceToTravelFromAPosition != -1 && distanceToTravelFromAPosition < min){
+				min = distanceToTravelFromAPosition;
+			}
+		}
+		
+		return min;
+	}
+
+	private Position smallestdUhU(ArrayList<Position> list, Position destination) {
+		int min = 8192;
+		Position posToReturn = null;
+		for(Position p : list){
+			if(p.getTaxiDistance(destination) < min){
+				min = p.getTaxiDistance(destination);
+				posToReturn = p;
+			}
+		}
+		return posToReturn;
+	}
+	
+	public int aStarOnEmptyCard(Position currentPos, Position estimatedGoldCardPosition){
+		ArrayList<Position> qList = new ArrayList<Position>();
+		Integer dU[] = new Integer[GRID_SIZE*GRID_SIZE];
+		
+		for(int i=0;i<dU.length;i++){
+			dU[i] = 65536;
+		}
+
+		qList.add(currentPos);
+		dU[currentPos.getcY() * GRID_SIZE + currentPos.getcX()] = 0;
+		
+		while(!qList.isEmpty()){
+			Position u = smallestdUhU(qList, estimatedGoldCardPosition);
+			if(u.getcX() == estimatedGoldCardPosition.getcX() && u.getcY() == estimatedGoldCardPosition.getcY()){
+				return dU[estimatedGoldCardPosition.getcY() * GRID_SIZE + estimatedGoldCardPosition.getcX()];
+			}
+			qList.remove(u);
+			for(Cardinal c : Cardinal.values()){
+				if(u.getNeighbor(c) != null && this.getCard(u.getNeighbor(c)) == null){
+					if(dU[u.getcY() * GRID_SIZE + u.getcX()] + 1 < dU[u.getNeighbor(c).getcY() * GRID_SIZE + u.getNeighbor(c).getcX()]){
+						dU[u.getNeighbor(c).getcY() * GRID_SIZE + u.getNeighbor(c).getcX()] = dU[u.getcY() * GRID_SIZE + u.getcX()] + 1;
+						qList.add(u.getNeighbor(c));
+					}
+				}
+			}
+		}
+		
+		return -1;
+	}
+
 }

@@ -151,7 +151,7 @@ public class GameState extends State{
 //		
     	//Fin du bloc à commenter
     	
-        this.game.newGame();
+//        this.game.newGame();
         
         this.resources.loadImage();
         this.resources.loadPicto();
@@ -160,12 +160,8 @@ public class GameState extends State{
         //NE PAS COMMENTER CETTE BOUCLE !!
         //IMPORTANT DANS TOUS LES CAS OU IL Y A UNE AI
         
-        for(Player p : this.game.getPlayerList()){
-    		if(p.isAI()){
-    			((AI)p).initializeAI();
-    		}
-    	}
-
+        this.game.initAI();
+        
         try{
             this.loader = new FXMLLoader();
             this.loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));

@@ -35,7 +35,7 @@
       </Text>
       <Pane>
          <children>
-            <Button fx:id="noQuitGameBtn" cancelButton="true" contentDisplay="CENTER" layoutX="44.0" layoutY="66.0" mnemonicParsing="false" onMouseClicked="#noQuitGameBtnAction" prefWidth="120.0" style="-fx-background-color: white;" text="NON" textAlignment="CENTER">
+            <Button fx:id="noQuitGameBtn" cancelButton="true" contentDisplay="CENTER" layoutX="44.0" layoutY="66.0" mnemonicParsing="false" onMouseClicked="#noQuitGameBtnAction" prefWidth="120.0" styleClass="btn" text="NON" textAlignment="CENTER">
                <font>
                   <Font size="32.0" />
                </font>
@@ -43,7 +43,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="yesQuitGameBtn" contentDisplay="CENTER" layoutX="228.0" layoutY="66.0" mnemonicParsing="false" onMouseClicked="#yesQuitGameBtnAction" prefWidth="120.0" style="-fx-background-color: white;" text="OUI" textAlignment="CENTER">
+            <Button fx:id="yesQuitGameBtn" contentDisplay="CENTER" layoutX="228.0" layoutY="66.0" mnemonicParsing="false" onMouseClicked="#yesQuitGameBtnAction" prefWidth="120.0" styleClass="btn" text="OUI" textAlignment="CENTER">
                <font>
                   <Font size="32.0" />
                </font>
