@@ -43,7 +43,7 @@ public class PlayerWaitState extends State{
 	private Card selectedCard = null;
 	private List<Object> boardEffect;
 	
-	private PlayerArc[] playersArc;
+	private PlayerArc playersArc;
 	private Resources resources = new Resources();
 	private HashMap<String, Image> allCards;
 
@@ -90,13 +90,8 @@ public class PlayerWaitState extends State{
 			}
 		});
         
-        int nbPlayer = this.game.getPlayerList().size();
-        this.playersArc = new PlayerArc[nbPlayer];
-        for(int i = 0; i < nbPlayer; i++) {
-        	String name = "#" + this.game.getPlayerList().get(i).getName() + i;
-        	name = name.replaceAll("\\s+","");
-        	this.playersArc[i] = (PlayerArc)this.primaryStage.getScene().lookup(name);
-        }
+        this.playersArc = (PlayerArc)this.primaryStage.getScene().lookup("#playersArc");
+        
         generateHandCardImage(); 
     }
 
@@ -122,7 +117,6 @@ public class PlayerWaitState extends State{
         		cancelEffectOfPreviousSelection();
         		
             	//style on the image of the selected card
-//        		this.imgSelectedCard.setStyle(null);
         		this.imgSelectedCard = newCard;
         		this.imgSelectedCard.setStyle("-fx-effect : dropshadow(gaussian, black, 2, 2, 2, 2);");
         		
@@ -140,46 +134,32 @@ public class PlayerWaitState extends State{
 	        	if(this.selectedCard.isSabotageCard()) {
 	        		ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
 	        		int sabotage = ((SabotageCard)this.selectedCard).getTool().getValue();
-	        		for(PlayerArc player : this.playersArc) {
-	        			for(Player p : this.game.getPlayers(card)) {
-	        				if(p == player.getPlayer()) {
-	        					player.getCircle()[sabotage].setStroke(Color.RED);
-	        					break;
-	        				}
-	        			}
-	        		}
+        			for(Player p : this.game.getPlayers(card)) {
+    					this.playersArc.getCircles(p)[sabotage].setStroke(Color.RED);
+        			}
+	        		
                 	this.gsm.pop();
                 	this.gsm.push("playerSelectedAction", this.selectedCard);
 	    		}
 	        	else if(this.selectedCard.isRescueCard()) {
 	    			ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
 	    			int rescue = ((RescueCard)this.selectedCard).getTool().getValue();
-	    			for(PlayerArc player : this.playersArc) {
-	        			for(Player p : this.game.getPlayers(card)) {
-	        				if(p == player.getPlayer()) {
-	        					player.getCircle()[rescue].setStroke(Color.GREEN);
-	        					break;
-	        				}
-	        			}
-	        		}
+        			for(Player p : this.game.getPlayers(card)) {
+        					this.playersArc.getCircles(p)[rescue].setStroke(Color.GREEN);
+        			}
                 	this.gsm.pop();
                 	this.gsm.push("playerSelectedAction", this.selectedCard);
 	    		}
 	        	//TODO : A revoir ici
 	        	else if(this.selectedCard.isDoubleRescueCard()) {
 	    			ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
-	    			int sabotage1 = ((DoubleRescueCard)this.selectedCard).getTool1().getValue();
-	    			int sabotage2 = ((DoubleRescueCard)this.selectedCard).getTool2().getValue();
+	    			int rescue1 = ((DoubleRescueCard)this.selectedCard).getTool1().getValue();
+	    			int rescue2 = ((DoubleRescueCard)this.selectedCard).getTool2().getValue();
 	    			
-	    			for(PlayerArc player : this.playersArc) {
-	        			for(Player p : this.game.getPlayers(card)) {
-	        				if(p == player.getPlayer()) {
-	        					player.getCircle()[sabotage1].setStroke(Color.GREEN);
-	        					player.getCircle()[sabotage2].setStroke(Color.GREEN);
-	        					break;
-	        				}
-	        			}
-	        		}
+	    			for(Player p : this.game.getPlayers(card)) {
+    					this.playersArc.getCircles(p)[rescue1].setStroke(Color.GREEN);
+    					this.playersArc.getCircles(p)[rescue2].setStroke(Color.GREEN);
+	    			}
                 	this.gsm.pop();
                 	this.gsm.push("playerSelectedAction", this.selectedCard);
 	    		}
@@ -196,7 +176,7 @@ public class PlayerWaitState extends State{
 						this.boardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
 	    			}
                 	this.gsm.pop();
-                	this.gsm.push("playerSelectedPath");
+                	this.gsm.push("playerSelectedPath", this.selectedCard);
 	    		}
 	        	else if(this.selectedCard.isCollapseCard()) {
 	    			List<Position> cantCollaps = this.game.getBoard().getGoalCards();
@@ -245,11 +225,11 @@ public class PlayerWaitState extends State{
     private void cancelEffectOfPreviousSelection() {
     	if(this.selectedCard != null) {
 			if(this.selectedCard.isRescueCard() || this.selectedCard.isDoubleRescueCard() || this.selectedCard.isSabotageCard()) {
-				for(PlayerArc player : this.playersArc) {
+				for(Player p : this.game.getPlayerList()) {
 					for(int i = 0; i < 3; i++) {
-						player.getCircle()[i].setStroke(Color.BLACK);
+						this.playersArc.getCircles(p)[i].setStroke(Color.BLACK);
 					}
-	    		}
+				}
 			}
 			if(this.selectedCard.isCollapseCard() || this.selectedCard.isPathCard()) {
 				for(Object obj : this.boardEffect) {
