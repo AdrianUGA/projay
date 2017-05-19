@@ -16,10 +16,8 @@ import saboteur.model.Player;
 import saboteur.model.Position;
 import saboteur.model.Team;
 import saboteur.model.Card.Card;
-import saboteur.model.Card.DoubleRescueCard;
 import saboteur.model.Card.PathCard;
-import saboteur.model.Card.SabotageCard;
-import saboteur.model.Card.Tool;
+
 
 public class AI extends Player {
 	static final long serialVersionUID = 6519358301134674963L;
