@@ -138,8 +138,8 @@ public class Game {
 		String stringCard[] = chaine.split(" ");
 		PathCard cardToAdd = (PathCard) getCard(stringCard[Loader.indexIdCardToPlay]);
 		this.stack.remove(cardToAdd);
-		int posX = Board.START.getcX() + Integer.parseInt(stringCard[Loader.indexPositionX]);
-		int posY = Board.START.getcY() + Integer.parseInt(stringCard[Loader.indexPositionY]);
+		int posX = Board.getStart().getcX() + Integer.parseInt(stringCard[Loader.indexPositionX]);
+		int posY = Board.getStart().getcY() + Integer.parseInt(stringCard[Loader.indexPositionY]);
 		Position position = new Position(posX, posY);
 		if (stringCard[Loader.indexReverseOrNot].equals("R")) cardToAdd.reverse();
 		

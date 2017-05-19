@@ -15,8 +15,8 @@ public class BoardTest {
 	//NOT SUCCESS CURRENTLY : Due to board's constructor
 	@Test
 	public void testIsPossible() {
-		int xStart = Board.START.getcX();
-		int yStart = Board.START.getcY();
+		int xStart = Board.getStart().getcX();
+		int yStart = Board.getStart().getcY();
 		String cross[] = {"NORTH", "EAST", "SOUTH", "WEST"};
 		String horizontalBar[] = {"WEST", "EAST"};
 		String verticalBar[] = {"NORTH", "SOUTH"};

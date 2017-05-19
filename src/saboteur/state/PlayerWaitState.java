@@ -200,7 +200,7 @@ public class PlayerWaitState extends State{
 	    		}
 	        	else if(this.selectedCard.isCollapseCard()) {
 	    			List<Position> cantCollaps = this.game.getBoard().getGoalCards();
-	    			cantCollaps.add(Board.START);
+	    			cantCollaps.add(Board.getStart());
 
 	    			this.boardEffect = new LinkedList<>();
 	    			boolean cancollaps;

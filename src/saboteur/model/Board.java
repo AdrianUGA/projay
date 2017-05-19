@@ -3,6 +3,8 @@ package saboteur.model;
 import java.io.Serializable;
 import java.util.*;
 
+import javax.lang.model.element.NestingKind;
+
 import saboteur.ai.AI;
 import saboteur.model.Card.*;
 
@@ -12,13 +14,13 @@ public class Board implements Serializable {
 	private static final int GRID_SIZE = 61;
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
-	public static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
+	private static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
 	public static final int DISTANCE_START_OBJECTIVE_X = 7;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	private static final Position[] goalCardsPositions = new Position[] {
-			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY()),
-			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() + DISTANCE_START_OBJECTIVE_Y),
-			new Position(START.getcX() + DISTANCE_START_OBJECTIVE_X, START.getcY() - DISTANCE_START_OBJECTIVE_Y)};
+			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY()),
+			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY() + DISTANCE_START_OBJECTIVE_Y),
+			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY() - DISTANCE_START_OBJECTIVE_Y)};
 	
 	
 	private PathCard[][] board; //NOT TO SAVE
@@ -41,7 +43,7 @@ public class Board implements Serializable {
 		
 		for(int i=0; i<3; i++)
 			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);
-		this.addCard(startPathCard.get(0), START);
+		this.addCard(startPathCard.get(0), getStart());
 	}
 	
 	public void addCard(PathCard card, Position position){
@@ -235,6 +237,20 @@ public class Board implements Serializable {
 		}
 		return (amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1);
 	}
+	
+	//A bit different from the previous method, return true if it's possible, even if not interesting
+	private boolean canPutAnyPathCardThere(Position pos) {
+		int amountOfComingNeighbor = 0;
+		int amountOfAvailableNeighbor = 0;
+		for(Cardinal cardinal : Cardinal.values()){
+			if(getCard(pos.getNeighbor(cardinal)) == null){
+				amountOfAvailableNeighbor ++;
+			}else if(getCard(pos.getNeighbor(cardinal)).isOpen(cardinal.opposite())){
+				amountOfComingNeighbor++;
+			}
+		}
+		return ((amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1) || amountOfComingNeighbor >=2);
+	}
 
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
 		List<Position> possible =  new ArrayList<Position>();
@@ -289,7 +305,7 @@ public class Board implements Serializable {
 		
 		ArrayList<Integer> positionsAlreadyExplored = new ArrayList<>();
 		
-		currentPosition = START;
+		currentPosition = getStart();
 		positionsToExplore.add(currentPosition);
 		positionsAlreadyExplored.add(indice(currentPosition));
 		
@@ -327,6 +343,11 @@ public class Board implements Serializable {
 		return result;
 	}
 	
+	public static Position getStart() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public int indice(Position pos){
 		return pos.getcY() * 60 + pos.getcX();
 	}
@@ -386,4 +407,46 @@ public class Board implements Serializable {
 	public Map<Position, PathCard> getPathCardsPosition() {
 		return pathCardsPosition;
 	}
+	
+	public ArrayList<Position> allPlacablePositionFromStart(){
+		ArrayList<Position> positionsToExplore = new ArrayList<Position>();
+		ArrayList<Position> positionsExplored = new ArrayList<Position>();
+		ArrayList<Position> allPlacablePositionFromStart = new ArrayList<Position>();
+		
+		positionsToExplore.add(Board.START);
+		positionsExplored.add(Board.START);
+		
+		while(!positionsToExplore.isEmpty()){
+			Position currentPos = positionsToExplore.remove(0);
+			for(Cardinal cardinal : Cardinal.values()){
+				Position currentNeighbor = currentPos.getNeighbor(cardinal);
+				//Position is null if it's outside from the board
+				if(currentNeighbor != null){
+					if(this.getCard(currentNeighbor) == null && this.getCard(currentPos).isOpen(cardinal)){
+						if(canPutAnyPathCardThere(currentNeighbor)){
+							allPlacablePositionFromStart.add(currentNeighbor);
+						}
+					}else{
+						if(!positionsExplored.contains(currentNeighbor) && !this.getCard(currentNeighbor).isCulDeSac()
+							  && this.getCard(currentNeighbor).isOpen(cardinal.opposite())){
+							positionsToExplore.add(currentNeighbor);
+						}
+					}
+				}
+			}
+		}
+		
+		return allPlacablePositionFromStart;
+		
+	}
+	
+	public int aStarMinFromStart(){
+		
+		return 0;
+	}
+	
+	public int aStarMinFromAnyPathCard(){
+		return 0;
+	}
+
 }

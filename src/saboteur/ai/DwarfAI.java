@@ -22,6 +22,7 @@ import saboteur.model.Card.DoubleRescueCard;
 public abstract class DwarfAI {
 	
 	public static void computeOperationWeightEasyAI(AI artificialIntelligence) {
+		//Can't use 'for each' on operationsWeight
 		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(artificialIntelligence.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			switch(o.getCard().getClassName()){
@@ -218,9 +219,9 @@ public abstract class DwarfAI {
 				}
 			}
 			else if(o.getCard().isCollapseCard()){
-				//Regarder pour chaque carte du plateau, si on l'enlève, 
-				//(est-ce qu'on peut foutre une de nos carte à la place et si oui, est-ce que ça améliore la distance minimale)
-				// OU (si c'est un cul-de-sac, est-ce que ça améliore la distance minimale)
+				//Check for every PathCard already on the board
+				//If AI removes it, does it decrease the distance to the gold card ?
+				//If yes, (can the AI put a card here ?) OR  (is the card a cul-de-sac ?)
 				Map<Position, PathCard> pathCardCopy = artificialIntelligence.getGame().getBoard().getPathCardsPosition();
 				Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 				List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
@@ -237,18 +238,18 @@ public abstract class DwarfAI {
 						allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 						if(allClosestPosition.get(0).getTaxiDistance(goldCardPosition) < minimumDistanceBeforeCollapsing){
 							if(removedCard.isCulDeSac()){
-								if(artificialIntelligence.canPlayThere(currentPosition)){ // if peut poser ici
+								if(artificialIntelligence.canPlayThere(currentPosition)){
 									artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 									((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(currentPosition));
 									((OperationActionCardToBoard) o).setPositionDestination(currentPosition);
-									artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_CAN_REPLACE_HARD + Coefficients.DWARF_COLLAPSE_CAN_REPLACE_HARD);
+									artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_CAN_REPLACE_HARD + Coefficients.DWARF_COLLAPSE_CDS_HARD);
 									atLeastOne = true;
 								}
 								else{
 									artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 									((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(currentPosition));
 									((OperationActionCardToBoard) o).setPositionDestination(currentPosition);
-									artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_CAN_REPLACE_HARD);
+									artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_CDS_HARD);
 									atLeastOne = true;
 								}
 							}
@@ -268,6 +269,19 @@ public abstract class DwarfAI {
 				}
 				if(!atLeastOne){
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+				}
+			}
+			else if(o.getCard().isPathCard()){
+				if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
+					
+				}
+				else{
+					if(((PathCard) o.getCard()).isCulDeSac()){
+						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+					}
+					else{
+						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -35f);
+					}
 				}
 			}
 		}
