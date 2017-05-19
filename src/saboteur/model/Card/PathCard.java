@@ -134,4 +134,8 @@ public class PathCard extends Card {
 	public void displayCardType(){
     	System.out.println("PathCard");
     }
+
+	public List<Cardinal> getOpenSides() {
+		return openSides;
+	}
 }

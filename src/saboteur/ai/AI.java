@@ -391,7 +391,8 @@ public class AI extends Player {
 	protected boolean canPlayThere(Position position) {
 		for(Card card : this.hand){
 			if(card.isPathCard()){
-				if(this.getGame().getBoard().isPossible((PathCard) card, position)) return true;
+				if(this.getGame().getBoard().isPossible((PathCard) card, position) 
+						|| this.getGame().getBoard().isPossible(((PathCard) card).reversed(), position)) return true;
 			}
 		}
 		return false;
