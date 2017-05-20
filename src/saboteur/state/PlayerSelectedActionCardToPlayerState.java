@@ -91,9 +91,7 @@ public class PlayerSelectedActionCardToPlayerState extends State{
         }
     }
     
-    private void selectedActionCardToPlayer(MouseEvent event) {
-    	System.out.println(event.getTarget());
-    	
+    private void selectedActionCardToPlayer(MouseEvent event) {    	
     	if(event.getTarget() instanceof Circle) {
             if(this.selectedCard.isSabotageCard()) {
             	Circle circle = (Circle) event.getTarget();

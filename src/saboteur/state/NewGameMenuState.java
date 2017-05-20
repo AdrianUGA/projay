@@ -27,8 +27,6 @@ public class NewGameMenuState extends State{
 	
 	@FXML private VBox playerContainer;
 	@FXML private Button addPlayerButton;
-
-
 	
 	private int nbPlayer = 3;
 
@@ -112,12 +110,12 @@ public class NewGameMenuState extends State{
         
     	//Début du bloc à commenter
     	
-    	this.game.getPlayerList().clear();
-    	this.game.getObservers().clear();
-    	
-    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY));
-    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY));
-    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY));
+//    	this.game.getPlayerList().clear();
+//    	this.game.getObservers().clear();
+//    	
+//    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY));
+//    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY));
+//    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY));
     	
     	//Fin du bloc à commenter
         

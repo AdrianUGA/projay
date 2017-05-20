@@ -164,17 +164,17 @@ public class PlayerWaitState extends State{
                 	this.gsm.push("playerSelectedAction", this.selectedCard);
 	    		}
 	        	else if(this.selectedCard.isPathCard()) {
-	    			PathCard card = (PathCard) this.selectedCard;
-	    			List<Position> possiblePositionList = this.game.getBoard().getPossiblePositionPathCard(card);
-	    			this.boardEffect = new LinkedList<>();
-	    			for(Position posiCard : possiblePositionList) {
-	    				SVGPath svg = new SVGPath();
-						svg.setFill(Color.GREEN);
-						svg.setContent(Icon.plus);
-						GridPane.setHalignment(svg, HPos.CENTER);
-						this.boardEffect.add(svg);
-						this.boardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
-	    			}
+//	    			PathCard card = (PathCard) this.selectedCard;
+//	    			List<Position> possiblePositionList = this.game.getBoard().getPossiblePositionPathCard(card);
+//	    			this.boardEffect = new LinkedList<>();
+//	    			for(Position posiCard : possiblePositionList) {
+//	    				SVGPath svg = new SVGPath();
+//						svg.setFill(Color.GREEN);
+//						svg.setContent(Icon.plus);
+//						GridPane.setHalignment(svg, HPos.CENTER);
+//						this.boardEffect.add(svg);
+//						this.boardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
+//	    			}
                 	this.gsm.pop();
                 	this.gsm.push("playerSelectedPath", this.selectedCard);
 	    		}
@@ -231,12 +231,12 @@ public class PlayerWaitState extends State{
 					}
 				}
 			}
-			if(this.selectedCard.isCollapseCard() || this.selectedCard.isPathCard()) {
-				for(Object obj : this.boardEffect) {
-					this.boardGridPane.getChildren().remove(obj);
-				}
-				this.boardEffect = null;
-			}
+//			if(this.selectedCard.isCollapseCard() || this.selectedCard.isPathCard()) {
+//				for(Object obj : this.boardEffect) {
+//					this.boardGridPane.getChildren().remove(obj);
+//				}
+//				this.boardEffect = null;
+//			}
 			
 			if(this.selectedCard.isPlanCard()) {
 	            this.gameBoard.toBack();
