@@ -22,7 +22,7 @@ public class PlayerEndOfTurnState extends State{
 
     @Override
     public void onEnter(Object param) {
-
+    	System.out.println("End of turn");
     }
 
     @Override

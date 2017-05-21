@@ -65,7 +65,7 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane>
+      <AnchorPane fx:id="boardAndCardContainer">
          <children>
             <Pane fx:id="boardContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -73,11 +73,6 @@
                   <VBox fx:id="goalCardContainer" alignment="CENTER" spacing="10.0" visible="false" />
                </children>
             </Pane>
-            <HBox fx:id="cardContainer" alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0">
-               <padding>
-                  <Insets bottom="5.0" />
-               </padding>
-            </HBox>
          </children>
       </AnchorPane>
       <VBox alignment="CENTER">

@@ -1,29 +1,33 @@
 package saboteur.state;
 
+import java.util.LinkedList;
+
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.model.Player;
+import saboteur.model.Card.ActionCardToPlayer;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.DoubleRescueCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.SabotageCard;
+import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 
 public class PlayerSelectedActionCardToPlayerState extends State{
 	
-	private Pane boardContainer;
 	private Card selectedCard;
 	private PlayerArc playersArc;
+	private LinkedList<Player> playerList;	
 	private int toolValue1 = -1;
-	private int toolValue2 = -1;	
+	private int toolValue2 = -1;
+	private boolean playerSelected;
 
     public PlayerSelectedActionCardToPlayerState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -44,53 +48,82 @@ public class PlayerSelectedActionCardToPlayerState extends State{
         System.out.println("action card");
         
         this.selectedCard = (Card) param;
-        this.boardContainer = (Pane) this.primaryStage.getScene().lookup("#boardContainer");
+    	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
+    	this.playerSelected = false;
         
+    	EventHandler<MouseEvent> mouseEvent = new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent event) {
+				selectedActionCardToPlayer(event);
+			}
+		};
+    	
+    	
+        //Put a correct value on toolValue depending of the selected card.
         this.toolValue1 = -1;
         this.toolValue2 = -1;
         if(this.selectedCard.isSabotageCard()) {
-    		this.toolValue1 = ((SabotageCard)this.selectedCard).getTool().getValue();
+        	this.toolValue1 = ((SabotageCard)this.selectedCard).getTool().getValue();
+        	ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
+        	this.playerList = this.game.getPlayers(card);
+			for(Player p : this.game.getPlayers(card)) {
+				this.playersArc.getCircles(p)[this.toolValue1].setStroke(Color.RED);
+				this.playersArc.getCircles(p)[this.toolValue1].setOnMouseClicked(mouseEvent);
+			}
 		}
-        
     	else if(this.selectedCard.isRescueCard()) {
     		this.toolValue1 = ((RescueCard)this.selectedCard).getTool().getValue();
+    		ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
+        	this.playerList = this.game.getPlayers(card);
+			for(Player p : this.game.getPlayers(card)) {
+					this.playersArc.getCircles(p)[toolValue1].setStroke(Color.GREEN);
+					this.playersArc.getCircles(p)[this.toolValue1].setOnMouseClicked(mouseEvent);
+			}
 		}
+        //TODO : a revoir
     	else if(this.selectedCard.isDoubleRescueCard()) {
     		this.toolValue1 = ((DoubleRescueCard)this.selectedCard).getTool1().getValue();
     		this.toolValue2 = ((DoubleRescueCard)this.selectedCard).getTool2().getValue();
+    		ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
+        	this.playerList = this.game.getPlayers(card);
+			for(Player p : this.game.getPlayers(card)) {
+				this.playersArc.getCircles(p)[toolValue1].setStroke(Color.GREEN);
+				this.playersArc.getCircles(p)[toolValue2].setStroke(Color.GREEN);
+				this.playersArc.getCircles(p)[this.toolValue1].setOnMouseClicked(mouseEvent);
+				this.playersArc.getCircles(p)[this.toolValue2].setOnMouseClicked(mouseEvent);
+			}
 		}
-        for(int i = 0; i < this.game.getPlayerList().size(); i++) {
-        	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
-        	
-        	this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue1].setOnMouseClicked(new EventHandler<MouseEvent>(){
-				@Override
-				public void handle(MouseEvent event) {
-					selectedActionCardToPlayer(event);
-				}
-			});
-        	
-        	//TODO : a revoir
-        	if(this.toolValue2 != -1){
-        		this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue2].setOnMouseClicked(new EventHandler<MouseEvent>(){
-    				@Override
-    				public void handle(MouseEvent event) {
-    					selectedActionCardToPlayer(event);
-    				}
-    			});
-        	}
-        }       
     }
 
     @Override
     public void onExit() {
+    	//Delete event on click
         for(int i = 0; i < this.game.getPlayerList().size(); i++) {
 	    	this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue1].setOnMouseClicked(null);
 	    	if(this.toolValue2 != -1){
 	    		this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue2].setOnMouseClicked(null);
 	    	}
         }
+        
+		for(Player p : this.playerList) {
+			for(int i = 0; i < 3; i++) {
+				this.playersArc.getCircles(p)[i].setStroke(Color.BLACK);
+				this.playersArc.setOnMouseClicked(null);
+			}
+		}
+		
+    	if(this.playerSelected) {
+    		this.game.getCurrentPlayer().getHand().remove(this.selectedCard);
+        	
+    		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
+        	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
+        	cardContainer.setOnMouseClicked(null);
+        	cardContainer.generateHandCardImage(); 
+        	this.gsm.push("playerEndOfTurn");
+    	}
+        
     }
-    
+    //TODO : ici juste l'ihm affiche le bonus / malus. Manque le joueur a affectee
     private void selectedActionCardToPlayer(MouseEvent event) {    	
     	if(event.getTarget() instanceof Circle) {
             if(this.selectedCard.isSabotageCard()) {
@@ -111,18 +144,15 @@ public class PlayerSelectedActionCardToPlayerState extends State{
             	circle.setFill(new ImagePattern(img));
     		}
             
-        	else if(this.selectedCard.isRescueCard()) {
+        	else {
         		Circle circle = (Circle) event.getTarget();
             	circle.setStroke(Color.BLACK);
             	circle.setFill(null);
+        	}
             	
-    		}
-        	else if(this.selectedCard.isDoubleRescueCard()) {
-        		Circle circle = (Circle) event.getTarget();
-            	circle.setStroke(Color.BLACK);
-            	circle.setFill(null);
-    		}
     	}
+    	this.playerSelected = true;
+    	this.gsm.pop();
     }
 }
 
