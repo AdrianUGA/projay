@@ -5,7 +5,7 @@ public class Coefficients {
 	// Easy AI coefficients
 	public static int DWARF_SABOTAGE_EASY = 1;
 	public static float DWARF_HANDICAP_SIZE_EASY = 0.5f;
-	public static int DWARF_RESCUE_EASY = 10;
+	public static int DWARF_RESCUE_EASY = 15;
 	public static int DWARF_DOUBLERESCUE_EASY = 9;
 	public static int DWARF_PLAN_TURN_EASY = 6;
 	public static int DWARF_PLAN_EASY = 10;
@@ -42,5 +42,8 @@ public class Coefficients {
 	public static int DWARF_PLAN_HARD = 150;
 	public static int DWARF_COLLAPSE_CAN_REPLACE_HARD = 40;
 	public static int DWARF_COLLAPSE_CDS_HARD = 25;
+	public static int DWARF_PATHCARD_HARD = 40;
+	public static float DWARF_PATHCARD_OPENSIDES_HARD = 0.5f;
+	public static int DWARF_PATHCARD_FIXHOLE_HARD = 80;
 	
 }

@@ -63,7 +63,7 @@ public class PlayerSelectedActionCardToPlayerState extends State{
         this.toolValue1 = -1;
         this.toolValue2 = -1;
         if(this.selectedCard.isSabotageCard()) {
-        	this.toolValue1 = ((SabotageCard)this.selectedCard).getTool().getValue();
+        	this.toolValue1 = ((SabotageCard)this.selectedCard).getSabotageType().getValue();
         	ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
         	this.playerList = this.game.getPlayers(card);
 			for(Player p : this.game.getPlayers(card)) {

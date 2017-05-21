@@ -78,7 +78,7 @@ public class PlayerWaitState extends State{
 	                	i++;
 	                }
 	            }
-	        	        	
+	        	    
 	        	if(this.selectedCard.isSabotageCard() || this.selectedCard.isRescueCard() || this.selectedCard.isDoubleRescueCard()) {	        		
                 	this.gsm.pop();
                 	this.gsm.push("playerSelectedAction", this.selectedCard);

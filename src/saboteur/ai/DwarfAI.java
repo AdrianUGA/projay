@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import saboteur.model.Board;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
@@ -41,7 +42,7 @@ public abstract class DwarfAI {
 				}
 				break;
 			case "saboteur.model.Card.RescueCard":
-				if(artificialIntelligence.canRescue((RescueCard)o.getCard())){
+				if(artificialIntelligence.canRescueItself((RescueCard)o.getCard())){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
 					((OperationActionCardToPlayer) o).setToolDestination(((RescueCard)o.getCard()).getRescueType());
 					artificialIntelligence.operationsWeight.put(o, (float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.DWARF_HANDICAP_SIZE_EASY) * Coefficients.DWARF_RESCUE_EASY);
@@ -150,7 +151,7 @@ public abstract class DwarfAI {
 				}
 				else{
 					// Trash
-					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -50f);
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 			}
 			else if(o.getCard().isRescueCard()){ // RESCUE CARD
@@ -159,26 +160,33 @@ public abstract class DwarfAI {
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
 				}
 				else{
+					boolean atLeastOne = false;
 					for(Player p : mostLikelyDwarfPlayers){
 						if(artificialIntelligence.canRescue((RescueCard)o.getCard(), p)){
 							((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 							if(p == artificialIntelligence){
 								//Rescue itself
 								artificialIntelligence.operationsWeight.put(o, (float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.DWARF_HANDICAP_SIZE_HARD) * Coefficients.DWARF_RESCUE_HARD + Coefficients.DWARF_RESCUE_ITSELF_HARD);
+								atLeastOne = true;
 							}else{
 								//Rescue ally
 								artificialIntelligence.operationsWeight.put(o, (float) ((4 - p.getHandicaps().size())*Coefficients.DWARF_HANDICAP_SIZE_HARD) * Coefficients.DWARF_RESCUE_HARD + (artificialIntelligence.getIsDwarf().get(p) - artificialIntelligence.AVERAGE_TRUST) );
+								atLeastOne = true;
 							}
 						}
 					}
+					if(!atLeastOne){
+						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
+					}
 				}
 			}
-			else if(o.getCard().isDoubleRescueCard()){
+			else if(o.getCard().isDoubleRescueCard()){ // DOUBLE RESCUE
 				LinkedList<Player> mostLikelyDwarfPlayers = artificialIntelligence.getAllMostLikelyDwarfPlayersHardAI(true);
 				if(mostLikelyDwarfPlayers.size() == 0){
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -19);
 				}
 				else{
+					boolean atLeastOne = false;
 					for(Player p : mostLikelyDwarfPlayers){
 						if(artificialIntelligence.canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard(), p)){
 							((OperationActionCardToPlayer) o).setDestinationPlayer(p);
@@ -194,35 +202,45 @@ public abstract class DwarfAI {
 							}
 							if(p == artificialIntelligence){
 								//Rescue itself
+								atLeastOne = true;
 								artificialIntelligence.operationsWeight.put(o, (float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.DWARF_HANDICAP_SIZE_HARD) * Coefficients.DWARF_DOUBLERESCUE_HARD + Coefficients.DWARF_RESCUE_ITSELF_HARD);
 							}else{
 								//Rescue ally
+								atLeastOne = true;
 								artificialIntelligence.operationsWeight.put(o, (float) ((4 - p.getHandicaps().size())*Coefficients.DWARF_HANDICAP_SIZE_HARD) * Coefficients.DWARF_DOUBLERESCUE_HARD + (artificialIntelligence.getIsDwarf().get(p) - artificialIntelligence.AVERAGE_TRUST) );
 							}
 						}
 					}
+					if(!atLeastOne){
+						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -19);
+					}
 				}
 			}
-			else if(o.getCard().isSabotageCard()){
+			else if(o.getCard().isSabotageCard()){ // SABOTAGE
 				LinkedList<Player> mostLikelySaboteurPlayers = artificialIntelligence.getAllMostLikelySaboteurPlayersHardAI(false);
 				if(mostLikelySaboteurPlayers.size() == 0 || (mostLikelySaboteurPlayers.size() == 1 && mostLikelySaboteurPlayers.get(0) == artificialIntelligence)){
-					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -10);
 				}
 				else{
+					boolean atLeastOne = false;
 					for(Player p : mostLikelySaboteurPlayers){
 						//AI won't hurt itself... it isn't masochistic
 						if(p != artificialIntelligence && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 							((OperationActionCardToPlayer) o).setDestinationPlayer(p);
+							atLeastOne = true;
 							artificialIntelligence.operationsWeight.put(o, (float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 						}
 					}
+					if(!atLeastOne){
+						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -10);
+					}
 				}
 			}
-			else if(o.getCard().isCollapseCard()){
+			else if(o.getCard().isCollapseCard()){ // COLLAPSE
 				//Check for every PathCard already on the board
 				//If AI removes it, does it decrease the distance to the gold card ?
 				//If yes, (can the AI put a card here ?) OR  (is the card a cul-de-sac ?)
-				Map<Position, PathCard> pathCardCopy = artificialIntelligence.getGame().getBoard().getPathCardsPosition();
+				Map<Position, PathCard> pathCardCopy = new HashMap<Position, PathCard>(artificialIntelligence.getGame().getBoard().getPathCardsPosition());
 				Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 				List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 				int minimumDistanceBeforeCollapsing = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
@@ -253,7 +271,7 @@ public abstract class DwarfAI {
 									atLeastOne = true;
 								}
 							}
-							else if(artificialIntelligence.canPlayThere(currentPosition)){	// if peut poser ici
+							else if(artificialIntelligence.canPlayThere(currentPosition)){
 								artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 								((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(currentPosition));
 								((OperationActionCardToBoard) o).setPositionDestination(currentPosition);
@@ -271,16 +289,93 @@ public abstract class DwarfAI {
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 			}
-			else if(o.getCard().isPathCard()){
-				if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
-					
+			else if(o.getCard().isPathCard()){ // PATHCARD
+				System.out.println("PathCard = " + o.getCard() + " " + ((PathCard)o.getCard()).isCulDeSac() + " " + artificialIntelligence.getHandicaps().size());
+				if(((PathCard) o.getCard()).isCulDeSac() || !(artificialIntelligence.getHandicaps().size() == 0)){
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 				else{
-					if(((PathCard) o.getCard()).isCulDeSac()){
-						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+					Position estimatedGoldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
+					Board board = artificialIntelligence.getGame().getBoard();
+					int minimumFromStart = board.minFromEmptyReachablePathCardToGoldCard(estimatedGoldCardPosition); // = min1
+					int minimumFromAnywhere = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition); // = min2
+					boolean atLeastOneOperation = false;
+					
+					if(minimumFromStart == Board.IMPOSSIBLE_PATH){
+						System.out.println("pas possible depuis début");
+						if(minimumFromAnywhere == Board.IMPOSSIBLE_PATH){
+							System.out.println("pas possible du tout");
+							//There is a loop, can't progress
+							//Do nothing
+						}
+						else{
+							//There is a loop at the start
+							//Trying to improve min2
+							Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+							for(OperationPathCard currentOp : allOperationsForThisCard){
+								board.temporarAddCard(currentOp);
+								
+								int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+								if(currentMin < minimumFromAnywhere){
+									artificialIntelligence.operationsWeight.put(currentOp, 
+											(float) Coefficients.DWARF_PATHCARD_HARD /  (((PathCard)currentOp.getCard()).openSidesAmount() * Coefficients.DWARF_PATHCARD_OPENSIDES_HARD));
+									atLeastOneOperation = true;
+								}
+								else if(currentMin-1 < minimumFromAnywhere){ //Allow the AI to play if it can't directly improve the path
+									//TODO (probleme = tout le temps vrai car le chemin minimum reste le meme)
+								}
+							
+								board.temporarRemoveCard(currentOp.getP());
+							}
+						}
 					}
-					else{
-						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -35f);
+					else if(minimumFromStart == minimumFromAnywhere){ //There is no hole
+						//Trying to improve min2
+						Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+						for(OperationPathCard currentOp : allOperationsForThisCard){
+							
+							board.temporarAddCard(currentOp);
+							
+							int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+							if(currentMin < minimumFromAnywhere){
+								artificialIntelligence.operationsWeight.put(currentOp, 
+										(float) Coefficients.DWARF_PATHCARD_HARD / (((PathCard)currentOp.getCard()).openSidesAmount() * Coefficients.DWARF_PATHCARD_OPENSIDES_HARD));
+								atLeastOneOperation = true;
+							}
+						
+							board.temporarRemoveCard(currentOp.getP());
+						}
+					}
+					else{ // There is a hole
+						//Trying to fix the hole
+						Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+						for(OperationPathCard currentOp : allOperationsForThisCard){
+							board.temporarAddCard(currentOp);
+							
+							int currentMinFromStart = board.minFromEmptyReachablePathCardToGoldCard(estimatedGoldCardPosition);
+							int currentMinFromAnywhere = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+							
+							if(currentMinFromStart == currentMinFromAnywhere){
+								//Can fix the hole
+								artificialIntelligence.operationsWeight.put(currentOp, 
+										(float) (Coefficients.DWARF_PATHCARD_FIXHOLE_HARD + Coefficients.DWARF_PATHCARD_HARD) / (((PathCard)currentOp.getCard()).openSidesAmount() * Coefficients.DWARF_PATHCARD_OPENSIDES_HARD));
+								atLeastOneOperation = true;
+								board.temporarRemoveCard(currentOp.getP());
+								break; //There is only 1 possible place to fix the hole
+							}
+							else if(currentMinFromAnywhere < minimumFromAnywhere){
+								//Doesn't fix the hole but could be interesting
+								artificialIntelligence.operationsWeight.put(currentOp, 
+										(float) Coefficients.DWARF_PATHCARD_HARD / (((PathCard)currentOp.getCard()).openSidesAmount() * Coefficients.DWARF_PATHCARD_OPENSIDES_HARD));
+								atLeastOneOperation = true;
+							}
+							
+							board.temporarRemoveCard(currentOp.getP());
+						}
+					}
+					if(!atLeastOneOperation){
+						System.out.println("Test");
+						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 					}
 				}
 			}

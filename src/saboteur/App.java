@@ -29,7 +29,7 @@ public class App extends Application {
         primaryStage = stage;
         initStage();
 
-        Resources.loadMusic().play();
+        //Resources.loadMusic().play();
 
         GameStateMachine gsm = new GameStateMachine();
         gsm.add("mainMenu", new MainMenuState(gsm, game, primaryStage));

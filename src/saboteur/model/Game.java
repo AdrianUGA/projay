@@ -417,7 +417,7 @@ public class Game {
 					isPossible = p.canHandicap((SabotageCard)card, p);
 					break;
 				case RESCUE:
-					isPossible = p.canRescue((RescueCard)card);
+					isPossible = p.canRescueItself((RescueCard)card);
 					break;
 				case DOUBLE_RESCUE:
 					isPossible = p.canRescueWithDoubleRescueCard((DoubleRescueCard)card);

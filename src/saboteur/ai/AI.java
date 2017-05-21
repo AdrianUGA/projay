@@ -353,7 +353,8 @@ public class AI extends Player {
 		case DWARF:
 			switch(this.getDifficulty()){
 			case EASY:
-				DwarfAI.computeOperationWeightEasyAI(this);
+				//DwarfAI.computeOperationWeightEasyAI(this);
+				DwarfAI.computeOperationWeightHardAI(this);
 				break;
 			case MEDIUM:
 				DwarfAI.computeOperationWeightMediumAI(this);

@@ -212,6 +212,7 @@ public class Board implements Serializable {
 		return possiblePlaces;
 	}
 	
+	//Return true if there is at least one neighbor coming at the position, and if there is at least one empty neighbor
 	private boolean canPutAPathCardThere(Position pos) {
 		int amountOfComingNeighbor = 0;
 		int amountOfAvailableNeighbor = 0;
@@ -359,11 +360,6 @@ public class Board implements Serializable {
 	public static int getGridSize() {
 		return GRID_SIZE;
 	}
-	
-	//TODO Remove this method, just needed it for test
-	public int amountOfCards(){
-		return this.pathCardsPosition.size();
-	}
 
 	public Map<Position, PathCard> getPathCardsPosition() {
 		return pathCardsPosition;
@@ -375,16 +371,16 @@ public class Board implements Serializable {
 		ArrayList<Position> allPlacablePositionFromStart = new ArrayList<Position>();
 		
 		positionsToExplore.add(Board.START);
-		positionsExplored.add(Board.START);
 		
 		while(!positionsToExplore.isEmpty()){
 			Position currentPos = positionsToExplore.remove(0);
+			positionsExplored.add(currentPos);
 			for(Cardinal cardinal : Cardinal.values()){
 				Position currentNeighbor = currentPos.getNeighbor(cardinal);
 				//Position is null if it's outside from the board
 				if(currentNeighbor != null){
-					if(this.getCard(currentNeighbor) == null && this.getCard(currentPos).isOpen(cardinal)){
-						if(canPutAnyPathCardThere(currentNeighbor)){
+					if(this.getCard(currentNeighbor) == null){
+						if(canPutAnyPathCardThere(currentNeighbor) && this.getCard(currentPos).isOpen(cardinal)){
 							allPlacablePositionFromStart.add(currentNeighbor);
 						}
 					}else{
@@ -396,7 +392,6 @@ public class Board implements Serializable {
 				}
 			}
 		}
-		
 		return allPlacablePositionFromStart;
 		
 	}
@@ -415,7 +410,7 @@ public class Board implements Serializable {
 		return allEmptyReachablePositions;
 	}
 	
-	public int minFromAnyEmptyPositionToGoldCard(Position estimatedGoldCardPosition){
+	public int minFromAnyEmptyPositionToGoldCard(Position estimatedGoldCardPosition){ // = min2
 		ArrayList<Position> availablePositions = allEmptyReachablePositions();
 		int distanceToTravelFromAPosition;
 		int min = IMPOSSIBLE_PATH;
@@ -430,7 +425,7 @@ public class Board implements Serializable {
 		return min;
 	}
 	
-	public int minFromEmptyReachablePathCardToGoldCard(Position estimatedGoldCardPosition){
+	public int minFromEmptyReachablePathCardToGoldCard(Position estimatedGoldCardPosition){ // = min1
 		ArrayList<Position> availablePositions = allPlacablePositionFromStart();
 		int distanceToTravelFromAPosition;
 		int min = IMPOSSIBLE_PATH;
@@ -460,7 +455,6 @@ public class Board implements Serializable {
 	public int aStarOnEmptyCard(Position currentPos, Position estimatedGoldCardPosition){
 		ArrayList<Position> qList = new ArrayList<Position>();
 		Integer dU[] = new Integer[GRID_SIZE*GRID_SIZE];
-		
 		for(int i=0;i<dU.length;i++){
 			dU[i] = 65536;
 		}
@@ -475,7 +469,7 @@ public class Board implements Serializable {
 			}
 			qList.remove(u);
 			for(Cardinal c : Cardinal.values()){
-				if(u.getNeighbor(c) != null && this.getCard(u.getNeighbor(c)) == null){
+				if(u.getNeighbor(c) != null && (this.getCard(u.getNeighbor(c)) == null || this.getCard(u.getNeighbor(c)).isGoal())){
 					if(dU[u.getcY() * GRID_SIZE + u.getcX()] + 1 < dU[u.getNeighbor(c).getcY() * GRID_SIZE + u.getNeighbor(c).getcX()]){
 						dU[u.getNeighbor(c).getcY() * GRID_SIZE + u.getNeighbor(c).getcX()] = dU[u.getcY() * GRID_SIZE + u.getcX()] + 1;
 						qList.add(u.getNeighbor(c));
