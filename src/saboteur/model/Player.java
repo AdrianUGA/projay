@@ -126,7 +126,7 @@ public abstract class Player implements Serializable {
 		this.gold.remove(card);
 	}
 	
-	public boolean canRescue(RescueCard card){
+	public boolean canRescueItself(RescueCard card){
 		for (SabotageCard sabotageCard : this.handicaps){
 			if (sabotageCard.getSabotageType() == card.getRescueType()){
 				return true;

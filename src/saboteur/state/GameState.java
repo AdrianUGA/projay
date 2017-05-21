@@ -42,7 +42,7 @@ public class GameState extends State{
 
 	private FXMLLoader loader;
 	
-	private PlayerArc[] playersArc;
+	private PlayerArc playersArc;
 	private Resources resources = new Resources();
 	private HashMap<String, Image> allCards;
 	
@@ -141,6 +141,17 @@ public class GameState extends State{
     	 * Pour pas être embêter par le problème de setTeam(),
     	 * commente son appel dans la méthode newRound de la classe Game
     	 */
+
+    	//Début du bloc à commenter
+    	
+//    	this.game.getPlayerList().clear();
+//    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY));
+//    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY));
+//    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY));
+//		
+    	//Fin du bloc à commenter
+    	
+//        this.game.newGame();
         
         this.resources.loadImage();
         this.resources.loadPicto();
@@ -157,7 +168,6 @@ public class GameState extends State{
             this.loader.setController(this);
             Pane pane = this.loader.load();
             
-            this.playersArc = new PlayerArc[this.game.getPlayerList().size()];
             //Take size of screen
             Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
             double gameTableSize = primaryScreenBounds.getHeight();
@@ -170,15 +180,11 @@ public class GameState extends State{
             //Create the goal card for the planCardActcion
             this.goalCardContainer.setPrefSize(gameTableSize, gameTableSize);
             for (int i = 0; i < 3; i++) {
-            	ImageView img = new ImageView("/resources/cards/goal_card_verso.png");
+            	ImageView img = new ImageView();
             	img.setFitWidth(108/1.5);
             	img.setFitHeight(166/1.5);
             	
-            	SVGPath svg = new SVGPath();
-            	svg.setFill(Color.WHITE);
-            	svg.setContent(Icon.eye);
-            	
-            	StackPane p = new StackPane(img, svg);
+            	StackPane p = new StackPane(img);
             	p.setAlignment(Pos.CENTER);
             	this.goalCardContainer.getChildren().add(p);
             }
@@ -195,17 +201,9 @@ public class GameState extends State{
             this.boardGridPane.setId("boardGridPane");
             this.boardContainer.getChildren().add(this.boardGridPane);
             
-            //Create Specific arc for first player
-        	addPlayerOnTheBoard(gameTableHalfSize, gameTableHalfSize, 100, -140.0, 0);
-
-            //Create arc for other player
-            int nbPlayer = this.game.getPlayerList().size()-1;
-            double length = 260.0 / nbPlayer; // 260 = 360 - 100 (100 degree of the 1st player)
-            double startAngle = -140.0;
-            for (int i = 1; i<=nbPlayer ; i++) {
-                startAngle = startAngle - length;
-                addPlayerOnTheBoard(gameTableHalfSize, gameTableHalfSize, length, startAngle, i);
-            }
+            this.playersArc = new PlayerArc(gameTableHalfSize, gameTableHalfSize, this.game.getPlayerList());
+            this.playersArc.setId("playersArc");
+            this.boardContainer.getChildren().add(this.playersArc);
 
             //Create the circle of the game board
             this.gameBoard.setCenterX(gameTableHalfSize);
@@ -237,15 +235,15 @@ public class GameState extends State{
         this.gsm.push("pauseMenu");
     }
         
-	private void addPlayerOnTheBoard(double sizeOfArc, double center, double length, double startAngle, int idPlayer){
-    	this.playersArc[idPlayer] = new PlayerArc(sizeOfArc, center, length, startAngle, this.game.getPlayerList().get(idPlayer));
-    	
-    	String name = this.game.getPlayerList().get(idPlayer).getName()+idPlayer;
-    	name = name.replaceAll("\\s+","");
-    	this.playersArc[idPlayer].setId(name);
-    	
-    	this.boardContainer.getChildren().add(this.playersArc[idPlayer]);
-    }
+//	private void addPlayerOnTheBoard(double sizeOfArc, double center, double length, double startAngle, int idPlayer){
+//    	this.playersArc[idPlayer] = new PlayerArc(sizeOfArc, center, length, startAngle, this.game.getPlayerList().get(idPlayer));
+//    	
+//    	String name = this.game.getPlayerList().get(idPlayer).getName()+idPlayer;
+//    	name = name.replaceAll("\\s+","");
+//    	this.playersArc[idPlayer].setId(name);
+//    	
+//    	this.boardContainer.getChildren().add(this.playersArc[idPlayer]);
+//    }
     
     private void generateBoard() {
         double cardWidth = 108/3;

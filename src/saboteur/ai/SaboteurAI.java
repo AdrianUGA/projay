@@ -39,7 +39,7 @@ public abstract class SaboteurAI {
 				}
 				break;
 			case "saboteur.model.Card.RescueCard":
-				if(artificialIntelligence.canRescue((RescueCard)o.getCard())){
+				if(artificialIntelligence.canRescueItself((RescueCard)o.getCard())){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
 					((OperationActionCardToPlayer) o).setToolDestination(((RescueCard)o.getCard()).getRescueType());
 					artificialIntelligence.operationsWeight.put(o, 

@@ -1,5 +1,8 @@
 package saboteur.view;
 
+import java.util.Hashtable;
+import java.util.LinkedList;
+
 import javafx.geometry.Insets;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -14,34 +17,55 @@ import javafx.scene.transform.Rotate;
 import saboteur.model.Player;
 
 public class PlayerArc extends Pane{
-	private Player player;
-	private Path path = new Path();
-	private Circle circle[] = new Circle[3];
+	private LinkedList<Player> players;
+//	private Circle circles[][];
+	private Hashtable<Player, Circle[]> circles = new Hashtable<Player, Circle[]>();
 
-	public PlayerArc(double sizeOfArc, double center, double lengthOfArc, double startAngle, Player player) {
-		this.player = player;
+	public PlayerArc(double radius, double center, LinkedList<Player> playerslist) {
 		
+		this.players = playerslist;
 		this.setPadding(new Insets(0, 0, 0, 0));
-		createArc(sizeOfArc, center, lengthOfArc, startAngle);
 		
+		int nbPlayers = playerslist.size();
+		for(Player p : playerslist) {
+			circles.put(p, new Circle[3]);
+		}
+		
+		
+		//Arc of 1st player
+		createArc(radius, center, 100, -140); 
+		createCircle(radius, center, 100, -140, this.players.get(0));
+		
+		//Arc of other players
+        double lengthOfArc = 260.0 / (nbPlayers-1); // 260 = 360 - 100 (100 degree of the 1st player)
+        double startAngle = -140.0;		
+        for (int i = 1; i<nbPlayers ; i++) {
+            startAngle = startAngle - lengthOfArc;
+			createArc(radius, center, lengthOfArc, startAngle);
+			createCircle(radius, center, lengthOfArc, startAngle, this.players.get(i));
+        }
+	}
+	
+	private void createCircle(double radius, double center, double lengthOfArc, double startAngle, Player player) {
 		double circleRadius = lengthOfArc / 1.5  ; // half of the length of arc
-		
-		double centerDistance = (sizeOfArc/2) + circleRadius*1.2; // game board size + circle radius
-						
+		double centerDistance = (radius/2) + circleRadius*1.2; // game board size + circle radius
 		double x =lengthOfArc/3;
 		
 		for (int i = 0; i<3; i++) {  
 			double angle = -startAngle-x*i-x/2;
-            this.circle[i] = new Circle(center + centerDistance, center, circleRadius, Color.web("#a4a4a4"));
+			this.circles.get(player)[i] = new Circle(center + centerDistance, center, circleRadius, Color.web("#a4a4a4"));
             Rotate rotate = new Rotate(angle, center, center);
-            this.circle[i].getTransforms().add(rotate);
-            this.circle[i].setStroke(Color.BLACK);
-            this.circle[i].setStrokeWidth(3);
-            this.getChildren().add(this.circle[i]);
+            this.circles.get(player)[i].getTransforms().add(rotate);
+            this.circles.get(player)[i].setStroke(Color.BLACK);
+            this.circles.get(player)[i].setStrokeWidth(3);
+            this.getChildren().add(this.circles.get(player)[i]);
 		}		
 	}
 	
 	private void createArc(double radius, double center, double lengthOfArc, double startAngle) {
+		
+		Path path = new Path();
+		
 		//Prepare all different positions 
 		double innerRadius = radius/2;
         double radians = Math.toRadians(startAngle);
@@ -57,11 +81,11 @@ public class PlayerArc extends Pane{
         int YendInner = (int)Math.round((Math.sin(-radians) * innerRadius + center));
                        
                 
-        this.path.setFill(Color.web("#a4a4a4"));
-        this.path.setStroke(Color.BLACK);
-        this.path.setStrokeWidth(2);
-        this.path.setStrokeType(StrokeType.OUTSIDE);
-        this.path.setFillRule(FillRule.EVEN_ODD);
+        path.setFill(Color.web("#a4a4a4"));
+        path.setStroke(Color.BLACK);
+        path.setStrokeWidth(2);
+        path.setStrokeType(StrokeType.OUTSIDE);
+        path.setFillRule(FillRule.EVEN_ODD);
         
         MoveTo moveTo = new MoveTo(XstartInner, YstartInner);
 
@@ -83,21 +107,17 @@ public class PlayerArc extends Pane{
 
         LineTo line2 = new LineTo(XendInner, YendInner);
         
-        this.path.getElements().add(moveTo);
-        this.path.getElements().add(arcToInner);
-        this.path.getElements().add(moveTo2);
-        this.path.getElements().add(line);
-        this.path.getElements().add(arcTo);
-        this.path.getElements().add(line2);
+        path.getElements().add(moveTo);
+        path.getElements().add(arcToInner);
+        path.getElements().add(moveTo2);
+        path.getElements().add(line);
+        path.getElements().add(arcTo);
+        path.getElements().add(line2);
 
-        this.getChildren().add(this.path);
+        this.getChildren().add(path);
 	}
 	
-	public Circle[] getCircle() {
-		return circle;
-	}
-	
-	public Player getPlayer() {
-		return this.player;
+	public Circle[] getCircles(Player player) {
+		return circles.get(player);
 	}
 }
