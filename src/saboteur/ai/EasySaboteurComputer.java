@@ -16,7 +16,7 @@ import saboteur.model.Card.PathCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.SabotageCard;
 
-public class EasySaboteurComputer extends AIComputer {
+public class EasySaboteurComputer extends Computer {
 	
 	public static int SABOTAGE = 1;
 	public static float HANDICAP_SIZE = 0.25f;
@@ -44,7 +44,7 @@ public class EasySaboteurComputer extends AIComputer {
 			Position randomPos = allCulDeSac.get(r.nextInt(allCulDeSac.size()));
 			((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(randomPos));
 			((OperationActionCardToBoard) o).setPositionDestination(randomPos);
-			artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) Coefficients.DWARF_COLLAPSE_EASY);
+			artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) COLLAPSE);
 		}
 	}
 
@@ -66,10 +66,10 @@ public class EasySaboteurComputer extends AIComputer {
 				int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
 				if(distanceDifference >= -1){
 					// At most 1 position away from the minimum
-					// If there is < SABOTEUR_DISTANCE_LEFT_EASY distance left, it put 0 as weight.
+					// If there is < SABOTEUR_DISTANCE_LEFT distance left, it put 0 as weight.
 					artificialIntelligence.operationsWeight.put(currentOp, 
-							(float) Maths.ifNegativeZeroElseOne(currentPos.getTaxiDistance(goldCardPosition)-Coefficients.SABOTEUR_DISTANCE_LEFT_EASY)
-							*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distanceDifference - ((PathCard) currentOp.getCard()).openSidesAmount()/5) * Coefficients.SABOTEUR_PATHCARD_EASY);
+							(float) Maths.ifNegativeZeroElseOne(currentPos.getTaxiDistance(goldCardPosition)-DISTANCE_LEFT)
+							*(DISTANCE_PATHCARD + distanceDifference - ((PathCard) currentOp.getCard()).openSidesAmount()/5) * PATHCARD);
 
 					
 				}else{
@@ -91,9 +91,9 @@ public class EasySaboteurComputer extends AIComputer {
 				if(distance >= -1){
 					// At most 1 position away from the minimum
 					artificialIntelligence.operationsWeight.put((OperationPathCard) currentOp, 
-						(float) Maths.ifNegativeZeroElseOne(Coefficients.SABOTEUR_DISTANCE_LEFT_EASY-currentPos.getTaxiDistance(goldCardPosition))
-						*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distance - ((PathCard) currentOp.getCard()).openSidesAmount()/5) 
-						* Coefficients.SABOTEUR_CUL_DE_SAC_EASY);
+						(float) Maths.ifNegativeZeroElseOne(DISTANCE_LEFT-currentPos.getTaxiDistance(goldCardPosition))
+						*(DISTANCE_PATHCARD + distance - ((PathCard) currentOp.getCard()).openSidesAmount()/5) 
+						* CUL_DE_SAC);
 				}else{
 					// Trash
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
@@ -105,11 +105,11 @@ public class EasySaboteurComputer extends AIComputer {
 	@Override
 	public void operationSabotageCard(Operation o) {
 		Player p = artificialIntelligence.mostLikelyADwarf();
-		if(artificialIntelligence.isDwarf.get(p) >= Coefficients.SABOTEUR_LIMIT_ESTIMATED_DWARF_EASY && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
+		if(artificialIntelligence.isDwarf.get(p) >= LIMIT_ESTIMATED_DWARF && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 			((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 			artificialIntelligence.operationsWeight.put(o, 
 				(float) (Maths.positiveOrZero(artificialIntelligence.isDwarf.get(p) - artificialIntelligence.AVERAGE_TRUST) 
-				* Coefficients.SABOTEUR_SABOTAGE_EASY) * ((float)(3-p.getHandicaps().size())/3));
+				* SABOTAGE) * ((float)(3-p.getHandicaps().size())/3));
 		}
 		else{
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
@@ -130,8 +130,8 @@ public class EasySaboteurComputer extends AIComputer {
 				((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getRescueType2());
 			}
 			artificialIntelligence.operationsWeight.put(o, 
-				(float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) 
-				* Coefficients.SABOTEUR_DOUBLERESCUE_EASY);
+				(float) ((4 - artificialIntelligence.getHandicaps().size())*HANDICAP_SIZE) 
+				* DOUBLERESCUE);
 		}else{
 			// Trash
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
@@ -143,8 +143,8 @@ public class EasySaboteurComputer extends AIComputer {
 			((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
 			((OperationActionCardToPlayer) o).setToolDestination(((RescueCard)o.getCard()).getRescueType());
 			artificialIntelligence.operationsWeight.put(o, 
-				(float) ((4 - artificialIntelligence.getHandicaps().size())*Coefficients.SABOTEUR_HANDICAP_SIZE_EASY) 
-				* Coefficients.SABOTEUR_RESCUE_EASY);
+				(float) ((4 - artificialIntelligence.getHandicaps().size())*HANDICAP_SIZE) 
+				* RESCUE);
 		}else{
 			// Trash
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
@@ -158,8 +158,8 @@ public class EasySaboteurComputer extends AIComputer {
 			((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(estimatedGoldCardPosition));
 			((OperationActionCardToBoard) o).setPositionDestination(estimatedGoldCardPosition);
 			artificialIntelligence.operationsWeight.put(o, 
-				(float) ((1 + Maths.positiveOrZero(Coefficients.SABOTEUR_PLAN_TURN_EASY 
-						- artificialIntelligence.getGame().getTurn())) * Coefficients.SABOTEUR_PLAN_EASY));
+				(float) ((1 + Maths.positiveOrZero(PLAN_TURN 
+						- artificialIntelligence.getGame().getTurn())) * PLAN));
 		}
 		else{
 			// Trash

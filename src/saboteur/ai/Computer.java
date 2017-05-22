@@ -5,7 +5,7 @@ import java.util.Map;
 
 import saboteur.model.Operation;
 
-public abstract class AIComputer {
+public abstract class Computer {
 	
 	protected AI artificialIntelligence;
 	
@@ -17,28 +17,24 @@ public abstract class AIComputer {
 	}
 
 	private void computeOperation(Operation o) {
-		switch(o.getCard().getClassName()){
-		case "saboteur.model.Card.PlanCard":
-			this.operationPlanCard(o);
-			break;
-		case "saboteur.model.Card.RescueCard":
-			this.operationRescueCard(o);
-			break;
-		case "saboteur.model.Card.DoubleRescueCard":
-			this.operationDoubleRescueCard(o);
-			break;
-		case "saboteur.model.Card.SabotageCard":
-			this.operationSabotageCard(o);
-			break;
-		case "saboteur.model.Card.PathCard":
-			this.operationPathCard(o);
-			break;
-		case "saboteur.model.Card.CollapseCard" :
-			this.operationCollapseCard(o);
+		if(o.getCard().isPlanCard()){ /* PLAN CARD */
+			this.operationPlanCard(o);	
+		}else if(o.getCard().isRescueCard()){ /* RESCUE CARD */
+			this.operationRescueCard(o);	
+		}else if(o.getCard().isDoubleRescueCard()){ /* DOUBLE RESCUE */
+			this.operationDoubleRescueCard(o);	
+		}else if(o.getCard().isSabotageCard()){ /* SABOTAGE */
+			this.operationSabotageCard(o);	
+		}else if(o.getCard().isCollapseCard()){ /* COLLAPSE */
+			this.operationPathCard(o);	
+		}else if(o.getCard().isPathCard()){ /* PATHCARD */
+			this.operationCollapseCard(o);		
+		}else{
+			System.err.println("Not supposed to happen");
 		}
 	}
 	
-	public AIComputer setArtificialIntelligence(AI artificialIntelligence2) {
+	public Computer setArtificialIntelligence(AI artificialIntelligence2) {
 		this.artificialIntelligence = artificialIntelligence2;
 		return this;
 	}

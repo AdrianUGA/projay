@@ -29,7 +29,7 @@ public class AI extends Player {
 	protected LinkedHashMap<Position,Float> estimatedGoldCardPosition;
 	protected LinkedHashMap<Operation, Float> operationsWeight;
 
-	private AIComputer computer;
+	private Computer computer;
 	
 
 	public AI(Game game, String name, Difficulty difficulty) {

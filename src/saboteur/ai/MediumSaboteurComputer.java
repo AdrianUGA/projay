@@ -2,7 +2,7 @@ package saboteur.ai;
 
 import saboteur.model.Operation;
 
-public class MediumSaboteurComputer extends AIComputer {
+public class MediumSaboteurComputer extends Computer {
 
 	@Override
 	void operationCollapseCard(Operation o) {
