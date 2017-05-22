@@ -3,7 +3,7 @@ import saboteur.model.Game;
 import saboteur.model.Operation;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,10 +32,10 @@ public class AI extends Player {
 
 	public AI(Game game, String name, Difficulty difficulty) {
 		super(game, name);
-		this.isDwarf = new HashMap<Player,Float>();
+		this.isDwarf = new LinkedHashMap<Player,Float>();
 		this.difficulty = difficulty;
-		this.operationsWeight = new HashMap<Operation, Float>();
-		this.estimatedGoldCardPosition = new HashMap<Position, Float>();
+		this.operationsWeight = new LinkedHashMap<Operation, Float>();
+		this.estimatedGoldCardPosition = new LinkedHashMap<Position, Float>();
 	}
 	
 	public void initializeAI(){
@@ -228,7 +228,7 @@ public class AI extends Player {
 	}
 	
 	protected void removeOperationWithNullTarget(){
-		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(this.operationsWeight);
+		Map<Operation, Float> cloneOperationsWeight = new LinkedHashMap<Operation,Float>(this.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			if(!o.isOperationTrash()){
 				if(o.getCard().isPathCard()){

@@ -1,6 +1,6 @@
 package saboteur.view;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,7 +18,7 @@ public class GameBoardGridPane extends GridPane {
 	private int xmin, xmax, ymin, ymax;
 	
 	private Resources resources = new Resources();
-	private HashMap<String, Image> allCards;
+	private LinkedHashMap<String, Image> allCards;
 	
 	
 	public GameBoardGridPane(Game game, double XstartInner, double YstartInner) {
@@ -112,7 +112,7 @@ public class GameBoardGridPane extends GridPane {
 		return dx + y;
     }
     
-    public HashMap<String, Image> getAllCards() {
+    public LinkedHashMap<String, Image> getAllCards() {
     	return this.allCards;
     }    
 }

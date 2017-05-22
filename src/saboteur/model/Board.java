@@ -32,7 +32,7 @@ public class Board implements Serializable {
 			}
 		}
 		this.objectiveCards = new LinkedList<Position>();
-		this.pathCardsPosition = new HashMap<Position, PathCard>();
+		this.pathCardsPosition = new LinkedHashMap<Position, PathCard>();
 		
 		Collections.shuffle(goalPathCard, new Random(Game.seed));
 		

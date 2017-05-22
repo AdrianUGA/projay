@@ -1,6 +1,6 @@
 package saboteur.view;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -16,7 +16,7 @@ public class GameCardContainer extends HBox {
 	private Game game;
 	
 	private Resources resources = new Resources();
-	private HashMap<String, Image> allCards;
+	private LinkedHashMap<String, Image> allCards;
 	
 	public GameCardContainer(Game game, double gameTableSize){
 		this.game = game;

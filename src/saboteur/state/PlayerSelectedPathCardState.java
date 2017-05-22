@@ -1,6 +1,6 @@
 package saboteur.state;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class PlayerSelectedPathCardState extends State{
 	private GameBoardGridPane gameBoardGridPane;
 	private List<Position> possiblePositionList;
 	private List<Object> boardEffect;
-	private HashMap<ImageView, Position> positionOfImages;
+	private LinkedHashMap<ImageView, Position> positionOfImages;
 	private Card selectedCard;
 	private boolean positionSelected;
 	
@@ -58,7 +58,7 @@ public class PlayerSelectedPathCardState extends State{
         this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
         this.gameBoardGridPane.toFront();
         this.boardEffect = new LinkedList<>();
-		this.positionOfImages = new HashMap<ImageView, Position>();
+		this.positionOfImages = new LinkedHashMap<ImageView, Position>();
 		this.positionSelected = false;
         
 		if(this.selectedCard.isCollapseCard()) {

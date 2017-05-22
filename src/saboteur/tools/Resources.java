@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Resources {
 
@@ -24,15 +24,15 @@ public class Resources {
     private static int k = 0;
     public static  double volume=0.5;
 
-    private HashMap<String, Image> imageCard;
+    private LinkedHashMap<String, Image> imageCard;
 
-    private HashMap<String, Image> picto;
+    private LinkedHashMap<String, Image> picto;
 
     private static ArrayList<MediaPlayer> music;
 
     public Resources() {
-        this.imageCard = new HashMap<>();
-        this.picto = new HashMap<>();
+        this.imageCard = new LinkedHashMap<>();
+        this.picto = new LinkedHashMap<>();
         try {
             this.pathImageCardFolder = Paths.get(App.class.getResource(ImageCardFolder).toURI());
             this.pathPictoFolder = Paths.get(App.class.getResource(pictoFolder).toURI());
@@ -61,7 +61,7 @@ public class Resources {
         }
     }
 
-    public HashMap<String, Image> getImageCard() {
+    public LinkedHashMap<String, Image> getImageCard() {
         return imageCard;
     }
 
