@@ -16,33 +16,7 @@ public abstract class Player implements Serializable {
 	transient protected Game game; //NOT TO SAVE
 	protected Team team; //TO SAVE
 	
-	public Card getSelectedCard() {
-		return selectedCard;
-	}
 
-	public void setSelectedCard(Card selectedCard) {
-		this.selectedCard = selectedCard;
-	}
-
-	public Game getGame() {
-		return game;
-	}
-
-	public void setGame(Game game) {
-		this.game = game;
-	}
-
-	public void setHandicaps(ArrayList<SabotageCard> handicaps) {
-		this.handicaps = handicaps;
-	}
-
-	public void setGold(ArrayList<GoldCard> gold) {
-		this.gold = gold;
-	}
-
-	public void setHand(ArrayList<Card> hand) {
-		this.hand = hand;
-	}
 
 	public Player (Game game, String name){
 		this.game = game;
@@ -53,78 +27,46 @@ public abstract class Player implements Serializable {
 		this.gold = new ArrayList<GoldCard>();
 	}
 	
+	
+/* Actions */
+	
 	public void playCard(Card card){
 	}
-	public void playCard(Player destinationPlayer){
-		Operation operation = new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer);
-		
-		this.game.playOperation(operation);
+	public void playCard(Player destinationPlayer){		
+		this.game.playOperation(new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer));
 	}
-	public void playCard(Player destinationPlayer, Tool destinationTool){
-		Operation operation = new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer, destinationTool);
-		
-		this.game.playOperation(operation);
+	public void playCard(Player destinationPlayer, Tool destinationTool){		
+		this.game.playOperation(new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer, destinationTool));
 	}
 	public void playCard(PathCard destinationCard){
-		Operation operation = new OperationActionCardToBoard(this, this.selectedCard, destinationCard);
-		
-		this.game.playOperation(operation);
+		this.game.playOperation(new OperationActionCardToBoard(this, this.selectedCard, destinationCard));
 	}
-	public void playCard(Position position){
-		Operation operation = new OperationPathCard(this, this.selectedCard, position);
-		
-		this.game.playOperation(operation);
+	public void playCard(Position position){		
+		this.game.playOperation(new OperationPathCard(this, this.selectedCard, position));
 	}
 	
-	public void playCard(){
-		Operation operation = new OperationTrash(this, this.selectedCard);
-		
-		this.game.playOperation(operation);
+	public void playCard(){		
+		this.game.playOperation(new OperationTrash(this, this.selectedCard));
 	}
 	
 	public void pickCard(){
-		if (!game.stackIsEmpty()){
-			Operation operation = new OperationPick(this, game.pick());
-			
-			this.game.playOperation(operation);
-		}
+		if (!game.stackIsEmpty())			
+			this.game.playOperation(new OperationPick(this, game.pick()));
 	}
 	
-	public ArrayList<SabotageCard> getHandicaps(){
-		return this.handicaps;
+	
+/* Callbacks */
+	
+	//Human : useless
+	//IA : redefinition
+	public void viewGoalCard(PathCard card){
+	}
+		
+	public void notify(Operation o){	
 	}
 	
-	public int getGold(){
-		int total = 0;
-		for (GoldCard card : this.gold){
-			total += card.getValue();
-		}
-		return total;
-	}
 	
-	public ArrayList<Card> getHand(){
-		return this.hand;
-	}
-	
-	public void removeHandCard(Card card){
-		this.hand.remove(card);
-	}
-	
-	public void removeHandicapCard(SabotageCard card){
-		this.handicaps.remove(card);
-	}
-	
-	public void addHandCard(Card card){
-		this.hand.add(card);
-	}
-	
-	public void addHandicapCard(SabotageCard card){
-		this.handicaps.add(card);
-	}
-	
-	public void removeGoldCard(GoldCard card){
-		this.gold.remove(card);
-	}
+/* Tests. No side effects */
 	
 	public boolean canRescueItself(RescueCard card){
 		return this.canRescue(card, this);
@@ -175,49 +117,12 @@ public abstract class Player implements Serializable {
 		}
 		return true;
 	}
-	//return null if not found
-	public SabotageCard getCardCorrespondingToRescueType(Tool tool){
-		for (SabotageCard sabotageCard : this.handicaps){
-			if (sabotageCard.getSabotageType() == tool){
-				return sabotageCard;
-			}
-		}
-		return null;
-	}
-
-	//Human : useless
-	//IA : redefinition
-	public void viewGoalCard(PathCard card){
-	}
 	
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(String nom) {
-		this.name = nom;
-	}
-	
-	public void notify(Operation o){
-		
-	}
 
 	public boolean emptyHand(){
 		return this.hand.isEmpty();
 	}
 	
-	public void addGold(GoldCard goldCard){
-		this.gold.add(goldCard);
-	}
-	
-	public void setTeam(Team team){
-		this.team = team;
-	}
-	
-	public Team getTeam(){
-		return this.team;
-	}
-
 	public boolean isHuman(){
 		return false;
 	}
@@ -235,6 +140,103 @@ public abstract class Player implements Serializable {
 				&& p.getHandicaps().equals(this.handicaps);
 	}
 
+	
+/* Getters Setters Modifiers */
+	
+	public Card getSelectedCard() {
+		return selectedCard;
+	}
+
+	public void setSelectedCard(Card selectedCard) {
+		this.selectedCard = selectedCard;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+	public void setHandicaps(ArrayList<SabotageCard> handicaps) {
+		this.handicaps = handicaps;
+	}
+
+	public void setGold(ArrayList<GoldCard> gold) {
+		this.gold = gold;
+	}
+
+	public void setHand(ArrayList<Card> hand) {
+		this.hand = hand;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(String nom) {
+		this.name = nom;
+	}	
+	
+	/* return null if not found */
+		public SabotageCard getCardCorrespondingToRescueType(Tool tool){
+			for (SabotageCard sabotageCard : this.handicaps){
+				if (sabotageCard.getSabotageType() == tool){
+					return sabotageCard;
+				}
+			}
+			return null;
+		}
+		
+	public void addGold(GoldCard goldCard){
+		this.gold.add(goldCard);
+	}
+	
+	public void setTeam(Team team){
+		this.team = team;
+	}
+	
+	public Team getTeam(){
+		return this.team;
+	}
+	
+	public ArrayList<SabotageCard> getHandicaps(){
+		return this.handicaps;
+	}
+	
+	public int getGold(){
+		int total = 0;
+		for (GoldCard card : this.gold){
+			total += card.getValue();
+		}
+		return total;
+	}
+	
+	public ArrayList<Card> getHand(){
+		return this.hand;
+	}
+	
+	public void removeHandCard(Card card){
+		this.hand.remove(card);
+	}
+	
+	public void removeHandicapCard(SabotageCard card){
+		this.handicaps.remove(card);
+	}
+	
+	public void addHandCard(Card card){
+		this.hand.add(card);
+	}
+	
+	public void addHandicapCard(SabotageCard card){
+		this.handicaps.add(card);
+	}
+	
+	public void removeGoldCard(GoldCard card){
+		this.gold.remove(card);
+	}
+	
 	public void resetHandicaps() {
 		this.handicaps.clear();
 	}
