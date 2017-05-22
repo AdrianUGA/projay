@@ -129,6 +129,7 @@ public class Game {
 	//init common to both methods (loadConfig() and newRound())
 	private void initRound() {
 		this.playerWinnerAlreadyAnnounced = false;
+		this.teamWinnerAlreadyAnnounced = false;
 		this.roundFinished = false;
 		this.round++;
 		this.turn = 1;
