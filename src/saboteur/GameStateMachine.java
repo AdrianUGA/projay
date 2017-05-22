@@ -1,18 +1,17 @@
 package saboteur;
 
-import javafx.stage.Stage;
 import saboteur.state.State;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Stack;
 
 public class GameStateMachine {
 
-    private HashMap<String, State> states;
+    private LinkedHashMap<String, State> states;
     private Stack<State> statesStack;
 
     public GameStateMachine(){
-        this.states = new HashMap<>();
+        this.states = new LinkedHashMap<>();
         this.statesStack = new Stack<>();
     }
 

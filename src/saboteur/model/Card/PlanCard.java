@@ -19,4 +19,8 @@ public class PlanCard extends ActionCardToBoard {
     	System.out.println("PlanCard");
     }
 	
+	@Override
+	public String toString() {
+		return "PlanCard";
+	}
 }

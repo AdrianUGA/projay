@@ -1,19 +1,15 @@
 package saboteur.state;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
-import javafx.scene.Node;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
@@ -32,7 +28,7 @@ public class PlayerSelectedPathCardState extends State{
 	private GameBoardGridPane gameBoardGridPane;
 	private List<Position> possiblePositionList;
 	private List<Object> boardEffect;
-	private HashMap<Object, Position> possiblePositions;
+	private LinkedHashMap<Object, Position> positionOfImages;
 	private Card selectedCard;
 	private boolean positionSelected;
 	
@@ -62,7 +58,8 @@ public class PlayerSelectedPathCardState extends State{
         this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
         this.gameBoardGridPane.toFront();
         this.boardEffect = new LinkedList<>();
-		this.possiblePositions = new HashMap<Object, Position>();
+
+		this.positionOfImages = new LinkedHashMap<Object, Position>();
 		this.positionSelected = false;
         
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>(){
@@ -86,7 +83,7 @@ public class PlayerSelectedPathCardState extends State{
 					GridPane.setHalignment(svg, HPos.CENTER);
 					this.boardEffect.add(svg);
 					
-					this.possiblePositions.put(svg, posiCard);
+					this.positionOfImages.put(svg, posiCard);
 //					this.possiblePositions.put(this.gameBoardGridPane. ,posiCard);
 					
 					this.gameBoardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
@@ -111,7 +108,7 @@ public class PlayerSelectedPathCardState extends State{
 				
 				this.boardEffect.add(svg);
 				this.boardEffect.add(img);
-				this.possiblePositions.put(img, posiCard);
+				this.positionOfImages.put(img, posiCard);
 
 				this.gameBoardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
 				this.gameBoardGridPane.add(img, posiCard.getcX(), posiCard.getcY());
@@ -141,7 +138,7 @@ public class PlayerSelectedPathCardState extends State{
     
     private void selectPositionOnBoard(MouseEvent event) {
     	if(event.getTarget() instanceof ImageView || event.getTarget() instanceof SVGPath) {
-    		Position position = this.possiblePositions.get(event.getTarget());
+    		Position position = this.positionOfImages.get(event.getTarget());
     		if(this.selectedCard.isCollapseCard()) {
     			this.gameBoardGridPane.removeCardOfBoard(position);
     		}

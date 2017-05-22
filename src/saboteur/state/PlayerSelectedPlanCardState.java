@@ -15,8 +15,6 @@ import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.model.Position;
 import saboteur.model.Card.Card;
-import saboteur.model.Card.PathCard;
-import saboteur.model.Card.PlanCard;
 import saboteur.tools.Icon;
 import saboteur.view.GameCardContainer;
 

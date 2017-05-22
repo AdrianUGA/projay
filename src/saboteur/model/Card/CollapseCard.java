@@ -19,4 +19,8 @@ public class CollapseCard extends ActionCardToBoard {
     	System.out.println("CollapseCard");
     }
 	
+	@Override
+	public String toString() {
+		return "CollapseCard";
+	}
 }

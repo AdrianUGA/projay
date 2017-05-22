@@ -1,6 +1,6 @@
 package saboteur.ai;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ public abstract class DwarfAI {
 	
 	public static void computeOperationWeightEasyAI(AI artificialIntelligence) {
 		//Can't use 'for each' on operationsWeight
-		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(artificialIntelligence.operationsWeight);
+		Map<Operation, Float> cloneOperationsWeight = new LinkedHashMap<Operation,Float>(artificialIntelligence.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			switch(o.getCard().getClassName()){
 			case "saboteur.model.Card.PlanCard":
@@ -33,7 +33,7 @@ public abstract class DwarfAI {
 					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(estimatedGoldCardPosition));
 					((OperationActionCardToBoard) o).setPositionDestination(estimatedGoldCardPosition);
 					artificialIntelligence.operationsWeight.put(o, 
-							(float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY 
+							(float) ((1 + Maths.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY 
 									- artificialIntelligence.getGame().getTurn())) * Coefficients.DWARF_PLAN_EASY));
 				}
 				else{
@@ -73,7 +73,7 @@ public abstract class DwarfAI {
 				Player p = artificialIntelligence.mostLikelyASaboteur();
 				if(artificialIntelligence.isDwarf.get(p) <= Coefficients.DWARF_LIMIT_ESTIMATED_SABOTEUR_EASY && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(p);
-					artificialIntelligence.operationsWeight.put(o, (float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
+					artificialIntelligence.operationsWeight.put(o, (float) (Maths.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 				}else{
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
 				}
@@ -117,7 +117,7 @@ public abstract class DwarfAI {
 				}
 				break;
 			case "saboteur.model.Card.CollapseCard" :
-				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().allCulDeSac();
+				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
 				if(allCulDeSac.size() == 0){
 					//IA only try to destroy cul-de-sac
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
@@ -140,7 +140,7 @@ public abstract class DwarfAI {
 	}
 	
 	public static void computeOperationWeightHardAI(AI artificialIntelligence) {
-		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(artificialIntelligence.operationsWeight);
+		Map<Operation, Float> cloneOperationsWeight = new LinkedHashMap<Operation,Float>(artificialIntelligence.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			if(o.getCard().isPlanCard()){ // PLAN CARD
 				if(!artificialIntelligence.knowsTheGoldCardPosition()){
@@ -224,11 +224,11 @@ public abstract class DwarfAI {
 				else{
 					boolean atLeastOne = false;
 					for(Player p : mostLikelySaboteurPlayers){
-						//AI won't hurt itself... it isn't masochistic
+						//AI won't hurt itself... it isn't masochistic... Or is it ?
 						if(p != artificialIntelligence && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 							((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 							atLeastOne = true;
-							artificialIntelligence.operationsWeight.put(o, (float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
+							artificialIntelligence.operationsWeight.put(o, (float) (Maths.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 						}
 					}
 					if(!atLeastOne){
@@ -240,7 +240,7 @@ public abstract class DwarfAI {
 				//Check for every PathCard already on the board
 				//If AI removes it, does it decrease the distance to the gold card ?
 				//If yes, (can the AI put a card here ?) OR  (is the card a cul-de-sac ?)
-				Map<Position, PathCard> pathCardCopy = new HashMap<Position, PathCard>(artificialIntelligence.getGame().getBoard().getPathCardsPosition());
+				Map<Position, PathCard> pathCardCopy = new LinkedHashMap<Position, PathCard>(artificialIntelligence.getGame().getBoard().getPathCardsPosition());
 				Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 				List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 				int minimumDistanceBeforeCollapsing = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
@@ -271,7 +271,7 @@ public abstract class DwarfAI {
 									atLeastOne = true;
 								}
 							}
-							else if(artificialIntelligence.canPlayThere(currentPosition)){
+							else if(artificialIntelligence.canPlayThere(currentPosition) && allClosestPosition.get(0).getTaxiDistance(goldCardPosition) < 2){
 								artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 								((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(currentPosition));
 								((OperationActionCardToBoard) o).setPositionDestination(currentPosition);
@@ -309,6 +309,7 @@ public abstract class DwarfAI {
 							//Do nothing
 						}
 						else{
+							System.out.println("Loop at start");
 							//There is a loop at the start
 							//Trying to improve min2
 							Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
@@ -331,6 +332,7 @@ public abstract class DwarfAI {
 					}
 					else if(minimumFromStart == minimumFromAnywhere){ //There is no hole
 						//Trying to improve min2
+						System.out.println("No hole");
 						Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 						for(OperationPathCard currentOp : allOperationsForThisCard){
 							
@@ -348,6 +350,7 @@ public abstract class DwarfAI {
 					}
 					else{ // There is a hole
 						//Trying to fix the hole
+						System.out.println("Hole");
 						Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 						for(OperationPathCard currentOp : allOperationsForThisCard){
 							board.temporarAddCard(currentOp);
@@ -374,7 +377,7 @@ public abstract class DwarfAI {
 						}
 					}
 					if(!atLeastOneOperation){
-						System.out.println("Test");
+						System.out.println("Pas possible");
 						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 					}
 				}
