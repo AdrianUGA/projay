@@ -85,7 +85,7 @@
                   <Insets bottom="20.0" />
                </VBox.margin>
             </ImageView>
-            <Button mnemonicParsing="false" onAction="#endOfTurnButtonAction" text="Fin de tour" />
+            <Button fx:id="endOfTurnButton" mnemonicParsing="false" onAction="#endOfTurnButtonAction" text="Fin de tour" />
             <ImageView fitHeight="127.0" fitWidth="75.0" onMouseClicked="#takeCardOfStackButtonAction" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../resources/DosCartes.png" />

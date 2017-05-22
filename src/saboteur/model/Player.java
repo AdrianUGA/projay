@@ -260,4 +260,8 @@ public abstract class Player implements Serializable {
 		this.handicaps.clear();
 	}
 
+	public void removeHandicapWith(RescueCard card) {
+		// TODO Auto-generated method stub
+	}
+
 }

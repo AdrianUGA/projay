@@ -362,7 +362,7 @@ public class Board implements Serializable {
 	}
 
 	public Map<Position, PathCard> getPathCardsPosition() {
-		return pathCardsPosition;
+		return this.pathCardsPosition;
 	}
 	
 	public ArrayList<Position> allPlacablePositionFromStart(){

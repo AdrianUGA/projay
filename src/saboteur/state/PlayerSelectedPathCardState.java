@@ -32,7 +32,7 @@ public class PlayerSelectedPathCardState extends State{
 	private GameBoardGridPane gameBoardGridPane;
 	private List<Position> possiblePositionList;
 	private List<Object> boardEffect;
-	private HashMap<ImageView, Position> positionOfImages;
+	private HashMap<Object, Position> possiblePositions;
 	private Card selectedCard;
 	private boolean positionSelected;
 	
@@ -62,30 +62,43 @@ public class PlayerSelectedPathCardState extends State{
         this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
         this.gameBoardGridPane.toFront();
         this.boardEffect = new LinkedList<>();
-		this.positionOfImages = new HashMap<ImageView, Position>();
+		this.possiblePositions = new HashMap<Object, Position>();
 		this.positionSelected = false;
         
+		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent event) {
+				selectPositionOnBoard(event);
+			}
+		};
+		
+		
 		if(this.selectedCard.isCollapseCard()) {
 			Map<Position, PathCard> pathCardsPosition = this.game.getBoard().getPathCardsPosition();
-			pathCardsPosition.remove(Board.getStart());
-			
-			for(Map.Entry<Position,PathCard> m:pathCardsPosition.entrySet()) {
-				SVGPath svg = new SVGPath();
-				svg.setFill(Color.RED);
-				svg.setContent(Icon.minus);
-				GridPane.setHalignment(svg, HPos.CENTER);
-				this.boardEffect.add(svg);
-				Position p = (Position) m.getKey();
-				this.gameBoardGridPane.add(svg, p.getcX(), p.getcY());
+			//If the map content more than the 1st path card (entry)
+			if(pathCardsPosition.size() > 1) {
+				pathCardsPosition.remove(Board.getStart());
+				
+				for(Position posiCard : pathCardsPosition.keySet()) {
+					SVGPath svg = new SVGPath();
+					svg.setFill(Color.RED);
+					svg.setContent(Icon.minus);
+					GridPane.setHalignment(svg, HPos.CENTER);
+					this.boardEffect.add(svg);
+					
+					this.possiblePositions.put(svg, posiCard);
+//					this.possiblePositions.put(this.gameBoardGridPane. ,posiCard);
+					
+					this.gameBoardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
+				}
+				this.gameBoardGridPane.setOnMouseClicked(event);
 			}
+			
 		}
 		else {
-			System.out.println("la?");
 			PathCard card  = (PathCard) this.selectedCard;
-			System.out.println(card);
 			this.possiblePositionList = this.game.getBoard().getPossiblePositionPathCard(card);
 			for(Position posiCard : this.possiblePositionList) {
-				System.out.println("in?");
 				SVGPath svg = new SVGPath();
 				svg.setFill(Color.GREEN);
 				svg.setContent(Icon.plus);
@@ -98,21 +111,13 @@ public class PlayerSelectedPathCardState extends State{
 				
 				this.boardEffect.add(svg);
 				this.boardEffect.add(img);
-				this.positionOfImages.put(img, posiCard);
+				this.possiblePositions.put(img, posiCard);
 
 				this.gameBoardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
 				this.gameBoardGridPane.add(img, posiCard.getcX(), posiCard.getcY());
 			}
+			this.gameBoardGridPane.setOnMouseClicked(event);
 		}
-		
-		this.gameBoardGridPane.setOnMouseClicked(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent event) {
-				selectPositionOnBoard(event);
-			}
-		});
-		
-
     }
 
     @Override
@@ -136,7 +141,7 @@ public class PlayerSelectedPathCardState extends State{
     
     private void selectPositionOnBoard(MouseEvent event) {
     	if(event.getTarget() instanceof ImageView || event.getTarget() instanceof SVGPath) {
-    		Position position = this.positionOfImages.get(event.getTarget());
+    		Position position = this.possiblePositions.get(event.getTarget());
     		if(this.selectedCard.isCollapseCard()) {
     			this.gameBoardGridPane.removeCardOfBoard(position);
     		}
