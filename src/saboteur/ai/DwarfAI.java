@@ -33,7 +33,7 @@ public abstract class DwarfAI {
 					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(estimatedGoldCardPosition));
 					((OperationActionCardToBoard) o).setPositionDestination(estimatedGoldCardPosition);
 					artificialIntelligence.operationsWeight.put(o, 
-							(float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY 
+							(float) ((1 + Maths.positiveOrZero(Coefficients.DWARF_PLAN_TURN_EASY 
 									- artificialIntelligence.getGame().getTurn())) * Coefficients.DWARF_PLAN_EASY));
 				}
 				else{
@@ -73,7 +73,7 @@ public abstract class DwarfAI {
 				Player p = artificialIntelligence.mostLikelyASaboteur();
 				if(artificialIntelligence.isDwarf.get(p) <= Coefficients.DWARF_LIMIT_ESTIMATED_SABOTEUR_EASY && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(p);
-					artificialIntelligence.operationsWeight.put(o, (float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
+					artificialIntelligence.operationsWeight.put(o, (float) (Maths.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 				}else{
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
 				}
@@ -228,7 +228,7 @@ public abstract class DwarfAI {
 						if(p != artificialIntelligence && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 							((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 							atLeastOne = true;
-							artificialIntelligence.operationsWeight.put(o, (float) (artificialIntelligence.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
+							artificialIntelligence.operationsWeight.put(o, (float) (Maths.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * Coefficients.DWARF_SABOTAGE_EASY) * ((3-p.getHandicaps().size())/3));
 						}
 					}
 					if(!atLeastOne){
