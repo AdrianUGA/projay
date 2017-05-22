@@ -7,8 +7,8 @@ import saboteur.model.Card.Card;
 public abstract class Operation implements Serializable {
 
 	private static final long serialVersionUID = -1654062965339840406L;
-	private Player sourcePlayer; //TO SAVE
-	private Card card; //TO SAVE
+	private Player sourcePlayer;
+	private Card card;
 	
 	public Operation(Player sourcePlayer, Card card){
 		this.sourcePlayer = sourcePlayer;

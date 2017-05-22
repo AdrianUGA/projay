@@ -13,22 +13,22 @@ import saboteur.tools.Loader;
 
 public class Game {
 
-	private int currentPlayerIndex; //TO SAVE
-	private int round; //TO SAVE
-	private int turn; //TO SAVE
+	private int currentPlayerIndex;
+	private int round;
+	private int turn;
 	public final static long seed = 321456789;
 
-	private final Deck deck;//NOT TO SAVE
+	private final Deck deck;
 
-	private LinkedList<GoldCard> goldCardStack;//TO SAVE
-	private LinkedList<Operation> history;//TO SAVE
+	private LinkedList<GoldCard> goldCardStack;
+	private LinkedList<Operation> history;
 
-	private LinkedList<Card> stack;//TO SAVE
-	private LinkedList<Card> trash;//TO SAVE
+	private LinkedList<Card> stack;
+	private LinkedList<Card> trash;
 
-	private LinkedList<Player> playerList;//TO SAVE
+	private LinkedList<Player> playerList;
 
-	private Board board;//TO SAVE
+	private Board board;
 	
 	private boolean teamWinnerAlreadyAnnounced;
 	private boolean playerWinnerAlreadyAnnounced;
@@ -71,15 +71,7 @@ public class Game {
 	}
 
 	public void loadConfig(String name){
-		this.playerWinnerAlreadyAnnounced = false;
-		this.roundFinished = false;
-		this.round++;
-		this.turn = 1;
-
-		this.trash = new LinkedList<>();
-		this.stack = this.deck.getCopyOtherCards();
-		Collections.shuffle(this.stack, new Random(Game.seed));
-		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
+		initRound();
 		
 		File configFile = new File(Loader.configFolder+ "/" + name + ".config");
 		BufferedReader reader = null;
@@ -132,6 +124,24 @@ public class Game {
 				}
 			}
 		}*/
+	}
+
+	//init common to both methods (loadConfig() and newRound())
+	private void initRound() {
+		this.playerWinnerAlreadyAnnounced = false;
+		this.roundFinished = false;
+		this.round++;
+		this.turn = 1;
+
+		this.trash = new LinkedList<>();
+		this.stack = this.deck.getCopyOtherCards();
+		Collections.shuffle(this.stack, new Random(Game.seed));
+		/*
+		for(Card c : this.stack){
+			c.displayCardType();
+		}
+		*/
+		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 	}
 
 	private void addCardToBoardFromConfig(String chaine) {
@@ -194,20 +204,7 @@ public class Game {
 	}
 	
 	public void newRound(){
-		this.teamWinnerAlreadyAnnounced = false;
-		this.roundFinished = false;
-		this.round++;
-		this.turn = 1;
-
-		this.trash = new LinkedList<>();
-		this.stack = this.deck.getCopyOtherCards();
-		Collections.shuffle(this.stack, new Random(Game.seed));
-		/*
-		for(Card c : this.stack){
-			c.displayCardType();
-		}
-		*/
-		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
+		initRound();
 
 		this.setTeam();
 
