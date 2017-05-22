@@ -30,7 +30,7 @@ public abstract class SaboteurAI {
 					((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(estimatedGoldCardPosition));
 					((OperationActionCardToBoard) o).setPositionDestination(estimatedGoldCardPosition);
 					artificialIntelligence.operationsWeight.put(o, 
-						(float) ((1 + artificialIntelligence.positiveOrZero(Coefficients.SABOTEUR_PLAN_TURN_EASY 
+						(float) ((1 + Maths.positiveOrZero(Coefficients.SABOTEUR_PLAN_TURN_EASY 
 								- artificialIntelligence.getGame().getTurn())) * Coefficients.SABOTEUR_PLAN_EASY));
 				}
 				else{
@@ -75,7 +75,7 @@ public abstract class SaboteurAI {
 				if(artificialIntelligence.isDwarf.get(p) >= Coefficients.SABOTEUR_LIMIT_ESTIMATED_DWARF_EASY && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 					artificialIntelligence.operationsWeight.put(o, 
-						(float) (artificialIntelligence.positiveOrZero(artificialIntelligence.isDwarf.get(p) - artificialIntelligence.AVERAGE_TRUST) 
+						(float) (Maths.positiveOrZero(artificialIntelligence.isDwarf.get(p) - artificialIntelligence.AVERAGE_TRUST) 
 						* Coefficients.SABOTEUR_SABOTAGE_EASY) * ((float)(3-p.getHandicaps().size())/3));
 				}
 				else{
@@ -101,7 +101,7 @@ public abstract class SaboteurAI {
 							// At most 1 position away from the minimum
 							// If there is < SABOTEUR_DISTANCE_LEFT_EASY distance left, it put 0 as weight.
 							artificialIntelligence.operationsWeight.put(currentOp, 
-									(float) artificialIntelligence.ifNegativeZeroElseOne(currentPos.getTaxiDistance(goldCardPosition)-Coefficients.SABOTEUR_DISTANCE_LEFT_EASY)
+									(float) Maths.ifNegativeZeroElseOne(currentPos.getTaxiDistance(goldCardPosition)-Coefficients.SABOTEUR_DISTANCE_LEFT_EASY)
 									*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distanceDifference - ((PathCard) currentOp.getCard()).openSidesAmount()/5) * Coefficients.SABOTEUR_PATHCARD_EASY);
 
 							
@@ -124,7 +124,7 @@ public abstract class SaboteurAI {
 						if(distance >= -1){
 							// At most 1 position away from the minimum
 							artificialIntelligence.operationsWeight.put((OperationPathCard) currentOp, 
-								(float) artificialIntelligence.ifNegativeZeroElseOne(Coefficients.SABOTEUR_DISTANCE_LEFT_EASY-currentPos.getTaxiDistance(goldCardPosition))
+								(float) Maths.ifNegativeZeroElseOne(Coefficients.SABOTEUR_DISTANCE_LEFT_EASY-currentPos.getTaxiDistance(goldCardPosition))
 								*(Coefficients.SABOTEUR_DISTANCE_PATHCARD_EASY + distance - ((PathCard) currentOp.getCard()).openSidesAmount()/5) 
 								* Coefficients.SABOTEUR_CUL_DE_SAC_EASY);
 						}else{
@@ -136,7 +136,7 @@ public abstract class SaboteurAI {
 				break;
 			case "saboteur.model.Card.CollapseCard" :
 				//TODO to be changed (Saboteur are bad guys, right ?)
-				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().allCulDeSac();
+				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
 				if(allCulDeSac.size() == 0){
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}

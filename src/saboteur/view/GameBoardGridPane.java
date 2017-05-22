@@ -1,7 +1,6 @@
 package saboteur.view;
 
 import java.util.HashMap;
-import java.util.List;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

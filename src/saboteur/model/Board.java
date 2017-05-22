@@ -3,7 +3,6 @@ package saboteur.model;
 import java.io.Serializable;
 import java.util.*;
 
-import saboteur.ai.AI;
 import saboteur.model.Card.*;
 
 public class Board implements Serializable {
@@ -20,11 +19,10 @@ public class Board implements Serializable {
 			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY()),
 			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY() + DISTANCE_START_OBJECTIVE_Y),
 			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY() - DISTANCE_START_OBJECTIVE_Y)};
-	
-	
-	private PathCard[][] board; //NOT TO SAVE
-	private List<Position> objectiveCards; //TO SAVE
-	private Map<Position, PathCard> pathCardsPosition; //TO SAVE
+
+	private PathCard[][] board;
+	private List<Position> objectiveCards;
+	private Map<Position, PathCard> pathCardsPosition;
 	
 	public Board(ArrayList<PathCard> startPathCard, ArrayList<PathCard> goalPathCard){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];
@@ -98,6 +96,74 @@ public class Board implements Serializable {
 		this.board[position.getcY()][position.getcX()] = null;
 		return removed;
 	}
+	
+	
+
+
+/* Tests. No side effects */
+	
+	public boolean isGoalCardWithGoldVisible() {
+		PathCard card;
+		for (Position posCard : this.objectiveCards){
+			card = getCard(posCard);
+			if (card.hasGold() && card.isVisible()) return true;
+		}
+		return false;
+	}
+	
+	/*Return true if there is at least one neighbor coming at the position, and if there is at least one empty neighbor*/
+	private boolean canPutAPathCardThere(Position pos) {
+		int amountOfComingNeighbor = 0;
+		int amountOfAvailableNeighbor = 0;
+		for(Cardinal cardinal : Cardinal.values()){
+			if(getCard(pos.getNeighbor(cardinal)) == null){
+				amountOfAvailableNeighbor ++;
+			}else if(getCard(pos.getNeighbor(cardinal)).isOpen(cardinal.opposite())){
+				amountOfComingNeighbor++;
+			}
+		}
+		return (amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1);
+	}
+	
+	//A bit different from the previous method, return true if it's possible, even if not interesting
+	private boolean canPutAnyPathCardThere(Position pos) {
+		int amountOfComingNeighbor = 0;
+		int amountOfAvailableNeighbor = 0;
+		for(Cardinal cardinal : Cardinal.values()){
+			if(getCard(pos.getNeighbor(cardinal)) == null){
+				amountOfAvailableNeighbor ++;
+			}else if(getCard(pos.getNeighbor(cardinal)).isOpen(cardinal.opposite())){
+				amountOfComingNeighbor++;
+			}
+		}
+		return ((amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1) || amountOfComingNeighbor >=2);
+	}
+
+	
+
+	public boolean isPossible(PathCard card, Position position){
+		if(!position.isValid())
+			return false;
+		
+		PathCard neighbor;
+		boolean atLeastOnePath = false;
+
+		for(Cardinal cardinal : Cardinal.values()){
+			neighbor = this.getCard(position.getNeighbor(cardinal));
+			
+			/* Important test if neighbor is visible because it can be a goalCard */
+			if(neighbor == null || !neighbor.isVisible())
+				continue;
+			
+			if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
+			if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
+
+		}
+		
+		return (card.isGoal() || card.isStart() || atLeastOnePath);
+	}
+
+/* Getters Setters Modifiers */
 	
 	public Set<Position> extractPositions(Set<OperationPathCard> operations){
 		Set<Position> positions = new HashSet<Position>();
@@ -217,34 +283,6 @@ public class Board implements Serializable {
 		return possiblePlaces;
 	}
 	
-	//Return true if there is at least one neighbor coming at the position, and if there is at least one empty neighbor
-	private boolean canPutAPathCardThere(Position pos) {
-		int amountOfComingNeighbor = 0;
-		int amountOfAvailableNeighbor = 0;
-		for(Cardinal cardinal : Cardinal.values()){
-			if(getCard(pos.getNeighbor(cardinal)) == null){
-				amountOfAvailableNeighbor ++;
-			}else if(getCard(pos.getNeighbor(cardinal)).isOpen(cardinal.opposite())){
-				amountOfComingNeighbor++;
-			}
-		}
-		return (amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1);
-	}
-	
-	//A bit different from the previous method, return true if it's possible, even if not interesting
-	private boolean canPutAnyPathCardThere(Position pos) {
-		int amountOfComingNeighbor = 0;
-		int amountOfAvailableNeighbor = 0;
-		for(Cardinal cardinal : Cardinal.values()){
-			if(getCard(pos.getNeighbor(cardinal)) == null){
-				amountOfAvailableNeighbor ++;
-			}else if(getCard(pos.getNeighbor(cardinal)).isOpen(cardinal.opposite())){
-				amountOfComingNeighbor++;
-			}
-		}
-		return ((amountOfAvailableNeighbor>=1 && amountOfComingNeighbor>=1) || amountOfComingNeighbor >=2);
-	}
-
 	public List<Position> getNearestPossiblePathCardPlace(Position position){
 		List<Position> possible =  new ArrayList<Position>();
 		for(OperationPathCard o : this.getPossibleOperationPathCard(null,null)){
@@ -263,28 +301,6 @@ public class Board implements Serializable {
 		}
 		return ret;
 	}
-
-	public boolean isPossible(PathCard card, Position position){
-		if(!position.isValid())
-			return false;
-		
-		PathCard neighbor;
-		boolean atLeastOnePath = false;
-
-		for(Cardinal cardinal : Cardinal.values()){
-			neighbor = this.getCard(position.getNeighbor(cardinal));
-			
-			/* Important test if neighbor is visible because it can be a goalCard */
-			if(neighbor == null || !neighbor.isVisible())
-				continue;
-			
-			if (card.isOpen(cardinal)^neighbor.isOpen(cardinal.opposite())) return false;
-			if (card.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())) atLeastOnePath = true;
-
-		}
-		
-		return (card.isGoal() || card.isStart() || atLeastOnePath);
-	}
 	
 	public ArrayList<Position> getGoalCardsToFlip(PathCard card, Position p){
 		PathCard neighbor;
@@ -300,7 +316,7 @@ public class Board implements Serializable {
 		
 		currentPosition = getStart();
 		positionsToExplore.add(currentPosition);
-		positionsAlreadyExplored.add(indice(currentPosition));
+		positionsAlreadyExplored.add(getIndice(currentPosition));
 		
 		while (!positionsToExplore.isEmpty()){
 			currentPosition = positionsToExplore.remove(positionsToExplore.size()-1);
@@ -309,8 +325,8 @@ public class Board implements Serializable {
 				posNeighbor = p.getNeighbor(cardinal);
 				neighbor = this.getCard(posNeighbor);
 				if (neighbor != null && currentCard.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())){
-					if (!positionsAlreadyExplored.contains(indice(posNeighbor))){
-						positionsAlreadyExplored.add(indice(posNeighbor));
+					if (!positionsAlreadyExplored.contains(getIndice(posNeighbor))){
+						positionsAlreadyExplored.add(getIndice(posNeighbor));
 						positionsToExplore.add(posNeighbor);
 						if (neighbor.isGoal() && !neighbor.isVisible()){
 							result.add(currentPosition);
@@ -319,10 +335,6 @@ public class Board implements Serializable {
 				}
 			}
 		}
-		
-		
-		
-		
 		for(Cardinal cardinal : Cardinal.values()){
 			if (card.isOpen(cardinal)){
 				posNeighbor = p.getNeighbor(cardinal);
@@ -340,26 +352,17 @@ public class Board implements Serializable {
 		return START;
 	}
 
-	public int indice(Position pos){
+	public int getIndice(Position pos){
 		return pos.getcY() * 60 + pos.getcX();
 	}
 	
-	public List<Position> allCulDeSac(){
+	public List<Position> getAllCulDeSac(){
 		List<Position> list = new LinkedList<Position>();
 		for(Position position : this.pathCardsPosition.keySet()){
 			if(this.pathCardsPosition.get(position).isCulDeSac())
 				list.add(position);
 		}
 		return list;
-	}
-
-	public boolean goalCardWithGoldIsVisible() {
-		PathCard card;
-		for (Position posCard : this.objectiveCards){
-			card = getCard(posCard);
-			if (card.hasGold() && card.isVisible()) return true;
-		}
-		return false;
 	}
 
 	public static int getGridSize() {
@@ -370,7 +373,7 @@ public class Board implements Serializable {
 		return pathCardsPosition;
 	}
 	
-	public ArrayList<Position> allPlacablePositionFromStart(){
+	public ArrayList<Position> getAllPlacablePositionFromStart(){
 		ArrayList<Position> positionsToExplore = new ArrayList<Position>();
 		ArrayList<Position> positionsExplored = new ArrayList<Position>();
 		ArrayList<Position> allPlacablePositionFromStart = new ArrayList<Position>();
@@ -398,10 +401,9 @@ public class Board implements Serializable {
 			}
 		}
 		return allPlacablePositionFromStart;
-		
 	}
 	
-	private ArrayList<Position> allEmptyReachablePositions(){
+	private ArrayList<Position> getAllEmptyReachablePositions(){
 		ArrayList<Position> allEmptyReachablePositions = new ArrayList<Position>();
 		for(Position p : this.pathCardsPosition.keySet()){
 			if(!getCard(p).isGoal()){
@@ -416,7 +418,7 @@ public class Board implements Serializable {
 	}
 	
 	public int minFromAnyEmptyPositionToGoldCard(Position estimatedGoldCardPosition){ // = min2
-		ArrayList<Position> availablePositions = allEmptyReachablePositions();
+		ArrayList<Position> availablePositions = getAllEmptyReachablePositions();
 		int distanceToTravelFromAPosition;
 		int min = IMPOSSIBLE_PATH;
 		
@@ -431,7 +433,7 @@ public class Board implements Serializable {
 	}
 	
 	public int minFromEmptyReachablePathCardToGoldCard(Position estimatedGoldCardPosition){ // = min1
-		ArrayList<Position> availablePositions = allPlacablePositionFromStart();
+		ArrayList<Position> availablePositions = getAllPlacablePositionFromStart();
 		int distanceToTravelFromAPosition;
 		int min = IMPOSSIBLE_PATH;
 		

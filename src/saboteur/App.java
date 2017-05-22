@@ -6,12 +6,7 @@ import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import saboteur.model.Game;
 import saboteur.state.*;
-import saboteur.tools.Resources;
 import javafx.scene.layout.StackPane;
-
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 public class App extends Application {

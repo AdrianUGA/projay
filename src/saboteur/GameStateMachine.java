@@ -1,6 +1,5 @@
 package saboteur;
 
-import javafx.stage.Stage;
 import saboteur.state.State;
 
 import java.util.HashMap;

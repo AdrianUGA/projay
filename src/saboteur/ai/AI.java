@@ -93,18 +93,18 @@ public class AI extends Player {
 	public void updateTrust(OperationActionCardToPlayer o){
 		if(o.getCard().isSabotageCard()){
 			if(this.isDwarf.get(o.getSourcePlayer()) > this.isDwarf.get(o.getDestinationPlayer()) && (this.isDwarf.get(o.getDestinationPlayer()) <= 40)){
-				// Ennemies of our ennemies are our allies
+				// Enemies of our enemies are our allies
 				this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) + 10);
 			}
 			else if(this.isDwarf.get(o.getSourcePlayer()) <= this.isDwarf.get(o.getDestinationPlayer()) && (this.isDwarf.get(o.getDestinationPlayer()) >= 60)){
-				// Ennemies of our allies are our ennemies
+				// Enemies of our allies are our enemies
 				this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 10);
 			}
 		}
 		else if(o.getCard().isRescueCard() || o.getCard().isDoubleRescueCard()){
 			if(!o.getSourcePlayer().equals(o.getDestinationPlayer())){
 				if(this.isDwarf.get(o.getDestinationPlayer()) <= 40){
-					// Allies of our ennemies are our ennemies
+					// Allies of our enemies are our enemies
 					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 10);
 				}
 				else if(this.isDwarf.get(o.getDestinationPlayer()) >= 60){
@@ -247,24 +247,6 @@ public class AI extends Player {
 						this.operationsWeight.remove((OperationActionCardToPlayer) o);
 				}
 			}
-		}
-	}
-	
-	//TODO move this method somewhere
-	public float positiveOrZero(float i){
-		if(i>0){
-			return i;
-		}
-		return 0;
-	}
-	
-	//TODO move this method somewhere
-	public float ifNegativeZeroElseOne(float i){
-		if(i<=0){
-			return 0;
-		}
-		else{
-			return 1;
 		}
 	}
 	
