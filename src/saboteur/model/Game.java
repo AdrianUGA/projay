@@ -50,7 +50,7 @@ public class Game {
 	public void playOperation(Operation op){
 		this.history.add(op);
 		op.exec(this);
-		if ( (this.board.goalCardWithGoldIsVisible() || emptyHandsPlayers()) && !this.roundFinished){
+		if ( (this.board.isGoalCardWithGoldVisible() || emptyHandsPlayers()) && !this.roundFinished){
 			dealGold();
 			this.roundFinished = true;
 		}
@@ -385,7 +385,7 @@ public class Game {
 	}
 	
 	public boolean dwarfsWon(){
-		return this.board.goalCardWithGoldIsVisible();
+		return this.board.isGoalCardWithGoldVisible();
 	}
 	
 	public LinkedList<Player> getWinners(){
@@ -565,7 +565,7 @@ public class Game {
 		team.add(Team.DWARF);
 		team.add(Team.DWARF);
 		team.add(Team.DWARF);
-		team.add(Team.SABOTEUR);
+		//team.add(Team.SABOTEUR);
 		if (nbPlayer > 3){
 			team.add(Team.DWARF);
 		}

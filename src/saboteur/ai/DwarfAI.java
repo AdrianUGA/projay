@@ -117,7 +117,7 @@ public abstract class DwarfAI {
 				}
 				break;
 			case "saboteur.model.Card.CollapseCard" :
-				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().allCulDeSac();
+				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
 				if(allCulDeSac.size() == 0){
 					//IA only try to destroy cul-de-sac
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
@@ -309,6 +309,7 @@ public abstract class DwarfAI {
 							//Do nothing
 						}
 						else{
+							System.out.println("Loop at start");
 							//There is a loop at the start
 							//Trying to improve min2
 							Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
@@ -331,6 +332,7 @@ public abstract class DwarfAI {
 					}
 					else if(minimumFromStart == minimumFromAnywhere){ //There is no hole
 						//Trying to improve min2
+						System.out.println("No hole");
 						Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 						for(OperationPathCard currentOp : allOperationsForThisCard){
 							
@@ -348,6 +350,7 @@ public abstract class DwarfAI {
 					}
 					else{ // There is a hole
 						//Trying to fix the hole
+						System.out.println("Hole");
 						Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 						for(OperationPathCard currentOp : allOperationsForThisCard){
 							board.temporarAddCard(currentOp);
@@ -374,7 +377,7 @@ public abstract class DwarfAI {
 						}
 					}
 					if(!atLeastOneOperation){
-						System.out.println("Test");
+						System.out.println("Pas possible");
 						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 					}
 				}
