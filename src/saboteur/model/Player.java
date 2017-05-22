@@ -140,7 +140,7 @@ public abstract class Player implements Serializable {
 	}
 	
 	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card){
-		return canRescueWithDoubleRescueCard(card, this);
+		return this.canRescueWithDoubleRescueCard(card, this);
 	}
 	
 	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card, Player player) {
@@ -154,20 +154,12 @@ public abstract class Player implements Serializable {
 	}
 	
 	public boolean canRescueType(Tool rescueType) {
-		Tool currentType;
-		for (SabotageCard sabotageCard : this.handicaps){
-			currentType = sabotageCard.getSabotageType();
-			if (currentType == rescueType){
-				return true;
-			}
-		}
-		return false;
+		return this.canRescueType(rescueType, this);
 	}
 	
 	public boolean canRescueType(Tool rescueType, Player player) {
-		Tool currentType;
 		for (SabotageCard sabotageCard : player.handicaps){
-			currentType = sabotageCard.getSabotageType();
+			Tool currentType = sabotageCard.getSabotageType();
 			if (currentType == rescueType){
 				return true;
 			}
