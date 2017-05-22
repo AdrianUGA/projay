@@ -41,6 +41,11 @@ public class Board implements Serializable {
 		for(int i=0; i<3; i++)
 			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);
 		this.addCard(startPathCard.get(0), getStart());
+		for(Position p : objectiveCards){
+			if(this.getCard(p).hasGold()){
+				System.out.println("Gold x:" + p.getcX() + " y:" + p.getcY());
+			}
+		}
 	}
 	
 	public void addCard(PathCard card, Position position){
@@ -164,7 +169,7 @@ public class Board implements Serializable {
 	}
 	
 	/* Returns actions on every free positions when card=null */
-	public Set<OperationPathCard> getPossibleOperationPathCard(AI ai, PathCard card){
+	public Set<OperationPathCard> getPossibleOperationPathCard(Player ai, PathCard card){
 		Set<OperationPathCard> possiblePlaces = new HashSet<OperationPathCard>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){

@@ -37,4 +37,9 @@ public class SabotageCard extends ActionCardToPlayer {
 	public void displayCardType(){
     	System.out.println("SabotageCard");
     }
+	
+	@Override
+	public String toString() {
+		return "SabotageCard : " + this.getSabotageType();
+	}
 }

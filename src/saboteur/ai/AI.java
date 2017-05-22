@@ -164,7 +164,20 @@ public class AI extends Player {
 			this.estimatedGoldCardPosition.put(p, 1f);
 			this.setAllEstimatedGoldCardPositionExept(p, 0f);
 		}else{
+			float temp = this.estimatedGoldCardPosition.get(p);
+			int greaterThanZero = 0;
+			
 			this.estimatedGoldCardPosition.put(p, 0f);
+			for(Position currentP : estimatedGoldCardPosition.keySet()){
+				if(estimatedGoldCardPosition.get(currentP)>0){
+					greaterThanZero++;
+				}
+			}
+			for(Position currentP : estimatedGoldCardPosition.keySet()){
+				if(estimatedGoldCardPosition.get(currentP)>0){
+					estimatedGoldCardPosition.put(currentP, estimatedGoldCardPosition.get(currentP) + temp/greaterThanZero);
+				}
+			}
 		}
 	}
 	
@@ -189,6 +202,8 @@ public class AI extends Player {
 	}
 	
 	public boolean knowsTheGoldCardPosition(){
+		if(estimatedGoldCardPosition.containsKey(1f))
+			System.out.println(this.name + " connait la position de la carte or");
 		return this.estimatedGoldCardPosition.containsValue(1f);
 	}
 	
@@ -397,6 +412,12 @@ public class AI extends Player {
 			}
 		}
 		return false;
+	}
+	
+	public void printHand(){
+		for(Card c : this.hand){
+			System.out.println(c);
+		}
 	}
 	
 }
