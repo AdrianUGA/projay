@@ -271,7 +271,7 @@ public abstract class DwarfAI {
 									atLeastOne = true;
 								}
 							}
-							else if(artificialIntelligence.canPlayThere(currentPosition)){
+							else if(artificialIntelligence.canPlayThere(currentPosition) && allClosestPosition.get(0).getTaxiDistance(goldCardPosition) < 2){
 								artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 								((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(currentPosition));
 								((OperationActionCardToBoard) o).setPositionDestination(currentPosition);
