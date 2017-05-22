@@ -292,6 +292,7 @@ public class Game {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void load(String name){
 		File saveFile = new File(Loader.savedFolder+ "/" + name + ".save");
 		FileInputStream fileInput;

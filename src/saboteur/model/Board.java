@@ -3,7 +3,6 @@ package saboteur.model;
 import java.io.Serializable;
 import java.util.*;
 
-import saboteur.ai.AI;
 import saboteur.model.Card.*;
 
 public class Board implements Serializable {
