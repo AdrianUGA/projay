@@ -117,7 +117,7 @@ public abstract class DwarfAI {
 				}
 				break;
 			case "saboteur.model.Card.CollapseCard" :
-				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().allCulDeSac();
+				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
 				if(allCulDeSac.size() == 0){
 					//IA only try to destroy cul-de-sac
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);

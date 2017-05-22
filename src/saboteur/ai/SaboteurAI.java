@@ -136,7 +136,7 @@ public abstract class SaboteurAI {
 				break;
 			case "saboteur.model.Card.CollapseCard" :
 				//TODO to be changed (Saboteur are bad guys, right ?)
-				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().allCulDeSac();
+				List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
 				if(allCulDeSac.size() == 0){
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
