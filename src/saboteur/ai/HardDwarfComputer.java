@@ -21,8 +21,7 @@ import saboteur.model.Card.SabotageCard;
 
 public class HardDwarfComputer extends Computer {
 
-	public static int MINIMUM_TRUST_DWARF = 65;
-	public static int MINIMUM_TRUST_SABOTEUR = 35;
+	public static int MINIMUM_TRUST = 65;
 
 	public static int RESCUE_ITSELF = 30;
 	public static float HANDICAP_SIZE = 0.5f;

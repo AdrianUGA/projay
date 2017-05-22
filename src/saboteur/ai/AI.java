@@ -109,43 +109,10 @@ public class AI extends Player {
 	
 	protected Operation selectOperation(){
 		resetProbabilitiesToPlayEachOperation();
-		switch(this.team){
-		case DWARF:
-			switch(this.getDifficulty()){
-			case EASY:
-				//DwarfAI.computeOperationWeightEasyAI(this);
-				DwarfAI.computeOperationWeightHardAI(this);
-				break;
-			case MEDIUM:
-				DwarfAI.computeOperationWeightMediumAI(this);
-				break;
-			case HARD:
-				DwarfAI.computeOperationWeightHardAI(this);
-				break;
-			}
-			break;
-		case SABOTEUR:
-			switch(this.getDifficulty()){
-			case EASY:
-				ComputerFactory.compute(this);
-				break;
-			case MEDIUM:
-				ComputerFactory.computeOperationWeightMediumAI(this);
-				break;
-			case HARD:
-				ComputerFactory.computeOperationWeightHardAI(this);
-				break;
-			}
-		}
+		this.computer.compute();
 		removeOperationWithNullTarget();
 		return bestOperationToPlay();
 	}
-
-
-
-
-	
-	
 	
 	
 /* Tests. No side effects */
@@ -381,7 +348,7 @@ public class AI extends Player {
 	//If parameter is true, it'll add the AI who calls the method anyway
 	public LinkedList<Player> getAllMostLikelySaboteurPlayersHardAI(boolean withAI) {
 		int maxAmountOfSaboteur = game.maximumAmountOfSaboteur();
-		int maxTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
+		int maxTrust = HardDwarfComputer.MINIMUM_TRUST;
 		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
 		
 		do{
@@ -400,7 +367,7 @@ public class AI extends Player {
 	//If parameter is true, it'll add the AI who calls the method anyway
 	public LinkedList<Player> getAllMostLikelyDwarfPlayersHardAI(boolean withAI) {
 		int minAmountOfDwarf = game.minimumAmountOfDwarf();
-		int minTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
+		int minTrust = HardDwarfComputer.MINIMUM_TRUST;
 		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
 		
 		do{
