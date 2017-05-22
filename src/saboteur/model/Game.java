@@ -309,6 +309,10 @@ public class Game {
             this.playerWinnerAlreadyAnnounced = (boolean) objectInputStream.readObject();
             this.roundFinished = (boolean) objectInputStream.readObject();
             this.observers = (LinkedList<Player>) objectInputStream.readObject();
+            
+            for (Player p : this.getPlayerList()){
+            	p.setGame(this);
+            }
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
