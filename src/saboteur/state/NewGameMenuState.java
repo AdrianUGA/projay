@@ -110,12 +110,12 @@ public class NewGameMenuState extends State{
     	//Début du bloc à commenter
 
         
-    	this.game.getPlayerList().clear();
-    	this.game.getObservers().clear();
-    	
-    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY, r.nextLong()));
-    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY, r.nextLong()));
-    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY, r.nextLong()));
+//    	this.game.getPlayerList().clear();
+//    	this.game.getObservers().clear();
+//    	
+//    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY, r.nextLong()));
+//    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY, r.nextLong()));
+//    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY, r.nextLong()));
     	
     	//Fin du bloc à commenter
         

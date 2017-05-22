@@ -291,14 +291,18 @@ public abstract class DwarfAI {
 			}
 			else if(o.getCard().isPathCard()){ // PATHCARD
 				System.out.println("PathCard = " + o.getCard() + " " + ((PathCard)o.getCard()).isCulDeSac() + " " + artificialIntelligence.getHandicaps().size());
-				if(((PathCard) o.getCard()).isCulDeSac() || !(artificialIntelligence.getHandicaps().size() == 0)){
+				if(((PathCard) o.getCard()).isCulDeSac()){
 					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+				}
+				else if(!(artificialIntelligence.getHandicaps().size() == 0)){
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -5f);
 				}
 				else{
 					Position estimatedGoldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 					Board board = artificialIntelligence.getGame().getBoard();
 					int minimumFromStart = board.minFromEmptyReachablePathCardToGoldCard(estimatedGoldCardPosition); // = min1
 					int minimumFromAnywhere = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition); // = min2
+					
 					boolean atLeastOneOperation = false;
 					
 					if(minimumFromStart == Board.IMPOSSIBLE_PATH){
@@ -337,15 +341,20 @@ public abstract class DwarfAI {
 						for(OperationPathCard currentOp : allOperationsForThisCard){
 							
 							board.temporarAddCard(currentOp);
+							System.out.println(currentOp.getP());
+							//int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
 							
-							int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
-							if(currentMin < minimumFromAnywhere){
-								artificialIntelligence.operationsWeight.put(currentOp, 
-										(float) Coefficients.DWARF_PATHCARD_HARD / (((PathCard)currentOp.getCard()).openSidesAmount() * Coefficients.DWARF_PATHCARD_OPENSIDES_HARD));
-								atLeastOneOperation = true;
+							for(Position pNeighbor : board.getAccessibleEmptyNeighbors(currentOp.getP())){
+								int currentMin = board.aStarOnEmptyCard(pNeighbor, estimatedGoldCardPosition);
+								System.out.println("CurrentMin = " + currentMin + " :pos"+pNeighbor+" MinFromAnywher = " + minimumFromAnywhere);
+								if(currentMin != -1 && currentMin -2 < minimumFromAnywhere){
+									artificialIntelligence.operationsWeight.put(currentOp, 
+											(float) Coefficients.DWARF_PATHCARD_HARD / (((PathCard)currentOp.getCard()).openSidesAmount() * Coefficients.DWARF_PATHCARD_OPENSIDES_HARD) + ((minimumFromAnywhere+1 - currentMin) * 20));
+									atLeastOneOperation = true;
+								}
 							}
-						
 							board.temporarRemoveCard(currentOp.getP());
+							
 						}
 					}
 					else{ // There is a hole
@@ -366,7 +375,9 @@ public abstract class DwarfAI {
 								board.temporarRemoveCard(currentOp.getP());
 								break; //There is only 1 possible place to fix the hole
 							}
-							else if(currentMinFromAnywhere < minimumFromAnywhere){
+							else if(board.aStarOnEmptyCard(currentOp.getP(), estimatedGoldCardPosition) -1 == minimumFromAnywhere){
+								//if(currentMinFromAnywhere < minimumFromAnywhere){
+								
 								//Doesn't fix the hole but could be interesting
 								artificialIntelligence.operationsWeight.put(currentOp, 
 										(float) Coefficients.DWARF_PATHCARD_HARD / (((PathCard)currentOp.getCard()).openSidesAmount() * Coefficients.DWARF_PATHCARD_OPENSIDES_HARD));
