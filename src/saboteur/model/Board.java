@@ -22,9 +22,9 @@ public class Board implements Serializable {
 			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY() - DISTANCE_START_OBJECTIVE_Y)};
 	
 	
-	private PathCard[][] board; //NOT TO SAVE
-	private List<Position> objectiveCards; //TO SAVE
-	private Map<Position, PathCard> pathCardsPosition; //TO SAVE
+	private PathCard[][] board;
+	private List<Position> objectiveCards;
+	private Map<Position, PathCard> pathCardsPosition;
 	
 	public Board(ArrayList<PathCard> startPathCard, ArrayList<PathCard> goalPathCard){
 		this.board = new PathCard[GRID_SIZE][GRID_SIZE];

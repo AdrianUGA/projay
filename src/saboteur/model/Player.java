@@ -8,13 +8,13 @@ import saboteur.model.Card.*;
 public abstract class Player implements Serializable {
 
 	private static final long serialVersionUID = -7234436527409826249L;
-	protected Card selectedCard; //NOT TO SAVE
-	protected String name; //TO SAVE
-	protected ArrayList<SabotageCard> handicaps; //TO SAVE
-	protected ArrayList<GoldCard> gold; //TO SAVE
-	protected ArrayList<Card> hand; //TO SAVE
-	transient protected Game game; //NOT TO SAVE
-	protected Team team; //TO SAVE
+	protected Card selectedCard;
+	protected String name;
+	protected ArrayList<SabotageCard> handicaps;
+	protected ArrayList<GoldCard> gold;
+	protected ArrayList<Card> hand;
+	transient protected Game game;
+	protected Team team;
 	
 	public Card getSelectedCard() {
 		return selectedCard;
