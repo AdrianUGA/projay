@@ -26,17 +26,17 @@ public class OperationActionCardToPlayer extends Operation {
 	}
 
 	@Override
-	public void exec(Game game) {
+	public void exec(Game game) {		
 		ActionCardToPlayer card = (ActionCardToPlayer) this.getCard();
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		switch (card.getType()){
 			case DOUBLE_RESCUE:
 				this.destinationCard = this.getDestinationPlayer().getCardCorrespondingToRescueType(this.toolDestination);
-				this.destinationPlayer.removeHandCard(this.destinationCard);
+				this.destinationPlayer.removeHandicapCard(this.destinationCard);
 				break;
 			case RESCUE:
 				this.destinationCard = this.getDestinationPlayer().getCardCorrespondingToRescueType(((RescueCard)card).getRescueType());
-				this.destinationPlayer.removeHandCard(this.destinationCard);
+				this.destinationPlayer.removeHandicapCard(this.destinationCard);
 				break;
 			case SABOTAGE:
 				this.destinationPlayer.addHandicapCard((SabotageCard)this.getCard());

@@ -36,7 +36,6 @@ public class PlayerWaitState extends State{
     @Override
     public void onEnter(Object param) {
         System.out.println("wait");
-
     	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
     	    	        
         this.cardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -73,6 +72,7 @@ public class PlayerWaitState extends State{
 	        	for(Node nodeIn:hb.getChildren()) {
 	                if( (ImageView)nodeIn == event.getTarget() ){
 	                	this.selectedCard = this.game.getCurrentPlayer().getHand().get(i);
+	                	this.game.getCurrentPlayer().setSelectedCard(this.selectedCard);
 	                }
 	                else {
 	                	i++;
