@@ -224,7 +224,7 @@ public abstract class DwarfAI {
 				else{
 					boolean atLeastOne = false;
 					for(Player p : mostLikelySaboteurPlayers){
-						//AI won't hurt itself... it isn't masochistic
+						//AI won't hurt itself... it isn't masochistic... Or is it ?
 						if(p != artificialIntelligence && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 							((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 							atLeastOne = true;
