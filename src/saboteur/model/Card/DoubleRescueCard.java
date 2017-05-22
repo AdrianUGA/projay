@@ -61,4 +61,9 @@ public class DoubleRescueCard extends ActionCardToPlayer {
 		Random r = new Random(Game.seed);
 		return (r.nextInt(2) == 0 ? getRescueType1() : getRescueType2());
 	}
+	
+	@Override
+	public String toString() {
+		return "DoubleRescueCard : " + this.getRescueType1() + ", " + this.getRescueType2();
+	}
 }
