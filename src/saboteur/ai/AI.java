@@ -28,6 +28,8 @@ public class AI extends Player {
 	protected Difficulty difficulty;
 	protected LinkedHashMap<Position,Float> estimatedGoldCardPosition;
 	protected LinkedHashMap<Operation, Float> operationsWeight;
+
+	private AIComputer computer;
 	
 
 	public AI(Game game, String name, Difficulty difficulty) {
@@ -56,6 +58,8 @@ public class AI extends Player {
 		else{
 			this.isDwarf.put(this, (float) 1073741824);
 		}
+		
+		this.computer = ComputerFactory.getComputer(this);
 	}
 
 	@Override
@@ -123,13 +127,13 @@ public class AI extends Player {
 		case SABOTEUR:
 			switch(this.getDifficulty()){
 			case EASY:
-				SaboteurAI.computeOperationWeightEasyAI(this);
+				ComputerFactory.compute(this);
 				break;
 			case MEDIUM:
-				SaboteurAI.computeOperationWeightMediumAI(this);
+				ComputerFactory.computeOperationWeightMediumAI(this);
 				break;
 			case HARD:
-				SaboteurAI.computeOperationWeightHardAI(this);
+				ComputerFactory.computeOperationWeightHardAI(this);
 				break;
 			}
 		}

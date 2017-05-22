@@ -16,9 +16,23 @@ import saboteur.model.Card.PathCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.SabotageCard;
 
-public class EasyComputer extends AIComputer {
+public class EasySaboteurComputer extends AIComputer {
 	
-	public void operationCollapseCard(AI artificialIntelligence, Operation o) {
+	public static int SABOTAGE = 1;
+	public static float HANDICAP_SIZE = 0.25f;
+	public static int LIMIT_ESTIMATED_DWARF = 50;
+	public static int RESCUE = 8;
+	public static int DOUBLERESCUE = 7;
+	public static int PLAN_TURN = 3;
+	public static int PLAN = 8;
+	public static int PATHCARD = 10;
+	public static int CUL_DE_SAC = 20;
+	public static int DISTANCE_PATHCARD = 2;
+	public static int COLLAPSE = 5;
+	public static int DISTANCE_LEFT = 2;
+	
+	@Override
+	public void operationCollapseCard(Operation o) {
 		//TODO to be changed (Saboteur are bad guys, right ?)
 		List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
 		if(allCulDeSac.size() == 0){
@@ -34,7 +48,8 @@ public class EasyComputer extends AIComputer {
 		}
 	}
 
-	public void operationPathCard(AI artificialIntelligence, Operation o) {
+	@Override
+	public void operationPathCard(Operation o) {
 		if(artificialIntelligence.getHandicaps().size() != 0){
 			// Trash
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
@@ -87,7 +102,8 @@ public class EasyComputer extends AIComputer {
 		}
 	}
 
-	public void operationSabotageCard(AI artificialIntelligence, Operation o) {
+	@Override
+	public void operationSabotageCard(Operation o) {
 		Player p = artificialIntelligence.mostLikelyADwarf();
 		if(artificialIntelligence.isDwarf.get(p) >= Coefficients.SABOTEUR_LIMIT_ESTIMATED_DWARF_EASY && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 			((OperationActionCardToPlayer) o).setDestinationPlayer(p);
@@ -100,7 +116,8 @@ public class EasyComputer extends AIComputer {
 		}
 	}
 
-	public void operationDoubleRescueCard(AI artificialIntelligence, Operation o) {
+	@Override
+	public void operationDoubleRescueCard(Operation o) {
 		if(artificialIntelligence.canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard())){
 			((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
 			if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1()) && artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType2())){
@@ -121,7 +138,7 @@ public class EasyComputer extends AIComputer {
 		}
 	}
 
-	public void operationRescueCard(AI artificialIntelligence, Operation o) {
+	public void operationRescueCard(Operation o) {
 		if(artificialIntelligence.canRescueItself((RescueCard)o.getCard())){
 			((OperationActionCardToPlayer) o).setDestinationPlayer(artificialIntelligence);
 			((OperationActionCardToPlayer) o).setToolDestination(((RescueCard)o.getCard()).getRescueType());
@@ -134,7 +151,8 @@ public class EasyComputer extends AIComputer {
 		}
 	}
 
-	public void operationPlanCard(AI artificialIntelligence, Operation o) {
+	@Override
+	public void operationPlanCard(Operation o) {
 		if(!artificialIntelligence.knowsTheGoldCardPosition()){
 			Position estimatedGoldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 			((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(estimatedGoldCardPosition));
@@ -147,14 +165,5 @@ public class EasyComputer extends AIComputer {
 			// Trash
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -2f);
 		}
-	}
-
-	public void computeOperationWeightMediumAI(AI artificialIntelligence) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	public void computeOperationWeightHardAI(AI artificialIntelligence) {
-		// TODO
 	}
 }
