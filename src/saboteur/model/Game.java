@@ -71,15 +71,7 @@ public class Game {
 	}
 
 	public void loadConfig(String name){
-		this.playerWinnerAlreadyAnnounced = false;
-		this.roundFinished = false;
-		this.round++;
-		this.turn = 1;
-
-		this.trash = new LinkedList<>();
-		this.stack = this.deck.getCopyOtherCards();
-		Collections.shuffle(this.stack, new Random(Game.seed));
-		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
+		initRound();
 		
 		File configFile = new File(Loader.configFolder+ "/" + name + ".config");
 		BufferedReader reader = null;
@@ -132,6 +124,24 @@ public class Game {
 				}
 			}
 		}*/
+	}
+
+	//init common to both methods (loadConfig() and newRound())
+	private void initRound() {
+		this.playerWinnerAlreadyAnnounced = false;
+		this.roundFinished = false;
+		this.round++;
+		this.turn = 1;
+
+		this.trash = new LinkedList<>();
+		this.stack = this.deck.getCopyOtherCards();
+		Collections.shuffle(this.stack, new Random(Game.seed));
+		/*
+		for(Card c : this.stack){
+			c.displayCardType();
+		}
+		*/
+		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 	}
 
 	private void addCardToBoardFromConfig(String chaine) {
@@ -194,20 +204,7 @@ public class Game {
 	}
 	
 	public void newRound(){
-		this.teamWinnerAlreadyAnnounced = false;
-		this.roundFinished = false;
-		this.round++;
-		this.turn = 1;
-
-		this.trash = new LinkedList<>();
-		this.stack = this.deck.getCopyOtherCards();
-		Collections.shuffle(this.stack, new Random(Game.seed));
-		/*
-		for(Card c : this.stack){
-			c.displayCardType();
-		}
-		*/
-		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
+		initRound();
 
 		this.setTeam();
 
