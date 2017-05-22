@@ -28,14 +28,16 @@ public class AI extends Player {
 	protected Difficulty difficulty;
 	protected LinkedHashMap<Position,Float> estimatedGoldCardPosition;
 	protected LinkedHashMap<Operation, Float> operationsWeight;
+	protected final long seedAI;
 	
 
-	public AI(Game game, String name, Difficulty difficulty) {
+	public AI(Game game, String name, Difficulty difficulty, long seedAI) {
 		super(game, name);
 		this.isDwarf = new LinkedHashMap<Player,Float>();
 		this.difficulty = difficulty;
 		this.operationsWeight = new LinkedHashMap<Operation, Float>();
 		this.estimatedGoldCardPosition = new LinkedHashMap<Position, Float>();
+		this.seedAI = seedAI;
 	}
 	
 	public void initializeAI(){
@@ -143,7 +145,7 @@ public class AI extends Player {
 	public Position getEstimatedGoldCardPosition(){
 		float max = -28091994;
 		LinkedList<Position> equiprobableGoldCardPosition = new LinkedList<Position>();
-		Random r = new Random(getGame().getSeed());
+		Random r = new Random(this.seedAI);
 		
 		for(Position p : this.estimatedGoldCardPosition.keySet()){
 			if(Math.round((this.estimatedGoldCardPosition.get(p))*1000) > max){
@@ -157,7 +159,6 @@ public class AI extends Player {
 			}
 		}
 		Position estimatedGoldCardPosition = equiprobableGoldCardPosition.get(r.nextInt(equiprobableGoldCardPosition.size()));
-		System.out.println("Taille = " + equiprobableGoldCardPosition.size() +" gold x=" + estimatedGoldCardPosition.getcX() + " y="+estimatedGoldCardPosition.getcY());
 		return estimatedGoldCardPosition;
 	}
 	
@@ -317,7 +318,7 @@ public class AI extends Player {
 	protected Operation bestOperationToPlay(){
 		float max = -435365;
 		LinkedList<Operation> bestOperations = new LinkedList<Operation>();
-		Random r = new Random(getGame().getSeed());
+		Random r = new Random(this.seedAI);
 		
 		for(Operation o : this.operationsWeight.keySet()){
 			////System.out.println(o.getClass().getName());
@@ -350,6 +351,8 @@ public class AI extends Player {
 	
 	protected Operation selectOperation(){
 		resetProbabilitiesToPlayEachOperation();
+		Position p = getEstimatedGoldCardPosition();
+		System.out.println("goldCard selon moi : x=" + p.getcX()+ " y=" + p.getcY());
 		switch(this.team){
 		case DWARF:
 			switch(this.getDifficulty()){

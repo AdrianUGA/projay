@@ -1,6 +1,7 @@
 package saboteur.state;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -91,6 +92,7 @@ public class NewGameMenuState extends State{
     private void startNewGameButtonAction() {
     	game.getPlayerList().clear();
     	game.getObservers().clear();
+    	Random r = new Random(Game.seed);
         for (Node n: this.playerContainer.getChildren()) {
             NewPlayerHBox playerBox = (NewPlayerHBox) n;
             String playerName = playerBox.getPlayerName().getCharacters().toString();
@@ -99,20 +101,20 @@ public class NewGameMenuState extends State{
             if (playerType.equals("Humain")){
                 player = new Human(this.game, playerName);
             } else{
-                player = new AI(this.game, "temp", Difficulty.EASY);
+                player = new AI(this.game, "temp", Difficulty.EASY, r.nextLong());
             }
             player.setName(playerName);
             this.game.addPlayer(player);
         }
         
     	//Début du bloc à commenter
-
+        
 //    	this.game.getPlayerList().clear();
 //    	this.game.getObservers().clear();
 //    	
-//    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY));
-//    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY));
-//    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY));
+//    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY, r.nextLong()));
+//    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY, r.nextLong()));
+//    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY, r.nextLong()));
     	
     	//Fin du bloc à commenter
         

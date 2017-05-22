@@ -286,7 +286,7 @@ public abstract class DwarfAI {
 					}
 				}
 				if(!atLeastOne){
-					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -10f);
 				}
 			}
 			else if(o.getCard().isPathCard()){ // PATHCARD
@@ -378,7 +378,7 @@ public abstract class DwarfAI {
 					}
 					if(!atLeastOneOperation){
 						System.out.println("Pas possible");
-						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+						artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -5f);
 					}
 				}
 			}
