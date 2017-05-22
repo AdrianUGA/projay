@@ -24,10 +24,10 @@ public class AI extends Player {
 
 	protected final int AVERAGE_TRUST = 50;
 	
-	protected Map<Player,Float> isDwarf;	
+	protected LinkedHashMap<Player,Float> isDwarf;	
 	protected Difficulty difficulty;
-	protected Map<Position,Float> estimatedGoldCardPosition;
-	protected Map<Operation, Float> operationsWeight;
+	protected LinkedHashMap<Position,Float> estimatedGoldCardPosition;
+	protected LinkedHashMap<Operation, Float> operationsWeight;
 	
 
 	public AI(Game game, String name, Difficulty difficulty) {
@@ -146,17 +146,19 @@ public class AI extends Player {
 		Random r = new Random(getGame().getSeed());
 		
 		for(Position p : this.estimatedGoldCardPosition.keySet()){
-			if(this.estimatedGoldCardPosition.get(p) > max){
-				max = this.estimatedGoldCardPosition.get(p);
+			if(Math.round((this.estimatedGoldCardPosition.get(p))*1000) > max){
+				max = Math.round(this.estimatedGoldCardPosition.get(p)*1000);
 				//System.out.println("max = " + max);
 			}
 		}
 		for(Position p : this.estimatedGoldCardPosition.keySet()){
-			if(this.estimatedGoldCardPosition.get(p) == max){
+			if(Math.round(this.estimatedGoldCardPosition.get(p)*1000) == max){
 				equiprobableGoldCardPosition.add(p);
 			}
 		}
-		return equiprobableGoldCardPosition.get(r.nextInt(equiprobableGoldCardPosition.size()));
+		Position estimatedGoldCardPosition = equiprobableGoldCardPosition.get(r.nextInt(equiprobableGoldCardPosition.size()));
+		System.out.println("Taille = " + equiprobableGoldCardPosition.size() +" gold x=" + estimatedGoldCardPosition.getcX() + " y="+estimatedGoldCardPosition.getcY());
+		return estimatedGoldCardPosition;
 	}
 	
 	public void changeEstimatedGoldCardPosition(Position p, Boolean b){
@@ -164,7 +166,6 @@ public class AI extends Player {
 			this.estimatedGoldCardPosition.put(p, 1f);
 			this.setAllEstimatedGoldCardPositionExept(p, 0f);
 		}else{
-			float temp = this.estimatedGoldCardPosition.get(p);
 			int greaterThanZero = 0;
 			
 			this.estimatedGoldCardPosition.put(p, 0f);
@@ -175,7 +176,7 @@ public class AI extends Player {
 			}
 			for(Position currentP : estimatedGoldCardPosition.keySet()){
 				if(estimatedGoldCardPosition.get(currentP)>0){
-					estimatedGoldCardPosition.put(currentP, estimatedGoldCardPosition.get(currentP) + temp/greaterThanZero);
+					estimatedGoldCardPosition.put(currentP, 1f/greaterThanZero);
 				}
 			}
 		}
@@ -202,7 +203,7 @@ public class AI extends Player {
 	}
 	
 	public boolean knowsTheGoldCardPosition(){
-		if(estimatedGoldCardPosition.containsKey(1f))
+		if(estimatedGoldCardPosition.containsValue(1f))
 			System.out.println(this.name + " connait la position de la carte or");
 		return this.estimatedGoldCardPosition.containsValue(1f);
 	}
@@ -332,6 +333,9 @@ public class AI extends Player {
 		Operation o = bestOperations.get(r.nextInt(bestOperations.size()));
 		System.out.print("Opération joué par " + this.name + " ==> ");
 		o.displayOperationInformation();
+		if(o.isOperationPathCard() && ((OperationPathCard)o).getReversed()){
+			System.out.print(" !R");
+		}
 		System.out.println(" ==> rôle = " + this.getTeam() + " with weight = "+ operationsWeight.get(o));
 		return o;
 	}
