@@ -1,6 +1,6 @@
 package saboteur.ai;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -21,7 +21,7 @@ import saboteur.model.Card.SabotageCard;
 public abstract class SaboteurAI {
 	
 	public static void computeOperationWeightEasyAI(AI artificialIntelligence) {
-		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(artificialIntelligence.operationsWeight);
+		Map<Operation, Float> cloneOperationsWeight = new LinkedHashMap<Operation,Float>(artificialIntelligence.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			switch(o.getCard().getClassName()){
 			case "saboteur.model.Card.PlanCard":

@@ -1,6 +1,6 @@
 package saboteur.ai;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +24,7 @@ public abstract class DwarfAI {
 	
 	public static void computeOperationWeightEasyAI(AI artificialIntelligence) {
 		//Can't use 'for each' on operationsWeight
-		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(artificialIntelligence.operationsWeight);
+		Map<Operation, Float> cloneOperationsWeight = new LinkedHashMap<Operation,Float>(artificialIntelligence.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			switch(o.getCard().getClassName()){
 			case "saboteur.model.Card.PlanCard":
@@ -140,7 +140,7 @@ public abstract class DwarfAI {
 	}
 	
 	public static void computeOperationWeightHardAI(AI artificialIntelligence) {
-		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(artificialIntelligence.operationsWeight);
+		Map<Operation, Float> cloneOperationsWeight = new LinkedHashMap<Operation,Float>(artificialIntelligence.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			if(o.getCard().isPlanCard()){ // PLAN CARD
 				if(!artificialIntelligence.knowsTheGoldCardPosition()){
@@ -240,7 +240,7 @@ public abstract class DwarfAI {
 				//Check for every PathCard already on the board
 				//If AI removes it, does it decrease the distance to the gold card ?
 				//If yes, (can the AI put a card here ?) OR  (is the card a cul-de-sac ?)
-				Map<Position, PathCard> pathCardCopy = new HashMap<Position, PathCard>(artificialIntelligence.getGame().getBoard().getPathCardsPosition());
+				Map<Position, PathCard> pathCardCopy = new LinkedHashMap<Position, PathCard>(artificialIntelligence.getGame().getBoard().getPathCardsPosition());
 				Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 				List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 				int minimumDistanceBeforeCollapsing = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);

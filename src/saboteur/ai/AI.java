@@ -3,13 +3,11 @@ import saboteur.model.Game;
 import saboteur.model.Operation;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.TreeMap;
 
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
@@ -232,7 +230,7 @@ public class AI extends Player {
 	}
 	
 	protected void removeOperationWithNullTarget(){
-		Map<Operation, Float> cloneOperationsWeight = new HashMap<Operation,Float>(this.operationsWeight);
+		Map<Operation, Float> cloneOperationsWeight = new LinkedHashMap<Operation,Float>(this.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			if(!o.isOperationTrash()){
 				if(o.getCard().isPathCard()){
