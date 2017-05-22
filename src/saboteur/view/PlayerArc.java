@@ -18,8 +18,8 @@ import saboteur.model.Player;
 
 public class PlayerArc extends Pane{
 	private LinkedList<Player> players;
-//	private Circle circles[][];
 	private Hashtable<Player, Circle[]> circles = new Hashtable<Player, Circle[]>();
+	public final static Color color = Color.web("#a4a4a4");
 
 	public PlayerArc(double radius, double center, LinkedList<Player> playerslist) {
 		
@@ -53,7 +53,7 @@ public class PlayerArc extends Pane{
 		
 		for (int i = 0; i<3; i++) {  
 			double angle = -startAngle-x*i-x/2;
-			this.circles.get(player)[i] = new Circle(center + centerDistance, center, circleRadius, Color.web("#a4a4a4"));
+			this.circles.get(player)[i] = new Circle(center + centerDistance, center, circleRadius, this.color);
             Rotate rotate = new Rotate(angle, center, center);
             this.circles.get(player)[i].getTransforms().add(rotate);
             this.circles.get(player)[i].setStroke(Color.BLACK);
@@ -81,7 +81,7 @@ public class PlayerArc extends Pane{
         int YendInner = (int)Math.round((Math.sin(-radians) * innerRadius + center));
                        
                 
-        path.setFill(Color.web("#a4a4a4"));
+        path.setFill(this.color);
         path.setStroke(Color.BLACK);
         path.setStrokeWidth(2);
         path.setStrokeType(StrokeType.OUTSIDE);

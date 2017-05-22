@@ -17,12 +17,14 @@ import saboteur.model.Card.Card;
 import saboteur.model.Card.DoubleRescueCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.SabotageCard;
+import saboteur.model.Card.Tool;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 
 public class PlayerSelectedActionCardToPlayerState extends State{
 	
 	private Card selectedCard;
+	private ActionCardToPlayer card;
 	private PlayerArc playersArc;
 	private LinkedList<Player> playerList;	
 	private int toolValue1 = -1;
@@ -62,36 +64,37 @@ public class PlayerSelectedActionCardToPlayerState extends State{
         //Put a correct value on toolValue depending of the selected card.
         this.toolValue1 = -1;
         this.toolValue2 = -1;
+        this.card = (ActionCardToPlayer) this.selectedCard;
         if(this.selectedCard.isSabotageCard()) {
         	this.toolValue1 = ((SabotageCard)this.selectedCard).getSabotageType().getValue();
-        	ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
-        	this.playerList = this.game.getPlayers(card);
-			for(Player p : this.game.getPlayers(card)) {
+        	this.playerList = this.game.getPlayers(this.card);
+			for(Player p : this.game.getPlayers(this.card)) {
+				this.playersArc.getCircles(p)[this.toolValue1].toFront();
 				this.playersArc.getCircles(p)[this.toolValue1].setStroke(Color.RED);
 				this.playersArc.getCircles(p)[this.toolValue1].setOnMouseClicked(mouseEvent);
 			}
 		}
     	else if(this.selectedCard.isRescueCard()) {
     		this.toolValue1 = ((RescueCard)this.selectedCard).getTool().getValue();
-    		ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
-        	this.playerList = this.game.getPlayers(card);
-			for(Player p : this.game.getPlayers(card)) {
+        	this.playerList = this.game.getPlayers(this.card);
+			for(Player p : this.game.getPlayers(this.card)) {
 					this.playersArc.getCircles(p)[toolValue1].setStroke(Color.GREEN);
 					this.playersArc.getCircles(p)[this.toolValue1].setOnMouseClicked(mouseEvent);
 			}
 		}
-        //TODO : a revoir
     	else if(this.selectedCard.isDoubleRescueCard()) {
+    		
     		this.toolValue1 = ((DoubleRescueCard)this.selectedCard).getTool1().getValue();
     		this.toolValue2 = ((DoubleRescueCard)this.selectedCard).getTool2().getValue();
-    		ActionCardToPlayer card = (ActionCardToPlayer) this.selectedCard;
-        	this.playerList = this.game.getPlayers(card);
-			for(Player p : this.game.getPlayers(card)) {
-				this.playersArc.getCircles(p)[toolValue1].setStroke(Color.GREEN);
-				this.playersArc.getCircles(p)[toolValue2].setStroke(Color.GREEN);
+        	this.playerList = this.game.getPlayers(this.card);
+        	for(Player p : this.game.getPlayers( new RescueCard(this.intToTool(this.toolValue1)))) {
+				this.playersArc.getCircles(p)[this.toolValue1].setStroke(Color.GREEN);
 				this.playersArc.getCircles(p)[this.toolValue1].setOnMouseClicked(mouseEvent);
+        	}
+        	for(Player p : this.game.getPlayers( new RescueCard(this.intToTool(this.toolValue2)))) {
+				this.playersArc.getCircles(p)[this.toolValue2].setStroke(Color.GREEN);
 				this.playersArc.getCircles(p)[this.toolValue2].setOnMouseClicked(mouseEvent);
-			}
+        	}
 		}
     }
 
@@ -108,7 +111,6 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 		for(Player p : this.playerList) {
 			for(int i = 0; i < 3; i++) {
 				this.playersArc.getCircles(p)[i].setStroke(Color.BLACK);
-				this.playersArc.setOnMouseClicked(null);
 			}
 		}
 		
@@ -128,7 +130,6 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     	if(event.getTarget() instanceof Circle) {
             if(this.selectedCard.isSabotageCard()) {
             	Circle circle = (Circle) event.getTarget();
-            	circle.setStroke(Color.BLACK);
             	Image img = null;
             	switch(this.toolValue1) {
             		case 0 : 
@@ -142,17 +143,46 @@ public class PlayerSelectedActionCardToPlayerState extends State{
                     	break;
             	}
             	circle.setFill(new ImagePattern(img));
+            	
+            	for(Player p : this.game.getPlayers(this.card)) {
+            		if( this.playersArc.getCircles(p)[this.toolValue1] == circle )
+            			this.game.getCurrentPlayer().playCard(p);
+    			}
+            	
     		}
             
         	else {
         		Circle circle = (Circle) event.getTarget();
-            	circle.setStroke(Color.BLACK);
-            	circle.setFill(null);
+        		
+            	circle.setFill(PlayerArc.color);
+            	for(Player p : this.game.getPlayers(this.card)) {
+            		if( this.playersArc.getCircles(p)[this.toolValue1] == circle )
+            			this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue1));
+            		if( this.toolValue2 != -1 && this.playersArc.getCircles(p)[this.toolValue2] == circle )
+            			this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue2));
+    			}
         	}
             	
     	}
     	this.playerSelected = true;
     	this.gsm.pop();
     }
+    
+    private Tool intToTool(int intOfTool) {
+    	Tool tool = null;
+    	switch(intOfTool) {
+    		case 0 :
+    			tool = Tool.PICKAXE;
+    			break;
+    		case 1 :
+    			tool = Tool.LANTERN;
+    			break;
+    		case 2 : 
+    			tool = Tool.CART;
+    			break;
+    	}
+    	return tool;
+    }
+    
 }
 

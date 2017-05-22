@@ -71,8 +71,8 @@ public class LoadGameState extends State {
     private void loadableGames() {
         Loader loaderSaves = new Loader();
         for (String savedFile : loaderSaves.loadSavedFile()) {
-        	String test[] = savedFile.split(".save");
-            addLoadableGame(test[0]);
+        	String name[] = savedFile.split(".save");
+            addLoadableGame(name[0]);
         }
     }
     

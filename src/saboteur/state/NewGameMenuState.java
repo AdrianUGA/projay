@@ -108,7 +108,6 @@ public class NewGameMenuState extends State{
         }
         
     	//Début du bloc à commenter
-
         
 //    	this.game.getPlayerList().clear();
 //    	this.game.getObservers().clear();

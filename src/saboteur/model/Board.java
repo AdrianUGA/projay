@@ -13,7 +13,7 @@ public class Board implements Serializable {
 	private static final int MIDDLE_Y = 30;
 	private static final int MIDDLE_X = 30;
 	private static final Position START = new Position(MIDDLE_Y,MIDDLE_X);
-	public static final int DISTANCE_START_OBJECTIVE_X = 7;
+	public static final int DISTANCE_START_OBJECTIVE_X = 8;
 	private static final int DISTANCE_START_OBJECTIVE_Y = 2;
 	private static final Position[] goalCardsPositions = new Position[] {
 			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY()),
@@ -373,7 +373,7 @@ public class Board implements Serializable {
 	}
 
 	public Map<Position, PathCard> getPathCardsPosition() {
-		return pathCardsPosition;
+		return this.pathCardsPosition;
 	}
 	
 	public ArrayList<Position> getAllPlacablePositionFromStart(){
