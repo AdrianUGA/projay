@@ -164,7 +164,7 @@ public class Game {
 		if (stringPlayer[Loader.indexPlayerType].equals("Human")){
 			toAdd = new Human(this, stringPlayer[Loader.indexPlayerName]);
 		} else {
-			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName], Difficulty.EASY);
+			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName], Difficulty.EASY, new Random(seed).nextLong()); // TODO
 		}
 		
 		//Hand

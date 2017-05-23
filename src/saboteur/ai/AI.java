@@ -29,15 +29,17 @@ public class AI extends Player {
 	protected LinkedHashMap<Position,Float> estimatedGoldCardPosition;
 	protected LinkedHashMap<Operation, Float> operationsWeight;
 
+	protected final long seedAI;
 	private Computer computer;
 	
 
-	public AI(Game game, String name, Difficulty difficulty) {
+	public AI(Game game, String name, Difficulty difficulty, long seedAI) {
 		super(game, name);
 		this.isDwarf = new LinkedHashMap<Player,Float>();
 		this.difficulty = difficulty;
 		this.operationsWeight = new LinkedHashMap<Operation, Float>();
 		this.estimatedGoldCardPosition = new LinkedHashMap<Position, Float>();
+		this.seedAI = seedAI;
 	}
 	
 	public void initializeAI(){
