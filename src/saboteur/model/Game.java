@@ -628,7 +628,7 @@ public class Game {
 		team.add(Team.DWARF);
 		team.add(Team.DWARF);
 		team.add(Team.DWARF);
-		//team.add(Team.SABOTEUR);
+		team.add(Team.SABOTEUR);
 		if (nbPlayer > 3){
 			team.add(Team.DWARF);
 		}
@@ -678,7 +678,7 @@ public class Game {
 	public void notifyAINoGoldThere(Position p) {
 		for(Player player : playerList){
 			if(player.isAI()){
-				((AI) player).noGoldThere(p);
+				((AI) player).changeEstimatedGoldCardPosition(p,false);
 			}
 		}
 		

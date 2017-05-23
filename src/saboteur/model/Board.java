@@ -86,10 +86,13 @@ public class Board implements Serializable {
 	}
 
 	public void removeCard(Position position){
-		if(this.getCard(position).isGoal())
+		if(this.getCard(position).isGoal()){
 			this.objectiveCards.remove(position);
-		else
+		}
+		else{
 			this.pathCardsPosition.remove(position);
+		}
+		System.out.println("Position removed = "+position);
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
@@ -494,7 +497,7 @@ public class Board implements Serializable {
 	public LinkedList<Position> getAccessibleEmptyNeighbors(Position p){
 		LinkedList<Position> result = new LinkedList<Position>();
 		for(Cardinal c : Cardinal.values()){
-			if(p.getNeighbor(c) != null && this.getCard(p.getNeighbor(c)) == null && this.getCard(p).isOpen(c)){
+			if(p.getNeighbor(c) != null && (this.getCard(p.getNeighbor(c)) == null || this.getCard(p.getNeighbor(c)).isGoal()) && this.getCard(p).isOpen(c)){
 				result.add(p.getNeighbor(c));
 			}
 		}
