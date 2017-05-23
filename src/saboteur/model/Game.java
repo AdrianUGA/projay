@@ -72,6 +72,7 @@ public class Game {
 				toUndo.execReverse(this);
 				listUndo.add(toUndo);
 				this.historyRedo.add(toUndo);
+				System.out.println("Operation pick undo");
 				toUndo = null;
 			}
 		}
@@ -85,6 +86,10 @@ public class Game {
 		toUndo.execReverse(this);
 		listUndo.add(toUndo);
 		this.historyRedo.add(toUndo);
+		if (toUndo.isOperationActionCardToBoard()) System.out.println("Operation board undo");
+		else if (toUndo.isOperationActionCardToPlayer()) System.out.println("Operation player undo");
+		else if (toUndo.isOperationPathCard()) System.out.println("Operation pathCard undo");
+		else if (toUndo.isOperationTrash()) System.out.println("Operation trash undo");
 		
 		return listUndo;
 	}
@@ -315,6 +320,10 @@ public class Game {
 
 	public void nextPlayer(){
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
+	}
+	
+	public void previousPlayer(){
+		this.currentPlayerIndex = (this.currentPlayerIndex - 1) % this.playerList.size();
 	}
 
 	public Player getNextPlayer(){

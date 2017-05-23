@@ -65,6 +65,7 @@ public class GameState extends State{
                     e.printStackTrace();
                 }*/
                     this.gsm.push("playerEndOfTurn");
+                    //game.nextPlayer();
                 }
                 else{
                     System.out.println("je suis humain");
