@@ -286,8 +286,8 @@ public class Board implements Serializable {
 		return possiblePlaces;
 	}
 	
-	public List<Position> getNearestPossiblePathCardPlace(Position position){
-		List<Position> possible =  new ArrayList<Position>();
+	public LinkedList<Position> getNearestPossiblePathCardPlace(Position position){
+		LinkedList<Position> possible =  new LinkedList<Position>();
 		for(OperationPathCard o : this.getPossibleOperationPathCard(null,null)){
 			possible.add(o.getP());
 		}
@@ -295,7 +295,7 @@ public class Board implements Serializable {
 		possible.sort(new PositionComparator(position));
 		
 		int min = position.getTaxiDistance(possible.get(possible.size()-1));
-		List<Position> ret = new LinkedList<Position>();
+		LinkedList<Position> ret = new LinkedList<Position>();
 		for(int i=0; i<possible.size(); i++){
 			if(possible.get(i).getTaxiDistance(position) > min){
 				break;

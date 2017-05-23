@@ -120,7 +120,6 @@ public class HardDwarfComputer extends Computer {
 					Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 					for(OperationPathCard currentOp : allOperationsForThisCard){
 						board.temporarAddCard(currentOp);
-						
 						int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
 						if(currentMin < minimumFromAnywhere){
 							artificialIntelligence.operationsWeight.put(currentOp, 
