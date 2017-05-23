@@ -106,8 +106,8 @@ public class NewGameMenuState extends State{
             player.setName(playerName);
             this.game.addPlayer(player);
         }
-        
-    	boolean ai = true; // auto ai
+
+    	boolean ai = false; // auto ai
         if(ai){
 	    	this.game.getPlayerList().clear();
 	    	this.game.getObservers().clear();
