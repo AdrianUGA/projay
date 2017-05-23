@@ -346,6 +346,7 @@ public class AI extends Player {
 	protected Map<Player,Float> getIsDwarf(){
 		return this.isDwarf;
 	}
+
 	
 	//If parameter is true, it'll add the AI who calls the method anyway
 	public LinkedList<Player> getAllMostLikelySaboteurPlayersHardAI(boolean withAI) {
