@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import saboteur.model.Game;
 import saboteur.state.*;
 import javafx.scene.layout.StackPane;
+import saboteur.tools.Resources;
 
 
 public class App extends Application {
@@ -52,9 +53,8 @@ public class App extends Application {
     private void initStage(){
         primaryStage.setTitle("Saboteur");
         StackPane rootLayout = new StackPane();
-
-        String stylesheet = App.class.getResource("/resources/style.css").toExternalForm();
-        rootLayout.getStylesheets().add(stylesheet);
+        rootLayout.getStyleClass().add("root-layout");
+        rootLayout.getStylesheets().add(Resources.getStylesheet());
 
         primaryStage.setScene(new Scene(rootLayout));
         primaryStage.setFullScreen(true);

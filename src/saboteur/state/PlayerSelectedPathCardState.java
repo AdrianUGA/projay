@@ -148,8 +148,7 @@ public class PlayerSelectedPathCardState extends State{
     		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
         	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
         	cardContainer.setOnMouseClicked(null);
-        	cardContainer.generateHandCardImage(); 
-        	this.gsm.push("playerEndOfTurn");
+        	cardContainer.generateHandCardImage();
     	}
 		
 		this.gameBoardGridPane.setOnMouseClicked(null);
@@ -167,7 +166,7 @@ public class PlayerSelectedPathCardState extends State{
             		this.gameBoardGridPane.addCardToBoard((PathCard)this.selectedCard, position);
         		}
     			this.positionSelected = true;
-        		this.gsm.pop();
+        		this.gsm.changePeek("playerEndOfTurn");
     		}
     	}
     }

@@ -253,6 +253,10 @@ public class Game {
 	public void nextPlayer(){
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
 	}
+
+	public Player getNextPlayer(){
+		return this.playerList.get((this.currentPlayerIndex + 1) % this.playerList.size());
+	}
 	
 	public void save(String name) {
 		File dirSave = new File(Loader.savedFolder);
