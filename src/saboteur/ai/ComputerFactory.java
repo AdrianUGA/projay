@@ -6,10 +6,18 @@ import saboteur.model.Team;
 public class ComputerFactory {
 	
 	public static Computer getComputer(AI artificialIntelligence){
+		// TODO to remove
+		if(artificialIntelligence.getTeam() == Team.DWARF)
+			return getComputer(Difficulty.EASY, Team.DWARF);
+		return getComputer(Difficulty.HARD, Team.SABOTEUR);
+		//
+		
+		/*
 		return getComputer(
 				artificialIntelligence.getDifficulty(),
 				artificialIntelligence.getTeam())
 				.setArtificialIntelligence(artificialIntelligence);
+				*/
 	}
 	
 	private static Computer getComputer(Difficulty difficulty, Team team){
