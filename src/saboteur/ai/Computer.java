@@ -26,9 +26,9 @@ public abstract class Computer {
 		}else if(o.getCard().isSabotageCard()){ /* SABOTAGE */
 			this.operationSabotageCard(o);	
 		}else if(o.getCard().isCollapseCard()){ /* COLLAPSE */
-			this.operationPathCard(o);	
+			this.operationCollapseCard(o);
 		}else if(o.getCard().isPathCard()){ /* PATHCARD */
-			this.operationCollapseCard(o);		
+			this.operationPathCard(o);	
 		}else{
 			System.err.println("Not supposed to happen");
 		}
