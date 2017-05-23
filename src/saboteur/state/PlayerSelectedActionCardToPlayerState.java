@@ -2,7 +2,9 @@ package saboteur.state;
 
 import java.util.LinkedList;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -26,6 +28,7 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 	private Card selectedCard;
 	private ActionCardToPlayer card;
 	private PlayerArc playersArc;
+	private Button endOfTurnButton;
 	private LinkedList<Player> playerList;	
 	private int toolValue1 = -1;
 	private int toolValue2 = -1;
@@ -59,7 +62,6 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 				selectedActionCardToPlayer(event);
 			}
 		};
-    	
     	
         //Put a correct value on toolValue depending of the selected card.
         this.toolValue1 = -1;
@@ -100,32 +102,23 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 
     @Override
     public void onExit() {
-    	//Delete event on click
-        for(int i = 0; i < this.game.getPlayerList().size(); i++) {
-	    	this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue1].setOnMouseClicked(null);
-	    	if(this.toolValue2 != -1){
-	    		this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue2].setOnMouseClicked(null);
-	    	}
-        }
-        
-		for(Player p : this.playerList) {
-			for(int i = 0; i < 3; i++) {
-				this.playersArc.getCircles(p)[i].setStroke(Color.BLACK);
-			}
-		}
-		
-    	if(this.playerSelected) {
-    		this.game.getCurrentPlayer().getHand().remove(this.selectedCard);
-        	
-    		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
-        	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
-        	cardContainer.setOnMouseClicked(null);
-        	cardContainer.generateHandCardImage(); 
-        	this.gsm.push("playerEndOfTurn");
+    	if(!this.playerSelected) {
+        	//Delete event on click
+            for(int i = 0; i < this.game.getPlayerList().size(); i++) {
+    	    	this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue1].setOnMouseClicked(null);
+    	    	if(this.toolValue2 != -1){
+    	    		this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue2].setOnMouseClicked(null);
+    	    	}
+            }
+            
+    		for(Player p : this.playerList) {
+    			for(int i = 0; i < 3; i++) {
+    				this.playersArc.getCircles(p)[i].setStroke(Color.BLACK);
+    			}
+    		}
     	}
-        
     }
-    //TODO : ici juste l'ihm affiche le bonus / malus. Manque le joueur a affectee
+    
     private void selectedActionCardToPlayer(MouseEvent event) {    	
     	if(event.getTarget() instanceof Circle) {
             if(this.selectedCard.isSabotageCard()) {
@@ -150,7 +143,6 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     			}
             	
     		}
-            
         	else {
         		Circle circle = (Circle) event.getTarget();
         		
@@ -162,11 +154,46 @@ public class PlayerSelectedActionCardToPlayerState extends State{
             			this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue2));
     			}
         	}
-            	
     	}
+    	this.beforEnd();
     	this.playerSelected = true;
-    	this.gsm.pop();
     }
+    
+    private void beforEnd() {
+    	//Delete event on click
+        for(int i = 0; i < this.game.getPlayerList().size(); i++) {
+	    	this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue1].setOnMouseClicked(null);
+	    	if(this.toolValue2 != -1){
+	    		this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue2].setOnMouseClicked(null);
+	    	}
+        }
+        
+		for(Player p : this.playerList) {
+			for(int i = 0; i < 3; i++) {
+				this.playersArc.getCircles(p)[i].setStroke(Color.BLACK);
+			}
+		}
+		
+    	this.game.getCurrentPlayer().getHand().remove(this.selectedCard);
+    	
+		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
+    	this.game.getCurrentPlayer().pickCard();
+    	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
+    	cardContainer.setOnMouseClicked(null);
+    	cardContainer.generateHandCardImage(); 
+    	
+    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
+    	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
+    	    @Override public void handle(ActionEvent e) {
+    	        endOfTurn();
+    	    }
+    	});
+    }
+    private void endOfTurn() {
+    	this.endOfTurnButton.setOnAction(null);
+    	this.gsm.pop();
+    	this.gsm.push("playerEndOfTurn");
+	}
     
     private Tool intToTool(int intOfTool) {
     	Tool tool = null;
@@ -183,6 +210,5 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     	}
     	return tool;
     }
-    
 }
 

@@ -46,7 +46,6 @@ public class PlayerEndOfTurnState extends State{
     
     private void endOfTurn() {
     	//take a new card
-    	this.game.getCurrentPlayer().pickCard();
     	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
     	cardContainer.generateHandCardImage();     	
     	this.endOfTurnButton.setOnAction(null);
