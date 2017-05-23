@@ -28,7 +28,7 @@ public class HardDwarfComputer extends Computer {
 	public static int PLAN = 150;
 	public static int COLLAPSE_CAN_REPLACE = 40;
 	public static int COLLAPSE_CDS = 25;
-	public static int PATHCARD = 40;
+	public static int PATHCARD = 10;
 	public static float PATHCARD_OPENSIDES = 0.5f;
 	public static int PATHCARD_FIXHOLE = 80;
 	
@@ -147,9 +147,11 @@ public class HardDwarfComputer extends Computer {
 					for(Position pNeighbor : board.getAccessibleEmptyNeighbors(currentOp.getP())){
 						int currentMin = board.aStarOnEmptyCard(pNeighbor, estimatedGoldCardPosition);
 						if(currentMin != -1 && currentMin -2 < minimumFromAnywhere){
-							artificialIntelligence.operationsWeight.put(currentOp, 
-									(float) PATHCARD/ (((PathCard)currentOp.getCard()).openSidesAmount() * PATHCARD_OPENSIDES) + ((minimumFromAnywhere+1 - currentMin) * 20));
-							atLeastOneOperation = true;
+							float currentFloat = (PATHCARD* ((PathCard)currentOp.getCard()).openSidesAmount() + ((minimumFromAnywhere+1 - currentMin) * 20));
+							if(artificialIntelligence.operationsWeight.get(currentOp) != null && artificialIntelligence.operationsWeight.get(currentOp) < currentFloat){
+								artificialIntelligence.operationsWeight.put(currentOp, currentFloat);
+								atLeastOneOperation = true;
+							}
 						}
 					}
 					board.temporarRemoveCard(currentOp.getP());
