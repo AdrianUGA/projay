@@ -81,7 +81,6 @@ public class AI extends Player {
 		Random r = new Random(getGame().getSeed());
 		
 		for(Operation o : this.operationsWeight.keySet()){
-			o.displayOperationInformation();
 			if(this.operationsWeight.get(o) > max){
 				max = this.operationsWeight.get(o);
 			}
@@ -108,6 +107,7 @@ public class AI extends Player {
 	
 	@Override
 	public void playCard(){
+		System.out.print("ma main : ");
 		printHand();
 		System.out.println(getEstimatedGoldCardPosition());
 		Operation o = selectOperation();
