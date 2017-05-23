@@ -72,6 +72,7 @@ public class PlayerSelectedPathCardState extends State{
 		
 		if(this.selectedCard.isCollapseCard()) {
 			Map<Position, PathCard> pathCardsPosition = this.game.getBoard().getPathCardsPosition();
+			
 			//If the map content more than the 1st path card (entry)
 			if(pathCardsPosition.size() > 1) {
 				pathCardsPosition.remove(Board.getStart());
@@ -84,13 +85,12 @@ public class PlayerSelectedPathCardState extends State{
 					this.boardEffect.add(svg);
 					
 					this.positionOfImages.put(svg, posiCard);
-//					this.possiblePositions.put(this.gameBoardGridPane. ,posiCard);
+					this.positionOfImages.put(this.gameBoardGridPane.getImageOfPosition(posiCard), posiCard);
 					
 					this.gameBoardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
 				}
 				this.gameBoardGridPane.setOnMouseClicked(event);
 			}
-			
 		}
 		else {
 			PathCard card  = (PathCard) this.selectedCard;
@@ -138,6 +138,7 @@ public class PlayerSelectedPathCardState extends State{
     
     private void selectPositionOnBoard(MouseEvent event) {
     	if(event.getTarget() instanceof ImageView || event.getTarget() instanceof SVGPath) {
+    		
     		Position position = this.positionOfImages.get(event.getTarget());
     		if(this.selectedCard.isCollapseCard()) {
     			this.gameBoardGridPane.removeCardOfBoard(position);
