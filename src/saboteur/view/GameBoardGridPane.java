@@ -15,17 +15,14 @@ public class GameBoardGridPane extends GridPane {
 	private Board board;
 	private int xmin, xmax, ymin, ymax;
 	
-	private Resources resources = new Resources();
 	private LinkedHashMap<String, Image> allCards;
 	
 	private ImageView[][] imagesOfGridPane;
 	
 	public GameBoardGridPane(Game game, double XstartInner, double YstartInner) {
 		this.board = game.getBoard();
-		
-        this.resources.loadImage();
-        this.resources.loadPicto();
-        this.allCards = this.resources.getImageCard();
+
+        this.allCards = Resources.getImage();
         
         this.imagesOfGridPane = new ImageView[Board.getGridSize()][Board.getGridSize()];
         
