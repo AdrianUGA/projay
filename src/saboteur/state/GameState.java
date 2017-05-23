@@ -64,6 +64,7 @@ public class GameState extends State{
                 } catch (Exception e){
                     e.printStackTrace();
                 }*/
+                    this.gameBoardGridPane.generateBoard();
                     this.gsm.push("playerEndOfTurn");
                     //game.nextPlayer();
                 }

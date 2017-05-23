@@ -81,7 +81,7 @@ public class AI extends Player {
 		Random r = new Random(getGame().getSeed());
 		
 		for(Operation o : this.operationsWeight.keySet()){
-			////System.out.println(o.getClass().getName());
+			o.displayOperationInformation();
 			if(this.operationsWeight.get(o) > max){
 				max = this.operationsWeight.get(o);
 			}
@@ -108,6 +108,8 @@ public class AI extends Player {
 	
 	@Override
 	public Operation playCard(){
+		printHand();
+		System.out.println(getEstimatedGoldCardPosition());
 		Operation o = selectOperation();
 		//System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
 		this.getGame().playOperation(o);
@@ -317,8 +319,9 @@ public class AI extends Player {
 		for(Operation o : cloneOperationsWeight.keySet()){
 			if(!o.isOperationTrash()){
 				if(o.getCard().isPathCard()){
-					if(((OperationPathCard) o).getP() == null)
+					if(((OperationPathCard) o).getP() == null){
 						this.operationsWeight.remove((OperationPathCard) o);
+					}
 				}
 				else if(o.getCard().isCollapseCard() || o.getCard().isPlanCard()){
 					if(((OperationActionCardToBoard) o).getDestinationCard() == null)
@@ -347,6 +350,7 @@ public class AI extends Player {
 	protected Map<Player,Float> getIsDwarf(){
 		return this.isDwarf;
 	}
+
 	
 	//If parameter is true, it'll add the AI who calls the method anyway
 	public LinkedList<Player> getAllMostLikelySaboteurPlayersHardAI(boolean withAI) {
@@ -391,7 +395,7 @@ public class AI extends Player {
 	public String handToString(){
 		String hand = "";
 		for(Card c: this.hand){
-			hand += c;
+			hand += c + " ";
 		}
 		return hand;	
 	}
