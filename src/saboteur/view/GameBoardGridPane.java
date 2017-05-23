@@ -93,6 +93,11 @@ public class GameBoardGridPane extends GridPane {
 						else {
 	    					img.setImage(this.allCards.get(card.getBackImage()));
 						}
+						
+						if(card.isReversed()) {
+							System.out.println("patate");
+							img.setRotate(180.0);
+						}
 					}
 				}
 				this.imagesOfGridPane[i][j] = img;
