@@ -12,25 +12,27 @@ import saboteur.tools.Resources;
 
 public class GameBoardGridPane extends GridPane {
 
-	private Game game;
 	private Board board;
 	private int xmin, xmax, ymin, ymax;
 	
 	private Resources resources = new Resources();
 	private LinkedHashMap<String, Image> allCards;
 	
+	private ImageView[][] imagesOfGridPane;
 	
 	public GameBoardGridPane(Game game, double XstartInner, double YstartInner) {
-		this.game = game;
 		this.board = game.getBoard();
 		
         this.resources.loadImage();
         this.resources.loadPicto();
         this.allCards = this.resources.getImageCard();
         
+        this.imagesOfGridPane = new ImageView[Board.getGridSize()][Board.getGridSize()];
+        
 		this.setLayoutX(XstartInner);
         this.setLayoutY(YstartInner);
         this.generateBoard();
+        
 	}
 	
 	public void addCardToBoard(PathCard card, Position position){
@@ -40,28 +42,15 @@ public class GameBoardGridPane extends GridPane {
 	
 	public void removeCardOfBoard(Position position) {
 		this.board.removeCard(position);
+		this.imagesOfGridPane[position.getcX()][position.getcY()] = null;
 		this.generateBoard();
 	}
-	
-	public ImageView getImageOfPosition(Position position) {
-		return (ImageView) this.getChildren().get(this.getIndexOfGridPane(position));
-	}
-	
-//	public List<ImageView> getCollapsPossibleImages(){
-//		List<ImageView> list = new LinkedList<ImageView>();
-//		
-//		for(int x = this.xmin; x < this.xmax; x++) {
-//			for(int y = this.ymin; y < ymax; y++) {
-//				this.getChildren()
-//			}
-//		}
-//		
-//		return list;
-//	}
 	
     private void generateBoard() {
         double cardWidth = 108/3;
         double cardHeight = 166/3;
+
+        this.getChildren().clear();
         
         this.xmin = Board.getGridSize();
         this.xmax = 0;
@@ -109,22 +98,14 @@ public class GameBoardGridPane extends GridPane {
 						}
 					}
 				}
+				this.imagesOfGridPane[i][j] = img;
 				this.add(img, i, j);
         	}
         }
     }
     
-    private int getIndexOfGridPane(Position posiCard) {
-		int x = posiCard.getcX() - xmin;
-		int y = posiCard.getcY() - ymin;
-		int dx;
-		if (x == 0){
-			dx = x * (ymax-ymin);
-		}
-		else {
-			dx = x * (ymax-ymin+1);
-		}
-		return dx + y;
+    public ImageView getImageOfPosition(Position posiCard) {
+    	return this.imagesOfGridPane[posiCard.getcX()][posiCard.getcY()];
     }
     
     public LinkedHashMap<String, Image> getAllCards() {
