@@ -77,5 +77,12 @@ public abstract class Card implements Cloneable, Serializable{
     public void displayCardType(){
     	System.out.println("UnspecifiedCard");
     }
+
+	@Override
+	public String toString() {
+		return "["+this.getClassName()+"]";
+	}
+    
+    
     
 }
