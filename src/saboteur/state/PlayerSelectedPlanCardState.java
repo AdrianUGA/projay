@@ -1,7 +1,9 @@
 package saboteur.state;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -23,6 +25,7 @@ public class PlayerSelectedPlanCardState extends State{
 	private Object[] svgEyes= new Object[3];
 	private StackPane[] paneOfGoalCard = new StackPane[3];
 	private VBox goalCardContainer;
+	private Button endOfTurnButton;
 	private Circle gameBoard;
 	private Card selectedCard;
 	private boolean goalCardSelect;
@@ -86,23 +89,14 @@ public class PlayerSelectedPlanCardState extends State{
     @Override
     public void onExit() {
     	//Delete SVG and Mouse event
-    	for(int i = 0; i < 3; i++){
-    		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
-    		this.paneOfGoalCard[i].setOnMouseClicked(null);
-    	}
-    	    	
-    	if(this.goalCardSelect) {
-    		this.game.getCurrentPlayer().getHand().remove(this.selectedCard);
-        	
-    		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
-        	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
-        	cardContainer.setOnMouseClicked(null);
-        	cardContainer.generateHandCardImage(); 
-        	this.gsm.push("playerEndOfTurn");
-    	}
-    	else {
-    		this.gameBoard.toBack();
-    		this.goalCardContainer.setVisible(false);
+    	if(!this.goalCardSelect) {
+	    	for(int i = 0; i < 3; i++){
+	    		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
+	    		this.paneOfGoalCard[i].setOnMouseClicked(null);
+	    	}
+	    	    	
+			this.gameBoard.toBack();
+			this.goalCardContainer.setVisible(false);
     	}
     }
     
@@ -117,11 +111,41 @@ public class PlayerSelectedPlanCardState extends State{
         			ImageView img = (ImageView) p.getChildren().get(0);
         			Position posi = this.game.getBoard().getGoalCards().get(i);
         			img.setImage( new Image("resources/cards/" + this.game.getBoard().getCard(posi).getFrontImage()) );
+                	this.beforEnd();
         			this.goalCardSelect = true;
+                	break;
         		}
         		i++;
         	}
-        	this.gsm.pop();
     	}
     }
+    
+    private void beforEnd() {
+    	for(int i = 0; i < 3; i++){
+    		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
+    		this.paneOfGoalCard[i].setOnMouseClicked(null);
+    	}
+    	
+    	this.game.getCurrentPlayer().getHand().remove(this.selectedCard);
+    	
+		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
+    	this.game.getCurrentPlayer().pickCard();
+    	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
+    	cardContainer.setOnMouseClicked(null);
+    	cardContainer.generateHandCardImage(); 
+    	
+    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
+    	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
+    	    @Override public void handle(ActionEvent e) {
+    	        endOfTurn();
+    	    }
+    	});
+    }
+    
+    private void endOfTurn() {
+    	this.gameBoard.toBack();
+		this.goalCardContainer.setVisible(false);
+    	this.endOfTurnButton.setOnAction(null);
+    	this.gsm.changePeek("playerEndOfTurn");
+	}
 }

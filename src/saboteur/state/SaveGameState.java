@@ -14,6 +14,7 @@ import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.tools.Loader;
+import saboteur.tools.Resources;
 
 import java.io.IOException;
 
@@ -55,8 +56,7 @@ public class SaveGameState extends State {
             Pane rootLayout = loader.load();
             Scene scene = new Scene(rootLayout, 900, primaryStage.getHeight(), Color.TRANSPARENT);
 
-            String stylesheet = App.class.getResource("/resources/style.css").toExternalForm();
-            scene.getStylesheets().add(stylesheet);
+            scene.getStylesheets().add(Resources.getStylesheet());
 
             this.modalStage.setScene(scene);
 

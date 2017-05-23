@@ -65,6 +65,10 @@ public class Resources {
         }
     }
 
+    public static String getStylesheet(){
+        return App.class.getResource("/resources/style.css").toExternalForm();
+    }
+
     public static MediaPlayer loadMusic() {
         if (music == null) {
             music = new ArrayList<>();

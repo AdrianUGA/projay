@@ -343,10 +343,6 @@ public class AI extends Player {
 		}
 		return leastTrustfulPlayer;
 	}
-	
-	public void noGoldThere(Position p) {
-		this.estimatedGoldCardPosition.put(p, 0f);
-	}
 
 	protected Map<Player,Float> getIsDwarf(){
 		return this.isDwarf;

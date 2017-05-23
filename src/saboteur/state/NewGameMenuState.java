@@ -106,8 +106,8 @@ public class NewGameMenuState extends State{
             player.setName(playerName);
             this.game.addPlayer(player);
         }
-        
-    	boolean ai = true; // auto ai
+
+    	boolean ai = false; // auto ai
         if(ai){
 	    	this.game.getPlayerList().clear();
 	    	this.game.getObservers().clear();
@@ -117,7 +117,6 @@ public class NewGameMenuState extends State{
 	    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY, r.nextLong()));
         }
 
-        
         this.game.newGame();
         this.gsm.change("game");
     }

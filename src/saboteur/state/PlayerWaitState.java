@@ -35,7 +35,7 @@ public class PlayerWaitState extends State{
 
     @Override
     public void onEnter(Object param) {
-        System.out.println("wait");
+    	System.out.println("waitState");
     	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
     	    	        
         this.cardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -80,16 +80,13 @@ public class PlayerWaitState extends State{
 	            }
 	        	    
 	        	if(this.selectedCard.isSabotageCard() || this.selectedCard.isRescueCard() || this.selectedCard.isDoubleRescueCard()) {	        		
-                	this.gsm.pop();
-                	this.gsm.push("playerSelectedAction", this.selectedCard);
+                	this.gsm.changePeek("playerSelectedAction", this.selectedCard);
 	    		}
 	        	else if(this.selectedCard.isPathCard() || this.selectedCard.isCollapseCard()) {
-                	this.gsm.pop();
-                	this.gsm.push("playerSelectedPath", this.selectedCard);
+	        		this.gsm.changePeek("playerSelectedPath", this.selectedCard);
 	    		}
 	        	else if(this.selectedCard.isPlanCard()) {
-                	this.gsm.pop();
-                	this.gsm.push("playerSelectedPlan", this.selectedCard);
+                	this.gsm.changePeek("playerSelectedPlan", this.selectedCard);
 	    		}
             }
         }

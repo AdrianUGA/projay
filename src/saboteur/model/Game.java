@@ -316,6 +316,10 @@ public class Game {
 	public void nextPlayer(){
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
 	}
+
+	public Player getNextPlayer(){
+		return this.playerList.get((this.currentPlayerIndex + 1) % this.playerList.size());
+	}
 	
 	public void save(String name) {
 		File dirSave = new File(Loader.savedFolder);
@@ -634,7 +638,7 @@ public class Game {
 		team.add(Team.DWARF);
 		team.add(Team.DWARF);
 		team.add(Team.DWARF);
-		//team.add(Team.SABOTEUR);
+		team.add(Team.SABOTEUR);
 		if (nbPlayer > 3){
 			team.add(Team.DWARF);
 		}
@@ -684,7 +688,7 @@ public class Game {
 	public void notifyAINoGoldThere(Position p) {
 		for(Player player : playerList){
 			if(player.isAI()){
-				((AI) player).noGoldThere(p);
+				((AI) player).changeEstimatedGoldCardPosition(p,false);
 			}
 		}
 		

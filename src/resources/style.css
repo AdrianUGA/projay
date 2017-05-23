@@ -1,4 +1,4 @@
-.root{
+.root-layout{
     -fx-background-image:  url(mine.jpg);
     -fx-background-size: cover;
 }
@@ -40,22 +40,22 @@
     -fx-font-size: 1.8em;
 }
 
-.list-view .list-cell{
+.list-view > .list-cell{
     -fx-font-size: 1.8em;
     -fx-padding-left: 20px;
 }
 
-.list-view .list-cell:even {
+.list-view > .list-cell:even {
     -fx-background-color: transparent;
     -fx-text-fill: white;
 }
 
-.list-view .list-cell:odd {
+.list-view > .list-cell:odd {
     -fx-background-color: rgba(125,125,125,0.1);
     -fx-text-fill: white;
 }
 
-.list-view .list-cell:filled:selected:focused,
-.list-view .list-cell:filled:selected {
+.list-view > .list-cell:filled:selected:focused,
+.list-view > .list-cell:filled:selected {
     -fx-background-color: rgba(255,255,255,0.2);
 }

@@ -13,6 +13,7 @@ import saboteur.tools.Resources;
 public class GameBoardGridPane extends GridPane {
 
 	private Board board;
+	private Game game;
 	private int xmin, xmax, ymin, ymax;
 	
 	private LinkedHashMap<String, Image> allCards;
@@ -21,7 +22,8 @@ public class GameBoardGridPane extends GridPane {
 	
 	public GameBoardGridPane(Game game, double XstartInner, double YstartInner) {
 		this.board = game.getBoard();
-
+		this.game = game;
+		
         this.allCards = Resources.getImage();
         
         this.imagesOfGridPane = new ImageView[Board.getGridSize()][Board.getGridSize()];
@@ -33,12 +35,12 @@ public class GameBoardGridPane extends GridPane {
 	}
 	
 	public void addCardToBoard(PathCard card, Position position){
-		this.board.addCard(card, position);
+		this.game.getCurrentPlayer().playCard(position);
 		this.generateBoard();
 	}
 	
 	public void removeCardOfBoard(Position position) {
-		this.board.removeCard(position);
+		this.game.getCurrentPlayer().playCard(this.board.getCard(position));
 		this.imagesOfGridPane[position.getcX()][position.getcY()] = null;
 		this.generateBoard();
 	}
