@@ -215,7 +215,7 @@ public class HardDwarfComputer extends Computer {
 					artificialIntelligence.operationsWeight.put(o, (float) (Maths.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * EasyDwarfComputer.SABOTAGE) * ((3-p.getHandicaps().size())/3));
 				}
 			}
-			if(!atLeastOne){
+			if(!atLeastOne){ /* Trash */
 				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -10);
 			}
 		}

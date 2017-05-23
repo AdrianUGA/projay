@@ -106,7 +106,7 @@ public class AI extends Player {
 	}
 	
 	@Override
-	public void playCard(){
+	public Operation playCard(){
 		System.out.print("ma main : ");
 		printHand();
 		System.out.println(getEstimatedGoldCardPosition());
@@ -114,6 +114,7 @@ public class AI extends Player {
 		//System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
 		this.getGame().playOperation(o);
 		//System.out.println("It now has " + hand.size() + " cards");
+		return o;
 	}
 	
 	protected Operation selectOperation(){
@@ -349,6 +350,7 @@ public class AI extends Player {
 	protected Map<Player,Float> getIsDwarf(){
 		return this.isDwarf;
 	}
+
 	
 	//If parameter is true, it'll add the AI who calls the method anyway
 	public LinkedList<Player> getAllMostLikelySaboteurPlayersHardAI(boolean withAI) {
