@@ -107,11 +107,12 @@ public class AI extends Player {
 	}
 	
 	@Override
-	public void playCard(){
+	public Operation playCard(){
 		Operation o = selectOperation();
 		//System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
 		this.getGame().playOperation(o);
 		//System.out.println("It now has " + hand.size() + " cards");
+		return o;
 	}
 	
 	protected Operation selectOperation(){

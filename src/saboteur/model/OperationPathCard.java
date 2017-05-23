@@ -14,6 +14,10 @@ public class OperationPathCard extends Operation {
 		return p;
 	}
 
+	public ArrayList<Position> getGoalCardsToFlip() {
+		return goalCardsToFlip;
+	}
+
 	public OperationPathCard(Player sourcePlayer, Card card, Position position) {
 		super(sourcePlayer, card);
 		this.p = position;

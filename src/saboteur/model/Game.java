@@ -62,13 +62,15 @@ public class Game {
 		this.historyRedo = new LinkedList<>();
 	}
 	
-	public void undo(){
+	public LinkedList<Operation> undo(){
+		LinkedList<Operation> listUndo = new LinkedList<>();
 		Operation toUndo = null;
 		
 		if (!this.history.isEmpty()){
 			toUndo = this.history.removeLast();
 			if (toUndo.isOperationPick()){
 				toUndo.execReverse(this);
+				listUndo.add(toUndo);
 				this.historyRedo.add(toUndo);
 				toUndo = null;
 			}
@@ -76,30 +78,38 @@ public class Game {
 		if (toUndo == null){
 			if (!this.history.isEmpty()){
 				toUndo = this.history.removeLast();
-				this.historyRedo.add(toUndo);
-				toUndo.execReverse(this);
 			} else {
 				System.out.println("It's not possible to have any Operation after an OperationPick");
 			}
 		}
+		toUndo.execReverse(this);
+		listUndo.add(toUndo);
+		this.historyRedo.add(toUndo);
+		
+		return listUndo;
 	}
 	
-	public void redo(){
+	public LinkedList<Operation> redo(){
+		LinkedList<Operation> listRedo = new LinkedList<>();
 		Operation toRedo = null;
 		
 		if (!this.historyRedo.isEmpty()){
 			toRedo = this.historyRedo.removeLast();
 			toRedo.exec(this);
+			listRedo.add(toRedo);
 			this.history.add(toRedo);
 			toRedo = null;
 		}
 		if (!this.historyRedo.isEmpty()){
 			if (this.historyRedo.getLast().isOperationPick()){
 				toRedo = this.historyRedo.removeLast();
-				this.history.add(toRedo);
 				toRedo.exec(this);
+				listRedo.add(toRedo);
+				this.history.add(toRedo);
 			}
 		}
+		
+		return listRedo;
 	}
 	
 	public boolean historyRedoIsEmpty(){
