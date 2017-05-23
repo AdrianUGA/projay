@@ -33,15 +33,13 @@ public class EasySaboteurComputer extends Computer {
 	
 	@Override
 	public void operationCollapseCard(Operation o) {
-		//TODO to be changed (Saboteur are bad guys, right ?)
-		List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
-		if(allCulDeSac.size() == 0){
+		List<Position> allCardsToDestroy = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
+		if(allCardsToDestroy.size() == 0){ /* Trash */
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 		}
 		else{
-			//TODO change
 			Random r = new Random(artificialIntelligence.getGame().getSeed());
-			Position randomPos = allCulDeSac.get(r.nextInt(allCulDeSac.size()));
+			Position randomPos = allCardsToDestroy.get(r.nextInt(allCardsToDestroy.size()));
 			((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(randomPos));
 			((OperationActionCardToBoard) o).setPositionDestination(randomPos);
 			artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) COLLAPSE);
