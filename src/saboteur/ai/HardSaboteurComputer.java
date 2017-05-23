@@ -6,24 +6,25 @@ import saboteur.model.Board;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
+import saboteur.model.OperationPathCard;
 import saboteur.model.OperationTrash;
 import saboteur.model.Player;
 import saboteur.model.Position;
-import saboteur.model.Card.CollapseCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.SabotageCard;
 
 public class HardSaboteurComputer extends Computer {
 	
-	private static final int COLLAPSE_AND_CREATE_HOLE = 90;
-	private static final int DISTANCE_TO_GOAL_FOR_COLLAPSE = 4;
+	private static final float TRASH_COLLAPSE_CARD = -20;
+	private static final float COLLAPSE_AND_CREATE_HOLE = 90;
+	private static final float DISTANCE_TO_GOAL_FOR_COLLAPSE = 4;
 	private static final float SABOTAGE = 2;
 	private static final float DOUBLE_RESCUE = 14;
 	public static int PLAN = 75;
 	public static int RESCUE_ITSELF = 20;
 	public static float HANDICAP_SIZE = 0.5f;
 	public static int RESCUE = 15;
-	public static int COLLAPSE = 60;
+	public static float COLLAPSE = 60;
 
 	@Override
 	void operationCollapseCard(Operation o) {
@@ -36,22 +37,30 @@ public class HardSaboteurComputer extends Computer {
 			for(Position p : this.artificialIntelligence.getGame().getBoard().getPathCardsPosition().keySet()){
 				if(board.getCard(p).isGoal() || board.getCard(p).isStart())
 					continue;
-				if(min1 == min2){
-					board.temporarRemoveCard(p);
-					int newMin1 = board.minFromEmptyReachablePathCardToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
-					int newMin2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
-					
-					if(newMin1 != newMin2){
-			//TODO			
-//						(OperationActionCardToBoard) o.set
-//						this.artificialIntelligence.operationsWeight.put(, COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p));
-					}
-				}
-//				this.artificialIntelligence.operationsWeight.put(o, COLLAPSE + );
+				
+				board.temporarRemoveCard(p);
+				
+				OperationActionCardToBoard operation = (OperationActionCardToBoard) o;
+				operation.setPositionDestination(p);
+				operation.setDestinationCard(board.getCard(p));
+				board.temporarRemoveCard(p);
+				
+				int newMin1 = board.minFromEmptyReachablePathCardToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
+				int newMin2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
+				board.temporarAddCard(new OperationPathCard(artificialIntelligence, operation.getDestinationCard(), p));
+				
+				if(min1 == min2 && newMin1 != newMin2){
+					atLeastOne = true;
+					this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p));
+				}else if(newMin2 < min2){
+					atLeastOne = true;
+					this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE + board.numberOfNeighbors(p));
+				}// TODO COMPLEATE
+				this.artificialIntelligence.operationsWeight.put(o, COLLAPSE + 0f );
 			}
 		}
 		if(!atLeastOne){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -20f);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_COLLAPSE_CARD);
 		}
 	}
 
