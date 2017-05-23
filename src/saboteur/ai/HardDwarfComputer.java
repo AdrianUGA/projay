@@ -76,6 +76,7 @@ public class HardDwarfComputer extends Computer {
 						artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) COLLAPSE_CAN_REPLACE);
 						atLeastOne = true;
 					}
+					artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 				}
 				else{
 					artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
@@ -141,12 +142,10 @@ public class HardDwarfComputer extends Computer {
 				for(OperationPathCard currentOp : allOperationsForThisCard){
 					
 					board.temporarAddCard(currentOp);
-					System.out.println(currentOp.getP());
 					//int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
 					
 					for(Position pNeighbor : board.getAccessibleEmptyNeighbors(currentOp.getP())){
 						int currentMin = board.aStarOnEmptyCard(pNeighbor, estimatedGoldCardPosition);
-						System.out.println("CurrentMin = " + currentMin + " :pos"+pNeighbor+" MinFromAnywher = " + minimumFromAnywhere);
 						if(currentMin != -1 && currentMin -2 < minimumFromAnywhere){
 							artificialIntelligence.operationsWeight.put(currentOp, 
 									(float) PATHCARD/ (((PathCard)currentOp.getCard()).openSidesAmount() * PATHCARD_OPENSIDES) + ((minimumFromAnywhere+1 - currentMin) * 20));
