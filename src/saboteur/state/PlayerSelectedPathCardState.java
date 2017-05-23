@@ -99,7 +99,6 @@ public class PlayerSelectedPathCardState extends State{
 			Set<OperationPathCard> possibleOperationPathCardList = this.game.getBoard().getPossibleOperationPathCard(this.game.getCurrentPlayer(), card);
 			for(OperationPathCard operation : possibleOperationPathCardList) {
 				Position posiCard = operation.getP();
-				System.out.println(posiCard);
 			}
 //				
 //				
@@ -161,9 +160,12 @@ public class PlayerSelectedPathCardState extends State{
     		Position position = this.positionOfImages.get(event.getTarget());
     		if(position != null){
     			if(this.selectedCard.isCollapseCard()) {
-        			this.gameBoardGridPane.removeCardOfBoard(position);
+    				this.game.getCurrentPlayer().playCard();
+    				this.gameBoardGridPane.removeCardOfBoard(position);
+        			
         		}
         		else {
+        			this.game.getCurrentPlayer().playCard(position);
             		this.gameBoardGridPane.addCardToBoard((PathCard)this.selectedCard, position);
         		}
     			this.positionSelected = true;
