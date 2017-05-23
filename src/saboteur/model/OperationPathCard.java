@@ -55,10 +55,6 @@ public class OperationPathCard extends Operation {
 			
 			if (toFlip.isGoal()){
 				toFlip.setVisible(false);
-				System.out.println("J'ai trouvé un but");
-				if(toFlip.hasGold()){
-					System.out.println("On a trouvé Laure");
-				}
 			}
 		}
 	}

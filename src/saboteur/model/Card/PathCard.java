@@ -51,21 +51,6 @@ public class PathCard extends Card {
 	public boolean isCulDeSac(){
 		return (this.isCulDeSac);
 	}
-	
-//	public PathCard reversed(){
-//		List<Cardinal> openSides = new LinkedList<>();
-//		for(Cardinal cardinal : this.openSides){
-//			openSides.add(cardinal.opposite());
-//		}
-//
-//		try {
-//			return ((PathCard) this.clone()).setOpenSides(openSides);
-//		} catch (CloneNotSupportedException e) {
-//			System.err.println("Impossible to clone pathcard. That is NOT supposed to happen, like ever");
-//			e.printStackTrace();
-//		}
-//		return null; /* that never happen */
-//	}
 
 	public void reverse(){
 		List<Cardinal> newOpenSides = new LinkedList<>();
@@ -92,11 +77,6 @@ public class PathCard extends Card {
 	public boolean isReversed(){
 		return this.isReversed;
 	}
-
-//	private PathCard setOpenSides(List<Cardinal> openSides) {
-//		this.openSides = openSides;
-//		return this;
-//	}
 	
 	public boolean isOpen(Cardinal cardinal){
 		for (Cardinal current : this.openSides){

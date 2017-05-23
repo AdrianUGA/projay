@@ -191,8 +191,7 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     }
     private void endOfTurn() {
     	this.endOfTurnButton.setOnAction(null);
-    	this.gsm.pop();
-    	this.gsm.push("playerEndOfTurn");
+    	this.gsm.changePeek("playerEndOfTurn");
 	}
     
     private Tool intToTool(int intOfTool) {

@@ -145,7 +145,7 @@ public abstract class Player implements Serializable {
 	}
 
 	
-/* Getters Setters Modifiers */
+/* Getters LinkedHashSetters Modifiers */
 	
 	public Card getSelectedCard() {
 		return selectedCard;

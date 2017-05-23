@@ -1,16 +1,25 @@
 package saboteur.state;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.tools.Resources;
 import saboteur.view.GameCardContainer;
+
+import java.io.IOException;
 
 public class PlayerEndOfTurnState extends State{
 
-    private Button endOfTurnButton;
+    private Stage modalStage;
 
 	public PlayerEndOfTurnState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -28,29 +37,45 @@ public class PlayerEndOfTurnState extends State{
 
     @Override
     public void onEnter(Object param) {
-    	System.out.println("End of turn");
-    	
-    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
-    	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
-    	    @Override public void handle(ActionEvent e) {
-    	        endOfTurn();
-    	    }
-    	});
-    	
+        this.modalStage = new Stage();
+        this.modalStage.initStyle(StageStyle.TRANSPARENT);
+
+        this.modalStage.initModality(Modality.APPLICATION_MODAL);
+        this.modalStage.initOwner(primaryStage);
+        this.modalStage.setTitle("Fin de tour");
+
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(App.class.getResource("/saboteur/view/modalEndOfTurn.fxml"));
+            loader.setController(this);
+            Pane modalPane = loader.load();
+            Scene scene = new Scene(modalPane, 500, 300, Color.TRANSPARENT);
+
+            Text text = (Text)modalPane.lookup("#text");
+            text.setText(this.game.getCurrentPlayer().getName() + " a fini de jouer. c'est au tour de " + this.game.getNextPlayer().getName() + " de jouer");
+
+            scene.getStylesheets().add(Resources.getStylesheet());
+
+            this.modalStage.setScene(scene);
+
+            this.modalStage.setX(primaryStage.getWidth()/2 - 500/2);
+            this.modalStage.setY(primaryStage.getHeight()/2 - 300/2);
+
+            this.modalStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     public void onExit() {
-    	this.gsm.push("playerWait");
+        this.modalStage.close();
+        this.game.nextPlayer();
     }
-    
-    private void endOfTurn() {
-    	//take a new card
-    	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
-    	cardContainer.generateHandCardImage();     	
-    	this.endOfTurnButton.setOnAction(null);
-    	
-    	this.game.nextPlayer();    	
-    	this.gsm.pop();
-	}
+
+    @FXML
+    private void goButtonAction(){
+	    this.gsm.pop();
+    }
 }

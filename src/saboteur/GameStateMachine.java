@@ -42,6 +42,16 @@ public class GameStateMachine {
 
     }
 
+    public void changePeek(String name, Object param){
+        this.pop();
+        this.push(name, param);
+    }
+
+    public void changePeek(String name){
+        this.pop();
+        this.push(name);
+    }
+
     public void render(){
         this.statesStack.peek().render();
     }

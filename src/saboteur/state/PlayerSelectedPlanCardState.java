@@ -146,7 +146,6 @@ public class PlayerSelectedPlanCardState extends State{
     	this.gameBoard.toBack();
 		this.goalCardContainer.setVisible(false);
     	this.endOfTurnButton.setOnAction(null);
-    	this.gsm.pop();
-    	this.gsm.push("playerEndOfTurn");
+    	this.gsm.changePeek("playerEndOfTurn");
 	}
 }

@@ -86,10 +86,13 @@ public class Board implements Serializable {
 	}
 
 	public void removeCard(Position position){
-		if(this.getCard(position).isGoal())
+		if(this.getCard(position).isGoal()){
 			this.objectiveCards.remove(position);
-		else
+		}
+		else{
 			this.pathCardsPosition.remove(position);
+		}
+		System.out.println("Position removed = "+position);
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
@@ -166,10 +169,10 @@ public class Board implements Serializable {
 		return (card.isGoal() || card.isStart() || atLeastOnePath);
 	}
 
-/* Getters Setters Modifiers */
+/* Getters LinkedHashSetters Modifiers */
 	
-	public Set<Position> extractPositions(Set<OperationPathCard> operations){
-		Set<Position> positions = new HashSet<Position>();
+	public LinkedHashSet<Position> extractPositions(LinkedHashSet<OperationPathCard> operations){
+		LinkedHashSet<Position> positions = new LinkedHashSet<Position>();
 		for(OperationPathCard operation : operations){
 			positions.add(operation.getP());
 		}
@@ -238,8 +241,8 @@ public class Board implements Serializable {
 	}
 	
 	/* Returns actions on every free positions when card=null */
-	public Set<OperationPathCard> getPossibleOperationPathCard(Player ai, PathCard card){
-		Set<OperationPathCard> possiblePlaces = new HashSet<OperationPathCard>();
+	public LinkedHashSet<OperationPathCard> getPossibleOperationPathCard(Player ai, PathCard card){
+		LinkedHashSet<OperationPathCard> possiblePlaces = new LinkedHashSet<OperationPathCard>();
 		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
@@ -286,8 +289,8 @@ public class Board implements Serializable {
 		return possiblePlaces;
 	}
 	
-	public List<Position> getNearestPossiblePathCardPlace(Position position){
-		List<Position> possible =  new ArrayList<Position>();
+	public LinkedList<Position> getNearestPossiblePathCardPlace(Position position){
+		LinkedList<Position> possible =  new LinkedList<Position>();
 		for(OperationPathCard o : this.getPossibleOperationPathCard(null,null)){
 			possible.add(o.getP());
 		}
@@ -295,7 +298,7 @@ public class Board implements Serializable {
 		possible.sort(new PositionComparator(position));
 		
 		int min = position.getTaxiDistance(possible.get(possible.size()-1));
-		List<Position> ret = new LinkedList<Position>();
+		LinkedList<Position> ret = new LinkedList<Position>();
 		for(int i=0; i<possible.size(); i++){
 			if(possible.get(i).getTaxiDistance(position) > min){
 				break;
@@ -494,7 +497,7 @@ public class Board implements Serializable {
 	public LinkedList<Position> getAccessibleEmptyNeighbors(Position p){
 		LinkedList<Position> result = new LinkedList<Position>();
 		for(Cardinal c : Cardinal.values()){
-			if(p.getNeighbor(c) != null && this.getCard(p.getNeighbor(c)) == null && this.getCard(p).isOpen(c)){
+			if(p.getNeighbor(c) != null && (this.getCard(p.getNeighbor(c)) == null || this.getCard(p.getNeighbor(c)).isGoal()) && this.getCard(p).isOpen(c)){
 				result.add(p.getNeighbor(c));
 			}
 		}

@@ -17,6 +17,7 @@ import javafx.util.Duration;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.tools.Resources;
 
 import java.io.IOException;
 
@@ -54,8 +55,7 @@ public class PauseMenuState extends State {
             Pane modalPane = loader.load();
             Scene scene = new Scene(modalPane, 900, primaryStage.getHeight(), Color.TRANSPARENT);
 
-            String stylesheet = App.class.getResource("/resources/style.css").toExternalForm();
-            scene.getStylesheets().add(stylesheet);
+            scene.getStylesheets().add(Resources.getStylesheet());
 
             this.modalStage.setScene(scene);
 

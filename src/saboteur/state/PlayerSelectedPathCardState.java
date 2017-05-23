@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -134,7 +134,6 @@ public class PlayerSelectedPathCardState extends State{
 				this.gameBoardGridPane.getChildren().remove(obj);
 			}
     	}
-		
 		this.gameBoardGridPane.setOnMouseClicked(null);
     }
     
@@ -181,8 +180,7 @@ public class PlayerSelectedPathCardState extends State{
     
     private void endOfTurn() {
     	this.endOfTurnButton.setOnAction(null);
-    	this.gsm.pop();
-    	this.gsm.push("playerEndOfTurn");
+		this.gsm.changePeek("playerEndOfTurn");
 	}
     
 }
