@@ -41,8 +41,12 @@ public abstract class Player implements Serializable {
 	public void playCard(PathCard destinationCard){
 		this.game.playOperation(new OperationActionCardToBoard(this, this.selectedCard, destinationCard));
 	}
-	public void playCard(Position position){		
-		this.game.playOperation(new OperationPathCard(this, this.selectedCard, position));
+	public void playCard(Position position){
+		OperationPathCard o = new OperationPathCard(this, this.selectedCard, position);
+		if(!this.game.getBoard().isPossible((PathCard)this.selectedCard, position)){
+			o.setReversed(true);
+		}
+		this.game.playOperation(o);
 	}
 	
 	public void playCard(){		
@@ -141,7 +145,7 @@ public abstract class Player implements Serializable {
 	}
 
 	
-/* Getters Setters Modifiers */
+/* Getters LinkedHashSetters Modifiers */
 	
 	public Card getSelectedCard() {
 		return selectedCard;

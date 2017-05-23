@@ -15,7 +15,6 @@ public class GameCardContainer extends HBox {
 	private ImageView[] handCardsImages = new ImageView[6];
 	private Game game;
 	
-	private Resources resources = new Resources();
 	private LinkedHashMap<String, Image> allCards;
 	
 	public GameCardContainer(Game game, double gameTableSize){
@@ -25,9 +24,7 @@ public class GameCardContainer extends HBox {
         this.setSpacing(20.0);
         AnchorPane.setBottomAnchor(this, 5.0);
         
-        this.resources.loadImage();
-        this.resources.loadPicto();
-        this.allCards = this.resources.getImageCard();
+        this.allCards = Resources.getImage();
         
 	}
 	

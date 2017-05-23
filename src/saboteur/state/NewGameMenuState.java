@@ -90,9 +90,9 @@ public class NewGameMenuState extends State{
     
     @FXML
     private void startNewGameButtonAction() {
+    	Random r = new Random(Game.seed);
     	game.getPlayerList().clear();
     	game.getObservers().clear();
-    	Random r = new Random(Game.seed);
         for (Node n: this.playerContainer.getChildren()) {
             NewPlayerHBox playerBox = (NewPlayerHBox) n;
             String playerName = playerBox.getPlayerName().getCharacters().toString();
@@ -107,16 +107,16 @@ public class NewGameMenuState extends State{
             this.game.addPlayer(player);
         }
         
-    	//Début du bloc à commenter
-        
-//    	this.game.getPlayerList().clear();
-//    	this.game.getObservers().clear();
-//    	
-//    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY, r.nextLong()));
-//    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY, r.nextLong()));
-//    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY, r.nextLong()));
-    	
-    	//Fin du bloc à commenter
+    	boolean ai = true; // auto ai
+        if(ai){
+	    	this.game.getPlayerList().clear();
+	    	this.game.getObservers().clear();
+	    	
+	    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY, r.nextLong()));
+	    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY, r.nextLong()));
+	    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY, r.nextLong()));
+        }
+
         
         this.game.newGame();
         this.gsm.change("game");

@@ -211,12 +211,11 @@ public class Game {
 	private Player createPlayerFromConfig(String chaine) {
 		Player toAdd;
 		String stringPlayer[] = chaine.split(" ");
-		Random r = new Random(Game.seed);
 		//Name and type
 		if (stringPlayer[Loader.indexPlayerType].equals("Human")){
 			toAdd = new Human(this, stringPlayer[Loader.indexPlayerName]);
 		} else {
-			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName], Difficulty.EASY, r.nextLong());
+			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName], Difficulty.EASY, new Random(seed).nextLong()); // TODO
 		}
 		
 		//Hand
