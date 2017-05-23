@@ -3,9 +3,6 @@ package saboteur.ai;
 import saboteur.model.Operation;
 
 public class HardSaboteurComputer extends Computer {
-	
-	public static int MINIMUM_TRUST = 35;
-
 
 	@Override
 	void operationCollapseCard(Operation o) {

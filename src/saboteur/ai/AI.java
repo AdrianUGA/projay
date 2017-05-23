@@ -349,7 +349,7 @@ public class AI extends Player {
 	//If parameter is true, it'll add the AI who calls the method anyway
 	public LinkedList<Player> getAllMostLikelySaboteurPlayersHardAI(boolean withAI) {
 		int maxAmountOfSaboteur = game.maximumAmountOfSaboteur();
-		int maxTrust = HardDwarfComputer.MINIMUM_TRUST;
+		int maxTrust = Computer.MINIMUM_TRUST_SABOTEUR_HARD;
 		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
 		
 		do{
@@ -368,7 +368,7 @@ public class AI extends Player {
 	//If parameter is true, it'll add the AI who calls the method anyway
 	public LinkedList<Player> getAllMostLikelyDwarfPlayersHardAI(boolean withAI) {
 		int minAmountOfDwarf = game.minimumAmountOfDwarf();
-		int minTrust = HardDwarfComputer.MINIMUM_TRUST;
+		int minTrust = Computer.MINIMUM_TRUST_DWARF_HARD;
 		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
 		
 		do{

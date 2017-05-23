@@ -7,6 +7,10 @@ import saboteur.model.Operation;
 
 public abstract class Computer {
 	
+	public static int MINIMUM_TRUST_DWARF_HARD = 65;
+	public static int MINIMUM_TRUST_SABOTEUR_HARD = 35;
+
+	
 	protected AI artificialIntelligence;
 	
 	public void compute() {

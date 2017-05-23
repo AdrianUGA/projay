@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import saboteur.model.Board;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
@@ -20,8 +19,6 @@ import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.SabotageCard;
 
 public class HardDwarfComputer extends Computer {
-
-	public static int MINIMUM_TRUST = 65;
 
 	public static int RESCUE_ITSELF = 30;
 	public static float HANDICAP_SIZE = 0.5f;
@@ -93,96 +90,41 @@ public class HardDwarfComputer extends Computer {
 
 	@Override
 	void operationPathCard(Operation o) {
-		System.out.println("PathCard = " + o.getCard() + " " + ((PathCard)o.getCard()).isCulDeSac() + " " + artificialIntelligence.getHandicaps().size());
-		if(((PathCard) o.getCard()).isCulDeSac() || !(artificialIntelligence.getHandicaps().size() == 0)){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
-		}
-		else{
-			Position estimatedGoldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
-			Board board = artificialIntelligence.getGame().getBoard();
-			int minimumFromStart = board.minFromEmptyReachablePathCardToGoldCard(estimatedGoldCardPosition); // = min1
-			int minimumFromAnywhere = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition); // = min2
-			boolean atLeastOneOperation = false;
-			
-			if(minimumFromStart == Board.IMPOSSIBLE_PATH){
-				System.out.println("pas possible depuis début");
-				if(minimumFromAnywhere == Board.IMPOSSIBLE_PATH){
-					System.out.println("pas possible du tout");
-					//There is a loop, can't progress
-					//Do nothing
-				}
-				else{
-					System.out.println("Loop at start");
-					//There is a loop at the start
-					//Trying to improve min2
-					Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
-					for(OperationPathCard currentOp : allOperationsForThisCard){
-						board.temporarAddCard(currentOp);
-						
-						int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
-						if(currentMin < minimumFromAnywhere){
-							artificialIntelligence.operationsWeight.put(currentOp, 
-									(float) PATHCARD /  (((PathCard)currentOp.getCard()).openSidesAmount() * PATHCARD_OPENSIDES));
-							atLeastOneOperation = true;
-						}
-						else if(currentMin-1 < minimumFromAnywhere){ //Allow the AI to play if it can't directly improve the path
-							//TODO (probleme = tout le temps vrai car le chemin minimum reste le meme)
-						}
+		if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
+			Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
+			List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
+			Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+
+			int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
+			for(OperationPathCard currentOp : allOperationsForThisCard){
+				Position currentPos = currentOp.getP();
+				int distanceDifference = distanceMin - currentPos.getTaxiDistance(goldCardPosition);
+				if(distanceDifference >= -1){
+					// At most 1 position away from the minimum
 					
-						board.temporarRemoveCard(currentOp.getP());
-					}
-				}
-			}
-			else if(minimumFromStart == minimumFromAnywhere){ //There is no hole
-				//Trying to improve min2
-				System.out.println("No hole");
-				Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
-				for(OperationPathCard currentOp : allOperationsForThisCard){
-					
-					board.temporarAddCard(currentOp);
-					
-					int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
-					if(currentMin < minimumFromAnywhere){
+					//Checking new minimum taxiDistance if AI put the card
+					artificialIntelligence.getGame().getBoard().temporarAddCard(currentOp);		
+					allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
+					int newDistanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
+					artificialIntelligence.getGame().getBoard().removeCard(currentOp.getP());
+					if(distanceMin - newDistanceMin ==1){
 						artificialIntelligence.operationsWeight.put(currentOp, 
-								(float) PATHCARD / (((PathCard)currentOp.getCard()).openSidesAmount() * PATHCARD_OPENSIDES));
-						atLeastOneOperation = true;
+								(float) ((EasyDwarfComputer.DISTANCE_PATHCARD + distanceDifference 
+								+ ((PathCard) currentOp.getCard()).openSidesAmount()/5f) * PATHCARD) + EasyDwarfComputer.BETTER_DISTANCE_MIN);
+					}else{
+						artificialIntelligence.operationsWeight.put(currentOp, 
+								(float) (EasyDwarfComputer.DISTANCE_PATHCARD + distanceDifference 
+								- ((PathCard) currentOp.getCard()).openSidesAmount()/5) * PATHCARD);
 					}
-				
-					board.temporarRemoveCard(currentOp.getP());
+					
+				}else{
+					// Trash
+					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
 			}
-			else{ // There is a hole
-				//Trying to fix the hole
-				System.out.println("Hole");
-				Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
-				for(OperationPathCard currentOp : allOperationsForThisCard){
-					board.temporarAddCard(currentOp);
-					
-					int currentMinFromStart = board.minFromEmptyReachablePathCardToGoldCard(estimatedGoldCardPosition);
-					int currentMinFromAnywhere = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
-					
-					if(currentMinFromStart == currentMinFromAnywhere){
-						//Can fix the hole
-						artificialIntelligence.operationsWeight.put(currentOp, 
-								(float) (PATHCARD_FIXHOLE + PATHCARD) / (((PathCard)currentOp.getCard()).openSidesAmount() * PATHCARD_OPENSIDES));
-						atLeastOneOperation = true;
-						board.temporarRemoveCard(currentOp.getP());
-						break; //There is only 1 possible place to fix the hole
-					}
-					else if(currentMinFromAnywhere < minimumFromAnywhere){
-						//Doesn't fix the hole but could be interesting
-						artificialIntelligence.operationsWeight.put(currentOp, 
-								(float) PATHCARD / (((PathCard)currentOp.getCard()).openSidesAmount() * PATHCARD_OPENSIDES));
-						atLeastOneOperation = true;
-					}
-					
-					board.temporarRemoveCard(currentOp.getP());
-				}
-			}
-			if(!atLeastOneOperation){
-				System.out.println("Pas possible");
-				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
-			}
+		}else{
+			// We don't want to play cul-de-sac card, and we can't play a pathcard if our tools are broken
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -35f);
 		}
 
 	}
