@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import saboteur.model.Board;
 import saboteur.model.Operation;
@@ -117,10 +117,9 @@ public class HardDwarfComputer extends Computer {
 					System.out.println("Loop at start");
 					//There is a loop at the start
 					//Trying to improve min2
-					Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+					LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 					for(OperationPathCard currentOp : allOperationsForThisCard){
 						board.temporarAddCard(currentOp);
-						
 						int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
 						if(currentMin < minimumFromAnywhere){
 							artificialIntelligence.operationsWeight.put(currentOp, 
@@ -138,7 +137,7 @@ public class HardDwarfComputer extends Computer {
 			else if(minimumFromStart == minimumFromAnywhere){ //There is no hole
 				//Trying to improve min2
 				System.out.println("No hole");
-				Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+				LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 				for(OperationPathCard currentOp : allOperationsForThisCard){
 					
 					board.temporarAddCard(currentOp);
@@ -161,7 +160,7 @@ public class HardDwarfComputer extends Computer {
 			else{ // There is a hole
 				//Trying to fix the hole
 				System.out.println("Hole");
-				Set<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+				LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 				for(OperationPathCard currentOp : allOperationsForThisCard){
 					board.temporarAddCard(currentOp);
 					
@@ -229,7 +228,7 @@ public class HardDwarfComputer extends Computer {
 			for(Player p : mostLikelyDwarfPlayers){
 				if(artificialIntelligence.canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard(), p)){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(p);
-					//Set tool
+					//LinkedHashSet tool
 					if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1()) && artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType2())){
 						((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getOneOfTheTwoType());
 					}

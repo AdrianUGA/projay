@@ -116,6 +116,7 @@ public class NewGameMenuState extends State{
 	    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY, r.nextLong()));
 	    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY, r.nextLong()));
         }
+
         
         this.game.newGame();
         this.gsm.change("game");

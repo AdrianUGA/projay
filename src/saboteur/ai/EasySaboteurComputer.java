@@ -2,7 +2,7 @@ package saboteur.ai;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
@@ -58,7 +58,7 @@ public class EasySaboteurComputer extends Computer {
 
 			Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 			List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-			Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+			LinkedHashSet<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 
 			int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 			for(OperationPathCard currentOp : allOperationsForThisCard){
@@ -82,7 +82,7 @@ public class EasySaboteurComputer extends Computer {
 
 			Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 			List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-			Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+			LinkedHashSet<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 
 			int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 			for(OperationPathCard currentOp : allOperationsForThisCard){

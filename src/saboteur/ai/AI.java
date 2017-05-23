@@ -139,7 +139,7 @@ public class AI extends Player {
 	}
 	
 	
-/* Getters Setters Modifiers */
+/* Getters LinkedHashSetters Modifiers */
 	
 	// Plan & Collapse card
 	public void updateTrust(OperationActionCardToBoard o){

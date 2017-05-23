@@ -92,6 +92,7 @@ public class BoardTest {
 		
 		assertEquals(false, boardTest.isPossible(horizontalBarCard, new Position(xStart+Board.DISTANCE_START_OBJECTIVE_X-1,yStart)));
 		goal.setVisible(true);
+		goalWithGold.setVisible(true);
 		assertEquals(true, boardTest.isPossible(horizontalBarCard, new Position(xStart+Board.DISTANCE_START_OBJECTIVE_X-1,yStart)));
 	}
 

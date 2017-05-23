@@ -4,7 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -96,7 +96,7 @@ public class PlayerSelectedPathCardState extends State{
 		}
 		else {
 			PathCard card  = (PathCard) this.selectedCard;
-			Set<OperationPathCard> possibleOperationPathCardList = this.game.getBoard().getPossibleOperationPathCard(this.game.getCurrentPlayer(), card);
+			LinkedHashSet<OperationPathCard> possibleOperationPathCardList = this.game.getBoard().getPossibleOperationPathCard(this.game.getCurrentPlayer(), card);
 			for(OperationPathCard operation : possibleOperationPathCardList) {
 				Position posiCard = operation.getP();
 			}
