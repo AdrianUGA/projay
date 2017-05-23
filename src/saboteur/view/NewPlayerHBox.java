@@ -71,7 +71,6 @@ public class NewPlayerHBox extends HBox {
 		this.selectPlayerMenu.setMaxSize(Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
 		this.selectPlayerMenu.setMinSize(Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
 		this.selectPlayerMenu.setStyle("-fx-font-size: 24px");
-//		this.selectPlayerMenu.setFont(Font.font("System", FontPosture.REGULAR, 24));
 		HBox.setMargin(this.selectPlayerMenu, new Insets(0,200,0,30));
 		this.selectPlayerMenu.getItems().addAll("Humain", "IA Facile", "IA Moyen", "IA Difficile");
 		

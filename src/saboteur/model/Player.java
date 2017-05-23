@@ -30,32 +30,47 @@ public abstract class Player implements Serializable {
 	
 /* Actions */
 	
-	public void playCard(Card card){
+	public Operation playCard(Card card){
+		return null;
 	}
-	public void playCard(Player destinationPlayer){		
-		this.game.playOperation(new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer));
+	public Operation playCard(Player destinationPlayer){
+		Operation op = new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer);
+		this.game.playOperation(op);
+		return op;
 	}
-	public void playCard(Player destinationPlayer, Tool destinationTool){		
-		this.game.playOperation(new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer, destinationTool));
+	public Operation playCard(Player destinationPlayer, Tool destinationTool){
+		Operation op = new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer, destinationTool);
+		this.game.playOperation(op);
+		return op;
 	}
-	public void playCard(PathCard destinationCard){
-		this.game.playOperation(new OperationActionCardToBoard(this, this.selectedCard, destinationCard));
+	public Operation playCard(PathCard destinationCard){
+		Operation op = new OperationActionCardToBoard(this, this.selectedCard, destinationCard);
+		this.game.playOperation(op);
+		return op;
 	}
-	public void playCard(Position position){
+	public Operation playCard(Position position){
 		OperationPathCard o = new OperationPathCard(this, this.selectedCard, position);
 		if(!this.game.getBoard().isPossible((PathCard)this.selectedCard, position)){
 			o.setReversed(true);
 		}
 		this.game.playOperation(o);
+		return o;
 	}
 	
-	public void playCard(){		
-		this.game.playOperation(new OperationTrash(this, this.selectedCard));
+	public Operation playCard(){		
+		Operation op = new OperationTrash(this, this.selectedCard);
+		this.game.playOperation(op);
+		return op;
 	}
 	
-	public void pickCard(){
-		if (!game.stackIsEmpty())			
-			this.game.playOperation(new OperationPick(this, game.pick()));
+	public Operation pickCard(){
+		Operation op = null;
+		if (!game.stackIsEmpty()){
+			op = new OperationPick(this, game.pick());
+			this.game.playOperation(op);
+			return op;
+		}	
+		return null;
 	}
 	
 	

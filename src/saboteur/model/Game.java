@@ -16,7 +16,7 @@ public class Game {
 	private int currentPlayerIndex;
 	private int round;
 	private int turn;
-	public final static long seed = 321456789;
+	public final static long seed = 123456789;
 
 	private final Deck deck;
 
@@ -62,44 +62,59 @@ public class Game {
 		this.historyRedo = new LinkedList<>();
 	}
 	
-	public void undo(){
+	public LinkedList<Operation> undo(){
+		LinkedList<Operation> listUndo = new LinkedList<>();
 		Operation toUndo = null;
 		
 		if (!this.history.isEmpty()){
 			toUndo = this.history.removeLast();
 			if (toUndo.isOperationPick()){
 				toUndo.execReverse(this);
+				listUndo.add(toUndo);
 				this.historyRedo.add(toUndo);
+				System.out.println("Operation pick undo");
 				toUndo = null;
 			}
 		}
 		if (toUndo == null){
 			if (!this.history.isEmpty()){
 				toUndo = this.history.removeLast();
-				this.historyRedo.add(toUndo);
-				toUndo.execReverse(this);
 			} else {
 				System.out.println("It's not possible to have any Operation after an OperationPick");
 			}
 		}
+		toUndo.execReverse(this);
+		listUndo.add(toUndo);
+		this.historyRedo.add(toUndo);
+		if (toUndo.isOperationActionCardToBoard()) System.out.println("Operation board undo");
+		else if (toUndo.isOperationActionCardToPlayer()) System.out.println("Operation player undo");
+		else if (toUndo.isOperationPathCard()) System.out.println("Operation pathCard undo");
+		else if (toUndo.isOperationTrash()) System.out.println("Operation trash undo");
+		
+		return listUndo;
 	}
 	
-	public void redo(){
+	public LinkedList<Operation> redo(){
+		LinkedList<Operation> listRedo = new LinkedList<>();
 		Operation toRedo = null;
 		
 		if (!this.historyRedo.isEmpty()){
 			toRedo = this.historyRedo.removeLast();
 			toRedo.exec(this);
+			listRedo.add(toRedo);
 			this.history.add(toRedo);
 			toRedo = null;
 		}
 		if (!this.historyRedo.isEmpty()){
 			if (this.historyRedo.getLast().isOperationPick()){
 				toRedo = this.historyRedo.removeLast();
-				this.history.add(toRedo);
 				toRedo.exec(this);
+				listRedo.add(toRedo);
+				this.history.add(toRedo);
 			}
 		}
+		
+		return listRedo;
 	}
 	
 	public boolean historyRedoIsEmpty(){
@@ -305,6 +320,10 @@ public class Game {
 
 	public void nextPlayer(){
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
+	}
+	
+	public void previousPlayer(){
+		this.currentPlayerIndex = (this.currentPlayerIndex - 1) % this.playerList.size();
 	}
 
 	public Player getNextPlayer(){

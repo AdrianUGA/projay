@@ -58,7 +58,8 @@ public class EasySaboteurComputer extends Computer {
 			Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 			List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 			LinkedHashSet<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
-
+			boolean atLeastOne = false;
+			
 			int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 			for(OperationPathCard currentOp : allOperationsForThisCard){
 				Position currentPos = currentOp.getP();
@@ -69,12 +70,12 @@ public class EasySaboteurComputer extends Computer {
 					artificialIntelligence.operationsWeight.put(currentOp, 
 							(float) Maths.ifNegativeZeroElseOne(currentPos.getTaxiDistance(goldCardPosition)-DISTANCE_LEFT)
 							*(DISTANCE_PATHCARD + distanceDifference - ((PathCard) currentOp.getCard()).openSidesAmount()/5) * PATHCARD);
-
+					atLeastOne = true;
 					
-				}else{
-					// Trash
-					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 				}
+			}
+			if(!atLeastOne){
+				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) 0);
 			}
 		}else {
 			// Easy Saboteur AI starts playing cul-de-sac when there is only 2 "distance" left
@@ -82,7 +83,8 @@ public class EasySaboteurComputer extends Computer {
 			Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 			List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 			LinkedHashSet<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
-
+			boolean atLeastOne = false;
+			
 			int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 			for(OperationPathCard currentOp : allOperationsForThisCard){
 				Position currentPos = currentOp.getP();
@@ -93,10 +95,11 @@ public class EasySaboteurComputer extends Computer {
 						(float) Maths.ifNegativeZeroElseOne(DISTANCE_LEFT-currentPos.getTaxiDistance(goldCardPosition))
 						*(DISTANCE_PATHCARD + distance - ((PathCard) currentOp.getCard()).openSidesAmount()/5) 
 						* CUL_DE_SAC);
-				}else{
-					// Trash
-					artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+					atLeastOne = true;
 				}
+			}
+			if(!atLeastOne){
+				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -5);
 			}
 		}
 	}

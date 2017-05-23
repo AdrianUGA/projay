@@ -455,7 +455,7 @@ public class Board implements Serializable {
 		int min = 8192;
 		Position posToReturn = null;
 		for(Position p : list){
-			if(p.getTaxiDistance(destination) < min){
+			if(p.heuristic(destination) < min){
 				min = p.getTaxiDistance(destination);
 				posToReturn = p;
 			}

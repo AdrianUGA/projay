@@ -42,7 +42,7 @@ public class GameBoardGridPane extends GridPane {
 		this.generateBoard();
 	}
 	
-    private void generateBoard() {
+    public void generateBoard() {
         double cardWidth = 108/3;
         double cardHeight = 166/3;
 
