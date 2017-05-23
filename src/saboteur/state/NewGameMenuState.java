@@ -90,9 +90,9 @@ public class NewGameMenuState extends State{
     
     @FXML
     private void startNewGameButtonAction() {
+    	Random r = new Random(Game.seed);
     	game.getPlayerList().clear();
     	game.getObservers().clear();
-    	Random r = new Random(Game.seed);
         for (Node n: this.playerContainer.getChildren()) {
             NewPlayerHBox playerBox = (NewPlayerHBox) n;
             String playerName = playerBox.getPlayerName().getCharacters().toString();
