@@ -28,7 +28,9 @@ public class AI extends Player {
 	protected Difficulty difficulty;
 	protected LinkedHashMap<Position,Float> estimatedGoldCardPosition;
 	protected LinkedHashMap<Operation, Float> operationsWeight;
+
 	protected final long seedAI;
+	private Computer computer;
 	
 
 	public AI(Game game, String name, Difficulty difficulty, long seedAI) {
@@ -58,6 +60,8 @@ public class AI extends Player {
 		else{
 			this.isDwarf.put(this, (float) 1073741824);
 		}
+		
+		this.computer = ComputerFactory.getComputer(this);
 	}
 
 	@Override
@@ -70,7 +74,68 @@ public class AI extends Player {
 			updateTrust((OperationPathCard) o);
 		else System.err.println("Opération non reconnue");
 	}
-
+	
+	protected Operation bestOperationToPlay(){
+		float max = -435365;
+		LinkedList<Operation> bestOperations = new LinkedList<Operation>();
+		Random r = new Random(getGame().getSeed());
+		
+		for(Operation o : this.operationsWeight.keySet()){
+			////System.out.println(o.getClass().getName());
+			if(this.operationsWeight.get(o) > max){
+				max = this.operationsWeight.get(o);
+			}
+		}
+		for(Operation o : this.operationsWeight.keySet()){
+			if(this.operationsWeight.get(o) == max){
+				bestOperations.add(o);
+			}
+		}
+		Operation o = bestOperations.get(r.nextInt(bestOperations.size()));
+		System.out.print("Opération joué par " + this.name + " ==> ");
+		o.displayOperationInformation();
+		if(o.isOperationPathCard() && ((OperationPathCard)o).getReversed()){
+			System.out.print(" !R");
+		}
+		System.out.println(" ==> rôle = " + this.getTeam() + " with weight = "+ operationsWeight.get(o));
+		return o;
+	}
+	
+	@Override
+	public void playCard(){
+		Operation o = selectOperation();
+		//System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
+		this.getGame().playOperation(o);
+		//System.out.println("It now has " + hand.size() + " cards");
+	}
+	
+	protected Operation selectOperation(){
+		resetProbabilitiesToPlayEachOperation();
+		this.computer.compute();
+		removeOperationWithNullTarget();
+		return bestOperationToPlay();
+	}
+	
+	
+/* Tests. No side effects */
+	
+	public boolean isAI(){
+		return true;
+	}
+	
+	protected boolean canPlayThere(Position position) {
+		for(Card card : this.hand){
+			if(card.isPathCard()){
+				if(this.getGame().getBoard().isPossible((PathCard) card, position) 
+						|| this.getGame().getBoard().isPossible(((PathCard) card).reversed(), position)) return true;
+			}
+		}
+		return false;
+	}
+	
+	
+/* Getters Setters Modifiers */
+	
 	// Plan & Collapse card
 	public void updateTrust(OperationActionCardToBoard o){
 		if(o.getCard().isPlanCard()){
@@ -214,6 +279,18 @@ public class AI extends Player {
 		changeEstimatedGoldCardPosition(getGame().getBoard().getPosition(card), card.hasGold());
 	}
 	
+	protected Player mostLikelyADwarf(){
+		float maxTrust=-1073741824;
+		Player mostTrustfulPlayer = null;
+		for(Player p : this.isDwarf.keySet()){
+			if(this.isDwarf.get(p) > maxTrust && p != this){
+				maxTrust = this.isDwarf.get(p);
+				mostTrustfulPlayer = p;
+			}
+		}
+		return mostTrustfulPlayer;
+	}
+	
 	protected void resetProbabilitiesToPlayEachOperation(){
 		this.operationsWeight.clear();
 		for(Card c : getHand()){
@@ -249,18 +326,6 @@ public class AI extends Player {
 		}
 	}
 	
-	protected Player mostLikelyADwarf(){
-		float maxTrust=-1073741824;
-		Player mostTrustfulPlayer = null;
-		for(Player p : this.isDwarf.keySet()){
-			if(this.isDwarf.get(p) > maxTrust && p != this){
-				maxTrust = this.isDwarf.get(p);
-				mostTrustfulPlayer = p;
-			}
-		}
-		return mostTrustfulPlayer;
-	}
-	
 	protected Player mostLikelyASaboteur(){
 		float leastTrust=1073741824;
 		Player leastTrustfulPlayer = null;
@@ -273,10 +338,37 @@ public class AI extends Player {
 		return leastTrustfulPlayer;
 	}
 	
+	public void noGoldThere(Position p) {
+		this.estimatedGoldCardPosition.put(p, 0f);
+	}
+
+	protected Map<Player,Float> getIsDwarf(){
+		return this.isDwarf;
+	}
+	
+	//If parameter is true, it'll add the AI who calls the method anyway
+	public LinkedList<Player> getAllMostLikelySaboteurPlayersHardAI(boolean withAI) {
+		int maxAmountOfSaboteur = game.maximumAmountOfSaboteur();
+		int maxTrust = Computer.MINIMUM_TRUST_SABOTEUR_HARD;
+		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
+		
+		do{
+			likelyDwarf.clear();
+			for(Player p : this.isDwarf.keySet()){
+				if(this.isDwarf.get(p) <= maxTrust || (withAI && p == this)){
+					likelyDwarf.add(p);
+				}
+			}
+			maxTrust = maxTrust - 5;
+		}while(likelyDwarf.size() >= maxAmountOfSaboteur);
+		
+		return likelyDwarf;
+	}
+	
 	//If parameter is true, it'll add the AI who calls the method anyway
 	public LinkedList<Player> getAllMostLikelyDwarfPlayersHardAI(boolean withAI) {
 		int minAmountOfDwarf = game.minimumAmountOfDwarf();
-		int minTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
+		int minTrust = Computer.MINIMUM_TRUST_DWARF_HARD;
 		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
 		
 		do{
@@ -292,121 +384,18 @@ public class AI extends Player {
 		return likelyDwarf;
 	}
 	
-	//If parameter is true, it'll add the AI who calls the method anyway
-	public LinkedList<Player> getAllMostLikelySaboteurPlayersHardAI(boolean withAI) {
-		int maxAmountOfSaboteur = game.maximumAmountOfSaboteur();
-		int maxTrust = Coefficients.MINIMUM_TRUST_DWARF_HARD;
-		LinkedList<Player> likelyDwarf = new LinkedList<Player>();
-		
-		do{
-			likelyDwarf.clear();
-			for(Player p : this.isDwarf.keySet()){
-				if(this.isDwarf.get(p) <= maxTrust || (withAI && p == this)){
-					likelyDwarf.add(p);
-				}
-			}
-			maxTrust = maxTrust - 5;
-		}while(likelyDwarf.size() >= maxAmountOfSaboteur);
-		
-		return likelyDwarf;
-	}
-
-	public boolean isAI(){
-		return true;
-	}
 	
-	protected Operation bestOperationToPlay(){
-		float max = -435365;
-		LinkedList<Operation> bestOperations = new LinkedList<Operation>();
-		Random r = new Random(this.seedAI);
-		
-		for(Operation o : this.operationsWeight.keySet()){
-			////System.out.println(o.getClass().getName());
-			if(this.operationsWeight.get(o) > max){
-				max = this.operationsWeight.get(o);
-			}
+/* Printing */
+	public String handToString(){
+		String hand = "";
+		for(Card c: this.hand){
+			hand += c;
 		}
-		for(Operation o : this.operationsWeight.keySet()){
-			if(this.operationsWeight.get(o) == max){
-				bestOperations.add(o);
-			}
-		}
-		Operation o = bestOperations.get(r.nextInt(bestOperations.size()));
-		System.out.print("Opération joué par " + this.name + " ==> ");
-		o.displayOperationInformation();
-		if(o.isOperationPathCard() && ((OperationPathCard)o).getReversed()){
-			System.out.print(" !R");
-		}
-		System.out.println(" ==> rôle = " + this.getTeam() + " with weight = "+ operationsWeight.get(o));
-		return o;
-	}
-	
-	@Override
-	public void playCard(){
-		Operation o = selectOperation();
-		//System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
-		this.getGame().playOperation(o);
-		//System.out.println("It now has " + hand.size() + " cards");
-	}
-	
-	protected Operation selectOperation(){
-		resetProbabilitiesToPlayEachOperation();
-		Position p = getEstimatedGoldCardPosition();
-		System.out.println("goldCard selon moi : x=" + p.getcX()+ " y=" + p.getcY());
-		switch(this.team){
-		case DWARF:
-			switch(this.getDifficulty()){
-			case EASY:
-				//DwarfAI.computeOperationWeightEasyAI(this);
-				DwarfAI.computeOperationWeightHardAI(this);
-				break;
-			case MEDIUM:
-				DwarfAI.computeOperationWeightMediumAI(this);
-				break;
-			case HARD:
-				DwarfAI.computeOperationWeightHardAI(this);
-				break;
-			}
-			break;
-		case SABOTEUR:
-			switch(this.getDifficulty()){
-			case EASY:
-				SaboteurAI.computeOperationWeightEasyAI(this);
-				break;
-			case MEDIUM:
-				SaboteurAI.computeOperationWeightMediumAI(this);
-				break;
-			case HARD:
-				SaboteurAI.computeOperationWeightHardAI(this);
-				break;
-			}
-		}
-		removeOperationWithNullTarget();
-		return bestOperationToPlay();
+		return hand;	
 	}
 
-	public void noGoldThere(Position p) {
-		this.estimatedGoldCardPosition.put(p, 0f);
-	}
-
-	protected Map<Player,Float> getIsDwarf(){
-		return this.isDwarf;
-	}
-
-	protected boolean canPlayThere(Position position) {
-		for(Card card : this.hand){
-			if(card.isPathCard()){
-				if(this.getGame().getBoard().isPossible((PathCard) card, position) 
-						|| this.getGame().getBoard().isPossible(((PathCard) card).reversed(), position)) return true;
-			}
-		}
-		return false;
-	}
 	
 	public void printHand(){
-		for(Card c : this.hand){
-			System.out.println(c);
-		}
+			System.out.println(this.handToString());
 	}
-	
 }

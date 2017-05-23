@@ -17,33 +17,28 @@ public class Resources {
     private final static String ImageCardFolder = "/resources/cards/";
     private final static String musicFolder = "/resources/music/";
 
-    private Path pathImageCardFolder;
-    private Path pathPictoFolder;
-
     private static int j = 0;
     private static int k = 0;
     public static  double volume=0.5;
 
-    private LinkedHashMap<String, Image> imageCard;
+    private static LinkedHashMap<String, Image> imageCard;
 
-    private LinkedHashMap<String, Image> picto;
+    private static LinkedHashMap<String, Image> picto;
 
     private static ArrayList<MediaPlayer> music;
 
-    public Resources() {
-        this.imageCard = new LinkedHashMap<>();
-        this.picto = new LinkedHashMap<>();
-        try {
-            this.pathImageCardFolder = Paths.get(App.class.getResource(ImageCardFolder).toURI());
-            this.pathPictoFolder = Paths.get(App.class.getResource(pictoFolder).toURI());
-        } catch (Exception e) {
-
+    public static LinkedHashMap<String, Image> getImage(){
+        if (imageCard == null){
+            imageCard = new LinkedHashMap<>();
+            loadImage();
         }
+        return imageCard;
     }
 
-    public void loadImage() {
+    private static void loadImage() {
         try {
-            Files.walk(this.pathImageCardFolder)
+            Path pathImageCardFolder = Paths.get(App.class.getResource(ImageCardFolder).toURI());
+            Files.walk(pathImageCardFolder)
                     .filter(Files::isRegularFile)
                     .forEach(path -> imageCard.put(path.getFileName().toString(), new Image(ImageCardFolder + path.getFileName().toString())));
         } catch (Exception e) {
@@ -51,18 +46,23 @@ public class Resources {
         }
     }
 
-    public void loadPicto() {
+    public static LinkedHashMap<String, Image> getPicto(){
+        if (picto == null){
+            picto = new LinkedHashMap<>();
+            loadPicto();
+        }
+        return picto;
+    }
+
+    private static void loadPicto() {
         try {
-            Files.walk(this.pathPictoFolder)
+            Path pathPictoFolder = Paths.get(App.class.getResource(pictoFolder).toURI());
+            Files.walk(pathPictoFolder)
                     .filter(Files::isRegularFile)
                     .forEach(path -> picto.put(path.getFileName().toString(), new Image(pictoFolder + path.getFileName().toString())));
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public LinkedHashMap<String, Image> getImageCard() {
-        return imageCard;
     }
 
     public static MediaPlayer loadMusic() {
@@ -93,8 +93,6 @@ public class Resources {
                 }
 
                 return music.get(0);
-                // mp.setVolume(0.5);
-                //mp.setCycleCount(MediaPlayer.INDEFINITE);
             } catch (Exception e) {
                 e.printStackTrace();
             }
