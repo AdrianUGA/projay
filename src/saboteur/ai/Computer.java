@@ -14,6 +14,9 @@ public abstract class Computer {
 	protected AI artificialIntelligence;
 	
 	public void compute() {
+		if(this.artificialIntelligence == null)
+			System.err.println("artificialIntelligence wasn’t set in this computer");
+		
 		Map<Operation, Float> cloneOperationsWeight = new LinkedHashMap<Operation,Float>(artificialIntelligence.operationsWeight);
 		for(Operation o : cloneOperationsWeight.keySet()){
 			this.computeOperation(o);

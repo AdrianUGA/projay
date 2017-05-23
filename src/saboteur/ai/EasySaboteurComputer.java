@@ -2,8 +2,9 @@ package saboteur.ai;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
+import java.util.LinkedHashSet;
 
+import saboteur.model.Game;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
 import saboteur.model.OperationActionCardToPlayer;
@@ -31,18 +32,17 @@ public class EasySaboteurComputer extends Computer {
 	public static int COLLAPSE = 5;
 	public static int DISTANCE_LEFT = 2;
 	
+	/* Collapse random card */
 	@Override
 	public void operationCollapseCard(Operation o) {
-		//TODO to be changed (Saboteur are bad guys, right ?)
-		List<Position> allCulDeSac = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
-		if(allCulDeSac.size() == 0){
+		List<Position> allCardsToDestroy = artificialIntelligence.getGame().getBoard().getAllCulDeSac();
+		if(allCardsToDestroy.size() == 0){ /* Trash */
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 		}
 		else{
-			//TODO change
-			Random r = new Random(artificialIntelligence.getGame().getSeed());
-			Position randomPos = allCulDeSac.get(r.nextInt(allCulDeSac.size()));
-			((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(randomPos));
+			Game game = this.artificialIntelligence.getGame();
+			Position randomPos = allCardsToDestroy.get(new Random(game.getSeed()).nextInt(allCardsToDestroy.size()));
+			((OperationActionCardToBoard) o).setDestinationCard(game.getBoard().getCard(randomPos));
 			((OperationActionCardToBoard) o).setPositionDestination(randomPos);
 			artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) COLLAPSE);
 		}
@@ -50,15 +50,14 @@ public class EasySaboteurComputer extends Computer {
 
 	@Override
 	public void operationPathCard(Operation o) {
-		if(artificialIntelligence.getHandicaps().size() != 0){
-			// Trash
+		if(artificialIntelligence.getHandicaps().size() != 0){ /* Trash */
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 		}
 		else if(!((PathCard) o.getCard()).isCulDeSac()){
 
 			Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 			List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-			Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+			LinkedHashSet<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 
 			int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 			for(OperationPathCard currentOp : allOperationsForThisCard){
@@ -82,7 +81,7 @@ public class EasySaboteurComputer extends Computer {
 
 			Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 			List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
-			Set<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
+			LinkedHashSet<OperationPathCard> allOperationsForThisCard = artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 
 			int distanceMin = allClosestPosition.get(0).getTaxiDistance(goldCardPosition);
 			for(OperationPathCard currentOp : allOperationsForThisCard){

@@ -22,6 +22,11 @@ public class Game {
 
 	private LinkedList<GoldCard> goldCardStack;
 	private LinkedList<Operation> history;
+	private LinkedList<Operation> historyRedo;
+
+	public LinkedList<Operation> getHistoryRedo() {
+		return historyRedo;
+	}
 
 	private LinkedList<Card> stack;
 	private LinkedList<Card> trash;
@@ -54,6 +59,51 @@ public class Game {
 			dealGold();
 			this.roundFinished = true;
 		}
+		this.historyRedo = new LinkedList<>();
+	}
+	
+	public void undo(){
+		Operation toUndo = null;
+		
+		if (!this.history.isEmpty()){
+			toUndo = this.history.removeLast();
+			if (toUndo.isOperationPick()){
+				toUndo.execReverse(this);
+				this.historyRedo.add(toUndo);
+				toUndo = null;
+			}
+		}
+		if (toUndo == null){
+			if (!this.history.isEmpty()){
+				toUndo = this.history.removeLast();
+				this.historyRedo.add(toUndo);
+				toUndo.execReverse(this);
+			} else {
+				System.out.println("It's not possible to have any Operation after an OperationPick");
+			}
+		}
+	}
+	
+	public void redo(){
+		Operation toRedo = null;
+		
+		if (!this.historyRedo.isEmpty()){
+			toRedo = this.historyRedo.removeLast();
+			toRedo.exec(this);
+			this.history.add(toRedo);
+			toRedo = null;
+		}
+		if (!this.historyRedo.isEmpty()){
+			if (this.historyRedo.getLast().isOperationPick()){
+				toRedo = this.historyRedo.removeLast();
+				this.history.add(toRedo);
+				toRedo.exec(this);
+			}
+		}
+	}
+	
+	public boolean historyRedoIsEmpty(){
+		return this.historyRedo.isEmpty();
 	}
 
 	public void newGame(){
@@ -64,6 +114,7 @@ public class Game {
 		Collections.shuffle(this.goldCardStack, new Random(Game.seed));
 
 		this.history = new LinkedList<>();
+		this.historyRedo = new LinkedList<>();
 
 		this.currentPlayerIndex = this.playerList.size()-1;
 		this.newRound();
@@ -163,8 +214,10 @@ public class Game {
 		//Name and type
 		if (stringPlayer[Loader.indexPlayerType].equals("Human")){
 			toAdd = new Human(this, stringPlayer[Loader.indexPlayerName]);
-		} else {
+		} else if (stringPlayer[Loader.indexPlayerType].equals("Easy")){
 			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName], Difficulty.EASY, new Random(seed).nextLong()); // TODO
+		} else {
+			toAdd = new AI(this, stringPlayer[Loader.indexPlayerName], Difficulty.HARD, new Random(seed).nextLong()); // TODO
 		}
 		
 		//Hand
@@ -305,6 +358,7 @@ public class Game {
 	        this.turn = (int) objectInputStream.readObject();
 	        this.goldCardStack = (LinkedList<GoldCard>) objectInputStream.readObject();
             this.history = (LinkedList<Operation>) objectInputStream.readObject();
+            this.historyRedo = new LinkedList<>();
             this.stack = (LinkedList<Card>) objectInputStream.readObject();
             this.trash = (LinkedList<Card>) objectInputStream.readObject();
             this.playerList = (LinkedList<Player>) objectInputStream.readObject();
