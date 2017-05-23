@@ -98,7 +98,6 @@ public class PlayerSelectedPlanCardState extends State{
         	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
         	cardContainer.setOnMouseClicked(null);
         	cardContainer.generateHandCardImage(); 
-        	this.gsm.push("playerEndOfTurn");
     	}
     	else {
     		this.gameBoard.toBack();
@@ -121,7 +120,7 @@ public class PlayerSelectedPlanCardState extends State{
         		}
         		i++;
         	}
-        	this.gsm.pop();
+        	this.gsm.changePeek("playerEndOfTurn");
     	}
     }
 }

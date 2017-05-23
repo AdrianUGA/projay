@@ -1,4 +1,4 @@
-.root{
+.root-layout{
     -fx-background-image:  url(mine.jpg);
     -fx-background-size: cover;
 }

@@ -121,7 +121,6 @@ public class PlayerSelectedActionCardToPlayerState extends State{
         	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
         	cardContainer.setOnMouseClicked(null);
         	cardContainer.generateHandCardImage(); 
-        	this.gsm.push("playerEndOfTurn");
     	}
         
     }
@@ -165,7 +164,7 @@ public class PlayerSelectedActionCardToPlayerState extends State{
             	
     	}
     	this.playerSelected = true;
-    	this.gsm.pop();
+    	this.gsm.changePeek("playerEndOfTurn");
     }
     
     private Tool intToTool(int intOfTool) {

@@ -20,6 +20,7 @@ import javafx.util.Duration;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.tools.Resources;
 
 public class MainMenuState extends State {
 
@@ -114,12 +115,11 @@ public class MainMenuState extends State {
     
     @FXML
     private void quitGameButtonAction(){
-        Stage stg = (Stage) this.quitGameButton.getScene().getWindow();
         Stage stage = new Stage();
         stage.initStyle(StageStyle.TRANSPARENT);
 
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(stg);
+        stage.initOwner(primaryStage);
         stage.setTitle("modal");
 
        //add a modal box from builder (exit game confirmation)
@@ -128,16 +128,18 @@ public class MainMenuState extends State {
             loader.setLocation(App.class.getResource("/saboteur/view/modalQuitGame.fxml"));
             loader.setController(this);
             Pane modalPane = loader.load();
-            Scene scene = new Scene(modalPane,400, 400, Color.TRANSPARENT);
+            Scene scene = new Scene(modalPane, 500, 300, Color.TRANSPARENT);
+
+            scene.getStylesheets().add(Resources.getStylesheet());
             stage.setScene(scene);
+
+            stage.setX(primaryStage.getWidth()/2);
+            stage.setY(primaryStage.getHeight()/2);
+
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        stage.setX(stg.getWidth()-1150);
-        stage.setY(stg.getHeight()-800);
-
-        stage.show();
     }
 
     @FXML
