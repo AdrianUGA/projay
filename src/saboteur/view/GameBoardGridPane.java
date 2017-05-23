@@ -1,7 +1,6 @@
 package saboteur.view;
 
 import java.util.LinkedHashMap;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -43,6 +42,22 @@ public class GameBoardGridPane extends GridPane {
 		this.board.removeCard(position);
 		this.generateBoard();
 	}
+	
+	public ImageView getImageOfPosition(Position position) {
+		return (ImageView) this.getChildren().get(this.getIndexOfGridPane(position));
+	}
+	
+//	public List<ImageView> getCollapsPossibleImages(){
+//		List<ImageView> list = new LinkedList<ImageView>();
+//		
+//		for(int x = this.xmin; x < this.xmax; x++) {
+//			for(int y = this.ymin; y < ymax; y++) {
+//				this.getChildren()
+//			}
+//		}
+//		
+//		return list;
+//	}
 	
     private void generateBoard() {
         double cardWidth = 108/3;

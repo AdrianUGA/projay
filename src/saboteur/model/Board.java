@@ -63,6 +63,9 @@ public class Board implements Serializable {
 					this.pathCardsPosition.put(p, this.getCard(position));
 					System.out.println("POSITION VOISIN = (" + p.getcX() + "," + p.getcY() + ")");
 					System.out.println("CARTE OBJECTIF A RETOURNER");
+					if(this.getCard(p).hasGold()){
+						System.out.println("Terminé nains ont gagné");
+					}
 				}
 			}
 		}
@@ -370,7 +373,7 @@ public class Board implements Serializable {
 	}
 
 	public Map<Position, PathCard> getPathCardsPosition() {
-		return pathCardsPosition;
+		return this.pathCardsPosition;
 	}
 	
 	public ArrayList<Position> getAllPlacablePositionFromStart(){
@@ -486,6 +489,16 @@ public class Board implements Serializable {
 		}
 		
 		return -1;
+	}
+	
+	public LinkedList<Position> getAccessibleEmptyNeighbors(Position p){
+		LinkedList<Position> result = new LinkedList<Position>();
+		for(Cardinal c : Cardinal.values()){
+			if(p.getNeighbor(c) != null && this.getCard(p.getNeighbor(c)) == null && this.getCard(p).isOpen(c)){
+				result.add(p.getNeighbor(c));
+			}
+		}
+		return result;
 	}
 
 }

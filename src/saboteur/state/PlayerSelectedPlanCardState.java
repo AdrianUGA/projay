@@ -101,10 +101,9 @@ public class PlayerSelectedPlanCardState extends State{
         	this.gsm.push("playerEndOfTurn");
     	}
     	else {
-    		 this.gameBoard.toBack();
-    	     this.goalCardContainer.setVisible(false);
+    		this.gameBoard.toBack();
+    		this.goalCardContainer.setVisible(false);
     	}
-    	
     }
     
     private void selectGoalCard(MouseEvent event) {

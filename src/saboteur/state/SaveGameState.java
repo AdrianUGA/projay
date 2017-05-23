@@ -69,7 +69,8 @@ public class SaveGameState extends State {
 
             Loader loaderSaves = new Loader();
             for (String savedFile : loaderSaves.loadSavedFile()) {
-                listFile.getItems().add(savedFile);
+            	String name[] = savedFile.split(".save");
+                listFile.getItems().add(name[0]);
             }
 
         } catch (IOException e) {

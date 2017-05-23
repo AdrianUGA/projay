@@ -129,6 +129,7 @@ public class Game {
 	//init common to both methods (loadConfig() and newRound())
 	private void initRound() {
 		this.playerWinnerAlreadyAnnounced = false;
+		this.teamWinnerAlreadyAnnounced = false;
 		this.roundFinished = false;
 		this.round++;
 		this.turn = 1;
@@ -159,7 +160,6 @@ public class Game {
 	private Player createPlayerFromConfig(String chaine) {
 		Player toAdd;
 		String stringPlayer[] = chaine.split(" ");
-		
 		//Name and type
 		if (stringPlayer[Loader.indexPlayerType].equals("Human")){
 			toAdd = new Human(this, stringPlayer[Loader.indexPlayerName]);
@@ -309,6 +309,10 @@ public class Game {
             this.playerWinnerAlreadyAnnounced = (boolean) objectInputStream.readObject();
             this.roundFinished = (boolean) objectInputStream.readObject();
             this.observers = (LinkedList<Player>) objectInputStream.readObject();
+            
+            for (Player p : this.getPlayerList()){
+            	p.setGame(this);
+            }
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
