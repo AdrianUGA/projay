@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import saboteur.GameStateMachine;
 import saboteur.model.Board;
 import saboteur.model.Game;
+import saboteur.model.OperationPathCard;
 import saboteur.model.Position;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
@@ -94,6 +96,22 @@ public class PlayerSelectedPathCardState extends State{
 		}
 		else {
 			PathCard card  = (PathCard) this.selectedCard;
+			Set<OperationPathCard> possibleOperationPathCardList = this.game.getBoard().getPossibleOperationPathCard(this.game.getCurrentPlayer(), card);
+			for(OperationPathCard operation : possibleOperationPathCardList) {
+				Position posiCard = operation.getP();
+			}
+//				
+//				
+//				if(operation.getReversed()) {
+//					PathCard posiCard = ((PathCard) operation.getCard()).reversed();
+//				}
+//				else{
+//					PathCard posiCard = (PathCard) operation.getCard();
+//				}
+				
+				
+				
+//			PathCard card  = (PathCard) this.selectedCard;
 			this.possiblePositionList = this.game.getBoard().getPossiblePositionPathCard(card);
 			for(Position posiCard : this.possiblePositionList) {
 				SVGPath svg = new SVGPath();
@@ -140,14 +158,19 @@ public class PlayerSelectedPathCardState extends State{
     	if(event.getTarget() instanceof ImageView || event.getTarget() instanceof SVGPath) {
     		
     		Position position = this.positionOfImages.get(event.getTarget());
-    		if(this.selectedCard.isCollapseCard()) {
-    			this.gameBoardGridPane.removeCardOfBoard(position);
+    		if(position != null){
+    			if(this.selectedCard.isCollapseCard()) {
+    				this.game.getCurrentPlayer().playCard();
+    				this.gameBoardGridPane.removeCardOfBoard(position);
+        			
+        		}
+        		else {
+        			this.game.getCurrentPlayer().playCard(position);
+            		this.gameBoardGridPane.addCardToBoard((PathCard)this.selectedCard, position);
+        		}
+    			this.positionSelected = true;
+        		this.gsm.pop();
     		}
-    		else {
-        		this.gameBoardGridPane.addCardToBoard((PathCard)this.selectedCard, position);
-    		}
-    		this.positionSelected = true;
-    		this.gsm.pop();
     	}
     }
     

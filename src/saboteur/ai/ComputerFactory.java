@@ -1,6 +1,5 @@
 package saboteur.ai;
 
-
 import saboteur.model.Team;
 
 public class ComputerFactory {
@@ -8,8 +7,8 @@ public class ComputerFactory {
 	public static Computer getComputer(AI artificialIntelligence){
 		// TODO to remove
 		if(artificialIntelligence.getTeam() == Team.DWARF)
-			return getComputer(Difficulty.EASY, Team.DWARF);
-		return getComputer(Difficulty.HARD, Team.SABOTEUR);
+			return getComputer(Difficulty.HARD, Team.DWARF).setArtificialIntelligence(artificialIntelligence);
+		return getComputer(Difficulty.EASY, Team.SABOTEUR).setArtificialIntelligence(artificialIntelligence);
 		//
 		
 		/*

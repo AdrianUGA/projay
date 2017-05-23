@@ -41,12 +41,12 @@ public abstract class Player implements Serializable {
 	public void playCard(PathCard destinationCard){
 		this.game.playOperation(new OperationActionCardToBoard(this, this.selectedCard, destinationCard));
 	}
-	public void playCard(Position position){	
+	public void playCard(Position position){
 		OperationPathCard o = new OperationPathCard(this, this.selectedCard, position);
 		if(!this.game.getBoard().isPossible((PathCard)this.selectedCard, position)){
 			o.setReversed(true);
 		}
-		this.game.playOperation(new OperationPathCard(this, this.selectedCard, position));
+		this.game.playOperation(o);
 	}
 	
 	public void playCard(){		

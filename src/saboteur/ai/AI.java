@@ -91,6 +91,11 @@ public class AI extends Player {
 				bestOperations.add(o);
 			}
 		}
+		
+		if(bestOperations.size() == 0){
+			System.out.println("This threw illegalArgument exeption in nextInt : " 
+				+ bestOperations.size());
+		}
 		Operation o = bestOperations.get(r.nextInt(bestOperations.size()));
 		System.out.print("Opération joué par " + this.name + " ==> ");
 		o.displayOperationInformation();
