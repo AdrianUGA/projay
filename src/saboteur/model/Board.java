@@ -120,6 +120,10 @@ public class Board implements Serializable {
 	private boolean canPutAPathCardThere(Position pos) {
 		int amountOfComingNeighbor = 0;
 		int amountOfAvailableNeighbor = 0;
+		if(this.getCard(pos) != null){
+			return false;
+		}
+		
 		for(Cardinal cardinal : Cardinal.values()){
 			if(getCard(pos.getNeighbor(cardinal)) == null){
 				amountOfAvailableNeighbor ++;

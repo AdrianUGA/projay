@@ -15,6 +15,7 @@ import saboteur.model.Card.SabotageCard;
 
 public class HardSaboteurComputer extends Computer {
 	
+	private static final int DISTANCE_LEFT_BEFORE_PLACE_CULDESAC = 5;
 	private static final float TRASH_COLLAPSE_CARD = -20;
 	private static final float COLLAPSE_AND_CREATE_HOLE = 90;
 	private static final float DISTANCE_TO_GOAL_FOR_COLLAPSE = 4;
@@ -48,13 +49,12 @@ public class HardSaboteurComputer extends Computer {
 				int newMin2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 				board.temporarAddCard(new OperationPathCard(artificialIntelligence, operation.getDestinationCard(), p));
 				
-				if(min1 == min2){ // No hole atm
+				if(min1 == min2){ /* No hole atm */
 					if(newMin1 != newMin2){
 						atLeastOne = true;
 						this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p));
 					}
-				}
-				else{ // Already an hole
+				}else{ /* Already an hole */
 					if(newMin2 > min2){
 						atLeastOne = true;
 						this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE + board.numberOfNeighbors(p));
@@ -70,8 +70,11 @@ public class HardSaboteurComputer extends Computer {
 
 	@Override
 	void operationPathCard(Operation o) {
-		// TODO Auto-generated method stub
-
+		if(this.artificialIntelligence.getGame().getBoard().minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition()) < DISTANCE_LEFT_BEFORE_PLACE_CULDESAC){
+			
+		}else{
+			
+		}
 	}
 
 	@Override
