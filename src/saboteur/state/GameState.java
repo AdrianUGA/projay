@@ -65,6 +65,7 @@ public class GameState extends State{
                     e.printStackTrace();
                 }*/
                     this.gameBoardGridPane.generateBoard();
+                    this.playersArc.refreshPlayersArcsAndCircles();
                     this.gsm.push("playerEndOfTurn");
                     //game.nextPlayer();
                 }
@@ -165,7 +166,7 @@ public class GameState extends State{
             this.gameBoardGridPane.setId("gameBoardGridPane");
             this.boardContainer.getChildren().add(this.gameBoardGridPane);
             
-            this.playersArc = new PlayerArc(gameTableHalfSize, gameTableHalfSize, this.game.getPlayerList());
+            this.playersArc = new PlayerArc(this.game, gameTableHalfSize, gameTableHalfSize);
             this.playersArc.setId("playersArc");
             this.boardContainer.getChildren().add(this.playersArc);
 

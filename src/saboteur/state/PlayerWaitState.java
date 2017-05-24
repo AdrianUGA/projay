@@ -12,10 +12,12 @@ import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.model.Card.Card;
 import saboteur.view.GameCardContainer;
+import saboteur.view.PlayerArc;
 
 public class PlayerWaitState extends State{
 	
 	private GameCardContainer cardContainer;
+	private PlayerArc playersArc;
 	
 	private ImageView imgSelectedCard = new ImageView();
 	private Card selectedCard = null;
@@ -42,8 +44,11 @@ public class PlayerWaitState extends State{
     public void onEnter(Object param) {
     	System.out.println("waitState");
     	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
+    	this.playersArc= (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
     	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
+    	
+    	this.playersArc.refreshPlayersArcsAndCircles();
     	
     	this.endOfTurnButton.setDisable(true);
     	this.trashButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -53,6 +58,7 @@ public class PlayerWaitState extends State{
 			    	gsm.changePeek("playerWait");
 			    	trashButton.setDisable(true);
 			    	
+			    	System.out.println(game.stackIsEmpty());
 			    	game.getCurrentPlayer().pickCard();
 			    	GameCardContainer cardContainer = (GameCardContainer)primaryStage.getScene().lookup("#cardContainer");
 			    	cardContainer.setOnMouseClicked(null);

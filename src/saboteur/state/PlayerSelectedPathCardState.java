@@ -93,11 +93,11 @@ public class PlayerSelectedPathCardState extends State{
 			//If the map content more than the 1st path card (entry)
 			if(pathCardsPosition.size() > 1) {
 				pathCardsPosition.remove(Board.getStart());
-				for(Position p : this.game.getBoard().getGoalCards()) {
-					System.out.println(p);
-					System.out.println(this.game.getBoard().getCard(p).isGoal());
-					pathCardsPosition.remove(p);
-				}
+//				for(Position p : this.game.getBoard().getGoalCards()) {
+//					System.out.println(p);
+//					System.out.println(this.game.getBoard().getCard(p));
+//					pathCardsPosition.remove(p);
+//				}
 				System.out.println(pathCardsPosition);
 				for(Position posiCard : pathCardsPosition.keySet()) {
 					SVGPath svg = new SVGPath();
@@ -197,7 +197,7 @@ public class PlayerSelectedPathCardState extends State{
 			this.boardEffect.add(this.rotateSVG);
 		}
     	
-    	if(this.game.getBoard().isPossible((PathCard)this.selectedCard, position) && this.game.getBoard().isPossible(((PathCard)this.selectedCard).reversed(), position)){
+    	if(this.game.getBoard().isPossible((PathCard)this.selectedCard, position) && this.game.getBoard().isPossible(((PathCard)this.selectedCard).reversed(), position) ){
     		
     		//Manage rotation SVG    		
 			this.gameBoardGridPane.add(this.rotateSVG, position.getcX(), position.getcY());
