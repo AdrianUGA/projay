@@ -132,8 +132,8 @@ public class Game {
 		this.historyRedo = new LinkedList<>();
 
 		this.currentPlayerIndex = this.playerList.size()-1;
-		this.newRound();
-		//this.loadConfig("editeur");
+		//this.newRound();
+		this.loadConfig("editeur");
 	}
 
 	public void loadConfig(String name){
@@ -147,6 +147,7 @@ public class Game {
 			
 			this.playerList.clear();
 			this.observers.clear();
+			
 			//To each player
 			while (!(chaine = reader.readLine()).equals("###")){
 				this.playerList.add(createPlayerFromConfig(chaine));
@@ -155,6 +156,14 @@ public class Game {
 			//To each card to play on board
 			while (!(chaine = reader.readLine()).equals("###")){
 				addCardToBoardFromConfig(chaine);
+			}
+			
+			//To nb cards in stack
+			if (!( (chaine = reader.readLine()).equals("X") || chaine.equals("x"))){
+				int nb = Integer.parseInt(chaine);
+				while (this.stack.size() > nb){
+					this.trash.add(this.stack.removeFirst());
+				}
 			}
 			
 		} catch (FileNotFoundException e) {
@@ -197,7 +206,9 @@ public class Game {
 	private void beginInitRound() {
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getCopyOtherCards();
+		
 		Collections.shuffle(this.stack, new Random(Game.seed));
+		
 		/*
 		for(Card c : this.stack){
 			c.displayCardType();
@@ -264,9 +275,10 @@ public class Game {
 	}
 	
 	private Card getCard(String id){
+		int idToSearch = Integer.parseInt(id);
 		Card firstCard = null;
 		for (Card card : this.stack){
-			if (card.getId() == Integer.parseInt(id)){
+			if (card.getId() == idToSearch){
 				firstCard = card;
 				break;
 			}
