@@ -36,12 +36,20 @@ public class OperationPathCard extends Operation {
 		PathCard toFlip;
 		for (Position p : this.goalCardsToFlip){
 			toFlip = game.getBoard().getCard(p);
+			
 			if (toFlip.isGoal()){
-				game.notifyAINoGoldThere(p);
-				
 				if (!toFlip.hasGold() && !game.getBoard().isPossible(toFlip, p)) toFlip.reverse();
 				
 				toFlip.setVisible(true);
+				
+				game.getBoard().getPathCardsPosition().put(p, toFlip);
+				//System.out.println("POSITION VOISIN = (" + p.getcX() + "," + p.getcY() + ")");
+				System.out.println("CARTE OBJECTIF A RETOURNER");
+				if(toFlip.hasGold()){
+					System.out.println("Terminé nains ont gagné");
+				} else {
+					game.notifyAINoGoldThere(p);
+				}
 			}
 		}
 		

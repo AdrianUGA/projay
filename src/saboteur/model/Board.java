@@ -57,19 +57,7 @@ public class Board implements Serializable {
 		/* Adding the goal cards when reached */
 		this.board[position.getcY()][position.getcX()] = card;
 		
-		for(Position p : this.getNeighbors(position)){
-			if (this.getCard(p) != null && this.getCard(p).isGoal()){
-				ArrayList<Position> goalCardsToFlip = getGoalCardsToFlip();
-				if(goalCardsToFlip.contains(p)){
-					this.pathCardsPosition.put(p, this.getCard(position));
-					System.out.println("POSITION VOISIN = (" + p.getcX() + "," + p.getcY() + ")");
-					System.out.println("CARTE OBJECTIF A RETOURNER");
-					if(this.getCard(p).hasGold()){
-						System.out.println("Terminé nains ont gagné");
-					}
-				}
-			}
-		}
+		//TODO WARNING
 	}
 	
 	//Used by AI to test what happens if it put a card somewhere
