@@ -132,8 +132,8 @@ public class Game {
 		this.historyRedo = new LinkedList<>();
 
 		this.currentPlayerIndex = this.playerList.size()-1;
-		this.newRound();
-		//this.loadConfig("editeur");
+		//this.newRound();
+		this.loadConfig("editeur");
 	}
 
 	public void loadConfig(String name){

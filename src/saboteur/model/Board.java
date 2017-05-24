@@ -36,9 +36,9 @@ public class Board implements Serializable {
 		
 		Collections.shuffle(goalPathCard, new Random(Game.seed));
 		
+		this.addCard(startPathCard.get(0), getStart());
 		for(int i=0; i<3; i++)
 			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);
-		this.addCard(startPathCard.get(0), getStart());
 		for(Position p : objectiveCards){
 			if(this.getCard(p).hasGold()){
 				System.out.println("Gold x:" + p.getcX() + " y:" + p.getcY());
@@ -57,7 +57,21 @@ public class Board implements Serializable {
 		/* Adding the goal cards when reached */
 		this.board[position.getcY()][position.getcX()] = card;
 		
-		//TODO WARNING
+		PathCard toFlip;
+		for (Position p : getGoalCardsToFlip()){
+			toFlip = getCard(p);
+			
+			if (toFlip.isGoal()){
+				if (!toFlip.hasGold() && !isPossible(toFlip, p)) toFlip.reverse();
+				
+				getPathCardsPosition().put(p, toFlip);
+				//System.out.println("POSITION VOISIN = (" + p.getcX() + "," + p.getcY() + ")");
+				System.out.println("CARTE OBJECTIF A RETOURNER");
+				if(toFlip.hasGold()){
+					System.out.println("Terminé nains ont gagné");
+				}
+			}
+		}
 	}
 	
 	//Used by AI to test what happens if it put a card somewhere
