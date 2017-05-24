@@ -92,7 +92,6 @@ public class Board implements Serializable {
 		else{
 			this.pathCardsPosition.remove(position);
 		}
-		System.out.println("Position removed = "+position);
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
@@ -270,7 +269,6 @@ public class Board implements Serializable {
 	/* Returns every free positions for a PathCard*/
 	public List<Position> getPossiblePositionPathCard(PathCard card){
 		List<Position> possiblePlaces = new LinkedList<Position>();
-		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
 				
