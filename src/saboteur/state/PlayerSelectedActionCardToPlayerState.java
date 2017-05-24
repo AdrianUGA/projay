@@ -135,14 +135,16 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     		}
         	else {
         		Circle circle = (Circle) event.getTarget();
-        		
-        		this.playersArc.refreshCircles(circle, this.toolValue1, false);
             	
             	for(Player p : this.game.getPlayers(this.card)) {
-            		if( this.playersArc.getCircles(p)[this.toolValue1] == circle )
+            		if( this.playersArc.getCircles(p)[this.toolValue1] == circle ){
             			this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue1));
-            		if( this.toolValue2 != -1 && this.playersArc.getCircles(p)[this.toolValue2] == circle )
+                		this.playersArc.refreshCircles(circle, this.toolValue1, false);
+            		}
+            		if( this.toolValue2 != -1 && this.playersArc.getCircles(p)[this.toolValue2] == circle ) {
             			this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue2));
+                		this.playersArc.refreshCircles(circle, this.toolValue2, false);
+            		}
     			}
         	}
     	}
