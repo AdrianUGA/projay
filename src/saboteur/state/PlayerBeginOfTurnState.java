@@ -13,15 +13,14 @@ import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.tools.Resources;
-import saboteur.view.GameCardContainer;
 
 import java.io.IOException;
 
-public class PlayerEndOfTurnState extends State{
+public class PlayerBeginOfTurnState extends State{
 
     private Stage modalStage;
 
-	public PlayerEndOfTurnState(GameStateMachine gsm, Game game, Stage primaryStage){
+	public PlayerBeginOfTurnState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
     }
 
@@ -46,12 +45,13 @@ public class PlayerEndOfTurnState extends State{
 
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(App.class.getResource("/saboteur/view/modalEndOfTurn.fxml"));
+            loader.setLocation(App.class.getResource("/saboteur/view/modalBeginOfTurn.fxml"));
             loader.setController(this);
             Pane modalPane = loader.load();
             Scene scene = new Scene(modalPane, 500, 300, Color.TRANSPARENT);
 
             Text text = (Text)modalPane.lookup("#text");
+            if ()
             text.setText(this.game.getCurrentPlayer().getName() + " a fini de jouer. c'est au tour de " + this.game.getNextPlayer().getName() + " de jouer");
 
             scene.getStylesheets().add(Resources.getStylesheet());

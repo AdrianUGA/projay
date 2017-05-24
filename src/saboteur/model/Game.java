@@ -467,6 +467,22 @@ public class Game {
 		}
 		return winners;
 	}
+
+	public LinkedList<Player> getRanking(){
+		LinkedList<Player> ranking = new LinkedList<>();
+		for (Player player: playerList){
+			if (ranking.isEmpty()){
+				ranking.addFirst(player);
+			} else{
+				int i = 0;
+				while(player.getGold() < ranking.get(i).getGold()){
+					i++;
+				}
+				ranking.add(i, player);
+			}
+		}
+		return ranking;
+	}
 	
 	public LinkedList<Player> getPlayers(ActionCardToPlayer card){
 		LinkedList<Player> result = new LinkedList<>();

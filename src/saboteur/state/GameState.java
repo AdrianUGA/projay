@@ -42,35 +42,24 @@ public class GameState extends State{
 
     @Override
     public void update() {
-        if (this.game.gameIsFinished()){
-            //fin de la partie
-            //this.gsm.change("annonce vainqueur");
-        	announceTeamWinner();
-        	announcePlayerWinner();
-        	//System.out.println("Le joueur "+this.game.getWinner().getName()+" a gagné ! (Avec "+this.game.getWinner().getGold()+ " or).");
-            //System.out.println("fin de partie");
-        } else {
-            if (this.game.roundIsFinished()){
-                announceTeamWinner();
-                this.game.newRound();
-            } else{
-                //la manche continue
-                if (this.game.getCurrentPlayer().isAI()){
-                    this.game.getCurrentPlayer().playCard();
-                    this.game.getCurrentPlayer().pickCard();
-                    //System.out.println("AI has played");
-                /*try{
-                    Thread.sleep(3000);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }*/
-                    this.gameBoardGridPane.generateBoard();
-                    this.gsm.push("playerEndOfTurn");
-                }
-                else{
-                    System.out.println("je suis humain");
-                	this.gsm.push("playerWait");
-				}
+        if (this.game.roundIsFinished()){
+            this.gsm.push("roundIsFinished");
+        } else{
+            this.gsm.push("playerBeginOfTurn");
+            //la manche continue
+            if (this.game.getCurrentPlayer().isAI()){
+                this.game.getCurrentPlayer().playCard();
+                this.game.getCurrentPlayer().pickCard();
+                //System.out.println("AI has played");
+            /*try{
+                Thread.sleep(3000);
+            } catch (Exception e){
+                e.printStackTrace();
+            }*/
+                this.gameBoardGridPane.generateBoard();
+            }
+            else{
+                this.gsm.push("playerWait");
             }
         }
     }
