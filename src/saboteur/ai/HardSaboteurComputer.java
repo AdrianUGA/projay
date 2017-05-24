@@ -43,7 +43,6 @@ public class HardSaboteurComputer extends Computer {
 				OperationActionCardToBoard operation = (OperationActionCardToBoard) o;
 				operation.setPositionDestination(p);
 				operation.setDestinationCard(board.getCard(p));
-				board.temporarRemoveCard(p);
 				
 				int newMin1 = board.minFromEmptyReachablePathCardToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 				int newMin2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
@@ -52,7 +51,7 @@ public class HardSaboteurComputer extends Computer {
 				if(min1 == min2 && newMin1 != newMin2){
 					atLeastOne = true;
 					this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p));
-				}else if(newMin2 < min2){
+				}else if(newMin1 < min1){
 					atLeastOne = true;
 					this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE + board.numberOfNeighbors(p));
 				}// TODO COMPLEATE
