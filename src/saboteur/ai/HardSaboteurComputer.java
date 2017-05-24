@@ -43,19 +43,23 @@ public class HardSaboteurComputer extends Computer {
 				OperationActionCardToBoard operation = (OperationActionCardToBoard) o;
 				operation.setPositionDestination(p);
 				operation.setDestinationCard(board.getCard(p));
-				board.temporarRemoveCard(p);
 				
 				int newMin1 = board.minFromEmptyReachablePathCardToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 				int newMin2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 				board.temporarAddCard(new OperationPathCard(artificialIntelligence, operation.getDestinationCard(), p));
 				
-				if(min1 == min2 && newMin1 != newMin2){
-					atLeastOne = true;
-					this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p));
-				}else if(newMin2 < min2){
-					atLeastOne = true;
-					this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE + board.numberOfNeighbors(p));
-				}// TODO COMPLEATE
+				if(min1 == min2){ // No hole atm
+					if(newMin1 != newMin2){
+						atLeastOne = true;
+						this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p));
+					}
+				}
+				else{ // Already an hole
+					if(newMin2 > min2){
+						atLeastOne = true;
+						this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE + board.numberOfNeighbors(p));
+					}
+				}
 				this.artificialIntelligence.operationsWeight.put(o, COLLAPSE + 0f );
 			}
 		}
