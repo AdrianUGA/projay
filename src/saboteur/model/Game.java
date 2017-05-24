@@ -137,7 +137,7 @@ public class Game {
 	}
 
 	public void loadConfig(String name){
-		initRound();
+		beginInitRound();
 		
 		File configFile = new File(Loader.configFolder+ "/" + name + ".config");
 		BufferedReader reader = null;
@@ -190,16 +190,11 @@ public class Game {
 				}
 			}
 		}*/
+		endInitRound();
 	}
 
 	//init common to both methods (loadConfig() and newRound())
-	private void initRound() {
-		this.playerWinnerAlreadyAnnounced = false;
-		this.teamWinnerAlreadyAnnounced = false;
-		this.roundFinished = false;
-		this.round++;
-		this.turn = 1;
-
+	private void beginInitRound() {
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getCopyOtherCards();
 		Collections.shuffle(this.stack, new Random(Game.seed));
@@ -211,6 +206,14 @@ public class Game {
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 	}
 
+	private void endInitRound(){
+		this.round++;
+		this.turn = 1;
+		this.roundFinished = false;
+		this.playerWinnerAlreadyAnnounced = false;
+		this.teamWinnerAlreadyAnnounced = false;
+	}
+	
 	private void addCardToBoardFromConfig(String chaine) {
 		String stringCard[] = chaine.split(" ");
 		PathCard cardToAdd = (PathCard) getCard(stringCard[Loader.indexIdCardToPlay]);
@@ -272,7 +275,7 @@ public class Game {
 	}
 	
 	public void newRound(){
-		initRound();
+		beginInitRound();
 
 		this.setTeam();
 
@@ -282,6 +285,8 @@ public class Game {
 		this.dealCardsToPlayer();
 		
 		this.nextPlayer();
+		
+		endInitRound();
 	}
 
 	public void initAI() {

@@ -15,6 +15,7 @@ import saboteur.model.Card.SabotageCard;
 
 public class HardSaboteurComputer extends Computer {
 	
+	private static final int DISTANCE_LEFT_BEFORE_PLACE_CULDESAC = 5;
 	private static final float TRASH_COLLAPSE_CARD = -20;
 	private static final float COLLAPSE_AND_CREATE_HOLE = 90;
 	private static final float DISTANCE_TO_GOAL_FOR_COLLAPSE = 4;
@@ -43,19 +44,22 @@ public class HardSaboteurComputer extends Computer {
 				OperationActionCardToBoard operation = (OperationActionCardToBoard) o;
 				operation.setPositionDestination(p);
 				operation.setDestinationCard(board.getCard(p));
-				board.temporarRemoveCard(p);
 				
 				int newMin1 = board.minFromEmptyReachablePathCardToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 				int newMin2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 				board.temporarAddCard(new OperationPathCard(artificialIntelligence, operation.getDestinationCard(), p));
 				
-				if(min1 == min2 && newMin1 != newMin2){
-					atLeastOne = true;
-					this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p));
-				}else if(newMin2 < min2){
-					atLeastOne = true;
-					this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE + board.numberOfNeighbors(p));
-				}// TODO COMPLEATE
+				if(min1 == min2){ /* No hole atm */
+					if(newMin1 != newMin2){
+						atLeastOne = true;
+						this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p));
+					}
+				}else{ /* Already an hole */
+					if(newMin2 > min2){
+						atLeastOne = true;
+						this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE + board.numberOfNeighbors(p));
+					}
+				}
 				this.artificialIntelligence.operationsWeight.put(o, COLLAPSE + 0f );
 			}
 		}
@@ -66,8 +70,11 @@ public class HardSaboteurComputer extends Computer {
 
 	@Override
 	void operationPathCard(Operation o) {
-		// TODO Auto-generated method stub
-
+		if(this.artificialIntelligence.getGame().getBoard().minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition()) < DISTANCE_LEFT_BEFORE_PLACE_CULDESAC){
+			
+		}else{
+			
+		}
 	}
 
 	@Override

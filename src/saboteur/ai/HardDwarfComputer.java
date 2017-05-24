@@ -70,13 +70,16 @@ public class HardDwarfComputer extends Computer {
 						}
 					}
 					else if(artificialIntelligence.canPlayThere(currentPosition) && allClosestPosition.get(0).getTaxiDistance(goldCardPosition) < 2){
+						System.out.println("peux jouer " + currentPosition);
 						artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 						((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(currentPosition));
 						((OperationActionCardToBoard) o).setPositionDestination(currentPosition);
 						artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) COLLAPSE_CAN_REPLACE);
 						atLeastOne = true;
 					}
-					artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
+					else{
+						artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
+					}
 				}
 				else{
 					artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
@@ -92,7 +95,7 @@ public class HardDwarfComputer extends Computer {
 
 	@Override
 	void operationPathCard(Operation o) {
-		//System.out.println("PathCard = " + o.getCard() + " " + ((PathCard)o.getCard()).isCulDeSac() + " " + artificialIntelligence.getHandicaps().size());
+		System.out.println("PathCard = " + o.getCard() + " " + ((PathCard)o.getCard()).isCulDeSac() + " " + artificialIntelligence.getHandicaps().size());
 		if(((PathCard) o.getCard()).isCulDeSac()){
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 		}
@@ -145,13 +148,12 @@ public class HardDwarfComputer extends Computer {
 				for(OperationPathCard currentOp : allOperationsForThisCard){
 					
 					board.temporarAddCard(currentOp);
-					//int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
 					
 					for(Position pNeighbor : board.getAccessibleEmptyNeighbors(currentOp.getP())){
 						int currentMin = board.aStarOnEmptyCard(pNeighbor, estimatedGoldCardPosition);
 						if(currentMin != -1 && currentMin -2 < minimumFromAnywhere){
 							float currentFloat = (PATHCARD* ((PathCard)currentOp.getCard()).openSidesAmount() + ((minimumFromAnywhere+1 - currentMin) * 20));
-							if(artificialIntelligence.operationsWeight.get(currentOp) != null && artificialIntelligence.operationsWeight.get(currentOp) < currentFloat){
+							if((artificialIntelligence.operationsWeight.get(currentOp) != null && artificialIntelligence.operationsWeight.get(currentOp) < currentFloat) || artificialIntelligence.operationsWeight.get(currentOp) == null){
 								artificialIntelligence.operationsWeight.put(currentOp, currentFloat);
 								atLeastOneOperation = true;
 							}
