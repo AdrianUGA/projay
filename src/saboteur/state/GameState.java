@@ -169,6 +169,7 @@ public class GameState extends State{
             this.playersArc = new PlayerArc(this.game, gameTableHalfSize, gameTableHalfSize);
             this.playersArc.setId("playersArc");
             this.boardContainer.getChildren().add(this.playersArc);
+            this.playersArc.refreshPlayersArcsAndCircles(); //TODO : à vérifier
 
             //Create the circle of the game board
             this.gameBoard.setCenterX(gameTableHalfSize);
