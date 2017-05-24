@@ -94,6 +94,7 @@ public class HardDwarfComputer extends Computer {
 	void operationPathCard(Operation o) {
 		//System.out.println("PathCard = " + o.getCard() + " " + ((PathCard)o.getCard()).isCulDeSac() + " " + artificialIntelligence.getHandicaps().size());
 		if(((PathCard) o.getCard()).isCulDeSac()){
+			System.out.println("CDS");
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
 		}
 		else if(!(artificialIntelligence.getHandicaps().size() == 0)){
