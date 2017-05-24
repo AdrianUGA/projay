@@ -82,7 +82,4 @@ public abstract class Card implements Cloneable, Serializable{
 	public String toString() {
 		return "["+this.getClassName()+"]";
 	}
-    
-    
-    
 }

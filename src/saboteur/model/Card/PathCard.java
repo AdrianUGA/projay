@@ -117,4 +117,30 @@ public class PathCard extends Card {
 	public List<Cardinal> getOpenSides() {
 		return openSides;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PathCard other = (PathCard) obj;
+		if (hasGold != other.hasGold)
+			return false;
+		if (isCulDeSac != other.isCulDeSac)
+			return false;
+		if (isGoal != other.isGoal)
+			return false;
+
+		if (isStart != other.isStart)
+			return false;
+		if (openSides == null) {
+			if (other.openSides != null)
+				return false;
+		} else if (!openSides.equals(other.openSides))
+			return false;
+		return true;
+	}
 }
