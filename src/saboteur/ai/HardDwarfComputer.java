@@ -50,7 +50,6 @@ public class HardDwarfComputer extends Computer {
 			   && !artificialIntelligence.getGame().getBoard().getPathCardsPosition().get(currentPosition).isGoal()){
 				
 				PathCard removedCard = artificialIntelligence.getGame().getBoard().temporarRemoveCard(currentPosition);
-				System.out.println(artificialIntelligence.getGame().getBoard().getPosition(removedCard));
 				
 				allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
 				if(allClosestPosition.get(0).getTaxiDistance(goldCardPosition) < minimumDistanceBeforeCollapsing){

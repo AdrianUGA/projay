@@ -118,8 +118,7 @@ public class PathCard extends Card {
 		return openSides;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
+	public boolean isSimilar(PathCard obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -142,5 +141,10 @@ public class PathCard extends Card {
 		} else if (!openSides.equals(other.openSides))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public boolean equals(Object o){
+		return this == o;
 	}
 }
