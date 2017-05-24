@@ -32,7 +32,7 @@ public class OperationPathCard extends Operation {
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		game.getBoard().addCard((PathCard)this.getCard(), p);
 		
-		this.goalCardsToFlip = game.getBoard().getGoalCardsToFlip((PathCard)this.getCard(), p);
+		this.goalCardsToFlip = game.getBoard().getGoalCardsToFlip();
 		PathCard toFlip;
 		for (Position p : this.goalCardsToFlip){
 			toFlip = game.getBoard().getCard(p);
