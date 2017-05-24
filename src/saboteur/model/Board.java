@@ -59,7 +59,7 @@ public class Board implements Serializable {
 		
 		for(Position p : this.getNeighbors(position)){
 			if (this.getCard(p) != null && this.getCard(p).isGoal()){
-				ArrayList<Position> goalCardsToFlip = getGoalCardsToFlip(card, position);
+				ArrayList<Position> goalCardsToFlip = getGoalCardsToFlip();
 				if(goalCardsToFlip.contains(p)){
 					this.pathCardsPosition.put(p, this.getCard(position));
 					System.out.println("POSITION VOISIN = (" + p.getcX() + "," + p.getcY() + ")");
@@ -311,40 +311,37 @@ public class Board implements Serializable {
 		return ret;
 	}
 	
-	public ArrayList<Position> getGoalCardsToFlip(PathCard card, Position p){
+	public ArrayList<Position> getGoalCardsToFlip(){
 		PathCard neighbor;
 		Position posNeighbor;
 		ArrayList<Position> result = new ArrayList<>();
 		
-		ArrayList<Position> positionsToExplore = new ArrayList<>();
+		LinkedList<Position> positionsToExplore = new LinkedList<>();
 		
 		PathCard currentCard;
 		Position currentPosition;
 		
-		//ArrayList<Integer> positionsAlreadyExplored = new ArrayList<>();
-		ArrayList<Position> positionsAlreadyExplored = new ArrayList<>();
+		LinkedList<Position> positionsAlreadyExplored = new LinkedList<>();
+		System.out.println("Taille already : " + positionsAlreadyExplored.size());
 		
 		currentPosition = getStart();
 		positionsToExplore.add(currentPosition);
-		//positionsAlreadyExplored.add(getIndice(currentPosition));
 		positionsAlreadyExplored.add(currentPosition);
 		
 		while (!positionsToExplore.isEmpty()){
-			currentPosition = positionsToExplore.remove(positionsToExplore.size()-1);
+			currentPosition = positionsToExplore.removeFirst();
 			currentCard = this.getCard(currentPosition);
-			positionsAlreadyExplored.add(currentPosition);
 			if(!currentCard.isCulDeSac()){
+				System.out.println("CardCardCard : " + currentCard.getId());
 				for(Cardinal cardinal : Cardinal.values()){
-					posNeighbor = p.getNeighbor(cardinal);
+					posNeighbor = currentPosition.getNeighbor(cardinal);
 					neighbor = this.getCard(posNeighbor);
-					if (neighbor != null && currentCard.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())){
-						//if (!positionsAlreadyExplored.contains(getIndice(posNeighbor))){
+					if (neighbor != null && currentCard.isOpen(cardinal) && (neighbor.isOpen(cardinal.opposite()) || !neighbor.isVisible() )){
 						if (!positionsAlreadyExplored.contains(posNeighbor)){
-							//positionsAlreadyExplored.add(getIndice(posNeighbor));
-							//positionsAlreadyExplored.add(posNeighbor);
+							positionsAlreadyExplored.add(posNeighbor);
 							positionsToExplore.add(posNeighbor);
 							if (neighbor.isGoal() && !neighbor.isVisible()){
-								System.out.println("fin :" + posNeighbor);
+								System.out.println("fin1 :" + posNeighbor);
 								result.add(posNeighbor);
 							}
 						}
