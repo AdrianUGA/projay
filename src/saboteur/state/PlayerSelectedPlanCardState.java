@@ -18,6 +18,7 @@ import saboteur.model.Game;
 import saboteur.model.Position;
 import saboteur.model.Card.Card;
 import saboteur.tools.Icon;
+import saboteur.tools.Resources;
 import saboteur.view.GameCardContainer;
 
 public class PlayerSelectedPlanCardState extends State{
@@ -51,6 +52,7 @@ public class PlayerSelectedPlanCardState extends State{
         
         this.selectedCard = (Card) param;
         this.goalCardContainer = (VBox) this.primaryStage.getScene().lookup("#goalCardContainer");
+    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
         this.goalCardSelect = false;
         this.gameBoard = (Circle)this.primaryStage.getScene().lookup("#gameBoard");
         
@@ -102,15 +104,15 @@ public class PlayerSelectedPlanCardState extends State{
     
     private void selectGoalCard(MouseEvent event) {
     	if(event.getTarget() instanceof ImageView || event.getTarget() instanceof SVGPath) {
-    		int i = 0;
+    		int i = 2;
         	for (Node n : this.goalCardContainer.getChildren()) {
         		StackPane p = (StackPane) n;
         		
         		//Turn selected card
         		if(event.getSource() == p) {
         			ImageView img = (ImageView) p.getChildren().get(0);
-        			Position posi = this.game.getBoard().getGoalCards().get(i);
-        			img.setImage( new Image("resources/cards/" + this.game.getBoard().getCard(posi).getFrontImage()) );
+        			Position posi = this.game.getBoard().getGoalCards().get(i%3);
+        			img.setImage( Resources.getImage().get(this.game.getBoard().getCard(posi).getFrontImage()) );
                 	this.beforEnd();
         			this.goalCardSelect = true;
                 	break;
@@ -121,6 +123,9 @@ public class PlayerSelectedPlanCardState extends State{
     }
     
     private void beforEnd() {
+    	Button trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
+    	trashButton.setDisable(true);
+    	
     	for(int i = 0; i < 3; i++){
     		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
     		this.paneOfGoalCard[i].setOnMouseClicked(null);
@@ -134,7 +139,7 @@ public class PlayerSelectedPlanCardState extends State{
     	cardContainer.setOnMouseClicked(null);
     	cardContainer.generateHandCardImage(); 
     	
-    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
+    	this.endOfTurnButton.setDisable(false);
     	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
     	    @Override public void handle(ActionEvent e) {
     	        endOfTurn();

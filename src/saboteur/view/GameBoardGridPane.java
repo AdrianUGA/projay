@@ -78,6 +78,7 @@ public class GameBoardGridPane extends GridPane {
         this.ymax++; 
         
         this.imagesOfGridPane = new ImageView[Board.getGridSize()][Board.getGridSize()];
+        this.getChildren().clear();
         
     	for(int i = this.xmin; i <= this.xmax; i++) {
     		for (int j = this.ymin; j <= this.ymax; j++) {

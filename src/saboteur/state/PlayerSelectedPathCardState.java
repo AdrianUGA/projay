@@ -93,7 +93,12 @@ public class PlayerSelectedPathCardState extends State{
 			//If the map content more than the 1st path card (entry)
 			if(pathCardsPosition.size() > 1) {
 				pathCardsPosition.remove(Board.getStart());
-				
+				for(Position p : this.game.getBoard().getGoalCards()) {
+					System.out.println(p);
+					System.out.println(this.game.getBoard().getCard(p).isGoal());
+					pathCardsPosition.remove(p);
+				}
+				System.out.println(pathCardsPosition);
 				for(Position posiCard : pathCardsPosition.keySet()) {
 					SVGPath svg = new SVGPath();
 					svg.setFill(Color.RED);
@@ -157,6 +162,7 @@ public class PlayerSelectedPathCardState extends State{
     				this.gameBoardGridPane.removeCardOfBoard(position);
         			this.beforEnd();
         			this.positionSelected = true;
+        			this.endOfTurnButton.setDisable(false);
         			this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
         	    	    @Override public void handle(ActionEvent e) {
         	    	        endOfTurn();
@@ -182,16 +188,7 @@ public class PlayerSelectedPathCardState extends State{
     		}
     	}
     }
-    
-    
-    
-    
-//    if(getBoard().isPossible(card.reversed(), position)){
-    	//removecard(position)
-    	//addcard(position,card.reversed)
-//    }
-    
-    
+        
     private void selectRotationOfCard(Position position) {
     	if(this.pathCardOnTheBoard) { 
 			this.gameBoardGridPane.getChildren().remove(this.rotateSVG);
@@ -213,6 +210,8 @@ public class PlayerSelectedPathCardState extends State{
 				}
 			});
 		}    
+    	
+    	this.endOfTurnButton.setDisable(false);
     	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
     	    @Override public void handle(ActionEvent e) {
     	    	PathCard card = (PathCard)selectedCard;
@@ -228,6 +227,9 @@ public class PlayerSelectedPathCardState extends State{
     
 
 	private void beforEnd() {
+		Button trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
+    	trashButton.setDisable(true);
+    	
     	for(Object obj : this.boardEffect) {
 			this.gameBoardGridPane.getChildren().remove(obj);
 		}

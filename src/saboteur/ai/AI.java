@@ -390,6 +390,10 @@ public class AI extends Player {
 		return likelyDwarf;
 	}
 	
+	public Map<Operation, Float> getOperationWeight() {
+		return this.operationsWeight;
+	}
+	
 	
 /* Printing */
 	public String handToString(){
@@ -404,4 +408,6 @@ public class AI extends Player {
 	public void printHand(){
 			System.out.println(this.handToString());
 	}
+
+
 }

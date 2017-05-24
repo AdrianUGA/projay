@@ -65,8 +65,8 @@ public class GameState extends State{
                     e.printStackTrace();
                 }*/
                     this.gameBoardGridPane.generateBoard();
-                    //this.gsm.push("playerEndOfTurn");
-                    game.nextPlayer();
+                    this.gsm.push("playerEndOfTurn");
+                    //game.nextPlayer();
                 }
                 else{
                     System.out.println("je suis humain");
@@ -179,24 +179,4 @@ public class GameState extends State{
             e.printStackTrace();
         }
     }
-    
-    //End of turn of the current player.
-    @FXML
-    private void endOfTurnButtonAction(){
-    	System.out.println("end of turn");
-    }
-    @FXML
-    private void takeCardOfStackButtonAction(){
-    	System.out.println("pioche");
-    }
-    @FXML
-    private void trashCardButtonAction(){
-    	System.out.println("jetter");
-    }
-    
-    @FXML
-    private void optionsButtonAction(){
-        this.gsm.push("pauseMenu");
-    }
-
 }

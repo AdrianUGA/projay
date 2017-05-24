@@ -1,7 +1,9 @@
 package saboteur.state;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -17,6 +19,9 @@ public class PlayerWaitState extends State{
 	
 	private ImageView imgSelectedCard = new ImageView();
 	private Card selectedCard = null;
+
+	private Button trashButton;
+	private Button endOfTurnButton;
 	
 	
     public PlayerWaitState(GameStateMachine gsm, Game game, Stage primaryStage){
@@ -37,6 +42,31 @@ public class PlayerWaitState extends State{
     public void onEnter(Object param) {
     	System.out.println("waitState");
     	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
+    	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
+    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
+    	
+    	this.endOfTurnButton.setDisable(true);
+    	this.trashButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+				@Override
+				public void handle(MouseEvent event) {
+					game.getCurrentPlayer().playCard();
+			    	gsm.changePeek("playerWait");
+			    	trashButton.setDisable(true);
+			    	
+			    	game.getCurrentPlayer().pickCard();
+			    	GameCardContainer cardContainer = (GameCardContainer)primaryStage.getScene().lookup("#cardContainer");
+			    	cardContainer.setOnMouseClicked(null);
+			    	cardContainer.generateHandCardImage(); 
+			    	
+			    	endOfTurnButton.setDisable(false);
+			    	endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
+			    	    @Override public void handle(ActionEvent e) {
+			    	    	endOfTurnButton.setOnAction(null);
+			    	    	gsm.changePeek("playerEndOfTurn");
+			    	    }
+			    	});
+				}
+			});
     	    	        
         this.cardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
@@ -60,7 +90,7 @@ public class PlayerWaitState extends State{
     		
         	newCard = (ImageView)event.getTarget();
             
-            if(!newCard.equals(this.imgSelectedCard)) {
+            if(newCard != this.imgSelectedCard) {
         		cancelEffectOfPreviousSelection();
         		
             	//style on the image of the selected card
@@ -78,7 +108,7 @@ public class PlayerWaitState extends State{
 	                	i++;
 	                }
 	            }
-	        	    
+	        	
 	        	if(this.selectedCard.isSabotageCard() || this.selectedCard.isRescueCard() || this.selectedCard.isDoubleRescueCard()) {	        		
                 	this.gsm.changePeek("playerSelectedAction", this.selectedCard);
 	    		}
@@ -90,6 +120,11 @@ public class PlayerWaitState extends State{
 	    		}
             }
         }
+    	
+    	if(this.imgSelectedCard != null) {
+    		this.trashButton.setDisable(false);
+    	}
+    	
     }
     
     private void cancelEffectOfPreviousSelection() {
