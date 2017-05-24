@@ -56,6 +56,7 @@ public class Board implements Serializable {
 		
 		/* Adding the goal cards when reached */
 		this.board[position.getcY()][position.getcX()] = card;
+		
 		for(Position p : this.getNeighbors(position)){
 			if (this.getCard(p) != null && this.getCard(p).isGoal()){
 				ArrayList<Position> goalCardsToFlip = getGoalCardsToFlip(card, position);
@@ -92,7 +93,6 @@ public class Board implements Serializable {
 		else{
 			this.pathCardsPosition.remove(position);
 		}
-		System.out.println("Position removed = "+position);
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
@@ -121,6 +121,10 @@ public class Board implements Serializable {
 	private boolean canPutAPathCardThere(Position pos) {
 		int amountOfComingNeighbor = 0;
 		int amountOfAvailableNeighbor = 0;
+		if(this.getCard(pos) != null){
+			return false;
+		}
+		
 		for(Cardinal cardinal : Cardinal.values()){
 			if(getCard(pos.getNeighbor(cardinal)) == null){
 				amountOfAvailableNeighbor ++;
@@ -270,7 +274,6 @@ public class Board implements Serializable {
 	/* Returns every free positions for a PathCard*/
 	public List<Position> getPossiblePositionPathCard(PathCard card){
 		List<Position> possiblePlaces = new LinkedList<Position>();
-		
 		for(PathCard pathCard : this.pathCardsPosition.values()){
 			for(Position neighbor : this.getAllNeighbors(this.getPosition(pathCard))){
 				
@@ -318,29 +321,37 @@ public class Board implements Serializable {
 		PathCard currentCard;
 		Position currentPosition;
 		
-		ArrayList<Integer> positionsAlreadyExplored = new ArrayList<>();
+		//ArrayList<Integer> positionsAlreadyExplored = new ArrayList<>();
+		ArrayList<Position> positionsAlreadyExplored = new ArrayList<>();
 		
 		currentPosition = getStart();
 		positionsToExplore.add(currentPosition);
-		positionsAlreadyExplored.add(getIndice(currentPosition));
+		//positionsAlreadyExplored.add(getIndice(currentPosition));
+		positionsAlreadyExplored.add(currentPosition);
 		
 		while (!positionsToExplore.isEmpty()){
 			currentPosition = positionsToExplore.remove(positionsToExplore.size()-1);
 			currentCard = this.getCard(currentPosition);
-			for(Cardinal cardinal : Cardinal.values()){
-				posNeighbor = p.getNeighbor(cardinal);
-				neighbor = this.getCard(posNeighbor);
-				if (neighbor != null && currentCard.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())){
-					if (!positionsAlreadyExplored.contains(getIndice(posNeighbor))){
-						positionsAlreadyExplored.add(getIndice(posNeighbor));
-						positionsToExplore.add(posNeighbor);
-						if (neighbor.isGoal() && !neighbor.isVisible()){
-							result.add(currentPosition);
+			positionsAlreadyExplored.add(currentPosition);
+			if(!currentCard.isCulDeSac()){
+				for(Cardinal cardinal : Cardinal.values()){
+					posNeighbor = p.getNeighbor(cardinal);
+					neighbor = this.getCard(posNeighbor);
+					if (neighbor != null && currentCard.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())){
+						//if (!positionsAlreadyExplored.contains(getIndice(posNeighbor))){
+						if (!positionsAlreadyExplored.contains(posNeighbor)){
+							//positionsAlreadyExplored.add(getIndice(posNeighbor));
+							//positionsAlreadyExplored.add(posNeighbor);
+							positionsToExplore.add(posNeighbor);
+							if (neighbor.isGoal() && !neighbor.isVisible()){
+								System.out.println("fin :" + posNeighbor);
+								result.add(posNeighbor);
+							}
 						}
 					}
 				}
 			}
-		}
+		}/*
 		for(Cardinal cardinal : Cardinal.values()){
 			if (card.isOpen(cardinal)){
 				posNeighbor = p.getNeighbor(cardinal);
@@ -349,7 +360,7 @@ public class Board implements Serializable {
 					result.add(posNeighbor);
 				}
 			}
-		}
+		}*/
 		
 		return result;
 	}
@@ -457,7 +468,7 @@ public class Board implements Serializable {
 		int min = 8192;
 		Position posToReturn = null;
 		for(Position p : list){
-			if(p.getTaxiDistance(destination) < min){
+			if(p.heuristic(destination) < min){
 				min = p.getTaxiDistance(destination);
 				posToReturn = p;
 			}
@@ -503,5 +514,4 @@ public class Board implements Serializable {
 		}
 		return result;
 	}
-
 }

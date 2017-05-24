@@ -70,6 +70,10 @@ public class Position implements Serializable {
 	public int getTaxiDistance(Position p) {
 		return Math.abs(this.getcY() - p.getcY()) + Math.abs(this.getcX() - p.getcX());
 	}
+	
+	public int heuristic(Position p) {
+		return Math.abs(this.getcY() - p.getcY()) + Math.abs(this.getcX() - p.getcX());
+	}
 
 	@Override
 	public String toString() {

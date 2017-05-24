@@ -27,8 +27,8 @@ public class HardDwarfComputer extends Computer {
 	public static int DOUBLERESCUE = 19;
 	public static int PLAN = 150;
 	public static int COLLAPSE_CAN_REPLACE = 40;
-	public static int COLLAPSE_CDS = 25;
-	public static int PATHCARD = 40;
+	public static int COLLAPSE_CDS = 45;
+	public static int PATHCARD = 10;
 	public static float PATHCARD_OPENSIDES = 0.5f;
 	public static int PATHCARD_FIXHOLE = 80;
 	
@@ -70,13 +70,16 @@ public class HardDwarfComputer extends Computer {
 						}
 					}
 					else if(artificialIntelligence.canPlayThere(currentPosition) && allClosestPosition.get(0).getTaxiDistance(goldCardPosition) < 2){
+						System.out.println("peux jouer " + currentPosition);
 						artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 						((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(currentPosition));
 						((OperationActionCardToBoard) o).setPositionDestination(currentPosition);
 						artificialIntelligence.operationsWeight.put((OperationActionCardToBoard) o, (float) COLLAPSE_CAN_REPLACE);
 						atLeastOne = true;
 					}
-					artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
+					else{
+						artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
+					}
 				}
 				else{
 					artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
@@ -85,7 +88,7 @@ public class HardDwarfComputer extends Computer {
 			}
 		}
 		if(!atLeastOne){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -25f);
 		}
 
 	}
@@ -120,17 +123,20 @@ public class HardDwarfComputer extends Computer {
 					//Trying to improve min2
 					LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 					for(OperationPathCard currentOp : allOperationsForThisCard){
+						
 						board.temporarAddCard(currentOp);
-						int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
-						if(currentMin < minimumFromAnywhere){
-							artificialIntelligence.operationsWeight.put(currentOp, 
-									(float) PATHCARD/  (((PathCard)currentOp.getCard()).openSidesAmount() * PATHCARD_OPENSIDES));
-							atLeastOneOperation = true;
+						//int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+						
+						for(Position pNeighbor : board.getAccessibleEmptyNeighbors(currentOp.getP())){
+							int currentMin = board.aStarOnEmptyCard(pNeighbor, estimatedGoldCardPosition);
+							if(currentMin != -1 && currentMin -2 < minimumFromAnywhere){
+								float currentFloat = (PATHCARD* ((PathCard)currentOp.getCard()).openSidesAmount() + ((minimumFromAnywhere+1 - currentMin) * 20));
+								if(artificialIntelligence.operationsWeight.get(currentOp) != null && artificialIntelligence.operationsWeight.get(currentOp) < currentFloat){
+									artificialIntelligence.operationsWeight.put(currentOp, currentFloat);
+									atLeastOneOperation = true;
+								}
+							}
 						}
-						else if(currentMin-1 < minimumFromAnywhere){ //Allow the AI to play if it can't directly improve the path
-							//TODO (probleme = tout le temps vrai car le chemin minimum reste le meme)
-						}
-					
 						board.temporarRemoveCard(currentOp.getP());
 					}
 				}
@@ -142,14 +148,15 @@ public class HardDwarfComputer extends Computer {
 				for(OperationPathCard currentOp : allOperationsForThisCard){
 					
 					board.temporarAddCard(currentOp);
-					//int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
 					
 					for(Position pNeighbor : board.getAccessibleEmptyNeighbors(currentOp.getP())){
 						int currentMin = board.aStarOnEmptyCard(pNeighbor, estimatedGoldCardPosition);
 						if(currentMin != -1 && currentMin -2 < minimumFromAnywhere){
-							artificialIntelligence.operationsWeight.put(currentOp, 
-									(float) PATHCARD/ (((PathCard)currentOp.getCard()).openSidesAmount() * PATHCARD_OPENSIDES) + ((minimumFromAnywhere+1 - currentMin) * 20));
-							atLeastOneOperation = true;
+							float currentFloat = (PATHCARD* ((PathCard)currentOp.getCard()).openSidesAmount() + ((minimumFromAnywhere+1 - currentMin) * 20));
+							if((artificialIntelligence.operationsWeight.get(currentOp) != null && artificialIntelligence.operationsWeight.get(currentOp) < currentFloat) || artificialIntelligence.operationsWeight.get(currentOp) == null){
+								artificialIntelligence.operationsWeight.put(currentOp, currentFloat);
+								atLeastOneOperation = true;
+							}
 						}
 					}
 					board.temporarRemoveCard(currentOp.getP());
@@ -210,7 +217,7 @@ public class HardDwarfComputer extends Computer {
 					artificialIntelligence.operationsWeight.put(o, (float) (Maths.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * EasyDwarfComputer.SABOTAGE) * ((3-p.getHandicaps().size())/3));
 				}
 			}
-			if(!atLeastOne){
+			if(!atLeastOne){ /* Trash */
 				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -10);
 			}
 		}

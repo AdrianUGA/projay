@@ -62,44 +62,59 @@ public class Game {
 		this.historyRedo = new LinkedList<>();
 	}
 	
-	public void undo(){
+	public LinkedList<Operation> undo(){
+		LinkedList<Operation> listUndo = new LinkedList<>();
 		Operation toUndo = null;
 		
 		if (!this.history.isEmpty()){
 			toUndo = this.history.removeLast();
 			if (toUndo.isOperationPick()){
 				toUndo.execReverse(this);
+				listUndo.add(toUndo);
 				this.historyRedo.add(toUndo);
+				System.out.println("Operation pick undo");
 				toUndo = null;
 			}
 		}
 		if (toUndo == null){
 			if (!this.history.isEmpty()){
 				toUndo = this.history.removeLast();
-				this.historyRedo.add(toUndo);
-				toUndo.execReverse(this);
 			} else {
 				System.out.println("It's not possible to have any Operation after an OperationPick");
 			}
 		}
+		toUndo.execReverse(this);
+		listUndo.add(toUndo);
+		this.historyRedo.add(toUndo);
+		if (toUndo.isOperationActionCardToBoard()) System.out.println("Operation board undo");
+		else if (toUndo.isOperationActionCardToPlayer()) System.out.println("Operation player undo");
+		else if (toUndo.isOperationPathCard()) System.out.println("Operation pathCard undo");
+		else if (toUndo.isOperationTrash()) System.out.println("Operation trash undo");
+		
+		return listUndo;
 	}
 	
-	public void redo(){
+	public LinkedList<Operation> redo(){
+		LinkedList<Operation> listRedo = new LinkedList<>();
 		Operation toRedo = null;
 		
 		if (!this.historyRedo.isEmpty()){
 			toRedo = this.historyRedo.removeLast();
 			toRedo.exec(this);
+			listRedo.add(toRedo);
 			this.history.add(toRedo);
 			toRedo = null;
 		}
 		if (!this.historyRedo.isEmpty()){
 			if (this.historyRedo.getLast().isOperationPick()){
 				toRedo = this.historyRedo.removeLast();
-				this.history.add(toRedo);
 				toRedo.exec(this);
+				listRedo.add(toRedo);
+				this.history.add(toRedo);
 			}
 		}
+		
+		return listRedo;
 	}
 	
 	public boolean historyRedoIsEmpty(){
@@ -122,7 +137,7 @@ public class Game {
 	}
 
 	public void loadConfig(String name){
-		initRound();
+		beginInitRound();
 		
 		File configFile = new File(Loader.configFolder+ "/" + name + ".config");
 		BufferedReader reader = null;
@@ -175,16 +190,11 @@ public class Game {
 				}
 			}
 		}*/
+		endInitRound();
 	}
 
 	//init common to both methods (loadConfig() and newRound())
-	private void initRound() {
-		this.playerWinnerAlreadyAnnounced = false;
-		this.teamWinnerAlreadyAnnounced = false;
-		this.roundFinished = false;
-		this.round++;
-		this.turn = 1;
-
+	private void beginInitRound() {
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getCopyOtherCards();
 		Collections.shuffle(this.stack, new Random(Game.seed));
@@ -196,6 +206,14 @@ public class Game {
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 	}
 
+	private void endInitRound(){
+		this.round++;
+		this.turn = 1;
+		this.roundFinished = false;
+		this.playerWinnerAlreadyAnnounced = false;
+		this.teamWinnerAlreadyAnnounced = false;
+	}
+	
 	private void addCardToBoardFromConfig(String chaine) {
 		String stringCard[] = chaine.split(" ");
 		PathCard cardToAdd = (PathCard) getCard(stringCard[Loader.indexIdCardToPlay]);
@@ -257,7 +275,7 @@ public class Game {
 	}
 	
 	public void newRound(){
-		initRound();
+		beginInitRound();
 
 		this.setTeam();
 
@@ -267,6 +285,8 @@ public class Game {
 		this.dealCardsToPlayer();
 		
 		this.nextPlayer();
+		
+		endInitRound();
 	}
 
 	public void initAI() {
@@ -305,6 +325,10 @@ public class Game {
 
 	public void nextPlayer(){
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
+	}
+	
+	public void previousPlayer(){
+		this.currentPlayerIndex = (this.currentPlayerIndex - 1) % this.playerList.size();
 	}
 
 	public Player getNextPlayer(){
