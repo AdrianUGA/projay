@@ -501,5 +501,4 @@ public class Board implements Serializable {
 		}
 		return result;
 	}
-
 }

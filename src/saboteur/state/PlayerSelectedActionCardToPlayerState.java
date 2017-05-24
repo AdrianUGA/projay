@@ -160,6 +160,9 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     }
     
     private void beforEnd() {
+    	Button trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
+    	trashButton.setDisable(true);
+    	
     	//Delete event on click
         for(int i = 0; i < this.game.getPlayerList().size(); i++) {
 	    	this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue1].setOnMouseClicked(null);
@@ -183,6 +186,7 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     	cardContainer.generateHandCardImage(); 
     	
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
+    	this.endOfTurnButton.setDisable(false);
     	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
     	    @Override public void handle(ActionEvent e) {
     	        endOfTurn();
