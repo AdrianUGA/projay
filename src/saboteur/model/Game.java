@@ -284,7 +284,7 @@ public class Game {
 		
 		this.dealCardsToPlayer();
 		
-		this.nextPlayer();
+		//this.nextPlayer();
 		
 		endInitRound();
 	}
@@ -324,6 +324,7 @@ public class Game {
 	}
 
 	public void nextPlayer(){
+		this.turn++;
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
 	}
 	

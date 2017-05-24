@@ -51,8 +51,11 @@ public class PlayerBeginOfTurnState extends State{
             Scene scene = new Scene(modalPane, 500, 300, Color.TRANSPARENT);
 
             Text text = (Text)modalPane.lookup("#text");
-            if ()
-            text.setText(this.game.getCurrentPlayer().getName() + " a fini de jouer. c'est au tour de " + this.game.getNextPlayer().getName() + " de jouer");
+            if (this.game.getTurn() == 1){
+                text.setText("c'est au tour de " + this.game.getNextPlayer().getName() + " de jouer");
+            } else{
+                text.setText(this.game.getCurrentPlayer().getName() + " a fini de jouer. c'est au tour de " + this.game.getNextPlayer().getName() + " de jouer");
+            }
 
             scene.getStylesheets().add(Resources.getStylesheet());
 
@@ -76,6 +79,6 @@ public class PlayerBeginOfTurnState extends State{
 
     @FXML
     private void goButtonAction(){
-	    this.gsm.pop();
+	    this.gsm.changePeek("playerWait");
     }
 }

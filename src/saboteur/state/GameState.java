@@ -46,21 +46,7 @@ public class GameState extends State{
             this.gsm.push("roundIsFinished");
         } else{
             this.gsm.push("playerBeginOfTurn");
-            //la manche continue
-            if (this.game.getCurrentPlayer().isAI()){
-                this.game.getCurrentPlayer().playCard();
-                this.game.getCurrentPlayer().pickCard();
-                //System.out.println("AI has played");
-            /*try{
-                Thread.sleep(3000);
-            } catch (Exception e){
-                e.printStackTrace();
-            }*/
-                this.gameBoardGridPane.generateBoard();
-            }
-            else{
-                this.gsm.push("playerWait");
-            }
+            this.gameBoardGridPane.generateBoard();
         }
     }
 

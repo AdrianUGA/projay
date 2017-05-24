@@ -86,7 +86,9 @@ public class GameIsFinishedState extends State{
 
                 resultRound.getRowConstraints().add(new RowConstraints(50, 50, 50, Priority.NEVER, VPos.CENTER, true));
 
-                this.resultRound.add(new Text(""+(i+1)), 0, i);
+                Text playerRank = new Text(""+(i+1));
+                playerRank.setStyle("-fx-font-size: 1.8em; -fx-fill: white");
+                this.resultRound.add(playerRank, 0, i);
                 this.resultRound.add(player.getPlayerIcon(), 1, i);
                 this.resultRound.add(player.getPlayerName(), 2, i);
                 this.resultRound.add(player.getPlayerGold(), 3, i);

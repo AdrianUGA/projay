@@ -41,6 +41,11 @@ public class PlayerWaitState extends State{
     @Override
     public void onEnter(Object param) {
     	System.out.println("waitState");
+		if (this.game.getCurrentPlayer().isAI()){
+			this.game.getCurrentPlayer().playCard();
+			this.game.getCurrentPlayer().pickCard();
+			this.gsm.pop();
+		}
     	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
     	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
@@ -62,7 +67,7 @@ public class PlayerWaitState extends State{
 			    	endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
 			    	    @Override public void handle(ActionEvent e) {
 			    	    	endOfTurnButton.setOnAction(null);
-			    	    	gsm.changePeek("playerEndOfTurn");
+			    	    	gsm.pop();
 			    	    }
 			    	});
 				}
