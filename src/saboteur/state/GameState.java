@@ -47,40 +47,9 @@ public class GameState extends State{
         } else{
             this.gsm.push("playerBeginOfTurn");
             this.gameBoardGridPane.generateBoard();
+            this.playersArc.refreshPlayersArcsAndCircles();
         }
     }
-
-    //For console mode
-    private void announcePlayerWinner() {
-		if (!this.game.isPlayerWinnerAlreadyAnnounced()){
-			LinkedList<Player> winners =  this.game.getWinners();
-			if (winners.size()>1){
-				System.out.print("Les joueurs ");
-				for (Player p : winners){
-					if (winners.indexOf(p) == winners.size()-2)
-						System.out.print(p.getName() + " et ");
-					else if (winners.indexOf(p) == winners.size()-1)
-						System.out.print(p.getName() + " ");
-					else
-						System.out.print(p.getName() + ", ");
-				}
-				System.out.print("sont gagnants ex aequo ");
-			} else {
-				System.out.print(winners.getFirst().getName() + " a gagné la partie ");
-			}
-			System.out.println("avec " + winners.getFirst().getGold() + " pépites d'or !");
-			this.game.setPlayerWinnerAlreadyAnnounced(true);
-		}
-	}
-
-	//For console mode
-	private void announceTeamWinner() {
-		if (!this.game.isTeamWinnerAlreadyAnnounced()){
-			if(this.game.dwarfsWon()) System.out.println("Les nains ont gagné !");
-			else System.out.println("Les saboteurs ont gagné !");
-			this.game.setTeamWinnerAlreadyAnnounced(true);
-		}
-	}
 
     @Override
     public void render() {
