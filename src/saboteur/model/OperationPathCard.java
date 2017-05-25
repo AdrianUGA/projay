@@ -52,7 +52,7 @@ public class OperationPathCard extends Operation {
 		PathCard toFlip;
 		for (Position p : this.goalCardsToFlip){
 			toFlip = game.getBoard().getCard(p);
-			
+			game.getBoard().getPathCardsPosition().remove(toFlip);
 			if (toFlip.isGoal()){
 				toFlip.setVisible(false);
 			}
