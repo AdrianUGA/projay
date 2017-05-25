@@ -66,11 +66,6 @@ public class PlayerWaitState extends State{
     	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
     	   	
     	//Image and Label of player role
-    	this.playerRoleLabel.setFont(new Font("Arial", 30));
-    	this.playerRoleLabel.setTextFill(Color.WHITE);
-    	this.playerRoleLabel.setTextAlignment(TextAlignment.CENTER);
-    	this.playerRoleImage.setFitHeight(282.0);
-    	this.playerRoleImage.setFitWidth(400.0);
     	
     	if(this.game.getCurrentPlayer().getTeam() == Team.DWARF) {
     		this.playerRoleLabel.setText("Chercheur d'or");
@@ -80,6 +75,8 @@ public class PlayerWaitState extends State{
     		this.playerRoleLabel.setText("Saboteur");
     		this.playerRoleImage.setImage(new Image("/resources/nainsaboteur.png"));
     	}
+    	this.playerRoleImage.setVisible(true);
+    	this.playerRoleLabel.setVisible(true);
     	
     	
     	this.playersArc.refreshPlayersArcsAndCircles();
@@ -115,7 +112,7 @@ public class PlayerWaitState extends State{
 			}
 		});
         
-        this.cardContainer.generateHandCardImage(); 
+        this.cardContainer.showCards(); 
     }
 
     @Override

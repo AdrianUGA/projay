@@ -3,6 +3,8 @@ package saboteur.state;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -13,6 +15,7 @@ import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.tools.Resources;
+import saboteur.view.GameCardContainer;
 
 import java.io.IOException;
 
@@ -36,6 +39,14 @@ public class PlayerBeginOfTurnState extends State{
 
     @Override
     public void onEnter(Object param) {
+    	GameCardContainer cardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#cardContainer");
+    	cardContainer.hideCards();
+
+    	Label playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
+    	ImageView playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
+    	playerRoleLabel.setVisible(false);
+    	playerRoleImage.setVisible(false);
+    	
         this.modalStage = new Stage();
         this.modalStage.initStyle(StageStyle.TRANSPARENT);
 
