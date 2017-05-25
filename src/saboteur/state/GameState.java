@@ -81,6 +81,8 @@ public class GameState extends State{
             Pane pane = this.loader.load();
                        
             GameComponentsSize gameComponentSize = GameComponentsSize.getGameComponentSize();
+            double gameTableSize = gameComponentSize.getGameTableSize();
+            double gameTableHalfSize = gameComponentSize.getGameTableHalfSize();
         	//Image and Label of player role
         	this.playerRoleLabel.setFont(new Font("Arial", 30));
         	this.playerRoleLabel.setTextFill(Color.WHITE);
@@ -89,7 +91,7 @@ public class GameState extends State{
         	this.playerRoleImage.setFitWidth(400.0);
         	
             //Create the goal card for the planCardActcion
-            this.goalCardContainer.setPrefSize(gameComponentSize.getGameTableSize(), gameComponentSize.getGameTableSize());
+            this.goalCardContainer.setPrefSize(gameTableSize, gameTableSize);
             for (int i = 0; i < 3; i++) {
             	ImageView img = new ImageView();
             	img.setFitWidth(gameComponentSize.getCardWidth()/1.5);
@@ -101,20 +103,21 @@ public class GameState extends State{
             }
             
             //For center cards hand Image
-            this.cardContainer = new GameCardContainer(this.game, gameComponentSize.getScreenWidth() - gameComponentSize.getGameTableSize() - 100);
+            this.cardContainer = new GameCardContainer(this.game, gameComponentSize.getScreenWidth() - gameTableSize - 100);
             this.cardContainer.setId("cardContainer");
             this.gameCardContainer.getChildren().add(this.cardContainer);
             
             //The game board
-            double innerRadius = gameComponentSize.getGameTableHalfSize()/2;
+//            double innerRadius = gameTableHalfSize/2;
+            double innerRadius = gameComponentSize.getInnerRadiusOfArc();
 	        double radians = Math.toRadians(135);
-	        double XstartInner = (int)Math.round((Math.cos(radians) * innerRadius + gameComponentSize.getGameTableHalfSize()));
-	        double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + gameComponentSize.getGameTableHalfSize()));
+	        double XstartInner = (int)Math.round((Math.cos(radians) * innerRadius + gameTableHalfSize));
+	        double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + gameTableHalfSize));
             this.gameBoardGridPane = new GameBoardGridPane(this.game, XstartInner, YstartInner);
             this.gameBoardGridPane.setId("gameBoardGridPane");
             this.boardContainer.getChildren().add(this.gameBoardGridPane);
             
-            this.playersArc = new PlayerArc(this.game, gameComponentSize.getGameTableHalfSize(), gameComponentSize.getGameTableHalfSize());
+            this.playersArc = new PlayerArc(this.game);
             this.playersArc.setId("playersArc");
             this.boardContainer.getChildren().add(this.playersArc);
             this.playersArc.refreshPlayersArcsAndCircles();
@@ -124,7 +127,7 @@ public class GameState extends State{
             //Create the circle of the game board
             this.gameBoard.setCenterX(gameComponentSize.getCenterOfGameTable());
             this.gameBoard.setCenterY(gameComponentSize.getCenterOfGameTable());
-            this.gameBoard.setRadius(gameComponentSize.getMiddleCircleRadius());
+            this.gameBoard.setRadius(gameComponentSize.getInnerRadiusOfArc()-10);
 
             this.changeLayout(pane);
         } catch (IOException e){
