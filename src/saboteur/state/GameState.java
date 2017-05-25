@@ -1,7 +1,6 @@
 package saboteur.state;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -17,7 +16,6 @@ import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
-import saboteur.model.Player;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;

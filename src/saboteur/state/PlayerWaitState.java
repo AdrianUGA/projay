@@ -51,18 +51,18 @@ public class PlayerWaitState extends State{
 
     @Override
     public void onEnter(Object param) {
-    	System.out.println("waitState");
+    	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
+    	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
+    	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
+    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
+    	this.playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
+    	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
+
 		if (this.game.getCurrentPlayer().isAI()){
 			this.game.getCurrentPlayer().playCard();
 			this.game.getCurrentPlayer().pickCard();
 			this.gsm.pop();
 		}
-    	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
-    	this.playersArc= (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
-    	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
-    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
-    	this.playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
-    	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
     	   	
     	//Image and Label of player role
     	this.playerRoleLabel.setFont(new Font("Arial", 30));
