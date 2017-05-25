@@ -28,5 +28,8 @@ public class OperationPick extends Operation {
 	public boolean isOperationPick(){
 		return true;
 	}
-	
+
+	public Card getCardPicked(){
+		return this.cardPicked;
+	}
 }
