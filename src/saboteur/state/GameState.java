@@ -4,6 +4,7 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -31,6 +32,8 @@ public class GameState extends State{
 	@FXML private VBox goalCardContainer;
 	@FXML private Label playerRoleLabel;
 	@FXML private ImageView playerRoleImage;
+	@FXML private Button undoButton;
+	@FXML private Button redoButton;
 	
 	private FXMLLoader loader;
 	
@@ -129,25 +132,33 @@ public class GameState extends State{
     
     @FXML
     private void undoButtonAction(){
-    	if(!this.game.historyUndoIsEmpty()) {
-        	this.game.undo();
+    	this.game.undo();
+    	this.game.previousPlayer();
+    	
+    	while(this.game.getCurrentPlayer().isAI()){
+    		this.game.undo();
         	this.game.previousPlayer();
-            this.gameBoardGridPane.generateBoard();
-            this.playersArc.refreshPlayersArcsAndCircles();
-            this.cardContainer.generateHandCardImage();
-            this.gsm.changePeek("playerBeginOfTurn");
+    	}
+    	
+        this.gameBoardGridPane.generateBoard();
+        this.playersArc.refreshPlayersArcsAndCircles();
+        this.cardContainer.generateHandCardImage();
+        this.gsm.changePeek("playerBeginOfTurn");
+    	if(this.game.historyUndoIsEmpty()) {
+        	this.undoButton.setDisable(true);
     	}
     }
     
     @FXML
     private void redoButtonAction(){
-    	if(!this.game.historyRedoIsEmpty()){
-        	this.game.redo();
-        	this.game.nextPlayer();
-            this.gameBoardGridPane.generateBoard();
-            this.playersArc.refreshPlayersArcsAndCircles();
-            this.cardContainer.generateHandCardImage();
-            this.gsm.changePeek("playerBeginOfTurn");
+    	this.game.redo();
+    	this.game.nextPlayer();    	
+        this.gameBoardGridPane.generateBoard();
+        this.playersArc.refreshPlayersArcsAndCircles();
+        this.cardContainer.generateHandCardImage();
+        this.gsm.changePeek("playerBeginOfTurn");
+    	if(this.game.historyRedoIsEmpty()){
+    		this.redoButton.setDisable(true);
     	}
     }
     

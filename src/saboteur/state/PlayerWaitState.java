@@ -65,7 +65,26 @@ public class PlayerWaitState extends State{
     	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
     	this.trash = (ImageView) this.primaryStage.getScene().lookup("#trash");
     	this.stack = (ImageView) this.primaryStage.getScene().lookup("#stack");
+    	
+    	Button undoButton = (Button) this.primaryStage.getScene().lookup("#undoButton");
+    	Button redoButton = (Button) this.primaryStage.getScene().lookup("#redoButton");
 
+    	//Manage undo and redo button
+    	if(this.game.historyUndoIsEmpty()) {
+    		undoButton.setDisable(true);
+    	}
+    	else {
+    		undoButton.setDisable(false);
+    	}
+    	
+    	if(this.game.historyRedoIsEmpty()) {
+    		redoButton.setDisable(true);
+    	}
+    	else {
+    		redoButton.setDisable(false);
+    	}
+    	
+    	
 		if (this.game.getCurrentPlayer().isAI()){
 			PauseTransition pt = new PauseTransition(Duration.INDEFINITE.millis(1000));
 			pt.setOnFinished(event -> {

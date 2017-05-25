@@ -194,8 +194,6 @@ public class PlayerArc extends Pane{
         radians = Math.toRadians(anglePosition);
         anglePosition = Math.abs(anglePosition);
         
-        System.out.println(anglePosition);
-        
         double distanceToCenter = radius;
        
         if( 0 <= anglePosition && anglePosition < 40 ) {
@@ -237,9 +235,6 @@ public class PlayerArc extends Pane{
         name.setRotate(angle);
         
         this.getChildren().add(name);
-        
-        
-        
 	}
 	
 	public Circle[] getCircles(Player player) {
