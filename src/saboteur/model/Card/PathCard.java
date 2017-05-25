@@ -126,8 +126,7 @@ public class PathCard extends Card {
 		if (getClass() != obj.getClass())
 			return false;
 		PathCard other = (PathCard) obj;
-		if (getId() != other.getId())
-			return false;
+
 		if (hasGold != other.hasGold)
 			return false;
 		if (isCulDeSac != other.isCulDeSac)

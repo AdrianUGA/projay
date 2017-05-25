@@ -324,7 +324,6 @@ public class Board implements Serializable {
 		Position currentPosition;
 		
 		LinkedList<Position> positionsAlreadyExplored = new LinkedList<>();
-		System.out.println("Taille already : " + positionsAlreadyExplored.size());
 		
 		currentPosition = getStart();
 		positionsToExplore.add(currentPosition);
@@ -334,7 +333,6 @@ public class Board implements Serializable {
 			currentPosition = positionsToExplore.removeFirst();
 			currentCard = this.getCard(currentPosition);
 			if(!currentCard.isCulDeSac()){
-				System.out.println("CardCardCard : " + currentCard.getId());
 				for(Cardinal cardinal : Cardinal.values()){
 					posNeighbor = currentPosition.getNeighbor(cardinal);
 					neighbor = this.getCard(posNeighbor);
