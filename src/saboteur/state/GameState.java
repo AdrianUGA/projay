@@ -42,72 +42,14 @@ public class GameState extends State{
 
     @Override
     public void update() {
-        if (this.game.gameIsFinished()){
-            //fin de la partie
-            //this.gsm.change("annonce vainqueur");
-        	announceTeamWinner();
-        	announcePlayerWinner();
-        	//System.out.println("Le joueur "+this.game.getWinner().getName()+" a gagné ! (Avec "+this.game.getWinner().getGold()+ " or).");
-            //System.out.println("fin de partie");
-        } else {
-            if (this.game.roundIsFinished()){
-                announceTeamWinner();
-                this.game.newRound();
-            } else{
-                //la manche continue
-                if (this.game.getCurrentPlayer().isAI()){
-                    this.game.getCurrentPlayer().playCard();
-                    this.game.getCurrentPlayer().pickCard();
-                    //System.out.println("AI has played");
-                /*try{
-                    Thread.sleep(3000);
-                } catch (Exception e){
-                    e.printStackTrace();
-                }*/
-                    this.gameBoardGridPane.generateBoard();
-                    this.playersArc.refreshPlayersArcsAndCircles();
-                    this.gsm.push("playerEndOfTurn");
-                    //game.nextPlayer();
-                }
-                else{
-                    System.out.println("je suis humain");
-                	this.gsm.push("playerWait");
-				}
-            }
+        if (this.game.roundIsFinished()){
+            this.gsm.push("roundIsFinished");
+        } else{
+            this.gsm.push("playerBeginOfTurn");
+            this.gameBoardGridPane.generateBoard();
+            this.playersArc.refreshPlayersArcsAndCircles();
         }
     }
-
-    //For console mode
-    private void announcePlayerWinner() {
-		if (!this.game.isPlayerWinnerAlreadyAnnounced()){
-			LinkedList<Player> winners =  this.game.getWinners();
-			if (winners.size()>1){
-				System.out.print("Les joueurs ");
-				for (Player p : winners){
-					if (winners.indexOf(p) == winners.size()-2)
-						System.out.print(p.getName() + " et ");
-					else if (winners.indexOf(p) == winners.size()-1)
-						System.out.print(p.getName() + " ");
-					else
-						System.out.print(p.getName() + ", ");
-				}
-				System.out.print("sont gagnants ex aequo ");
-			} else {
-				System.out.print(winners.getFirst().getName() + " a gagné la partie ");
-			}
-			System.out.println("avec " + winners.getFirst().getGold() + " pépites d'or !");
-			this.game.setPlayerWinnerAlreadyAnnounced(true);
-		}
-	}
-
-	//For console mode
-	private void announceTeamWinner() {
-		if (!this.game.isTeamWinnerAlreadyAnnounced()){
-			if(this.game.dwarfsWon()) System.out.println("Les nains ont gagné !");
-			else System.out.println("Les saboteurs ont gagné !");
-			this.game.setTeamWinnerAlreadyAnnounced(true);
-		}
-	}
 
     @Override
     public void render() {
@@ -184,20 +126,24 @@ public class GameState extends State{
     
     @FXML
     private void undoButtonAction(){
-    	this.game.undo();
-    	this.game.previousPlayer();
-        this.gameBoardGridPane.generateBoard();
-        this.playersArc.refreshPlayersArcsAndCircles();
-        this.cardContainer.generateHandCardImage(); 
+    	if(!this.game.historyUndoIsEmpty()) {
+        	this.game.undo();
+        	this.game.previousPlayer();
+            this.gameBoardGridPane.generateBoard();
+            this.playersArc.refreshPlayersArcsAndCircles();
+            this.cardContainer.generateHandCardImage(); 
+    	}
     }
     
     @FXML
     private void redoButtonAction(){
-    	this.game.redo();
-    	this.game.nextPlayer();
-        this.gameBoardGridPane.generateBoard();
-        this.playersArc.refreshPlayersArcsAndCircles();
-        this.cardContainer.generateHandCardImage(); 
+    	if(!this.game.historyRedoIsEmpty()){
+        	this.game.redo();
+        	this.game.nextPlayer();
+            this.gameBoardGridPane.generateBoard();
+            this.playersArc.refreshPlayersArcsAndCircles();
+            this.cardContainer.generateHandCardImage(); 
+    	}
     }
     
 }

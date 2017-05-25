@@ -17,6 +17,7 @@ import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.model.Team;
 import saboteur.model.Card.Card;
+import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 
@@ -52,6 +53,11 @@ public class PlayerWaitState extends State{
     @Override
     public void onEnter(Object param) {
     	System.out.println("waitState");
+		if (this.game.getCurrentPlayer().isAI()){
+			this.game.getCurrentPlayer().playCard();
+			this.game.getCurrentPlayer().pickCard();
+			this.gsm.pop();
+		}
     	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
     	this.playersArc= (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
     	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
@@ -96,7 +102,7 @@ public class PlayerWaitState extends State{
 			    	endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
 			    	    @Override public void handle(ActionEvent e) {
 			    	    	endOfTurnButton.setOnAction(null);
-			    	    	gsm.changePeek("playerEndOfTurn");
+			    	    	gsm.pop();
 			    	    }
 			    	});
 				}

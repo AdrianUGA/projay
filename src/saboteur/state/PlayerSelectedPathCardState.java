@@ -94,8 +94,6 @@ public class PlayerSelectedPathCardState extends State{
 			if(pathCardsPosition.size() > 1) {
 				pathCardsPosition.remove(Board.getStart());
 //				for(Position p : this.game.getBoard().getGoalCards()) {
-//					System.out.println(p);
-//					System.out.println(this.game.getBoard().getCard(p));
 //					pathCardsPosition.remove(p);
 //				}
 				System.out.println(pathCardsPosition);
@@ -247,7 +245,7 @@ public class PlayerSelectedPathCardState extends State{
     
     private void endOfTurn() {
     	this.endOfTurnButton.setOnAction(null);
-		this.gsm.changePeek("playerEndOfTurn");
+		this.gsm.pop();
 	}
     
 }

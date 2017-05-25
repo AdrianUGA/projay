@@ -42,7 +42,9 @@ public class App extends Application {
         gsm.add("playerSelectedPath", new PlayerSelectedPathCardState(gsm, game, primaryStage));
         gsm.add("playerSelectedAction", new PlayerSelectedActionCardToPlayerState(gsm, game, primaryStage));
         gsm.add("playerSelectedPlan", new PlayerSelectedPlanCardState(gsm, game, primaryStage));
-        gsm.add("playerEndOfTurn", new PlayerEndOfTurnState(gsm, game, primaryStage));
+        gsm.add("playerBeginOfTurn", new PlayerBeginOfTurnState(gsm, game, primaryStage));
+        gsm.add("roundIsFinished", new RoundIsFinishedState(gsm, game, primaryStage));
+        gsm.add("gameIsFinished", new GameIsFinishedState(gsm, game, primaryStage));
 
         gsm.change("mainMenu");
 

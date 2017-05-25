@@ -120,6 +120,10 @@ public class Game {
 	public boolean historyRedoIsEmpty(){
 		return this.historyRedo.isEmpty();
 	}
+	
+	public boolean historyUndoIsEmpty(){
+		return this.history.isEmpty();
+	}
 
 	public void newGame(){
 		this.teamWinnerAlreadyAnnounced = false;
@@ -299,7 +303,7 @@ public class Game {
 		
 		this.dealCardsToPlayer();
 		
-		this.nextPlayer();
+		//this.nextPlayer();
 		
 		endInitRound();
 	}
@@ -338,6 +342,7 @@ public class Game {
 	}
 
 	public void nextPlayer(){
+		this.turn++;
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
 	}
 	
@@ -505,6 +510,22 @@ public class Game {
 			}
 		}
 		return winners;
+	}
+
+	public LinkedList<Player> getRanking(){
+		LinkedList<Player> ranking = new LinkedList<>();
+		for (Player player: playerList){
+			if (ranking.isEmpty()){
+				ranking.addFirst(player);
+			} else{
+				int i = 0;
+				while(player.getGold() < ranking.get(i).getGold()){
+					i++;
+				}
+				ranking.add(i, player);
+			}
+		}
+		return ranking;
 	}
 	
 	public LinkedList<Player> getPlayers(ActionCardToPlayer card){
