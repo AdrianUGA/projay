@@ -13,11 +13,6 @@ public class SabotageCard extends ActionCardToPlayer {
 		return this.sabotageType;
 	}
 
-	@Override
-	public ActionCardToPlayerType getType() {
-		return ActionCardToPlayerType.SABOTAGE;
-	}
-
 	public SabotageCard clone(){
 		SabotageCard card;
 

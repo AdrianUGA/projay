@@ -532,19 +532,11 @@ public class Game {
 		LinkedList<Player> result = new LinkedList<>();
 		boolean isPossible = false;
 		for (Player p : this.playerList){
-			switch (card.getType()) {
-				case SABOTAGE:
-					isPossible = p.canHandicap((SabotageCard)card, p);
-					break;
-				case RESCUE:
-					isPossible = p.canRescueItself((RescueCard)card);
-					break;
-				case DOUBLE_RESCUE:
-					isPossible = p.canRescueWithDoubleRescueCard((DoubleRescueCard)card);
-					break;
-				default:
-					break;
-			}
+
+			if (card.isSabotageCard()) isPossible = p.canHandicap((SabotageCard)card, p);
+			else if (card.isRescueCard()) isPossible = p.canRescueItself((RescueCard)card);
+			else if (card.isDoubleRescueCard()) isPossible = p.canRescueWithDoubleRescueCard((DoubleRescueCard)card);
+			
 			if (isPossible) result.add(p);
 		}
 		
