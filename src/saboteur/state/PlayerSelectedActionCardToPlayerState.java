@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -123,19 +124,8 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     	if(event.getTarget() instanceof Circle) {
             if(this.selectedCard.isSabotageCard()) {
             	Circle circle = (Circle) event.getTarget();
-            	Image img = null;
-            	switch(this.toolValue1) {
-            		case 0 : 
-                    	img = new Image("/resources/picto/broken_pickaxe_picto.png");
-                    	break;
-            		case 1 : 
-                    	img = new Image("/resources/picto/broken_lantern_picto.png");
-                    	break;
-            		case 2 : 
-                    	img = new Image("/resources/picto/broken_cart_picto.png");
-                    	break;
-            	}
-            	circle.setFill(new ImagePattern(img));
+            	
+            	this.playersArc.refreshCircles(circle, this.toolValue1, true);
             	
             	for(Player p : this.game.getPlayers(this.card)) {
             		if( this.playersArc.getCircles(p)[this.toolValue1] == circle )
@@ -145,13 +135,16 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     		}
         	else {
         		Circle circle = (Circle) event.getTarget();
-        		
-            	circle.setFill(PlayerArc.color);
+            	
             	for(Player p : this.game.getPlayers(this.card)) {
-            		if( this.playersArc.getCircles(p)[this.toolValue1] == circle )
+            		if( this.playersArc.getCircles(p)[this.toolValue1] == circle ){
             			this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue1));
-            		if( this.toolValue2 != -1 && this.playersArc.getCircles(p)[this.toolValue2] == circle )
+                		this.playersArc.refreshCircles(circle, this.toolValue1, false);
+            		}
+            		if( this.toolValue2 != -1 && this.playersArc.getCircles(p)[this.toolValue2] == circle ) {
             			this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue2));
+                		this.playersArc.refreshCircles(circle, this.toolValue2, false);
+            		}
     			}
         	}
     	}

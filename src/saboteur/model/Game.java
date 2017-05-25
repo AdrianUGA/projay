@@ -16,7 +16,7 @@ public class Game {
 	private int currentPlayerIndex;
 	private int round;
 	private int turn;
-	public final static long seed = 321456789;
+	public final static long seed = 123456789;
 
 	private final Deck deck;
 
@@ -133,7 +133,7 @@ public class Game {
 
 		this.currentPlayerIndex = this.playerList.size()-1;
 		this.newRound();
-		//this.loadConfig("editeur");
+		//this.loadConfig("almostFinished");
 	}
 
 	public void loadConfig(String name){
@@ -147,6 +147,7 @@ public class Game {
 			
 			this.playerList.clear();
 			this.observers.clear();
+			
 			//To each player
 			while (!(chaine = reader.readLine()).equals("###")){
 				this.playerList.add(createPlayerFromConfig(chaine));
@@ -155,6 +156,14 @@ public class Game {
 			//To each card to play on board
 			while (!(chaine = reader.readLine()).equals("###")){
 				addCardToBoardFromConfig(chaine);
+			}
+			
+			//To nb cards in stack
+			if (!( (chaine = reader.readLine()).equals("X") || chaine.equals("x"))){
+				int nb = Integer.parseInt(chaine);
+				while (this.stack.size() > nb){
+					this.trash.add(this.stack.removeFirst());
+				}
 			}
 			
 		} catch (FileNotFoundException e) {
@@ -190,6 +199,7 @@ public class Game {
 				}
 			}
 		}*/
+		
 		endInitRound();
 	}
 
@@ -197,7 +207,9 @@ public class Game {
 	private void beginInitRound() {
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getCopyOtherCards();
+		
 		Collections.shuffle(this.stack, new Random(Game.seed));
+		
 		/*
 		for(Card c : this.stack){
 			c.displayCardType();
@@ -239,16 +251,13 @@ public class Game {
 		}
 		
 		//Hand
-		ArrayList<Card> hand = new ArrayList<>();
 		int indexHand = Loader.beginIndexPlayerHand;
 		while (!stringPlayer[indexHand].equals(";")){
 			Card cardToAdd = getCard(stringPlayer[indexHand]);
 			this.stack.remove(cardToAdd);
-			hand.add(cardToAdd);
-			
+			toAdd.addHandCard(cardToAdd);
 			indexHand++;
 		}
-		toAdd.setHand(hand);
 		
 		//Handicaps
 		int indexHandicap = indexHand + 1;
@@ -264,9 +273,10 @@ public class Game {
 	}
 	
 	private Card getCard(String id){
+		int idToSearch = Integer.parseInt(id);
 		Card firstCard = null;
 		for (Card card : this.stack){
-			if (card.getId() == Integer.parseInt(id)){
+			if (card.getId() == idToSearch){
 				firstCard = card;
 				break;
 			}
@@ -280,6 +290,11 @@ public class Game {
 		this.setTeam();
 
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+		
+		for(Player p : this.playerList){
+			p.resetHandicaps();
+		}
+		
 		initAI();
 		
 		this.dealCardsToPlayer();
@@ -291,7 +306,6 @@ public class Game {
 
 	public void initAI() {
 		for(Player p : this.playerList){
-			p.resetHandicaps();
 			if(p.isAI()){
 				((AI) p).initializeAI();
 			}
@@ -330,6 +344,7 @@ public class Game {
 	
 	public void previousPlayer(){
 		this.currentPlayerIndex = (this.currentPlayerIndex - 1) % this.playerList.size();
+		if (this.currentPlayerIndex == -1) this.currentPlayerIndex = 2;
 	}
 
 	public Player getNextPlayer(){

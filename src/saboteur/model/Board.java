@@ -36,9 +36,9 @@ public class Board implements Serializable {
 		
 		Collections.shuffle(goalPathCard, new Random(Game.seed));
 		
+		this.addCard(startPathCard.get(0), getStart());
 		for(int i=0; i<3; i++)
 			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);
-		this.addCard(startPathCard.get(0), getStart());
 		for(Position p : objectiveCards){
 			if(this.getCard(p).hasGold()){
 				System.out.println("Gold x:" + p.getcX() + " y:" + p.getcY());
@@ -57,16 +57,18 @@ public class Board implements Serializable {
 		/* Adding the goal cards when reached */
 		this.board[position.getcY()][position.getcX()] = card;
 		
-		for(Position p : this.getNeighbors(position)){
-			if (this.getCard(p) != null && this.getCard(p).isGoal()){
-				ArrayList<Position> goalCardsToFlip = getGoalCardsToFlip(card, position);
-				if(goalCardsToFlip.contains(p)){
-					this.pathCardsPosition.put(p, this.getCard(position));
-					System.out.println("POSITION VOISIN = (" + p.getcX() + "," + p.getcY() + ")");
-					System.out.println("CARTE OBJECTIF A RETOURNER");
-					if(this.getCard(p).hasGold()){
-						System.out.println("Terminé nains ont gagné");
-					}
+		PathCard toFlip;
+		for (Position p : getGoalCardsToFlip()){
+			toFlip = getCard(p);
+			
+			if (toFlip.isGoal()){
+				if (!toFlip.hasGold() && !isPossible(toFlip, p)) toFlip.reverse();
+				
+				getPathCardsPosition().put(p, toFlip);
+				//System.out.println("POSITION VOISIN = (" + p.getcX() + "," + p.getcY() + ")");
+				System.out.println("CARTE OBJECTIF A RETOURNER");
+				if(toFlip.hasGold()){
+					System.out.println("Terminé nains ont gagné");
 				}
 			}
 		}
@@ -311,40 +313,35 @@ public class Board implements Serializable {
 		return ret;
 	}
 	
-	public ArrayList<Position> getGoalCardsToFlip(PathCard card, Position p){
+	public ArrayList<Position> getGoalCardsToFlip(){
 		PathCard neighbor;
 		Position posNeighbor;
 		ArrayList<Position> result = new ArrayList<>();
 		
-		ArrayList<Position> positionsToExplore = new ArrayList<>();
+		LinkedList<Position> positionsToExplore = new LinkedList<>();
 		
 		PathCard currentCard;
 		Position currentPosition;
 		
-		//ArrayList<Integer> positionsAlreadyExplored = new ArrayList<>();
-		ArrayList<Position> positionsAlreadyExplored = new ArrayList<>();
+		LinkedList<Position> positionsAlreadyExplored = new LinkedList<>();
 		
 		currentPosition = getStart();
 		positionsToExplore.add(currentPosition);
-		//positionsAlreadyExplored.add(getIndice(currentPosition));
 		positionsAlreadyExplored.add(currentPosition);
 		
 		while (!positionsToExplore.isEmpty()){
-			currentPosition = positionsToExplore.remove(positionsToExplore.size()-1);
+			currentPosition = positionsToExplore.removeFirst();
 			currentCard = this.getCard(currentPosition);
-			positionsAlreadyExplored.add(currentPosition);
 			if(!currentCard.isCulDeSac()){
 				for(Cardinal cardinal : Cardinal.values()){
-					posNeighbor = p.getNeighbor(cardinal);
+					posNeighbor = currentPosition.getNeighbor(cardinal);
 					neighbor = this.getCard(posNeighbor);
-					if (neighbor != null && currentCard.isOpen(cardinal) && neighbor.isOpen(cardinal.opposite())){
-						//if (!positionsAlreadyExplored.contains(getIndice(posNeighbor))){
+					if (neighbor != null && currentCard.isOpen(cardinal) && (neighbor.isOpen(cardinal.opposite()) || !neighbor.isVisible() )){
 						if (!positionsAlreadyExplored.contains(posNeighbor)){
-							//positionsAlreadyExplored.add(getIndice(posNeighbor));
-							//positionsAlreadyExplored.add(posNeighbor);
+							positionsAlreadyExplored.add(posNeighbor);
 							positionsToExplore.add(posNeighbor);
 							if (neighbor.isGoal() && !neighbor.isVisible()){
-								System.out.println("fin :" + posNeighbor);
+								System.out.println("fin1 :" + posNeighbor);
 								result.add(posNeighbor);
 							}
 						}

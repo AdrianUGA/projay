@@ -32,16 +32,12 @@ public class OperationPathCard extends Operation {
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		game.getBoard().addCard((PathCard)this.getCard(), p);
 		
-		this.goalCardsToFlip = game.getBoard().getGoalCardsToFlip((PathCard)this.getCard(), p);
-		PathCard toFlip;
+		this.goalCardsToFlip = game.getBoard().getGoalCardsToFlip();
 		for (Position p : this.goalCardsToFlip){
-			toFlip = game.getBoard().getCard(p);
-			if (toFlip.isGoal()){
+			PathCard toFlip = game.getBoard().getCard(p);
+			toFlip.setVisible(true);
+			if (!toFlip.hasGold()){			
 				game.notifyAINoGoldThere(p);
-				
-				if (!toFlip.hasGold() && !game.getBoard().isPossible(toFlip, p)) toFlip.reverse();
-				
-				toFlip.setVisible(true);
 			}
 		}
 		

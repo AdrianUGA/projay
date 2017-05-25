@@ -24,11 +24,11 @@ import saboteur.view.PlayerArc;
 
 public class GameState extends State{
 
-	@FXML private AnchorPane boardAndCardContainer;
+	@FXML private AnchorPane gameCardContainer;
 	@FXML private Pane boardContainer;
 	@FXML private Circle gameBoard;
 	@FXML private VBox goalCardContainer;
-
+	
 	private FXMLLoader loader;
 	
 	private PlayerArc playersArc;
@@ -126,9 +126,9 @@ public class GameState extends State{
             }
             
             //For center cards hand Image
-            this.cardContainer = new GameCardContainer(this.game, gameTableSize);
+            this.cardContainer = new GameCardContainer(this.game, primaryScreenBounds.getWidth() - gameTableSize - 100);
             this.cardContainer.setId("cardContainer");
-            this.boardAndCardContainer.getChildren().add(this.cardContainer);
+            this.gameCardContainer.getChildren().add(this.cardContainer);
             
             //The game board
             double innerRadius = gameTableHalfSize/2;
@@ -139,9 +139,10 @@ public class GameState extends State{
             this.gameBoardGridPane.setId("gameBoardGridPane");
             this.boardContainer.getChildren().add(this.gameBoardGridPane);
             
-            this.playersArc = new PlayerArc(gameTableHalfSize, gameTableHalfSize, this.game.getPlayerList());
+            this.playersArc = new PlayerArc(this.game, gameTableHalfSize, gameTableHalfSize);
             this.playersArc.setId("playersArc");
             this.boardContainer.getChildren().add(this.playersArc);
+            this.playersArc.refreshPlayersArcsAndCircles(); //TODO : à vérifier
 
             //Create the circle of the game board
             this.gameBoard.setCenterX(gameTableHalfSize);
@@ -153,4 +154,23 @@ public class GameState extends State{
             e.printStackTrace();
         }
     }
+    
+    @FXML
+    private void undoButtonAction(){
+    	this.game.undo();
+    	this.game.previousPlayer();
+        this.gameBoardGridPane.generateBoard();
+        this.playersArc.refreshPlayersArcsAndCircles();
+        this.cardContainer.generateHandCardImage(); 
+    }
+    
+    @FXML
+    private void redoButtonAction(){
+    	this.game.redo();
+    	this.game.nextPlayer();
+        this.gameBoardGridPane.generateBoard();
+        this.playersArc.refreshPlayersArcsAndCircles();
+        this.cardContainer.generateHandCardImage(); 
+    }
+    
 }

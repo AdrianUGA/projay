@@ -15,7 +15,7 @@ public class PathCard extends Card {
     private boolean isReversed;
 
 	public PathCard(String[] cardinal, boolean isCulDeSac, boolean isStart, boolean isGoal, boolean hasGold){
-        this.openSides = new LinkedList<>();
+		this.openSides = new LinkedList<>();
         for (String c: cardinal) {
             this.openSides.add(Cardinal.valueOf(c));
         }
@@ -126,6 +126,7 @@ public class PathCard extends Card {
 		if (getClass() != obj.getClass())
 			return false;
 		PathCard other = (PathCard) obj;
+
 		if (hasGold != other.hasGold)
 			return false;
 		if (isCulDeSac != other.isCulDeSac)
