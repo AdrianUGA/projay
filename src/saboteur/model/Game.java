@@ -347,6 +347,7 @@ public class Game {
 	
 	public void previousPlayer(){
 		this.currentPlayerIndex = (this.currentPlayerIndex - 1) % this.playerList.size();
+		if (this.currentPlayerIndex == -1) this.currentPlayerIndex = 2;
 	}
 
 	public Player getNextPlayer(){
