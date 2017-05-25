@@ -47,6 +47,7 @@ public class GameCardContainer extends HBox {
     
     public void hideCards(){
     	this.getChildren().removeAll(this.handCardsImages);
+
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
     		this.handCardsImages[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getBackImage()));
         	this.getChildren().add(this.handCardsImages[i]);

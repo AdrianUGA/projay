@@ -4,7 +4,6 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -50,8 +49,6 @@ public class GameState extends State{
             this.gsm.push("roundIsFinished");
         } else{
             this.gsm.push("playerBeginOfTurn");
-            this.gameBoardGridPane.generateBoard();
-            this.playersArc.refreshPlayersArcsAndCircles();
         }
     }
 
@@ -90,8 +87,8 @@ public class GameState extends State{
         	this.playerRoleImage.setFitHeight(282.0);
         	this.playerRoleImage.setFitWidth(400.0);
         	
-            //Create the goal card for the planCardActcion
-            this.goalCardContainer.setPrefSize(gameTableSize, gameTableSize);
+            //Create the goal card for the planCardAction
+            this.goalCardContainer.setPrefSize(gameComponentSize.getGameTableSize(), gameComponentSize.getGameTableSize());
             for (int i = 0; i < 3; i++) {
             	ImageView img = new ImageView();
             	img.setFitWidth(gameComponentSize.getCardWidth()/1.5);
@@ -137,7 +134,8 @@ public class GameState extends State{
         	this.game.previousPlayer();
             this.gameBoardGridPane.generateBoard();
             this.playersArc.refreshPlayersArcsAndCircles();
-            this.cardContainer.generateHandCardImage(); 
+            this.cardContainer.generateHandCardImage();
+            this.gsm.changePeek("playerBeginOfTurn");
     	}
     }
     
@@ -148,7 +146,8 @@ public class GameState extends State{
         	this.game.nextPlayer();
             this.gameBoardGridPane.generateBoard();
             this.playersArc.refreshPlayersArcsAndCircles();
-            this.cardContainer.generateHandCardImage(); 
+            this.cardContainer.generateHandCardImage();
+            this.gsm.changePeek("playerBeginOfTurn");
     	}
     }
     

@@ -1,5 +1,6 @@
 package saboteur.state;
 
+import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,6 +21,7 @@ import saboteur.model.Game;
 import saboteur.model.Operation;
 import saboteur.model.OperationPick;
 import saboteur.model.Team;
+import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 
@@ -27,6 +29,7 @@ public class PlayerPlayCardState extends State{
 
 	private GameCardContainer cardContainer;
 	private PlayerArc playersArc;
+	private GameBoardGridPane gameBoardGridPane;
 
 	private Label playerRoleLabel;
 	private ImageView playerRoleImage;
@@ -58,6 +61,7 @@ public class PlayerPlayCardState extends State{
 
     	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
     	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
+    	this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
     	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
     	this.playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
@@ -65,17 +69,29 @@ public class PlayerPlayCardState extends State{
     	this.trash = (ImageView) this.primaryStage.getScene().lookup("#trash");
     	this.stack = (ImageView) this.primaryStage.getScene().lookup("#stack");
 
+		Button trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
+		trashButton.setDisable(true);
+
+		cardContainer.setOnMouseClicked(null);
+
+		this.gameBoardGridPane.generateBoard();
+		this.playersArc.refreshPlayersArcsAndCircles();
+
 		//Operation card animation
 
     	//Pick card animation
 		OperationPick op = (OperationPick) this.game.getCurrentPlayer().pickCard();
 
-		ScaleTransition st = new ScaleTransition(javafx.util.Duration.INDEFINITE.millis(500), this.stack);
+		if (this.game.getCurrentPlayer().isHuman()){
+			cardContainer.showCards();
+		}
 
+		ScaleTransition st = new ScaleTransition(javafx.util.Duration.INDEFINITE.millis(500), this.stack);
 		st.setByX(0.3f);
 		st.setByY(0.3f);
 		st.setCycleCount(2);
 		st.setAutoReverse(true);
+		st.setInterpolator(Interpolator.EASE_OUT);
 		st.setOnFinished(event -> {
 			this.gsm.pop();
 		});
@@ -84,6 +100,6 @@ public class PlayerPlayCardState extends State{
 
     @Override
     public void onExit() {
-    	
+    	this.game.nextPlayer();
     }
 }
