@@ -4,12 +4,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
@@ -18,6 +24,9 @@ public class PlayerWaitState extends State{
 	
 	private GameCardContainer cardContainer;
 	private PlayerArc playersArc;
+	
+	private Label playerRoleLabel;
+	private ImageView playerRoleImage;
 	
 	private ImageView imgSelectedCard = new ImageView();
 	private Card selectedCard = null;
@@ -47,6 +56,25 @@ public class PlayerWaitState extends State{
     	this.playersArc= (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
     	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
+    	this.playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
+    	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
+    	   	
+    	//Image and Label of player role
+    	this.playerRoleLabel.setFont(new Font("Arial", 30));
+    	this.playerRoleLabel.setTextFill(Color.WHITE);
+    	this.playerRoleLabel.setTextAlignment(TextAlignment.CENTER);
+    	this.playerRoleImage.setFitHeight(282.0);
+    	this.playerRoleImage.setFitWidth(400.0);
+    	
+    	if(this.game.getCurrentPlayer().getTeam() == Team.DWARF) {
+    		this.playerRoleLabel.setText("Chercheur d'or");
+    		this.playerRoleImage.setImage(new Image("/resources/nainchercheurdor.png"));
+    	}
+    	else {
+    		this.playerRoleLabel.setText("Saboteur");
+    		this.playerRoleImage.setImage(new Image("/resources/nainsaboteur.png"));
+    	}
+    	
     	
     	this.playersArc.refreshPlayersArcsAndCircles();
     	

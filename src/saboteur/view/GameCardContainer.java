@@ -23,6 +23,8 @@ public class GameCardContainer extends HBox {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(20.0);
         AnchorPane.setBottomAnchor(this, 5.0);
+        AnchorPane.setLeftAnchor(this, 5.0);
+        AnchorPane.setRightAnchor(this, 5.0);
         
         this.allCards = Resources.getImage();
         
