@@ -17,6 +17,7 @@ import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.model.Team;
 import saboteur.model.Card.Card;
+import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 

@@ -68,7 +68,7 @@
                <children>
                   <StackPane alignment="CENTER_RIGHT">
                      <children>
-                        <ImageView fitHeight="127.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="trash" fitHeight="127.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../resources/DosCartes.png" />
                            </image>
@@ -84,7 +84,7 @@
                      </children>
                   </StackPane>
                   <Button fx:id="endOfTurnButton" disable="true" mnemonicParsing="false" text="Fin de tour" />
-                  <ImageView fitHeight="127.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="stack" fitHeight="127.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../resources/DosCartes.png" />
                      </image>
