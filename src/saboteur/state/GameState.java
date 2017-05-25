@@ -108,12 +108,7 @@ public class GameState extends State{
             this.gameCardContainer.getChildren().add(this.cardContainer);
             
             //The game board
-//            double innerRadius = gameTableHalfSize/2;
-            double innerRadius = gameComponentSize.getInnerRadiusOfArc();
-	        double radians = Math.toRadians(135);
-	        double XstartInner = (int)Math.round((Math.cos(radians) * innerRadius + gameTableHalfSize));
-	        double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + gameTableHalfSize));
-            this.gameBoardGridPane = new GameBoardGridPane(this.game, XstartInner, YstartInner);
+            this.gameBoardGridPane = new GameBoardGridPane(this.game);
             this.gameBoardGridPane.setId("gameBoardGridPane");
             this.boardContainer.getChildren().add(this.gameBoardGridPane);
             

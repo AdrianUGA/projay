@@ -1,11 +1,13 @@
 package saboteur.view;
 
-import java.awt.Label;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
+import javax.swing.text.LabelView;
+
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -17,6 +19,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 import saboteur.model.Game;
 import saboteur.model.Player;
@@ -144,10 +147,10 @@ public class PlayerArc extends Pane{
         double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + center));
 		
         radians = Math.toRadians(startAngle + lengthOfArc);
-        int XendOuter = (int)Math.round((Math.cos(radians) * radius + center));
-        int YendOuter = (int)Math.round((Math.sin(-radians) * radius + center));
-        int XendInner = (int)Math.round((Math.cos(radians) * innerRadius + center));
-        int YendInner = (int)Math.round((Math.sin(-radians) * innerRadius + center));
+        double XendOuter = (int)Math.round((Math.cos(radians) * radius + center));
+        double YendOuter = (int)Math.round((Math.sin(-radians) * radius + center));
+        double XendInner = (int)Math.round((Math.cos(radians) * innerRadius + center));
+        double YendInner = (int)Math.round((Math.sin(-radians) * innerRadius + center));
                        
                 
         path.setFill(PlayerArc.color);
@@ -186,10 +189,55 @@ public class PlayerArc extends Pane{
         this.playerArc.put(player, path);
         this.getChildren().add(path);
         
-//        Label name = new Label(player.getName());
-//        double anglePosition = startAngle + lengthOfArc/2;
-//        
-//        
+        Label name = new Label(player.getName());
+        double anglePosition = startAngle + lengthOfArc/2;
+        radians = Math.toRadians(anglePosition);
+        anglePosition = Math.abs(anglePosition);
+        
+        System.out.println(anglePosition);
+        
+        double distanceToCenter = radius;
+       
+        if( 0 <= anglePosition && anglePosition < 40 ) {
+        	distanceToCenter-=20;
+        }
+        else if( 40 <= anglePosition && anglePosition < 70 ) {
+        	distanceToCenter-=10;
+        }
+        else if( 70 <= anglePosition && anglePosition < 100 ) {
+        	distanceToCenter+=5;
+        }
+        else if( 100 <= anglePosition && anglePosition < 110 ) {
+        	distanceToCenter+=20;
+        }
+        else if( 110 <= anglePosition && anglePosition < 130 ) {
+        	distanceToCenter+=30;
+        }
+        else if( 130 <= anglePosition && anglePosition < 180 ) {
+        	distanceToCenter+=20;
+        }
+        else if( 180 <= anglePosition && anglePosition < 270 ) {
+        	distanceToCenter+=40;
+        }
+        else if( 270 <= anglePosition && anglePosition < 300 ) {
+        	distanceToCenter+=25;
+        }
+        else if( 300 <= anglePosition && anglePosition < 325 ) {
+        	distanceToCenter+=15;
+        }
+        XstartInner = (int)Math.round((Math.cos(radians) * distanceToCenter + center));
+        YstartInner = (int)Math.round((Math.sin(-radians) * distanceToCenter + center));
+        
+        name.setFont(new Font("Arial", 20));
+        name.setTextFill(Color.WHITE);
+        name.setLayoutX(XstartInner);
+        name.setLayoutY(YstartInner);
+        
+        double angle = Math.abs(anglePosition)%180 - 90;
+        name.setRotate(angle);
+        
+        this.getChildren().add(name);
+        
         
         
 	}

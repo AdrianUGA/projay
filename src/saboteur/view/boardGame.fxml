@@ -98,8 +98,8 @@
          <left>
             <VBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" onAction="#undoButtonAction" text="undo" />
-                  <Button mnemonicParsing="false" onAction="#redoButtonAction" text="redo" />
+                  <Button fx:id="undoButton" mnemonicParsing="false" onAction="#undoButtonAction" text="undo" />
+                  <Button fx:id="redoButton" mnemonicParsing="false" onAction="#redoButtonAction" text="redo" />
                </children>
             </VBox>
          </left>

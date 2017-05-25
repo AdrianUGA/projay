@@ -92,7 +92,6 @@ public class PlayerSelectedPathCardState extends State{
 			
 			//If the map content more than the 1st path card (entry)
 			if(pathCardsPosition.size() > 0) {
-				System.out.println(pathCardsPosition);
 				for(Position posiCard : pathCardsPosition.keySet()) {
 					SVGPath svg = new SVGPath();
 					svg.setFill(Color.RED);

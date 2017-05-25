@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import saboteur.model.Game;
+import saboteur.tools.GameComponentsSize;
 import saboteur.tools.Resources;
 
 public class GameCardContainer extends HBox {
@@ -28,8 +29,8 @@ public class GameCardContainer extends HBox {
         
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
         	this.handCardsImages[i] = new ImageView();
-        	this.handCardsImages[i].setFitWidth(108);
-        	this.handCardsImages[i].setFitHeight(166);
+        	this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth());
+        	this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight());
         }
         
         this.allCards = Resources.getImage();
