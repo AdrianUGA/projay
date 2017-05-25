@@ -483,6 +483,10 @@ public class Game {
 		return this.stack.removeFirst();
 	}
 	
+	public Card observeFirstCard(){
+		return this.stack.getFirst();
+	}
+	
 	public boolean stackIsEmpty(){
 		return this.stack.isEmpty();
 	}
