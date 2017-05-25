@@ -14,7 +14,7 @@
    <children>
       <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: rgba(0,0,0,0.7);;">
          <children>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.2em;" text="Fin de tour" textAlignment="CENTER" wrappingWidth="379.59375">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.2em;" text="Début du tour" textAlignment="CENTER" wrappingWidth="379.59375">
                <font>
                   <Font name="System Bold" size="32.0" />
                </font>

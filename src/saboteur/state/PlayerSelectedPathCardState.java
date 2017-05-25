@@ -245,7 +245,7 @@ public class PlayerSelectedPathCardState extends State{
     
     private void endOfTurn() {
     	this.endOfTurnButton.setOnAction(null);
-		this.gsm.changePeek("playerEndOfTurn");
+		this.gsm.pop();
 	}
     
 }
