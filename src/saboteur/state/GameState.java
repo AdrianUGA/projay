@@ -184,20 +184,24 @@ public class GameState extends State{
     
     @FXML
     private void undoButtonAction(){
-    	this.game.undo();
-    	this.game.previousPlayer();
-        this.gameBoardGridPane.generateBoard();
-        this.playersArc.refreshPlayersArcsAndCircles();
-        this.cardContainer.generateHandCardImage(); 
+    	if(!this.game.historyUndoIsEmpty()) {
+        	this.game.undo();
+        	this.game.previousPlayer();
+            this.gameBoardGridPane.generateBoard();
+            this.playersArc.refreshPlayersArcsAndCircles();
+            this.cardContainer.generateHandCardImage(); 
+    	}
     }
     
     @FXML
     private void redoButtonAction(){
-    	this.game.redo();
-    	this.game.nextPlayer();
-        this.gameBoardGridPane.generateBoard();
-        this.playersArc.refreshPlayersArcsAndCircles();
-        this.cardContainer.generateHandCardImage(); 
+    	if(!this.game.historyRedoIsEmpty()){
+        	this.game.redo();
+        	this.game.nextPlayer();
+            this.gameBoardGridPane.generateBoard();
+            this.playersArc.refreshPlayersArcsAndCircles();
+            this.cardContainer.generateHandCardImage(); 
+    	}
     }
     
 }
