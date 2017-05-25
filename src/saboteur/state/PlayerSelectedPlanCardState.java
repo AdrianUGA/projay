@@ -113,6 +113,7 @@ public class PlayerSelectedPlanCardState extends State{
         			ImageView img = (ImageView) p.getChildren().get(0);
         			Position posi = this.game.getBoard().getGoalCards().get(i%3);
         			img.setImage( Resources.getImage().get(this.game.getBoard().getCard(posi).getFrontImage()) );
+        			this.game.getCurrentPlayer().playCard(this.game.getBoard().getCard(posi));
                 	this.beforEnd();
         			this.goalCardSelect = true;
                 	break;
