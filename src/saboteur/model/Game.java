@@ -120,6 +120,10 @@ public class Game {
 	public boolean historyRedoIsEmpty(){
 		return this.historyRedo.isEmpty();
 	}
+	
+	public boolean historyUndoIsEmpty(){
+		return this.history.isEmpty();
+	}
 
 	public void newGame(){
 		this.teamWinnerAlreadyAnnounced = false;
