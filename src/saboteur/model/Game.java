@@ -136,8 +136,8 @@ public class Game {
 		this.historyRedo = new LinkedList<>();
 
 		this.currentPlayerIndex = this.playerList.size()-1;
-		//this.newRound();
-		this.loadConfig("almostFinished");
+		this.newRound();
+		//this.loadConfig("almostFinished");
 	}
 
 	public void loadConfig(String name){
