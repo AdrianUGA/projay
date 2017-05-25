@@ -133,7 +133,7 @@ public class Game {
 
 		this.currentPlayerIndex = this.playerList.size()-1;
 		this.newRound();
-		//this.loadConfig("editeur");
+		//this.loadConfig("almostFinished");
 	}
 
 	public void loadConfig(String name){
@@ -199,6 +199,7 @@ public class Game {
 				}
 			}
 		}*/
+		
 		endInitRound();
 	}
 
@@ -250,16 +251,13 @@ public class Game {
 		}
 		
 		//Hand
-		ArrayList<Card> hand = new ArrayList<>();
 		int indexHand = Loader.beginIndexPlayerHand;
 		while (!stringPlayer[indexHand].equals(";")){
 			Card cardToAdd = getCard(stringPlayer[indexHand]);
 			this.stack.remove(cardToAdd);
-			hand.add(cardToAdd);
-			
+			toAdd.addHandCard(cardToAdd);
 			indexHand++;
 		}
-		toAdd.setHand(hand);
 		
 		//Handicaps
 		int indexHandicap = indexHand + 1;
@@ -292,6 +290,11 @@ public class Game {
 		this.setTeam();
 
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+		
+		for(Player p : this.playerList){
+			p.resetHandicaps();
+		}
+		
 		initAI();
 		
 		this.dealCardsToPlayer();
@@ -303,7 +306,6 @@ public class Game {
 
 	public void initAI() {
 		for(Player p : this.playerList){
-			p.resetHandicaps();
 			if(p.isAI()){
 				((AI) p).initializeAI();
 			}
