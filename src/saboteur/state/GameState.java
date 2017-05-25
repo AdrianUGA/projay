@@ -5,17 +5,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.stage.Screen;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.tools.GameComponentsSize;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
@@ -26,6 +30,8 @@ public class GameState extends State{
 	@FXML private Pane boardContainer;
 	@FXML private Circle gameBoard;
 	@FXML private VBox goalCardContainer;
+	@FXML private Label playerRoleLabel;
+	@FXML private ImageView playerRoleImage;
 	
 	private FXMLLoader loader;
 	
@@ -73,15 +79,17 @@ public class GameState extends State{
             this.loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
             this.loader.setController(this);
             Pane pane = this.loader.load();
-            
-            //Take size of screen
-            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-            double gameTableSize = primaryScreenBounds.getHeight();
-            double gameTableHalfSize = gameTableSize/2;
-            double boardSize = gameTableHalfSize/2;
-         
+                       
+            GameComponentsSize gameComponentSize = GameComponentsSize.getGameComponentSize();
+        	//Image and Label of player role
+        	this.playerRoleLabel.setFont(new Font("Arial", 30));
+        	this.playerRoleLabel.setTextFill(Color.WHITE);
+        	this.playerRoleLabel.setTextAlignment(TextAlignment.CENTER);
+        	this.playerRoleImage.setFitHeight(282.0);
+        	this.playerRoleImage.setFitWidth(400.0);
+        	
             //Create the goal card for the planCardActcion
-            this.goalCardContainer.setPrefSize(gameTableSize, gameTableSize);
+            this.goalCardContainer.setPrefSize(gameComponentSize.getGameTableSize(), gameComponentSize.getGameTableSize());
             for (int i = 0; i < 3; i++) {
             	ImageView img = new ImageView();
             	img.setFitWidth(108/1.5);
@@ -93,28 +101,30 @@ public class GameState extends State{
             }
             
             //For center cards hand Image
-            this.cardContainer = new GameCardContainer(this.game, primaryScreenBounds.getWidth() - gameTableSize - 100);
+            this.cardContainer = new GameCardContainer(this.game, gameComponentSize.getScreenWidth() - gameComponentSize.getGameTableSize() - 100);
             this.cardContainer.setId("cardContainer");
             this.gameCardContainer.getChildren().add(this.cardContainer);
             
             //The game board
-            double innerRadius = gameTableHalfSize/2;
+            double innerRadius = gameComponentSize.getGameTableHalfSize()/2;
 	        double radians = Math.toRadians(135);
-	        double XstartInner = (int)Math.round((Math.cos(radians) * innerRadius + gameTableHalfSize));
-	        double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + gameTableHalfSize));
+	        double XstartInner = (int)Math.round((Math.cos(radians) * innerRadius + gameComponentSize.getGameTableHalfSize()));
+	        double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + gameComponentSize.getGameTableHalfSize()));
             this.gameBoardGridPane = new GameBoardGridPane(this.game, XstartInner, YstartInner);
             this.gameBoardGridPane.setId("gameBoardGridPane");
             this.boardContainer.getChildren().add(this.gameBoardGridPane);
             
-            this.playersArc = new PlayerArc(this.game, gameTableHalfSize, gameTableHalfSize);
+            this.playersArc = new PlayerArc(this.game, gameComponentSize.getGameTableHalfSize(), gameComponentSize.getGameTableHalfSize());
             this.playersArc.setId("playersArc");
             this.boardContainer.getChildren().add(this.playersArc);
-            this.playersArc.refreshPlayersArcsAndCircles(); //TODO : à vérifier
+            this.playersArc.refreshPlayersArcsAndCircles();
+            
+            this.boardContainer.toBack();
 
             //Create the circle of the game board
-            this.gameBoard.setCenterX(gameTableHalfSize);
-            this.gameBoard.setCenterY(gameTableHalfSize);
-            this.gameBoard.setRadius(boardSize);
+            this.gameBoard.setCenterX(gameComponentSize.getCenterOfGameTable());
+            this.gameBoard.setCenterY(gameComponentSize.getCenterOfGameTable());
+            this.gameBoard.setRadius(gameComponentSize.getMiddleCircleRadius());
 
             this.changeLayout(pane);
         } catch (IOException e){
@@ -142,6 +152,11 @@ public class GameState extends State{
             this.playersArc.refreshPlayersArcsAndCircles();
             this.cardContainer.generateHandCardImage(); 
     	}
+    }
+    
+    @FXML
+    private void pauseButtonAction(){
+    	this.gsm.push("pauseMenu");
     }
     
 }

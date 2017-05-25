@@ -12,9 +12,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import saboteur.GameStateMachine;
@@ -74,6 +71,8 @@ public class PlayerWaitState extends State{
 		} else {
 			initControlForHuman();
 		}
+
+
     }
 
     @Override
@@ -124,25 +123,23 @@ public class PlayerWaitState extends State{
 
     private void initControlForHuman(){
 		//Image and Label of player role
-		this.playerRoleLabel.setFont(new Font("Arial", 30));
-		this.playerRoleLabel.setTextFill(Color.WHITE);
-		this.playerRoleLabel.setTextAlignment(TextAlignment.CENTER);
-		this.playerRoleImage.setFitHeight(282.0);
-		this.playerRoleImage.setFitWidth(400.0);
 
-		if (this.game.getCurrentPlayer().getTeam() == Team.DWARF) {
+		if(this.game.getCurrentPlayer().getTeam() == Team.DWARF) {
 			this.playerRoleLabel.setText("Chercheur d'or");
 			this.playerRoleImage.setImage(new Image("/resources/nainchercheurdor.png"));
-		} else {
+		}
+		else {
 			this.playerRoleLabel.setText("Saboteur");
 			this.playerRoleImage.setImage(new Image("/resources/nainsaboteur.png"));
 		}
+		this.playerRoleImage.setVisible(true);
+		this.playerRoleLabel.setVisible(true);
 
 
 		this.playersArc.refreshPlayersArcsAndCircles();
 
 		this.endOfTurnButton.setDisable(true);
-		this.trashButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		this.trashButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event) {
 				game.getCurrentPlayer().playCard();
@@ -151,14 +148,13 @@ public class PlayerWaitState extends State{
 
 				System.out.println(game.stackIsEmpty());
 				game.getCurrentPlayer().pickCard();
-				GameCardContainer cardContainer = (GameCardContainer) primaryStage.getScene().lookup("#cardContainer");
+				GameCardContainer cardContainer = (GameCardContainer)primaryStage.getScene().lookup("#cardContainer");
 				cardContainer.setOnMouseClicked(null);
 				cardContainer.generateHandCardImage();
 
 				endOfTurnButton.setDisable(false);
 				endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
-					@Override
-					public void handle(ActionEvent e) {
+					@Override public void handle(ActionEvent e) {
 						endOfTurnButton.setOnAction(null);
 						gsm.pop();
 					}
@@ -166,14 +162,14 @@ public class PlayerWaitState extends State{
 			}
 		});
 
-		this.cardContainer.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		this.cardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event) {
 				selectCardButtonAction(event);
 			}
 		});
 
-		this.cardContainer.generateHandCardImage();
+		this.cardContainer.showCards();
 	}
     
     private void removeOldSelection() {

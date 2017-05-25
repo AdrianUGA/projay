@@ -29,19 +29,17 @@ public class OperationActionCardToPlayer extends Operation {
 	public void exec(Game game) {		
 		ActionCardToPlayer card = (ActionCardToPlayer) this.getCard();
 		this.getSourcePlayer().removeHandCard(this.getCard());
-		switch (card.getType()){
-			case DOUBLE_RESCUE:
-				this.destinationCard = this.getDestinationPlayer().getCardCorrespondingToRescueType(this.toolDestination);
-				this.destinationPlayer.removeHandicapCard(this.destinationCard);
-				break;
-			case RESCUE:
-				this.destinationCard = this.getDestinationPlayer().getCardCorrespondingToRescueType(((RescueCard)card).getRescueType());
-				this.destinationPlayer.removeHandicapCard(this.destinationCard);
-				break;
-			case SABOTAGE:
-				this.destinationPlayer.addHandicapCard((SabotageCard)this.getCard());
-				break;
-			default:
+		
+		if (card.isSabotageCard()){
+			this.destinationPlayer.addHandicapCard((SabotageCard)this.getCard());
+		}
+		else if (card.isRescueCard()){
+			this.destinationCard = this.getDestinationPlayer().getCardCorrespondingToRescueType(((RescueCard)card).getRescueType());
+			this.destinationPlayer.removeHandicapCard(this.destinationCard);
+		}
+		else if (card.isDoubleRescueCard()){
+			this.destinationCard = this.getDestinationPlayer().getCardCorrespondingToRescueType(this.toolDestination);
+			this.destinationPlayer.removeHandicapCard(this.destinationCard);
 		}
 		
 		game.notify(this);

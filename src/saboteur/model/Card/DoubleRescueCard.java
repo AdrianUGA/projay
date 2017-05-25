@@ -23,11 +23,6 @@ public class DoubleRescueCard extends ActionCardToPlayer {
 		return this.rescueType2;
 	}
 
-	@Override
-	public ActionCardToPlayerType getType() {
-		return ActionCardToPlayerType.DOUBLE_RESCUE;
-	}
-
 	public DoubleRescueCard clone(){
 		DoubleRescueCard card;
 
