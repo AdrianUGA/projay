@@ -8,12 +8,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import saboteur.model.Game;
+import saboteur.model.Card.Card;
 import saboteur.tools.GameComponentsSize;
 import saboteur.tools.Resources;
 
 public class GameCardContainer extends HBox {
 	
 	private ImageView[] handCardsImages = new ImageView[6];
+	private ImageView imgSelectedCard = new ImageView();
+	private Card selectedCard = null;
 	private Game game;
 	
 	private LinkedHashMap<String, Image> allCards;
@@ -57,5 +60,21 @@ public class GameCardContainer extends HBox {
     public void showCards(){
     	this.generateHandCardImage();
     }
+
+	public ImageView getImgSelectedCard() {
+		return imgSelectedCard;
+	}
+
+	public void setImgSelectedCard(ImageView selectedCard) {
+		this.imgSelectedCard = selectedCard;
+	}
+
+	public Card getSelectedCard() {
+		return selectedCard;
+	}
+
+	public void setSelectedCard(Card selectedCard) {
+		this.selectedCard = selectedCard;
+	}
 
 }

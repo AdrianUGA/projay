@@ -59,7 +59,7 @@ public class PlayerPlayCardState extends State{
     public void onEnter(Object param) {
     	Operation o = (Operation) param;
 
-    	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
+    	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#gameCardContainer");
     	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
     	this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
     	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");

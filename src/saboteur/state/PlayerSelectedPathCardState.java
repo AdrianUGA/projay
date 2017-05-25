@@ -19,6 +19,7 @@ import saboteur.GameStateMachine;
 import saboteur.model.*;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
+import saboteur.tools.GameComponentsSize;
 import saboteur.tools.Icon;
 import saboteur.tools.Resources;
 import saboteur.view.GameBoardGridPane;
@@ -26,12 +27,12 @@ import saboteur.view.GameCardContainer;
 
 public class PlayerSelectedPathCardState extends State{
 
+	private GameCardContainer gameCardContainer;
 	private GameBoardGridPane gameBoardGridPane;
 	private List<Position> possiblePositionList;
 	private List<Object> boardEffect;
 	private LinkedHashMap<ImageView, Position> positionOfImages;
 	private LinkedHashMap<String, Image> allCards = Resources.getImage();
-	private Card selectedCard;
 	private boolean positionSelected;
 	private Button endOfTurnButton;
 
@@ -64,11 +65,11 @@ public class PlayerSelectedPathCardState extends State{
     @Override
     public void onEnter(Object param) {
         System.out.println("path card");
-        double cardWidth = 108/3;
-        double cardHeight = 166/3;
+        double cardWidth = GameComponentsSize.getGameComponentSize().getCardWidth()/3;
+        double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/3;
         
 
-        this.selectedCard = (Card) param;
+        this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
         this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
         this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
         this.gameBoardGridPane.toFront();
@@ -86,7 +87,7 @@ public class PlayerSelectedPathCardState extends State{
 		};
 		
 		
-		if(this.selectedCard.isCollapseCard()) {
+		if(this.gameCardContainer.getSelectedCard().isCollapseCard()) {
 			Map<Position, PathCard> pathCardsPosition = game.getBoard().getPathCardsPositionWhichCanBeRemoved();
 			
 			//If the map content more than the 1st path card (entry)
@@ -107,7 +108,7 @@ public class PlayerSelectedPathCardState extends State{
 			}
 		}
 		else {
-			PathCard card  = (PathCard) this.selectedCard;
+			PathCard card  = (PathCard) this.gameCardContainer.getSelectedCard();
 			this.possiblePositionList = this.game.getBoard().getPossiblePositionPathCard(card);
 			if(this.game.getCurrentPlayer().getHandicaps().size() != 0) {
 				this.possiblePositionList.clear();
@@ -150,7 +151,7 @@ public class PlayerSelectedPathCardState extends State{
     		
     		Position position = this.positionOfImages.get(event.getTarget());
     		if(position != null){
-    			if(this.selectedCard.isCollapseCard()) {
+    			if(this.gameCardContainer.getSelectedCard().isCollapseCard()) {
     				this.op = this.game.getCurrentPlayer().playCard(this.game.getBoard().getCard(position));
         			this.beforEnd();
         			this.positionSelected = true;
@@ -171,7 +172,7 @@ public class PlayerSelectedPathCardState extends State{
         			this.selectedImagePosition = (ImageView) event.getTarget();
         			this.selectedImagePosition.setOpacity(1.0);
         			
-        			if(!this.game.getBoard().isPossible((PathCard)this.selectedCard, position)){
+        			if(!this.game.getBoard().isPossible((PathCard)this.gameCardContainer.getSelectedCard(), position)){
         				this.selectedImagePosition.setRotate(180.0);
         			}
         			
@@ -189,7 +190,8 @@ public class PlayerSelectedPathCardState extends State{
 			this.boardEffect.add(this.rotateSVG);
 		}
     	
-    	if(this.game.getBoard().isPossible((PathCard)this.selectedCard, position) && this.game.getBoard().isPossible(((PathCard)this.selectedCard).reversed(), position) ){
+    	Card selectedCard = this.gameCardContainer.getSelectedCard();
+    	if(this.game.getBoard().isPossible((PathCard)selectedCard, position) && this.game.getBoard().isPossible(((PathCard)selectedCard).reversed(), position) ){
     		
     		//Manage rotation SVG    		
 			this.gameBoardGridPane.add(this.rotateSVG, position.getcX(), position.getcY());

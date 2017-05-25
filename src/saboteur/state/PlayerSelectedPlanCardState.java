@@ -29,7 +29,6 @@ public class PlayerSelectedPlanCardState extends State{
 	private VBox goalCardContainer;
 	private Button endOfTurnButton;
 	private Circle gameBoard;
-	private Card selectedCard;
 	private boolean goalCardSelect;
 
 	private Operation op;
@@ -52,8 +51,6 @@ public class PlayerSelectedPlanCardState extends State{
     public void onEnter(Object param) {
         System.out.println("plan card");
         
-        
-        this.selectedCard = (Card) param;
         this.goalCardContainer = (VBox) this.primaryStage.getScene().lookup("#goalCardContainer");
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
         this.goalCardSelect = false;

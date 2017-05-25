@@ -43,8 +43,8 @@ public class PlayerBeginOfTurnState extends State{
 
     @Override
     public void onEnter(Object param) {
-    	GameCardContainer cardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#cardContainer");
-    	cardContainer.hideCards();
+    	GameCardContainer gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
+    	gameCardContainer.hideCards();
 
     	Label playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
     	ImageView playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");

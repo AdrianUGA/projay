@@ -61,7 +61,7 @@
             </HBox>
          </center>
          <bottom>
-            <AnchorPane fx:id="gameCardContainer" BorderPane.alignment="CENTER" />
+            <AnchorPane fx:id="cardContainer" BorderPane.alignment="CENTER" />
          </bottom>
          <top>
             <VBox alignment="CENTER_RIGHT" spacing="20.0" BorderPane.alignment="CENTER">
