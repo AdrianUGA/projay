@@ -104,8 +104,8 @@ public class PlayerArc extends Pane{
 	}
 	
 	private void createCircle(double radius, double center, double lengthOfArc, double startAngle, Player player) {
-		double circleRadius = lengthOfArc / 1.5  ; // half of the length of arc
-		double centerDistance = (radius/2) + circleRadius*1.2; // game board size + circle radius
+		double circleRadius = radius / 12  ; // half of the length of arc
+		double centerDistance = radius - circleRadius*1.2; // game board size + circle radius
 		double x =lengthOfArc/3;
 		
 		for (int i = 0; i<3; i++) {  
@@ -124,7 +124,7 @@ public class PlayerArc extends Pane{
 		Path path = new Path();
 		
 		//Prepare all different positions 
-		double innerRadius = radius/2;
+		double innerRadius = radius/1.5;
         double radians = Math.toRadians(startAngle);
         double XstartOuter = (int)Math.round((Math.cos(radians) * radius + center));
         double YstartOuter = (int)Math.round((Math.sin(-radians)* radius + center));

@@ -38,11 +38,12 @@ public class App extends Application {
         gsm.add("gameOptions", new GameOptionsState(gsm, game, primaryStage));
         gsm.add("score", new ScoreState(gsm, game, primaryStage));
         gsm.add("help", new HelpState(gsm, game, primaryStage));
+        gsm.add("playerBeginOfTurn", new PlayerBeginOfTurnState(gsm, game, primaryStage));
         gsm.add("playerWait", new PlayerWaitState(gsm, game, primaryStage));
         gsm.add("playerSelectedPath", new PlayerSelectedPathCardState(gsm, game, primaryStage));
         gsm.add("playerSelectedAction", new PlayerSelectedActionCardToPlayerState(gsm, game, primaryStage));
         gsm.add("playerSelectedPlan", new PlayerSelectedPlanCardState(gsm, game, primaryStage));
-        gsm.add("playerBeginOfTurn", new PlayerBeginOfTurnState(gsm, game, primaryStage));
+        gsm.add("playerPlayCard", new PlayerPlayCardState(gsm, game, primaryStage));
         gsm.add("roundIsFinished", new RoundIsFinishedState(gsm, game, primaryStage));
         gsm.add("gameIsFinished", new GameIsFinishedState(gsm, game, primaryStage));
 
