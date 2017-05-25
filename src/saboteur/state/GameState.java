@@ -95,8 +95,8 @@ public class GameState extends State{
             this.goalCardContainer.setPrefSize(gameComponentSize.getGameTableSize(), gameComponentSize.getGameTableSize());
             for (int i = 0; i < 3; i++) {
             	ImageView img = new ImageView();
-            	img.setFitWidth(108/1.5);
-            	img.setFitHeight(166/1.5);
+            	img.setFitWidth(gameComponentSize.getCardWidth()/1.5);
+            	img.setFitHeight(gameComponentSize.getCardHeight()/1.5);
             	
             	StackPane p = new StackPane(img);
             	p.setAlignment(Pos.CENTER);

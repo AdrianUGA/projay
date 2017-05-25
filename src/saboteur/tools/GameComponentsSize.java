@@ -11,6 +11,9 @@ public class GameComponentsSize {
 	private double gameTableHalfSize;
 	private double middleCircleRadius;
 	private double centerOfGameTable;
+
+	private double cardHeight;
+	private double cardWidth;
 	
 	private static GameComponentsSize size;
 	
@@ -20,6 +23,9 @@ public class GameComponentsSize {
         this.gameTableHalfSize = gameTableSize/2;
         this.middleCircleRadius = gameTableHalfSize/2;
         this.centerOfGameTable = gameTableSize/2;
+        
+        this.cardHeight = 166.0;
+        this.cardWidth = 108.0;
 	}
 	
 	public static GameComponentsSize getGameComponentSize(){
@@ -52,4 +58,13 @@ public class GameComponentsSize {
 	public double getCenterOfGameTable(){
 		return this.centerOfGameTable;
 	}
+	
+	public double getCardHeight() {
+		return this.cardHeight;
+	}
+
+	public double getCardWidth() {
+		return this.cardWidth;
+	}
+
 }
