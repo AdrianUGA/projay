@@ -1,6 +1,7 @@
 package saboteur.state;
 
 import javafx.animation.ParallelTransition;
+import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
@@ -66,8 +67,12 @@ public class PlayerWaitState extends State{
     	this.stack = (ImageView) this.primaryStage.getScene().lookup("#stack");
 
 		if (this.game.getCurrentPlayer().isAI()){
-			Operation o = this.game.getCurrentPlayer().playCard();
-			this.gsm.changePeek("playerPlayCard", o);
+			PauseTransition pt = new PauseTransition(Duration.INDEFINITE.millis(1000));
+			pt.setOnFinished(event -> {
+				Operation o = this.game.getCurrentPlayer().playCard();
+				this.gsm.changePeek("playerPlayCard", o);
+			});
+			pt.play();
 		} else {
 			initControlForHuman();
 		}

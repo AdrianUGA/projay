@@ -15,6 +15,7 @@ import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.model.Operation;
 import saboteur.model.Position;
 import saboteur.model.Card.Card;
 import saboteur.tools.Icon;
@@ -30,6 +31,8 @@ public class PlayerSelectedPlanCardState extends State{
 	private Circle gameBoard;
 	private Card selectedCard;
 	private boolean goalCardSelect;
+
+	private Operation op;
 	
     public PlayerSelectedPlanCardState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -113,7 +116,7 @@ public class PlayerSelectedPlanCardState extends State{
         			ImageView img = (ImageView) p.getChildren().get(0);
         			Position posi = this.game.getBoard().getGoalCards().get(i%3);
         			img.setImage( Resources.getImage().get(this.game.getBoard().getCard(posi).getFrontImage()) );
-        			this.game.getCurrentPlayer().playCard(this.game.getBoard().getCard(posi));
+        			this.op = this.game.getCurrentPlayer().playCard(this.game.getBoard().getCard(posi));
                 	this.beforEnd();
         			this.goalCardSelect = true;
                 	break;
@@ -131,15 +134,7 @@ public class PlayerSelectedPlanCardState extends State{
     		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
     		this.paneOfGoalCard[i].setOnMouseClicked(null);
     	}
-    	
-    	this.game.getCurrentPlayer().getHand().remove(this.selectedCard);
-    	
-		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
-    	this.game.getCurrentPlayer().pickCard();
-    	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
-    	cardContainer.setOnMouseClicked(null);
-    	cardContainer.generateHandCardImage(); 
-    	
+
     	this.endOfTurnButton.setDisable(false);
     	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
     	    @Override public void handle(ActionEvent e) {
@@ -152,6 +147,6 @@ public class PlayerSelectedPlanCardState extends State{
     	this.gameBoard.toBack();
 		this.goalCardContainer.setVisible(false);
     	this.endOfTurnButton.setOnAction(null);
-    	this.gsm.pop();
+    	this.gsm.changePeek("playerPlayCard", op);
 	}
 }

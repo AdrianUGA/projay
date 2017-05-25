@@ -14,6 +14,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.model.Operation;
 import saboteur.model.Player;
 import saboteur.model.Card.ActionCardToPlayer;
 import saboteur.model.Card.Card;
@@ -34,6 +35,8 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 	private int toolValue1 = -1;
 	private int toolValue2 = -1;
 	private boolean playerSelected;
+
+	private Operation op;
 
     public PlayerSelectedActionCardToPlayerState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -129,7 +132,7 @@ public class PlayerSelectedActionCardToPlayerState extends State{
             	
             	for(Player p : this.game.getPlayers(this.card)) {
             		if( this.playersArc.getCircles(p)[this.toolValue1] == circle )
-            			this.game.getCurrentPlayer().playCard(p);
+            			this.op = this.game.getCurrentPlayer().playCard(p);
     			}
             	
     		}
@@ -138,11 +141,11 @@ public class PlayerSelectedActionCardToPlayerState extends State{
             	
             	for(Player p : this.game.getPlayers(this.card)) {
             		if( this.playersArc.getCircles(p)[this.toolValue1] == circle ){
-            			this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue1));
+            			this.op = this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue1));
                 		this.playersArc.refreshCircles(circle, this.toolValue1, false);
             		}
             		if( this.toolValue2 != -1 && this.playersArc.getCircles(p)[this.toolValue2] == circle ) {
-            			this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue2));
+            			this.op = this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue2));
                 		this.playersArc.refreshCircles(circle, this.toolValue2, false);
             		}
     			}
@@ -169,15 +172,7 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 				this.playersArc.getCircles(p)[i].setStroke(Color.BLACK);
 			}
 		}
-		
-    	this.game.getCurrentPlayer().getHand().remove(this.selectedCard);
-    	
-		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
-    	this.game.getCurrentPlayer().pickCard();
-    	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
-    	cardContainer.setOnMouseClicked(null);
-    	cardContainer.generateHandCardImage(); 
-    	
+
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
     	this.endOfTurnButton.setDisable(false);
     	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -186,11 +181,12 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     	    }
     	});
     }
+
     private void endOfTurn() {
     	this.endOfTurnButton.setOnAction(null);
-    	this.gsm.pop();
+    	this.gsm.changePeek("playerPlayCard", this.op);
 	}
-    
+
     private Tool intToTool(int intOfTool) {
     	Tool tool = null;
     	switch(intOfTool) {

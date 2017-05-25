@@ -16,10 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import saboteur.GameStateMachine;
-import saboteur.model.Board;
-import saboteur.model.Game;
-import saboteur.model.OperationPathCard;
-import saboteur.model.Position;
+import saboteur.model.*;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 import saboteur.tools.Icon;
@@ -41,6 +38,8 @@ public class PlayerSelectedPathCardState extends State{
 	private ImageView selectedImagePosition;
 	private boolean pathCardOnTheBoard;
 	private SVGPath rotateSVG;
+
+	private Operation op;
 	
     public PlayerSelectedPathCardState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -157,7 +156,7 @@ public class PlayerSelectedPathCardState extends State{
     		Position position = this.positionOfImages.get(event.getTarget());
     		if(position != null){
     			if(this.selectedCard.isCollapseCard()) {
-    				this.gameBoardGridPane.removeCardOfBoard(position);
+    				this.op = this.game.getCurrentPlayer().playCard(this.game.getBoard().getCard(position));
         			this.beforEnd();
         			this.positionSelected = true;
         			this.endOfTurnButton.setDisable(false);
@@ -216,36 +215,28 @@ public class PlayerSelectedPathCardState extends State{
     	    	if(selectedImagePosition.getRotate() != 0){
     	    		card.reverse();
     	    	}
-    	    	gameBoardGridPane.addCardToBoard(card, position);
+				op = game.getCurrentPlayer().playCard(position);
     	        beforEnd();
     	        endOfTurn();
     	    }
     	});
 	}
-    
+
 
 	private void beforEnd() {
 		Button trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
     	trashButton.setDisable(true);
-    	
+
     	for(Object obj : this.boardEffect) {
 			this.gameBoardGridPane.getChildren().remove(obj);
 		}
-    	
+
     	this.gameBoardGridPane.setOnMouseClicked(null);
-    	
-    	this.game.getCurrentPlayer().getHand().remove(this.selectedCard);
-    	
-		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
-    	this.game.getCurrentPlayer().pickCard();
-    	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
-    	cardContainer.setOnMouseClicked(null);
-    	cardContainer.generateHandCardImage(); 
     }
-    
+
     private void endOfTurn() {
     	this.endOfTurnButton.setOnAction(null);
-		this.gsm.pop();
+		this.gsm.changePeek("playerPlayCard", op);
 	}
     
 }

@@ -135,7 +135,7 @@ public class Game {
 		this.history = new LinkedList<>();
 		this.historyRedo = new LinkedList<>();
 
-		this.currentPlayerIndex = this.playerList.size()-1;
+		this.currentPlayerIndex = 0;
 		this.newRound();
 		//this.loadConfig("almostFinished");
 	}
@@ -347,12 +347,15 @@ public class Game {
 	}
 	
 	public void previousPlayer(){
-		this.currentPlayerIndex = (this.currentPlayerIndex - 1) % this.playerList.size();
-		if (this.currentPlayerIndex == -1) this.currentPlayerIndex = 2;
+		this.turn--;
+		this.currentPlayerIndex = this.currentPlayerIndex - 1;
+		if (this.currentPlayerIndex == -1) this.currentPlayerIndex = this.playerList.size()-1;
 	}
 
-	public Player getNextPlayer(){
-		return this.playerList.get((this.currentPlayerIndex + 1) % this.playerList.size());
+	public Player getPreviousPlayer(){
+		int previousPlayerIndex = this.currentPlayerIndex - 1;
+		if (previousPlayerIndex == -1) previousPlayerIndex = this.playerList.size()-1;
+		return this.playerList.get(previousPlayerIndex);
 	}
 	
 	public void save(String name) {
