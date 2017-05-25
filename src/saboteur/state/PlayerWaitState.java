@@ -1,5 +1,8 @@
 package saboteur.state;
 
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -9,15 +12,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
+import saboteur.model.Operation;
 import saboteur.model.Team;
 import saboteur.model.Card.Card;
-import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 
@@ -34,7 +35,10 @@ public class PlayerWaitState extends State{
 
 	private Button trashButton;
 	private Button endOfTurnButton;
-	
+
+	private ImageView trash;
+	private ImageView stack;
+
 	
     public PlayerWaitState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -52,67 +56,23 @@ public class PlayerWaitState extends State{
 
     @Override
     public void onEnter(Object param) {
-    	System.out.println("waitState");
-		if (this.game.getCurrentPlayer().isAI()){
-			this.game.getCurrentPlayer().playCard();
-			this.game.getCurrentPlayer().pickCard();
-			this.gsm.pop();
-		}
     	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
-    	this.playersArc= (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
+    	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
     	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
     	this.playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
     	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
-    	   	
-    	//Image and Label of player role
-    	
-    	if(this.game.getCurrentPlayer().getTeam() == Team.DWARF) {
-    		this.playerRoleLabel.setText("Chercheur d'or");
-    		this.playerRoleImage.setImage(new Image("/resources/nainchercheurdor.png"));
-    	}
-    	else {
-    		this.playerRoleLabel.setText("Saboteur");
-    		this.playerRoleImage.setImage(new Image("/resources/nainsaboteur.png"));
-    	}
-    	this.playerRoleImage.setVisible(true);
-    	this.playerRoleLabel.setVisible(true);
-    	
-    	
-    	this.playersArc.refreshPlayersArcsAndCircles();
-    	
-    	this.endOfTurnButton.setDisable(true);
-    	this.trashButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
-				@Override
-				public void handle(MouseEvent event) {
-					game.getCurrentPlayer().playCard();
-			    	gsm.changePeek("playerWait");
-			    	trashButton.setDisable(true);
-			    	
-			    	System.out.println(game.stackIsEmpty());
-			    	game.getCurrentPlayer().pickCard();
-			    	GameCardContainer cardContainer = (GameCardContainer)primaryStage.getScene().lookup("#cardContainer");
-			    	cardContainer.setOnMouseClicked(null);
-			    	cardContainer.generateHandCardImage(); 
-			    	
-			    	endOfTurnButton.setDisable(false);
-			    	endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
-			    	    @Override public void handle(ActionEvent e) {
-			    	    	endOfTurnButton.setOnAction(null);
-			    	    	gsm.pop();
-			    	    }
-			    	});
-				}
-			});
-    	    	        
-        this.cardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent event) {
-				selectCardButtonAction(event);
-			}
-		});
-        
-        this.cardContainer.showCards(); 
+    	this.trash = (ImageView) this.primaryStage.getScene().lookup("#trash");
+    	this.stack = (ImageView) this.primaryStage.getScene().lookup("#stack");
+
+		if (this.game.getCurrentPlayer().isAI()){
+			Operation o = this.game.getCurrentPlayer().playCard();
+			this.gsm.changePeek("playerPlayCard", o);
+		} else {
+			initControlForHuman();
+		}
+
+
     }
 
     @Override
@@ -128,12 +88,10 @@ public class PlayerWaitState extends State{
         	newCard = (ImageView)event.getTarget();
             
             if(newCard != this.imgSelectedCard) {
-        		cancelEffectOfPreviousSelection();
-        		
-            	//style on the image of the selected card
-        		this.imgSelectedCard = newCard;
-        		this.imgSelectedCard.setStyle("-fx-effect : dropshadow(gaussian, black, 2, 2, 2, 2);");
-        		
+
+            	removeOldSelection();
+        		addNewSelection(newCard);
+
         		//take the ref. of the card.
 	        	int i = 0;
 	        	for(Node nodeIn:hb.getChildren()) {
@@ -161,14 +119,81 @@ public class PlayerWaitState extends State{
     	if(this.imgSelectedCard != null) {
     		this.trashButton.setDisable(false);
     	}
-    	
     }
+
+    private void initControlForHuman(){
+		//Image and Label of player role
+
+		if(this.game.getCurrentPlayer().getTeam() == Team.DWARF) {
+			this.playerRoleLabel.setText("Chercheur d'or");
+			this.playerRoleImage.setImage(new Image("/resources/nainchercheurdor.png"));
+		}
+		else {
+			this.playerRoleLabel.setText("Saboteur");
+			this.playerRoleImage.setImage(new Image("/resources/nainsaboteur.png"));
+		}
+		this.playerRoleImage.setVisible(true);
+		this.playerRoleLabel.setVisible(true);
+
+
+		this.playersArc.refreshPlayersArcsAndCircles();
+
+		this.endOfTurnButton.setDisable(true);
+		this.trashButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent event) {
+				game.getCurrentPlayer().playCard();
+				gsm.changePeek("playerWait");
+				trashButton.setDisable(true);
+
+				System.out.println(game.stackIsEmpty());
+				game.getCurrentPlayer().pickCard();
+				GameCardContainer cardContainer = (GameCardContainer)primaryStage.getScene().lookup("#cardContainer");
+				cardContainer.setOnMouseClicked(null);
+				cardContainer.generateHandCardImage();
+
+				endOfTurnButton.setDisable(false);
+				endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
+					@Override public void handle(ActionEvent e) {
+						endOfTurnButton.setOnAction(null);
+						gsm.pop();
+					}
+				});
+			}
+		});
+
+		this.cardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent event) {
+				selectCardButtonAction(event);
+			}
+		});
+
+		this.cardContainer.showCards();
+	}
     
-    private void cancelEffectOfPreviousSelection() {
+    private void removeOldSelection() {
     	if(this.selectedCard != null) {
-			this.imgSelectedCard.setStyle(null);
+			TranslateTransition tt = new TranslateTransition(Duration.INDEFINITE.millis(200), this.imgSelectedCard);
+			tt.setByY(30);
+			ScaleTransition st = new ScaleTransition(Duration.INDEFINITE.millis(200), this.imgSelectedCard);
+			st.setByX(-0.2f);
+			st.setByY(-0.2f);
+			ParallelTransition pt = new ParallelTransition(tt, st);
+			pt.play();
 			this.imgSelectedCard = null;
 			this.selectedCard = null;
-    	}
+		}
+	}
+
+	private void addNewSelection(ImageView newCard){
+		TranslateTransition tt = new TranslateTransition(Duration.INDEFINITE.millis(200), newCard);
+		tt.setByY(-30);
+		ScaleTransition st = new ScaleTransition(Duration.INDEFINITE.millis(200), newCard);
+		st.setByX(0.2f);
+		st.setByY(0.2f);
+		ParallelTransition pt = new ParallelTransition(tt, st);
+		pt.play();
+		this.imgSelectedCard = newCard;
 	}
 }
