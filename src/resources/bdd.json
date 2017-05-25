@@ -3,19 +3,19 @@
   	"goldCards": [
       {
       	"id" : 45,
-        "frontImage": "gold_card_1.png",
+        "frontImage": "gold_card_45.png",
         "value": 1,
         "number": 16
       },
       {
       	"id" : 46,
-        "frontImage": "gold_card_2.png",
+        "frontImage": "gold_card_46.png",
         "value": 2,
         "number": 8
       },
       {
       	"id" : 47,
-        "frontImage": "gold_card_3.png",
+        "frontImage": "gold_card_47.png",
         "value": 3,
         "number": 4
       }
@@ -23,21 +23,21 @@
     "sabotageCards": [
       {
       	"id" : 48,
-        "frontImage": "broken_lantern_card.png",
+        "frontImage": "broken_lantern_card_48.png",
         "backImage": "card_verso.png",
         "type": "LANTERN",
         "number": 3
       },
       {
       	"id" : 49,
-        "frontImage": "broken_cart_card.png",
+        "frontImage": "broken_cart_card_49.png",
         "backImage": "card_verso.png",
         "type": "CART",
         "number": 3
       },
       {
       	"id" : 50,
-        "frontImage": "broken_pickaxe_card.png",
+        "frontImage": "broken_pickaxe_card_50.png",
         "backImage": "card_verso.png",
         "type": "PICKAXE",
         "number": 3
@@ -46,21 +46,21 @@
     "rescueCards": [
       {
       	"id" : 51,
-        "frontImage": "lantern_card.png",
+        "frontImage": "rescue_lantern_card_51.png",
         "backImage": "card_verso.png",
         "type": "LANTERN",
         "number": 2
       },
       {
       	"id" : 52,
-        "frontImage": "cart_card.png",
+        "frontImage": "rescue_cart_card_52.png",
         "backImage": "card_verso.png",
         "type": "CART",
         "number": 2
       },
       {
       	"id" : 53,
-        "frontImage": "pickaxe_card.png",
+        "frontImage": "rescue_pickaxe_card_53.png",
         "backImage": "card_verso.png",
         "type": "PICKAXE",
         "number": 2
@@ -69,7 +69,7 @@
     "doubleRescueCards": [
       {
       	"id" : 54,
-        "frontImage": "pickaxe_cart_card.png",
+        "frontImage": "double_rescue_pickaxe_cart_card_54.png",
         "backImage": "card_verso.png",
         "type1": "PICKAXE",
         "type2": "CART",
@@ -77,7 +77,7 @@
       },
       {
       	"id" : 55,
-        "frontImage": "pickaxe_lantern_card.png",
+        "frontImage": "double_rescue_pickaxe_lantern_card_55.png",
         "backImage": "card_verso.png",
         "type1": "PICKAXE",
         "type2": "LANTERN",
@@ -85,7 +85,7 @@
       },
       {
       	"id" : 56,
-        "frontImage": "lantern_cart_card.png",
+        "frontImage": "double_rescue_lantern_cart_card_56.png",
         "backImage": "card_verso.png",
         "type1": "CART",
         "type2": "LANTERN",
@@ -94,20 +94,20 @@
     ],
     "planCard": {
     	"id" : 57,
-      "frontImage": "plan_card.png",
+      "frontImage": "plan_card_57.png",
       "backImage": "card_verso.png",
       "number": 6
     },
     "collapseCard": {
     	"id" : 58,
-      "frontImage": "collapse_card.png",
+      "frontImage": "collapse_card_58.png",
       "backImage": "card_verso.png",
       "number": 3
     },
     "pathCards": [
       {
       	"id" : 41,
-        "frontImage": "start_card.png",
+        "frontImage": "start_card_41.png",
         "backImage": "goal_card_verso.png",
         "cardinal": [
           "NORTH",
@@ -122,7 +122,7 @@
       },
       {
       	"id" : 42,
-        "frontImage": "goal_card_rock_1.png",
+        "frontImage": "goal_card_rock_42.png",
         "backImage": "goal_card_verso.png",
         "cardinal": [
           "EAST",
@@ -135,7 +135,7 @@
       },
       {
       	"id" : 43,
-        "frontImage": "goal_card_rock_2.png",
+        "frontImage": "goal_card_rock_43.png",
         "backImage": "goal_card_verso.png",
         "cardinal": [
           "SOUTH",
@@ -148,7 +148,7 @@
       },
       {
       	"id" : 44,
-        "frontImage": "goal_card_gold.png",
+        "frontImage": "goal_card_gold_44.png",
         "backImage": "goal_card_verso.png",
         "cardinal": [
           "NORTH",

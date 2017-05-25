@@ -13,11 +13,6 @@ public class RescueCard extends ActionCardToPlayer {
 		return this.rescueType;
 	}
 
-	@Override
-	public ActionCardToPlayerType getType() {
-		return ActionCardToPlayerType.RESCUE;
-	}
-
 	public RescueCard clone(){
 		RescueCard card;
 
