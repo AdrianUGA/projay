@@ -162,6 +162,8 @@ public class Game {
 	public void loadConfig(String name){
 		beginInitRound();
 		
+		int numRound = 1;
+		
 		File configFile = new File(Loader.configFolder+ "/" + name + ".config");
 		BufferedReader reader = null;
 		try {
@@ -189,6 +191,17 @@ public class Game {
 				}
 			}
 			
+			//To current player
+			chaine = reader.readLine();
+			for (Player p : this.playerList){
+				if (p.name.equals(chaine)){
+					this.currentPlayerIndex = this.playerList.indexOf(p);
+				}
+			}
+			
+			chaine = reader.readLine();
+			numRound = Integer.parseInt(chaine);
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -206,12 +219,9 @@ public class Game {
 			}
 		}
 		
-		//this.currentPlayerIndex = this.playerList.size()-1;
-		this.currentPlayerIndex = 1;
 		this.setTeam();
-		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
         initAI();
-		this.nextPlayer();
+		//this.nextPlayer();
 		/*for (Player p : this.playerList){
 			System.out.println("Nom = " + p.name);
 			for (Card firstCard : p.getHand()){
@@ -224,6 +234,8 @@ public class Game {
 		}*/
 		
 		endInitRound();
+		this.round = numRound;
+		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
 	}
 
 	/**
@@ -331,8 +343,6 @@ public class Game {
 		beginInitRound();
 
 		this.setTeam();
-
-		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
 		
 		for(Player p : this.playerList){
 			p.resetHandicaps();
@@ -345,6 +355,7 @@ public class Game {
 		//this.nextPlayer();
 		
 		endInitRound();
+		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
 	}
 
 	public void initAI() {
@@ -405,6 +416,78 @@ public class Game {
 		int previousPlayerIndex = this.currentPlayerIndex - 1;
 		if (previousPlayerIndex == -1) previousPlayerIndex = this.playerList.size()-1;
 		return this.playerList.get(previousPlayerIndex);
+	}
+	
+	/**
+	 * if nb score saved > 10, we delete the oldest
+	 */
+	public void saveScore(){
+		LinkedList<Score> old = readAllScore();
+		if (old.size() >= 10){
+			old.removeLast();
+		}
+		Score toAdd = new Score();
+		for (Player p : this.playerList)
+			toAdd.addPlayerName(p.getName());
+		LinkedList<Player> winners = this.getWinners();
+		for (Player w : winners)
+			toAdd.addWinnerName(w.getName());
+		toAdd.setScoreWinner(winners.getFirst().getGold());
+		old.addFirst(toAdd);
+		
+		String cheminDuFichier = Loader.scoreFolder+"/score";
+		
+		File file = new File(cheminDuFichier);
+		
+		try {
+			file.createNewFile();
+			FileOutputStream fileOutput = new FileOutputStream(file);
+			ObjectOutputStream objectOutput = new ObjectOutputStream(fileOutput);
+			objectOutput.writeObject(old);
+			objectOutput.close();
+		} catch (IOException e) {
+			System.out.println("Impossible to save score in file : "
+					+ cheminDuFichier);
+		}
+	}
+	
+	/**
+	 * If file not exist, return empty list
+	 * @return
+	 */
+	public LinkedList<Score> readAllScore(){
+		LinkedList<Score> result = new LinkedList<>();
+		File dirSave = new File(Loader.scoreFolder);
+		dirSave.mkdir();
+		String cheminDuFichier = Loader.scoreFolder+ "/score";
+		File file = new File(cheminDuFichier);
+		try {
+			if (!file.exists())
+				return result;
+			else {
+				FileInputStream fileInput = new FileInputStream(cheminDuFichier);
+		        ObjectInputStream objectInputStream = new ObjectInputStream(fileInput);
+
+				result = (LinkedList<Score>) objectInputStream.readObject();
+				if (result == null){
+					return new LinkedList<>();
+				}
+
+		        objectInputStream.close();
+			}
+		}
+        catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	public void save(String name) {
