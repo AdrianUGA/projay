@@ -120,13 +120,19 @@ public class PlayerArc extends Pane{
 		double x =lengthOfArc/3.5;
 		double y = (lengthOfArc - x*3)/2;
 		
-		for (int i = 0; i<3; i++) {  
+		for (int i = 0; i<3; i++) {              
 			double angle = -startAngle-x*i-x/2-y;
-			this.playerCircles.get(player)[i] = new Circle(center + centerDistance, center, circleRadius, PlayerArc.color);
-            Rotate rotate = new Rotate(angle, center, center);
-            this.playerCircles.get(player)[i].getTransforms().add(rotate);
+			double radians = Math.toRadians(angle);
+            double layoutX = (int)Math.round((Math.cos(radians) * centerDistance + center));
+            double layoutY = (int)Math.round((Math.sin(-radians)* centerDistance + center));
+            
+			this.playerCircles.get(player)[i] = new Circle(circleRadius);
+            this.playerCircles.get(player)[i].setLayoutX(layoutX);
+            this.playerCircles.get(player)[i].setLayoutY(layoutY);
             this.playerCircles.get(player)[i].setStroke(Color.BLACK);
             this.playerCircles.get(player)[i].setStrokeWidth(3);
+            this.playerCircles.get(player)[i].toFront();
+            
             this.getChildren().add(this.playerCircles.get(player)[i]);
 		}		
 	}
@@ -188,6 +194,7 @@ public class PlayerArc extends Pane{
 
         this.playerArc.put(player, path);
         this.getChildren().add(path);
+        path.toBack();
         
         Label name = new Label(player.getName());
         double anglePosition = startAngle + lengthOfArc/2;

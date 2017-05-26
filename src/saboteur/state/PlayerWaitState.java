@@ -22,9 +22,11 @@ import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
+import saboteur.view.TrashAndPickStackContainer;
 
 public class PlayerWaitState extends State{
 	
+	private TrashAndPickStackContainer trashAndPickStackContainer;
 	private GameCardContainer gameCardContainer;
 	private PlayerArc playersArc;
 	
@@ -33,9 +35,6 @@ public class PlayerWaitState extends State{
 
 	private Button trashButton;
 	private Button endOfTurnButton;
-
-	private ImageView trash;
-	private ImageView stack;
 
 	
     public PlayerWaitState(GameStateMachine gsm, Game game, Stage primaryStage){
@@ -54,14 +53,13 @@ public class PlayerWaitState extends State{
 
     @Override
     public void onEnter(Object param) {
-    	this.gameCardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#gameCardContainer");
+    	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
+    	this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
     	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
-    	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
+    	this.trashButton = (Button) this.primaryStage.getScene().lookup("#trashButton");
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
     	this.playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
     	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
-    	this.trash = (ImageView) this.primaryStage.getScene().lookup("#trash");
-    	this.stack = (ImageView) this.primaryStage.getScene().lookup("#stack");
     	
     	Button undoButton = (Button) this.primaryStage.getScene().lookup("#undoButton");
     	Button redoButton = (Button) this.primaryStage.getScene().lookup("#redoButton");
@@ -140,6 +138,7 @@ public class PlayerWaitState extends State{
     	
     	if(this.gameCardContainer.getImgSelectedCard() != null) {
     		this.trashButton.setDisable(false);
+    		this.trashAndPickStackContainer.enableTrashButton();
     	}
     }
 
@@ -170,9 +169,9 @@ public class PlayerWaitState extends State{
 
 				System.out.println(game.stackIsEmpty());
 				game.getCurrentPlayer().pickCard();
-				GameCardContainer cardContainer = (GameCardContainer)primaryStage.getScene().lookup("#cardContainer");
-				cardContainer.setOnMouseClicked(null);
-				cardContainer.generateHandCardImage();
+				GameCardContainer gameCardContainer = (GameCardContainer)primaryStage.getScene().lookup("#gameCardContainer");
+				gameCardContainer.setOnMouseClicked(null);
+				gameCardContainer.generateHandCardImage();
 
 				endOfTurnButton.setDisable(false);
 				endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -183,7 +182,37 @@ public class PlayerWaitState extends State{
 				});
 			}
 		});
+		
+		
+		this.trashAndPickStackContainer.disablePickAndEndTurnButton();
+		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				game.getCurrentPlayer().playCard();
+				gsm.changePeek("playerWait");
+				trashAndPickStackContainer.disableTrashButton();
+				
+				System.out.println(game.stackIsEmpty());
+				game.getCurrentPlayer().pickCard();
+				GameCardContainer gameCardContainer = (GameCardContainer)primaryStage.getScene().lookup("#gameCardContainer");
+				gameCardContainer.setOnMouseClicked(null);
+				gameCardContainer.generateHandCardImage();
+				
+				trashAndPickStackContainer.enablePickAndEndTurnButton();
+				trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(MouseEvent event) {
+						trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
+						gsm.pop();
+					}
+				});
+			}
+		};
+		this.trashAndPickStackContainer.setEventToTrashButton(event);
+		
 
+		
+		
 		this.gameCardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event) {

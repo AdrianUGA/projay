@@ -24,12 +24,14 @@ import saboteur.model.Card.SabotageCard;
 import saboteur.model.Card.Tool;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
+import saboteur.view.TrashAndPickStackContainer;
 
 public class PlayerSelectedActionCardToPlayerState extends State{
 	
 	private GameCardContainer gameCardContainer;
 	private ActionCardToPlayer card;
 	private PlayerArc playersArc;
+	private TrashAndPickStackContainer trashAndPickStackContainer;
 	private Button endOfTurnButton;
 	private LinkedList<Player> playerList;	
 	private int toolValue1 = -1;
@@ -55,7 +57,8 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     @Override
     public void onEnter(Object param) {
         System.out.println("action card");
-        
+
+    	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
         this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
     	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
     	this.playerSelected = false;
@@ -181,10 +184,18 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     	        endOfTurn();
     	    }
     	});
+    	
+    	this.trashAndPickStackContainer.enablePickAndEndTurnButton();
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
+    	    @Override public void handle(MouseEvent e) {
+    	        endOfTurn();
+    	    }
+    	});
     }
 
     private void endOfTurn() {
     	this.endOfTurnButton.setOnAction(null);
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
     	this.gsm.changePeek("playerPlayCard", this.op);
 	}
 

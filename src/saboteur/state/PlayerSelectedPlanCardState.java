@@ -21,12 +21,14 @@ import saboteur.model.Card.Card;
 import saboteur.tools.Icon;
 import saboteur.tools.Resources;
 import saboteur.view.GameCardContainer;
+import saboteur.view.TrashAndPickStackContainer;
 
 public class PlayerSelectedPlanCardState extends State{
 
 	private Object[] svgEyes= new Object[3];
 	private StackPane[] paneOfGoalCard = new StackPane[3];
 	private VBox goalCardContainer;
+	private TrashAndPickStackContainer trashAndPickStackContainer;
 	private Button endOfTurnButton;
 	private Circle gameBoard;
 	private boolean goalCardSelect;
@@ -50,11 +52,12 @@ public class PlayerSelectedPlanCardState extends State{
     @Override
     public void onEnter(Object param) {
         System.out.println("plan card");
-        
+
+        this.gameBoard = (Circle)this.primaryStage.getScene().lookup("#gameBoard");
         this.goalCardContainer = (VBox) this.primaryStage.getScene().lookup("#goalCardContainer");
     	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
+    	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
         this.goalCardSelect = false;
-        this.gameBoard = (Circle)this.primaryStage.getScene().lookup("#gameBoard");
         
         this.gameBoard.toFront();
         this.goalCardContainer.toFront();
@@ -138,12 +141,20 @@ public class PlayerSelectedPlanCardState extends State{
     	        endOfTurn();
     	    }
     	});
+    	
+    	this.trashAndPickStackContainer.enablePickAndEndTurnButton();
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
+    	    @Override public void handle(MouseEvent e) {
+    	        endOfTurn();
+    	    }
+    	});
     }
     
     private void endOfTurn() {
     	this.gameBoard.toBack();
 		this.goalCardContainer.setVisible(false);
     	this.endOfTurnButton.setOnAction(null);
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
     	this.gsm.changePeek("playerPlayCard", op);
 	}
 }

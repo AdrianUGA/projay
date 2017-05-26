@@ -24,6 +24,7 @@ import saboteur.tools.Icon;
 import saboteur.tools.Resources;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
+import saboteur.view.TrashAndPickStackContainer;
 
 public class PlayerSelectedPathCardState extends State{
 
@@ -35,6 +36,7 @@ public class PlayerSelectedPathCardState extends State{
 	private LinkedHashMap<String, Image> allCards = Resources.getImage();
 	private boolean positionSelected;
 	private Button endOfTurnButton;
+	private TrashAndPickStackContainer trashAndPickStackContainer;
 
 	private ImageView selectedImagePosition;
 	private boolean pathCardOnTheBoard;
@@ -69,6 +71,7 @@ public class PlayerSelectedPathCardState extends State{
         double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/3;
         
 
+    	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
         this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
         this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
         this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
@@ -161,6 +164,13 @@ public class PlayerSelectedPathCardState extends State{
         	    	        endOfTurn();
         	    	    }
         	    	});
+        			
+        			this.trashAndPickStackContainer.enablePickAndEndTurnButton();
+        			this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
+        	    	    @Override public void handle(MouseEvent e) {
+        	    	        endOfTurn();
+        	    	    }
+        	    	});
         		}
         		else {
         			this.pathCardOnTheBoard = false;
@@ -208,6 +218,19 @@ public class PlayerSelectedPathCardState extends State{
     	this.endOfTurnButton.setDisable(false);
     	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
     	    @Override public void handle(ActionEvent e) {
+    	    	PathCard card = (PathCard)selectedCard;
+    	    	if(selectedImagePosition.getRotate() != 0){
+    	    		card.reverse();
+    	    	}
+				op = game.getCurrentPlayer().playCard(position);
+    	        beforEnd();
+    	        endOfTurn();
+    	    }
+    	});
+    	
+    	this.trashAndPickStackContainer.enablePickAndEndTurnButton();
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
+    	    @Override public void handle(MouseEvent e) {
     	    	PathCard card = (PathCard)selectedCard;
     	    	if(selectedImagePosition.getRotate() != 0){
     	    		card.reverse();

@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -23,15 +24,19 @@ import saboteur.tools.GameComponentsSize;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
+import saboteur.view.TrashAndPickStackContainer;
 
 public class GameState extends State{
-
-	@FXML private AnchorPane cardContainer;
+	
+	@FXML private BorderPane gameBorderPane;
+	
 	@FXML private Pane boardContainer;
 	@FXML private Circle gameBoard;
 	@FXML private VBox goalCardContainer;
+	
 	@FXML private Label playerRoleLabel;
 	@FXML private ImageView playerRoleImage;
+	
 	@FXML private Button undoButton;
 	@FXML private Button redoButton;
 	
@@ -40,7 +45,9 @@ public class GameState extends State{
 	private PlayerArc playersArc;
 	
 	private GameBoardGridPane gameBoardGridPane;
+	
 	private GameCardContainer gameCardContainer;
+	private TrashAndPickStackContainer trahAndPickStackContainer;
 
     public GameState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -82,7 +89,8 @@ public class GameState extends State{
                        
             GameComponentsSize gameComponentSize = GameComponentsSize.getGameComponentSize();
             double gameTableSize = gameComponentSize.getGameTableSize();
-            double gameTableHalfSize = gameComponentSize.getGameTableHalfSize();
+            
+            // ******************** Right ********************
         	//Image and Label of player role
         	this.playerRoleLabel.setFont(new Font("Arial", 30));
         	this.playerRoleLabel.setTextFill(Color.WHITE);
@@ -90,6 +98,29 @@ public class GameState extends State{
         	this.playerRoleImage.setFitHeight(282.0);
         	this.playerRoleImage.setFitWidth(400.0);
         	
+            // trash and pick stacks
+        	this.trahAndPickStackContainer = new TrashAndPickStackContainer(this.game);
+        	this.trahAndPickStackContainer.setId("trashAndPickStackContainer");
+//        	this.gameBorderPane.setTop(this.trahAndPickStackContainer);
+        	this.gameBorderPane.setRight(this.trahAndPickStackContainer);
+            
+            //Cards of current player
+            this.gameCardContainer = new GameCardContainer(this.game, gameComponentSize.getScreenWidth() - gameTableSize - 100);
+            this.gameCardContainer.setId("gameCardContainer");
+            this.gameBorderPane.setBottom(this.gameCardContainer);
+            
+            
+            // ******************** Left ********************
+            //The game board
+            this.gameBoardGridPane = new GameBoardGridPane(this.game);
+            this.gameBoardGridPane.setId("gameBoardGridPane");
+            this.boardContainer.getChildren().add(this.gameBoardGridPane);
+            
+            this.playersArc = new PlayerArc(this.game);
+            this.playersArc.setId("playersArc");
+            this.playersArc.refreshPlayersArcsAndCircles();
+            this.boardContainer.getChildren().add(this.playersArc);
+            
             //Create the goal card for the planCardAction
             this.goalCardContainer.setPrefSize(gameComponentSize.getGameTableSize(), gameComponentSize.getGameTableSize());
             for (int i = 0; i < 3; i++) {
@@ -101,21 +132,6 @@ public class GameState extends State{
             	p.setAlignment(Pos.CENTER);
             	this.goalCardContainer.getChildren().add(p);
             }
-            
-            //For center cards hand Image
-            this.gameCardContainer = new GameCardContainer(this.game, gameComponentSize.getScreenWidth() - gameTableSize - 100);
-            this.gameCardContainer.setId("gameCardContainer");
-            this.cardContainer.getChildren().add(this.gameCardContainer);
-            
-            //The game board
-            this.gameBoardGridPane = new GameBoardGridPane(this.game);
-            this.gameBoardGridPane.setId("gameBoardGridPane");
-            this.boardContainer.getChildren().add(this.gameBoardGridPane);
-            
-            this.playersArc = new PlayerArc(this.game);
-            this.playersArc.setId("playersArc");
-            this.boardContainer.getChildren().add(this.playersArc);
-            this.playersArc.refreshPlayersArcsAndCircles();
             
             this.boardContainer.toBack();
 
