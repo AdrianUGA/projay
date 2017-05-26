@@ -73,7 +73,6 @@ public class GameState extends State{
     private void initGame(){
         
         this.game.initAI();
-        
         try{
             this.loader = new FXMLLoader();
             this.loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
