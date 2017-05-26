@@ -16,7 +16,7 @@ public class Game {
 	private int currentPlayerIndex;
 	private int round;
 	private int turn;
-	public final static long seed = 123456789;
+	public final static long seed = 321456789;
 
 	private final Deck deck;
 

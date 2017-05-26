@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
-import javax.swing.text.LabelView;
-
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -19,7 +16,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
-import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import saboteur.model.Game;
 import saboteur.model.Player;
@@ -29,8 +26,8 @@ import saboteur.tools.GameComponentsSize;
 
 public class PlayerArc extends Pane{
 	private LinkedList<Player> players;
-	private Hashtable<Player, Path> playerArc = new Hashtable<Player, Path>();
-	private Hashtable<Player, Circle[]> playerCircles = new Hashtable<Player, Circle[]>();
+	private Hashtable<Player, Path> playerArc = new Hashtable<>();
+	private Hashtable<Player, Circle[]> playerCircles = new Hashtable<>();
 	private Player previousPlayer;
 	private Game game;
 	private GameComponentsSize gameComponentsSize;
@@ -189,7 +186,7 @@ public class PlayerArc extends Pane{
         this.playerArc.put(player, path);
         this.getChildren().add(path);
         
-        Label name = new Label(player.getName());
+        Text name = new Text(player.getName());
         double anglePosition = startAngle + lengthOfArc/2;
         radians = Math.toRadians(anglePosition);
         anglePosition = Math.abs(anglePosition);
@@ -225,9 +222,8 @@ public class PlayerArc extends Pane{
         }
         XstartInner = (int)Math.round((Math.cos(radians) * distanceToCenter + center));
         YstartInner = (int)Math.round((Math.sin(-radians) * distanceToCenter + center));
-        
-        name.setFont(new Font("Arial", 20));
-        name.setTextFill(Color.WHITE);
+
+        name.getStyleClass().add("player-arc-name");
         name.setLayoutX(XstartInner);
         name.setLayoutY(YstartInner);
         
