@@ -30,16 +30,6 @@ public class GameBoardGridPane extends GridPane {
         
 	}
 	
-	public void addCardToBoard(PathCard card, Position position){
-		this.game.getCurrentPlayer().playCard(position);
-		this.generateBoard();
-	}
-	
-	public void removeCardOfBoard(Position position) {
-		this.game.getCurrentPlayer().playCard(this.board.getCard(position));
-		this.generateBoard();
-	}
-	
     public void generateBoard() {
         double cardWidth = GameComponentsSize.getGameComponentSize().getCardWidth()/3;
         double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/3;

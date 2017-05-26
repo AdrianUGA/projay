@@ -58,6 +58,7 @@ public class GameState extends State{
         if (this.game.roundIsFinished()){
             this.gsm.push("roundIsFinished");
         } else{
+            manageUndoRedoButton();
             this.gsm.push("playerBeginOfTurn");
         }
     }
@@ -80,7 +81,6 @@ public class GameState extends State{
     private void initGame(){
         
         this.game.initAI();
-        
         try{
             this.loader = new FXMLLoader();
             this.loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
@@ -143,6 +143,22 @@ public class GameState extends State{
             this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
+        }
+    }
+
+    private void manageUndoRedoButton(){
+        if(this.game.historyUndoIsEmpty()) {
+            undoButton.setDisable(true);
+        }
+        else {
+            undoButton.setDisable(false);
+        }
+
+        if(this.game.historyRedoIsEmpty()) {
+            redoButton.setDisable(true);
+        }
+        else {
+            redoButton.setDisable(false);
         }
     }
     

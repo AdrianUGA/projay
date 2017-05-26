@@ -2,11 +2,15 @@ package saboteur.view;
 
 import java.util.LinkedHashMap;
 
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.util.Duration;
 import saboteur.model.Game;
 import saboteur.model.Card.Card;
 import saboteur.tools.GameComponentsSize;
@@ -37,7 +41,6 @@ public class GameCardContainer extends HBox {
         }
         
         this.allCards = Resources.getImage();
-        
 	}
 	
     public void generateHandCardImage() {
@@ -50,7 +53,6 @@ public class GameCardContainer extends HBox {
     
     public void hideCards(){
     	this.getChildren().removeAll(this.handCardsImages);
-
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
     		this.handCardsImages[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getBackImage()));
         	this.getChildren().add(this.handCardsImages[i]);
@@ -65,16 +67,35 @@ public class GameCardContainer extends HBox {
 		return imgSelectedCard;
 	}
 
-	public void setImgSelectedCard(ImageView selectedCard) {
-		this.imgSelectedCard = selectedCard;
-	}
-
 	public Card getSelectedCard() {
 		return selectedCard;
 	}
 
-	public void setSelectedCard(Card selectedCard) {
-		this.selectedCard = selectedCard;
+	public void removeSelection() {
+		if(this.selectedCard != null) {
+			TranslateTransition tt = new TranslateTransition(Duration.millis(200), this.imgSelectedCard);
+			tt.setByY(30);
+			ScaleTransition st = new ScaleTransition(Duration.millis(200), this.imgSelectedCard);
+			st.setByX(-0.2f);
+			st.setByY(-0.2f);
+			ParallelTransition pt = new ParallelTransition(tt, st);
+			pt.play();
+			imgSelectedCard = null;
+			this.imgSelectedCard = null;
+			this.selectedCard = null;
+		}
+	}
+
+	public void addSelection(Card selectedCard, ImageView imgSelectedCard){
+    	this.selectedCard = selectedCard;
+    	this.imgSelectedCard = imgSelectedCard;
+		TranslateTransition tt = new TranslateTransition(Duration.millis(200), this.imgSelectedCard);
+		tt.setByY(-30);
+		ScaleTransition st = new ScaleTransition(Duration.millis(200), this.imgSelectedCard);
+		st.setByX(0.2f);
+		st.setByY(0.2f);
+		ParallelTransition pt = new ParallelTransition(tt, st);
+		pt.play();
 	}
 
 }

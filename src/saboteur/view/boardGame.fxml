@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.SVGPath?>
@@ -59,26 +58,6 @@
                </children>
             </HBox>
          </center>
-         <top>
-            <VBox alignment="CENTER_RIGHT" spacing="20.0" BorderPane.alignment="CENTER">
-               <children>
-                  <StackPane alignment="CENTER_RIGHT">
-                     <children>
-                        <Button fx:id="trashButton" alignment="CENTER" disable="true" mnemonicParsing="false" prefHeight="166.0" prefWidth="108.0" text="Défausse">
-                           <StackPane.margin>
-                              <Insets />
-                           </StackPane.margin>
-                        </Button>
-                     </children>
-                  </StackPane>
-                  <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0">
-                     <children>
-                        <Button fx:id="endOfTurnButton" disable="true" mnemonicParsing="false" prefHeight="166.0" prefWidth="108.0" text="Fin de tour" />
-                     </children>
-                  </StackPane>
-               </children>
-            </VBox>
-         </top>
          <left>
             <VBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
                <children>

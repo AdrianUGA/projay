@@ -25,6 +25,7 @@ import saboteur.tools.Resources;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.TrashAndPickStackContainer;
+import saboteur.view.PlayerArc;
 
 public class PlayerSelectedPathCardState extends State{
 
@@ -35,7 +36,6 @@ public class PlayerSelectedPathCardState extends State{
 	private LinkedHashMap<ImageView, Position> positionOfImages;
 	private LinkedHashMap<String, Image> allCards = Resources.getImage();
 	private boolean positionSelected;
-	private Button endOfTurnButton;
 	private TrashAndPickStackContainer trashAndPickStackContainer;
 
 	private ImageView selectedImagePosition;
@@ -66,20 +66,23 @@ public class PlayerSelectedPathCardState extends State{
 
     @Override
     public void onEnter(Object param) {
-        System.out.println("path card");
+		PlayerArc playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
+		playersArc.refreshPlayersArcsAndCircles();
+
         double cardWidth = GameComponentsSize.getGameComponentSize().getCardWidth()/3;
         double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/3;
         
 
     	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
         this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
-        this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
         this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
         this.gameBoardGridPane.toFront();
         this.boardEffect = new LinkedList<>();
 
+        this.gameBoardGridPane.generateBoard();
+
         this.selectedImagePosition = null;
-		this.positionOfImages = new LinkedHashMap<ImageView, Position>();
+		this.positionOfImages = new LinkedHashMap<>();
 		this.positionSelected = false;
         
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>(){
@@ -147,6 +150,7 @@ public class PlayerSelectedPathCardState extends State{
 			}
     	}
 		this.gameBoardGridPane.setOnMouseClicked(null);
+		this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
     }
     
     private void selectPositionOnBoard(MouseEvent event) {
@@ -155,22 +159,21 @@ public class PlayerSelectedPathCardState extends State{
     		Position position = this.positionOfImages.get(event.getTarget());
     		if(position != null){
     			if(this.gameCardContainer.getSelectedCard().isCollapseCard()) {
-    				this.op = this.game.getCurrentPlayer().playCard(this.game.getBoard().getCard(position));
-        			this.beforEnd();
+					if(this.selectedImagePosition != null) {
+						this.selectedImagePosition.setOpacity(1.0);
+					}
+					this.selectedImagePosition = (ImageView) event.getTarget();
+					this.selectedImagePosition.setOpacity(0.0);
         			this.positionSelected = true;
-        			this.endOfTurnButton.setDisable(false);
-        			this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
-        	    	    @Override public void handle(ActionEvent e) {
-        	    	        endOfTurn();
-        	    	    }
-        	    	});
         			
         			this.trashAndPickStackContainer.enablePickAndEndTurnButton();
         			this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
         	    	    @Override public void handle(MouseEvent e) {
-        	    	        endOfTurn();
+        	    	    	op = game.getCurrentPlayer().playCard(game.getBoard().getCard(position));
+        	    			gsm.changePeek("playerPlayCard", op);
         	    	    }
         	    	});
+        			
         		}
         		else {
         			this.pathCardOnTheBoard = false;
@@ -215,19 +218,6 @@ public class PlayerSelectedPathCardState extends State{
 			});
 		}    
     	
-    	this.endOfTurnButton.setDisable(false);
-    	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
-    	    @Override public void handle(ActionEvent e) {
-    	    	PathCard card = (PathCard)selectedCard;
-    	    	if(selectedImagePosition.getRotate() != 0){
-    	    		card.reverse();
-    	    	}
-				op = game.getCurrentPlayer().playCard(position);
-    	        beforEnd();
-    	        endOfTurn();
-    	    }
-    	});
-    	
     	this.trashAndPickStackContainer.enablePickAndEndTurnButton();
     	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
     	    @Override public void handle(MouseEvent e) {
@@ -236,27 +226,8 @@ public class PlayerSelectedPathCardState extends State{
     	    		card.reverse();
     	    	}
 				op = game.getCurrentPlayer().playCard(position);
-    	        beforEnd();
-    	        endOfTurn();
+				gsm.changePeek("playerPlayCard", op);
     	    }
     	});
 	}
-
-
-	private void beforEnd() {
-		Button trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
-    	trashButton.setDisable(true);
-
-    	for(Object obj : this.boardEffect) {
-			this.gameBoardGridPane.getChildren().remove(obj);
-		}
-
-    	this.gameBoardGridPane.setOnMouseClicked(null);
-    }
-
-    private void endOfTurn() {
-    	this.endOfTurnButton.setOnAction(null);
-		this.gsm.changePeek("playerPlayCard", op);
-	}
-    
 }
