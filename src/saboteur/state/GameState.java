@@ -24,7 +24,9 @@ import saboteur.tools.GameComponentsSize;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
+import saboteur.view.PlayerRoleContainer;
 import saboteur.view.TrashAndPickStackContainer;
+import saboteur.view.UndoRedoButtonContainer;
 
 public class GameState extends State{
 	
@@ -34,12 +36,6 @@ public class GameState extends State{
 	@FXML private Circle gameBoard;
 	@FXML private VBox goalCardContainer;
 	
-	@FXML private Label playerRoleLabel;
-	@FXML private ImageView playerRoleImage;
-	
-	@FXML private Button undoButton;
-	@FXML private Button redoButton;
-	
 	private FXMLLoader loader;
 	
 	private PlayerArc playersArc;
@@ -48,6 +44,9 @@ public class GameState extends State{
 	
 	private GameCardContainer gameCardContainer;
 	private TrashAndPickStackContainer trahAndPickStackContainer;
+	private PlayerRoleContainer playerRoleContainer;
+	private UndoRedoButtonContainer undoRedoButtonContainer;
+
 
     public GameState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -58,7 +57,7 @@ public class GameState extends State{
         if (this.game.roundIsFinished()){
             this.gsm.push("roundIsFinished");
         } else{
-            manageUndoRedoButton();
+            this.undoRedoButtonContainer.manageUndoRedoButton();
             this.gsm.push("playerBeginOfTurn");
         }
     }
@@ -91,18 +90,23 @@ public class GameState extends State{
             double gameTableSize = gameComponentSize.getGameTableSize();
             
             // ******************** Right ********************
+            //undo redo button action
+            this.undoRedoButtonContainer = new UndoRedoButtonContainer(this.game);
+            this.undoRedoButtonContainer.setId("undoRedoButtonContainer");
+            this.undoRedoButtonContainer.setUndoButtonAction(event -> undoButtonAction());
+            this.undoRedoButtonContainer.setRedoButtonAction(event -> redoButtonAction());
+            
+            this.gameBorderPane.setLeft(this.undoRedoButtonContainer);
+            
         	//Image and Label of player role
-        	this.playerRoleLabel.setFont(new Font("Arial", 30));
-        	this.playerRoleLabel.setTextFill(Color.WHITE);
-        	this.playerRoleLabel.setTextAlignment(TextAlignment.CENTER);
-        	this.playerRoleImage.setFitHeight(282.0);
-        	this.playerRoleImage.setFitWidth(400.0);
+        	this.playerRoleContainer = new PlayerRoleContainer(this.game);
+        	this.playerRoleContainer.setId("playerRoleContainer");
+        	this.gameBorderPane.setCenter(this.playerRoleContainer);
         	
             // trash and pick stacks
         	this.trahAndPickStackContainer = new TrashAndPickStackContainer(this.game);
         	this.trahAndPickStackContainer.setId("trashAndPickStackContainer");
-//        	this.gameBorderPane.setTop(this.trahAndPickStackContainer);
-        	this.gameBorderPane.setRight(this.trahAndPickStackContainer);
+        	this.gameBorderPane.setTop(this.trahAndPickStackContainer);
             
             //Cards of current player
             this.gameCardContainer = new GameCardContainer(this.game, gameComponentSize.getScreenWidth() - gameTableSize - 100);
@@ -145,25 +149,8 @@ public class GameState extends State{
             e.printStackTrace();
         }
     }
-
-    private void manageUndoRedoButton(){
-        if(this.game.historyUndoIsEmpty()) {
-            undoButton.setDisable(true);
-        }
-        else {
-            undoButton.setDisable(false);
-        }
-
-        if(this.game.historyRedoIsEmpty()) {
-            redoButton.setDisable(true);
-        }
-        else {
-            redoButton.setDisable(false);
-        }
-    }
     
-    @FXML
-    private void undoButtonAction(){
+    private void undoButtonAction() {
     	this.game.undo();
     	this.game.previousPlayer();
     	
@@ -177,12 +164,11 @@ public class GameState extends State{
         this.gameCardContainer.generateHandCardImage();
         this.gsm.changePeek("playerBeginOfTurn");
     	if(this.game.historyUndoIsEmpty()) {
-        	this.undoButton.setDisable(true);
+        	this.undoRedoButtonContainer.disableUndoButton();
     	}
     }
     
-    @FXML
-    private void redoButtonAction(){
+    private void redoButtonAction() {
     	this.game.redo();
     	this.game.nextPlayer();    	
         this.gameBoardGridPane.generateBoard();
@@ -190,13 +176,12 @@ public class GameState extends State{
         this.gameCardContainer.generateHandCardImage();
         this.gsm.changePeek("playerBeginOfTurn");
     	if(this.game.historyRedoIsEmpty()){
-    		this.redoButton.setDisable(true);
+    		this.undoRedoButtonContainer.disableRedoButton();
     	}
     }
-    
+        
     @FXML
     private void pauseButtonAction(){
     	this.gsm.push("pauseMenu");
     }
-    
 }
