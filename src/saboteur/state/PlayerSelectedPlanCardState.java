@@ -130,9 +130,6 @@ public class PlayerSelectedPlanCardState extends State{
     }
     
     private void beforEnd() {
-    	Button trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
-    	trashButton.setDisable(true);
-
 		this.gameCardContainer.setOnMouseClicked(null);
     	
     	for(int i = 0; i < 3; i++){
@@ -141,11 +138,7 @@ public class PlayerSelectedPlanCardState extends State{
     	}
     	
     	this.trashAndPickStackContainer.enablePickAndEndTurnButton();
-    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
-    	    @Override public void handle(MouseEvent e) {
-    	        endOfTurn();
-    	    }
-    	});
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(e -> endOfTurn());
     }
     
     private void endOfTurn() {

@@ -83,6 +83,7 @@ public class PlayerPlayCardState extends State{
 
     	//Pick card animation
 		OperationPick op = (OperationPick) this.game.getCurrentPlayer().pickCard();
+		this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
 
 		if (this.game.getCurrentPlayer().isHuman()){
 			cardContainer.showCards();

@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -28,7 +25,7 @@ public class GameIsFinishedState extends State{
     @FXML private Text text;
     @FXML private GridPane resultRound;
 
-    private Stage modalStage;
+    private Pane modalPane;
 
 	public GameIsFinishedState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -46,19 +43,11 @@ public class GameIsFinishedState extends State{
 
     @Override
     public void onEnter(Object param) {
-        this.modalStage = new Stage();
-        this.modalStage.initStyle(StageStyle.TRANSPARENT);
-
-        this.modalStage.initModality(Modality.APPLICATION_MODAL);
-        this.modalStage.initOwner(primaryStage);
-        this.modalStage.setTitle("Fin de la partie");
-
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/modalGameIsFinished.fxml"));
             loader.setController(this);
-            Pane modalPane = loader.load();
-            Scene scene = new Scene(modalPane, 900, primaryStage.getHeight(), Color.TRANSPARENT);
+            this.modalPane = loader.load();
 
             String winnerText = "";
             LinkedList<Player> winners =  this.game.getWinners();
@@ -93,14 +82,13 @@ public class GameIsFinishedState extends State{
                 this.resultRound.add(player.getPlayerName(), 2, i);
                 this.resultRound.add(player.getPlayerGold(), 3, i);
             }
-            scene.getStylesheets().add(Resources.getStylesheet());
 
-            this.modalStage.setScene(scene);
+            modalPane.setPrefHeight(primaryStage.getWidth());
+            modalPane.setPrefWidth(primaryStage.getHeight());
 
-            this.modalStage.setX(primaryStage.getWidth()/2d - 900/2d);
-            this.modalStage.setY(0);
+            StackPane root = (StackPane) primaryStage.getScene().getRoot();
+            root.getChildren().add(this.modalPane);
 
-            this.modalStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -109,7 +97,8 @@ public class GameIsFinishedState extends State{
 
     @Override
     public void onExit() {
-        this.modalStage.close();
+        StackPane root = (StackPane) primaryStage.getScene().getRoot();
+        root.getChildren().remove(this.modalPane);
     }
 
     @FXML

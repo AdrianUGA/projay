@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.LinearGradient?>
@@ -12,9 +13,9 @@
 
 <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: rgba(0,0,0,0.7);;">
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" style="-fx-background-color: rgba(0,0,0,0.7);;">
          <children>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.2em;" text="Début du tour" textAlignment="CENTER" wrappingWidth="379.59375">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2.2em;" text="Menu principal" textAlignment="CENTER" wrappingWidth="427.59375">
                <font>
                   <Font name="System Bold" size="32.0" />
                </font>
@@ -22,7 +23,7 @@
                   <Insets bottom="30.0" />
                </VBox.margin>
             </Text>
-            <Text fx:id="text" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2em;" text="Le joueur #? a fini de jouer. C'est au tour du joueur #?." textAlignment="CENTER" wrappingWidth="460.0">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2em;" text="Si la partie n'a pas été sauvegardée, elle sera perdue. Etes-vous sûr de vouloir revenir au menu principal ?" textAlignment="CENTER" wrappingWidth="426.75">
                <font>
                   <Font name="System Bold" size="32.0" />
                </font>
@@ -34,10 +35,21 @@
                      </stops>
                   </LinearGradient>
                </stroke>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
             </Text>
-            <HBox fx:id="goButtonContainer" alignment="CENTER">
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="goButton" cancelButton="true" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#goButtonAction" styleClass="btn" text="C'est parti !" textAlignment="CENTER">
+                  <Button alignment="CENTER" cancelButton="true" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#noConfirmButtonAction" prefWidth="120.0" styleClass="btn" text="Non" textAlignment="CENTER" AnchorPane.leftAnchor="60.0">
+                     <font>
+                        <Font size="32.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#yesConfirmButtonAction" prefWidth="120.0" styleClass="btn" text="Oui" textAlignment="CENTER" AnchorPane.rightAnchor="60.0">
                      <font>
                         <Font size="32.0" />
                      </font>
@@ -47,9 +59,9 @@
                   </Button>
                </children>
                <VBox.margin>
-                  <Insets top="30.0" />
+                  <Insets top="40.0" />
                </VBox.margin>
-            </HBox>
+            </AnchorPane>
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

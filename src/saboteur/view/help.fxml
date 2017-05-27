@@ -24,10 +24,10 @@
                   <Image url="@../../resources/AideLogo.png" />
                </image>
                <VBox.margin>
-                  <Insets bottom="50.0" top="150.0" />
+                  <Insets bottom="50.0" top="50.0" />
                </VBox.margin>
             </ImageView>
-            <ScrollPane hbarPolicy="NEVER" prefHeight="479.0" vvalue="0.49" VBox.vgrow="ALWAYS">
+            <ScrollPane hbarPolicy="NEVER" prefHeight="479.0" VBox.vgrow="ALWAYS">
               <content>
                 <AnchorPane>
                      <children>
@@ -123,7 +123,7 @@
                         </ImageView>
                         <ImageView fitHeight="137.0" fitWidth="188.0" layoutX="460.0" layoutY="1071.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/goal_card_gold.png" />
+                              <Image url="@../../resources/cards/goal_card_gold_44.png" />
                            </image>
                         </ImageView>
                         <Text fill="WHITE" layoutX="574.0" layoutY="1064.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Derrière une des cartes arrivé, il y a la carte avec la pépite d'or. L'objectif pour un chercheur d'or est de trouver cette carte. L'objectif pour un saboteur est d'empecher les chercheurs d'or à trouver cette carte." wrappingWidth="194.66468811035156">
@@ -173,17 +173,17 @@
                         </ImageView>
                         <ImageView fitHeight="62.0" fitWidth="43.0" layoutX="604.0" layoutY="1394.0" opacity="0.57" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/broken_lantern_card.png" />
+                              <Image url="@../../resources/cards/broken_lantern_card_48.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="62.0" fitWidth="43.0" layoutX="624.0" layoutY="1405.0" opacity="0.67" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/cart_card.png" />
+                              <Image url="@../../resources/cards/rescue_cart_card_52.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="62.0" fitWidth="43.0" layoutX="642.0" layoutY="1418.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/lantern_cart_card.png" />
+                              <Image url="@../../resources/cards/double_rescue_lantern_cart_card_56.png" />
                            </image>
                         </ImageView>
                         <Text fill="WHITE" layoutX="94.0" layoutY="1567.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ensuite le joueur doit piocher une carte, et finir son tour. Son tour est alors terminé et c'est au tour du joueur suivant. Quand la pioche est vide, il suffit de finir son tour." wrappingWidth="640.1476211547852">
@@ -198,42 +198,42 @@
                         </Label>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="53.0" layoutY="1703.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/lantern_card.png" />
+                              <Image url="@../../resources/cards/rescue_lantern_card_51.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="297.0" layoutY="1703.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/cart_card.png" />
+                              <Image url="@../../resources/cards/rescue_cart_card_52.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="554.0" layoutY="1701.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/pickaxe_card.png" />
+                              <Image url="@../../resources/cards/rescue_pickaxe_card_53.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="665.0" layoutY="1701.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/broken_pickaxe_card.png" />
+                              <Image url="@../../resources/cards/broken_pickaxe_card_50.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="159.0" layoutY="1705.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/broken_lantern_card.png" />
+                              <Image url="@../../resources/cards/broken_lantern_card_48.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="411.0" layoutY="1700.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/broken_cart_card.png" />
+                              <Image url="@../../resources/cards/broken_cart_card_49.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="46.0" layoutY="1996.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/collapse_card.png" />
+                              <Image url="@../../resources/cards/collapse_card_58.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="651.0" layoutY="1998.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/plan_card.png" />
+                              <Image url="@../../resources/cards/plan_card_57.png" />
                            </image>
                         </ImageView>
                         <Text fill="WHITE" layoutX="76.0" layoutY="1866.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lanterne réparée et lanterne cassée" wrappingWidth="141.3053436279297">
@@ -283,17 +283,17 @@
                         </Text>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="29.0" layoutY="2174.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/pickaxe_lantern_card.png" />
+                              <Image url="@../../resources/cards/double_rescue_lantern_cart_card_56.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="146.0" layoutY="2173.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/lantern_cart_card.png" />
+                              <Image url="@../../resources/cards/double_rescue_pickaxe_cart_card_54.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="261.0" layoutY="2171.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../resources/cards/pickaxe_cart_card.png" />
+                              <Image url="@../../resources/cards/double_rescue_pickaxe_lantern_card_55.png" />
                            </image>
                         </ImageView>
                         <Text fill="WHITE" layoutX="372.0" layoutY="2214.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ces trois cartes ne peuvent apparaitre qu'une seule fois dans le jeu. Elles servent à se débarasser d'un et un seul objet cassé. Elles ont deux possibilité de réparation chacune. Le joueur qui joue cette carte doit choisir quel objet il veut réparer." textAlignment="JUSTIFY" wrappingWidth="369.6314697265625">
@@ -305,14 +305,9 @@
                   </AnchorPane>
               </content>
             </ScrollPane>
-            <AnchorPane>
-               <VBox.margin>
-                  <Insets bottom="20.0" top="50.0" />
-               </VBox.margin>
-            </AnchorPane>
             <HBox alignment="CENTER">
                <VBox.margin>
-                  <Insets bottom="100.0" top="50.0" />
+                  <Insets bottom="30.0" top="50.0" />
                </VBox.margin>
                <children>
                   <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#okButtonAction" onMouseClicked="#okButtonAction" prefHeight="44.0" prefWidth="135.0" styleClass="btn" text="OK">

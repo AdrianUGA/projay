@@ -86,6 +86,6 @@
     -fx-background-image: url('/resources/cards/card_verso.png');
     -fx-background-size: cover;
     -fx-text-fill: white;
-    -fx-font-size: 2em;
+    -fx-font-size: 1.8em;
     -fx-font-weight: bold;
 }

@@ -104,7 +104,8 @@ public class GameState extends State{
         	this.gameBorderPane.setCenter(this.playerRoleContainer);
         	
             // trash and pick stacks
-        	this.trahAndPickStackContainer = new TrashAndPickStackContainer(this.game);
+        	this.trahAndPickStackContainer = new TrashAndPickStackContainer();
+        	this.trahAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
         	this.trahAndPickStackContainer.setId("trashAndPickStackContainer");
         	this.gameBorderPane.setTop(this.trahAndPickStackContainer);
             

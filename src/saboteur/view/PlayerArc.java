@@ -60,6 +60,10 @@ public class PlayerArc extends Pane{
 			createArc(lengthOfArc, startAngle, player);
 			createCircle(lengthOfArc, startAngle, player);
         }
+
+		this.handicapCircleAnimation = new ParallelTransition();
+		handicapCircleAnimation.setAutoReverse(true);
+		handicapCircleAnimation.setCycleCount(Animation.INDEFINITE);
 	}
 	
 	public void refreshPlayersArcsAndCircles(){
@@ -247,10 +251,6 @@ public class PlayerArc extends Pane{
 	}
 
 	public void activateHandicapCircle(int tool, LinkedList<Player> players, EventHandler<MouseEvent> mouseEvent, boolean isSabotage){
-		this.handicapCircleAnimation = new ParallelTransition();
-		handicapCircleAnimation.setAutoReverse(true);
-		handicapCircleAnimation.setCycleCount(Animation.INDEFINITE);
-
 		for(Player p : players) {
 			if (isSabotage){
 				playerCircles.get(p)[tool].setStroke(Color.RED);
@@ -282,6 +282,7 @@ public class PlayerArc extends Pane{
 			}
 		}
 		this.handicapCircleAnimation.stop();
+		this.handicapCircleAnimation.getChildren().clear();
 	}
 	
 	public Circle[] getCircles(Player player) {

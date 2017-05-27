@@ -17,10 +17,8 @@ public class TrashAndPickStackContainer extends VBox{
 	
 	private StackPane trashPane, pickAndEndTurnPane;
 	private Button trashButton, pickAndEndTurnButton;
-	private Game game;
 	
-	public TrashAndPickStackContainer(Game game) {
-		this.game = game;
+	public TrashAndPickStackContainer() {
 		this.trashButton = new Button("Défausser\net\nfinir le\ntour");
 		this.pickAndEndTurnButton = new Button("Finir le\ntour");
 		
@@ -47,6 +45,16 @@ public class TrashAndPickStackContainer extends VBox{
 		button.setPrefHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.6);
 		button.setTextAlignment(TextAlignment.CENTER);
 		button.getStyleClass().add("btn-card");
+	}
+
+	public void updateStackText(int nbCard){
+		String text = ""+nbCard;
+		if (nbCard <= 1){
+			text += " carte\nrestante";
+		} else{
+			text += " cartes\nrestantes";
+		}
+		this.pickAndEndTurnButton.setText("Finir\n le tour\n\n" + text);
 	}
 
 	public void disablePickAndEndTurnButton() {

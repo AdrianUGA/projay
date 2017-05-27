@@ -4,26 +4,24 @@ import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.stage.Modality;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
-import saboteur.tools.Resources;
 
 import java.io.IOException;
 
 public class PauseMenuState extends State {
 
-    private Stage modalStage;
+    private Pane modalPane;
+    private Pane confirmModalPane;
+    private StackPane rootPane;
 
     public PauseMenuState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -41,28 +39,18 @@ public class PauseMenuState extends State {
 
     @Override
     public void onEnter(Object param) {
-        this.modalStage = new Stage();
-        this.modalStage.initStyle(StageStyle.TRANSPARENT);
-
-        this.modalStage.initModality(Modality.APPLICATION_MODAL);
-        this.modalStage.initOwner(primaryStage);
-        this.modalStage.setTitle("modal");
-
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/modalPauseMenu.fxml"));
             loader.setController(this);
-            Pane modalPane = loader.load();
-            Scene scene = new Scene(modalPane, 900, primaryStage.getHeight(), Color.TRANSPARENT);
+            this.modalPane = loader.load();
 
-            scene.getStylesheets().add(Resources.getStylesheet());
+            this.modalPane.setPrefHeight(primaryStage.getHeight());
+            this.modalPane.setPrefWidth(primaryStage.getWidth());
 
-            this.modalStage.setScene(scene);
+            this.rootPane = (StackPane) primaryStage.getScene().getRoot();
+            this.rootPane.getChildren().add(this.modalPane);
 
-            this.modalStage.setX(primaryStage.getWidth()/2d - 900/2d);
-            this.modalStage.setY(0);
-
-            this.modalStage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -70,7 +58,7 @@ public class PauseMenuState extends State {
 
     @Override
     public void onExit() {
-        this.modalStage.close();
+        this.rootPane.getChildren().remove(this.modalPane);
     }
 
     @FXML
@@ -91,7 +79,7 @@ public class PauseMenuState extends State {
         HBox hb = (HBox)event.getSource();
         for(Node nodeIn:hb.getChildren()){
             if(nodeIn instanceof ImageView){
-                FadeTransition ft = new FadeTransition(Duration.millis(500), nodeIn);
+                FadeTransition ft = new FadeTransition(Duration.millis(200), nodeIn);
                 ft.setFromValue(1.0);
                 ft.setToValue(0.0);
                 ft.play();
@@ -106,8 +94,8 @@ public class PauseMenuState extends State {
 
     @FXML
     private void saveButtonAction(){
-        this.modalStage.close();
-        this.gsm.push("saveGame", this.modalStage);
+        this.rootPane.getChildren().remove(this.modalPane);
+        this.gsm.push("saveGame", this.modalPane);
     }
 
     @FXML
@@ -117,6 +105,34 @@ public class PauseMenuState extends State {
 
     @FXML
     private void mainMenuButtonAction(){
+        confirmReturnToMainMenu();
+    }
+
+    private void confirmReturnToMainMenu(){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(App.class.getResource("/saboteur/view/modalReturnToMainMenuConfirm.fxml"));
+            loader.setController(this);
+            this.confirmModalPane = loader.load();
+
+            this.confirmModalPane.setPrefHeight(primaryStage.getHeight());
+            this.confirmModalPane.setPrefWidth(primaryStage.getWidth());
+
+            this.rootPane.getChildren().add(this.confirmModalPane);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void yesConfirmButtonAction(){
+        this.rootPane.getChildren().remove(this.confirmModalPane);
         this.gsm.change("mainMenu");
+    }
+
+    @FXML
+    private void noConfirmButtonAction(){
+        this.rootPane.getChildren().remove(this.confirmModalPane);
     }
 }

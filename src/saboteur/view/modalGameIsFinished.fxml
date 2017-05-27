@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="600.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="TOP_CENTER" prefWidth="900.0" style="-fx-background-color: rgba(0,0,0,0.8);">
          <children>
@@ -24,7 +24,7 @@
                   <Image url="@../../resources/FinPartieLogo.png" />
                </image>
                <VBox.margin>
-                  <Insets bottom="50.0" top="100.0" />
+                  <Insets bottom="50.0" top="50.0" />
                </VBox.margin>
             </ImageView>
             <Text fx:id="text" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 2em;" text="Joueur 1 a gagné !!" textAlignment="CENTER">
@@ -42,7 +42,7 @@
             </Text>
             <ScrollPane fitToWidth="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <VBox.margin>
-                  <Insets top="50.0" />
+                  <Insets top="30.0" />
                </VBox.margin>
                <content>
                   <GridPane fx:id="resultRound" alignment="CENTER" styleClass="result-table">
@@ -67,7 +67,7 @@
                   </Button>
                </children>
                <VBox.margin>
-                  <Insets bottom="50.0" top="50.0" />
+                  <Insets bottom="30.0" top="50.0" />
                </VBox.margin>
             </HBox>
          </children>

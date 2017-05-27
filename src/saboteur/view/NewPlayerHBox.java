@@ -19,6 +19,7 @@ import saboteur.tools.Icon;
 
 public class NewPlayerHBox extends HBox {
 
+	private final static int MAX_LENGTH = 10;
 	private SVGPath svg = new SVGPath();
 	private TextField playerName;
 	private ComboBox<String> selectPlayerMenu;
@@ -29,13 +30,12 @@ public class NewPlayerHBox extends HBox {
 	public NewPlayerHBox(int nbplayer, boolean isHuman) {
 		this.playerNumber = nbplayer;
 		initBox();
+		this.playerName.setText("Joueur " + this.playerNumber);
 		if(isHuman) {
-			this.playerName.setText("Joueur " + this.playerNumber);
 			this.selectPlayerMenu.setValue("Humain");
 			this.svg.setContent(Icon.user);
 		}
 		else {
-			this.playerName.setText("IA " + this.playerNumber);
 			this.selectPlayerMenu.setValue("IA Facile");
 			this.svg.setContent(Icon.computer);
 		}
@@ -53,9 +53,14 @@ public class NewPlayerHBox extends HBox {
 		this.playerName.setPrefSize(215, 25);
 		this.playerName.setMaxSize(Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
 		this.playerName.setMinSize(Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
+		this.playerName.textProperty().addListener((ov, oldValue, newValue) -> {
+            if (playerName.getText().length() > MAX_LENGTH) {
+                String s = playerName.getText().substring(0, MAX_LENGTH);
+                playerName.setText(s);
+            }
+        });
 		
 		// Split Menu
-//		this.selectPlayerMenu.setTextFill(Color.BLACK);
 		this.selectPlayerMenu = new ComboBox<>();
 		this.selectPlayerMenu.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
