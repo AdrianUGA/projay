@@ -4,10 +4,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -144,13 +142,15 @@ public class PlayerSelectedPathCardState extends State{
 
     @Override
     public void onExit() {
+		this.trashAndPickStackContainer.disablePickAndEndTurnButton();
+		this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
+
 		if(!this.positionSelected) {
 			for(Object obj : this.boardEffect) {
 				this.gameBoardGridPane.getChildren().remove(obj);
 			}
     	}
 		this.gameBoardGridPane.setOnMouseClicked(null);
-		this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
     }
     
     private void selectPositionOnBoard(MouseEvent event) {

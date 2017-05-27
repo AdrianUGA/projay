@@ -19,7 +19,8 @@ public class GameComponentsSize {
 	private double innerRadiusOfArc;
 	private double playerArcRadius;
 	
-	private double addToSize = 40;
+	private final double addToSize = 40;
+	private final int defaultMargin = 30;
 	
 	private static GameComponentsSize size;
 	
@@ -31,10 +32,9 @@ public class GameComponentsSize {
         this.middleCircleRadius = gameTableHalfSize/2;
         this.centerOfGameTable = gameTableSize/2;
         
-        double marginOfCircles = 30;
         this.miniCircleRadius = this.gameTableHalfSize/15;
-        this.innerRadiusOfArc = this.gameTableHalfSize - this.miniCircleRadius*3 - marginOfCircles;
-        this.playerArcRadius = this.gameTableHalfSize - marginOfCircles; 
+        this.innerRadiusOfArc = this.gameTableHalfSize - this.miniCircleRadius*3 - this.defaultMargin;
+        this.playerArcRadius = this.gameTableHalfSize - this.defaultMargin;
         
         this.cardHeight = 166.0;
         this.cardWidth = 108.0;
@@ -93,6 +93,10 @@ public class GameComponentsSize {
 
 	public double getCardWidth() {
 		return this.cardWidth;
+	}
+
+	public int getDefaultMargin() {
+		return defaultMargin;
 	}
 
 }

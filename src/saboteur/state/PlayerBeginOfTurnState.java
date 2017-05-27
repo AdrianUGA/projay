@@ -17,12 +17,14 @@ import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.view.GameCardContainer;
+import saboteur.view.PlayerRoleContainer;
 
 import java.io.IOException;
 
 public class PlayerBeginOfTurnState extends State{
 
     @FXML private HBox goButtonContainer;
+	private PlayerRoleContainer playerRoleContainer;
 
     private Stage modalStage;
     private Pane modalPane;
@@ -45,11 +47,9 @@ public class PlayerBeginOfTurnState extends State{
     public void onEnter(Object param) {
     	GameCardContainer gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
     	gameCardContainer.hideCards();
-
-    	Label playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
-    	ImageView playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
-    	playerRoleLabel.setVisible(false);
-    	playerRoleImage.setVisible(false);
+    	
+    	this.playerRoleContainer = (PlayerRoleContainer) this.primaryStage.getScene().lookup("#playerRoleContainer");
+		this.playerRoleContainer.setPlayerRoleComponentsVisible(false);
     	
         this.modalStage = new Stage();
         this.modalStage.initStyle(StageStyle.TRANSPARENT);

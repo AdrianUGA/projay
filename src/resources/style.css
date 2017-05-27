@@ -80,3 +80,12 @@
     -fx-stroke-width: 1;
     -fx-font-weight: bold;
 }
+
+.btn-card{
+    -fx-background-color: rgba(125, 125, 125, 0.5);
+    -fx-background-image: url('/resources/cards/card_verso.png');
+    -fx-background-size: cover;
+    -fx-text-fill: white;
+    -fx-font-size: 2em;
+    -fx-font-weight: bold;
+}

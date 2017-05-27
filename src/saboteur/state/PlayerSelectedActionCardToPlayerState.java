@@ -3,16 +3,10 @@ package saboteur.state;
 import java.util.LinkedList;
 
 import javafx.animation.Animation;
-import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -39,9 +33,8 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 	private LinkedList<Player> playerList;	
 	private int toolValue1 = -1;
 	private int toolValue2 = -1;
-	private boolean playerSelected;
 
-	private Player playerSelectedp;
+	private Player playerSelected;
 	private Tool toolSelected;
 
     public PlayerSelectedActionCardToPlayerState(GameStateMachine gsm, Game game, Stage primaryStage){
@@ -60,20 +53,12 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 
     @Override
     public void onEnter(Object param) {
-        System.out.println("action card");
-
     	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
         this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
     	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
     	this.playersArc.refreshPlayersArcsAndCircles();
-    	this.playerSelected = false;
         
-    	EventHandler<MouseEvent> mouseEvent = new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent event) {
-				selectedActionCardToPlayer(event);
-			}
-		};
+    	EventHandler<MouseEvent> mouseEvent = this::selectedActionCardToPlayer;
     	
         //Put a correct value on toolValue depending of the selected card.
         this.toolValue1 = -1;
@@ -82,51 +67,27 @@ public class PlayerSelectedActionCardToPlayerState extends State{
         this.card = (ActionCardToPlayer) selectedCard;
         if(selectedCard.isSabotageCard()) {
         	this.toolValue1 = ((SabotageCard)selectedCard).getSabotageType().getValue();
-        	this.playerList = this.game.getPlayers(this.card);
-			for(Player p : this.game.getPlayers(this.card)) {
-				this.playersArc.getCircles(p)[this.toolValue1].setStroke(Color.RED);
-				this.playersArc.getCircles(p)[this.toolValue1].setOnMouseClicked(mouseEvent);
-			}
+        	this.playersArc.activateHandicapCircle(this.toolValue1, this.game.getPlayers(this.card), mouseEvent, true);
 		}
     	else if(selectedCard.isRescueCard()) {
     		this.toolValue1 = ((RescueCard)selectedCard).getTool().getValue();
-        	this.playerList = this.game.getPlayers(this.card);
-			for(Player p : this.game.getPlayers(this.card)) {
-					this.playersArc.getCircles(p)[toolValue1].setStroke(Color.GREEN);
-					this.playersArc.getCircles(p)[this.toolValue1].setOnMouseClicked(mouseEvent);
-			}
+			this.playersArc.activateHandicapCircle(this.toolValue1, this.game.getPlayers(this.card), mouseEvent, false);
 		}
     	else if(selectedCard.isDoubleRescueCard()) {
-    		
     		this.toolValue1 = ((DoubleRescueCard)selectedCard).getTool1().getValue();
     		this.toolValue2 = ((DoubleRescueCard)selectedCard).getTool2().getValue();
-        	this.playerList = this.game.getPlayers(this.card);
-        	for(Player p : this.game.getPlayers( new RescueCard(this.intToTool(this.toolValue1)))) {
-				this.playersArc.getCircles(p)[this.toolValue1].setStroke(Color.GREEN);
-				this.playersArc.getCircles(p)[this.toolValue1].setOnMouseClicked(mouseEvent);
-        	}
-        	for(Player p : this.game.getPlayers( new RescueCard(this.intToTool(this.toolValue2)))) {
-				this.playersArc.getCircles(p)[this.toolValue2].setStroke(Color.GREEN);
-				this.playersArc.getCircles(p)[this.toolValue2].setOnMouseClicked(mouseEvent);
-        	}
+			this.playersArc.activateHandicapCircle(this.toolValue1, this.game.getPlayers( new RescueCard(Tool.intToTool(this.toolValue1))), mouseEvent, false);
+			this.playersArc.activateHandicapCircle(this.toolValue2, this.game.getPlayers( new RescueCard(Tool.intToTool(this.toolValue2))), mouseEvent, false);
 		}
     }
 
     @Override
     public void onExit() {
-		//Delete event on click
-		for(int i = 0; i < this.game.getPlayerList().size(); i++) {
-			this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue1].setOnMouseClicked(null);
-			if(this.toolValue2 != -1){
-				this.playersArc.getCircles(this.game.getPlayerList().get(i))[this.toolValue2].setOnMouseClicked(null);
-			}
-		}
+		this.trashAndPickStackContainer.disablePickAndEndTurnButton();
+		this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
 
-		for(Player p : this.playerList) {
-			for(int i = 0; i < 3; i++) {
-				this.playersArc.getCircles(p)[i].setStroke(Color.BLACK);
-			}
-		}		
+		//Delete event on click
+		this.playersArc.desactivateHandicapCircle(this.toolValue1, this.toolValue2);
     }
     
     private void selectedActionCardToPlayer(MouseEvent event) {
@@ -138,8 +99,7 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 
 			for(Player p : this.game.getPlayers(this.card)) {
 				if( this.playersArc.getCircles(p)[this.toolValue1] == circle )
-					this.playerSelectedp = p;
-					//this.op = this.game.getCurrentPlayer().playCard(p);
+					this.playerSelected = p;
 			}
 
 		}
@@ -148,15 +108,13 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 
 			for(Player p : this.game.getPlayers(this.card)) {
 				if( this.playersArc.getCircles(p)[this.toolValue1] == circle ){
-					//this.op = this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue1));
-					this.playerSelectedp = p;
-					this.toolSelected = this.intToTool(toolValue1);
+					this.playerSelected = p;
+					this.toolSelected = Tool.intToTool(toolValue1);
 					this.playersArc.refreshCircles(circle, this.toolValue1, false);
 				}
 				if( this.toolValue2 != -1 && this.playersArc.getCircles(p)[this.toolValue2] == circle ) {
-					//this.op = this.game.getCurrentPlayer().playCard(p, this.intToTool(toolValue2));
-					this.playerSelectedp = p;
-					this.toolSelected = this.intToTool(toolValue2);
+					this.playerSelected = p;
+					this.toolSelected = Tool.intToTool(toolValue2);
 					this.playersArc.refreshCircles(circle, this.toolValue2, false);
 				}
 			}
@@ -169,33 +127,12 @@ public class PlayerSelectedActionCardToPlayerState extends State{
     private void endOfTurn() {
 		Operation op;
 		if (this.toolSelected == null){
-			op = this.game.getCurrentPlayer().playCard(this.playerSelectedp);
+			op = this.game.getCurrentPlayer().playCard(this.playerSelected);
 		} else{
-			op = this.game.getCurrentPlayer().playCard(this.playerSelectedp, this.toolSelected);
+			op = this.game.getCurrentPlayer().playCard(this.playerSelected, this.toolSelected);
 		}
-    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
     	
     	this.gsm.changePeek("playerPlayCard", op);
-    	
-
-
-
 	}
-
-    private Tool intToTool(int intOfTool) {
-    	Tool tool = null;
-    	switch(intOfTool) {
-    		case 0 :
-    			tool = Tool.PICKAXE;
-    			break;
-    		case 1 :
-    			tool = Tool.LANTERN;
-    			break;
-    		case 2 : 
-    			tool = Tool.CART;
-    			break;
-    	}
-    	return tool;
-    }
 }
 
