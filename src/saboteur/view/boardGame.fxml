@@ -6,6 +6,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -16,9 +17,9 @@
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-image: url(@../../resources/woodPattern.jpg);" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <AnchorPane>
          <children>
-            <HBox alignment="CENTER_LEFT" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#pauseButtonAction" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
                <children>
                   <SVGPath content="M16 14c0-2.203-1.797-4-4-4s-4 1.797-4 4 1.797 4 4 4 4-1.797 4-4zM24 12.297v3.469c0 0.234-0.187 0.516-0.438 0.562l-2.891 0.438c-0.172 0.5-0.359 0.969-0.609 1.422 0.531 0.766 1.094 1.453 1.672 2.156 0.094 0.109 0.156 0.25 0.156 0.391s-0.047 0.25-0.141 0.359c-0.375 0.5-2.484 2.797-3.016 2.797-0.141 0-0.281-0.063-0.406-0.141l-2.156-1.687c-0.453 0.234-0.938 0.438-1.422 0.594-0.109 0.953-0.203 1.969-0.453 2.906-0.063 0.25-0.281 0.438-0.562 0.438h-3.469c-0.281 0-0.531-0.203-0.562-0.469l-0.438-2.875c-0.484-0.156-0.953-0.344-1.406-0.578l-2.203 1.672c-0.109 0.094-0.25 0.141-0.391 0.141s-0.281-0.063-0.391-0.172c-0.828-0.75-1.922-1.719-2.578-2.625-0.078-0.109-0.109-0.234-0.109-0.359 0-0.141 0.047-0.25 0.125-0.359 0.531-0.719 1.109-1.406 1.641-2.141-0.266-0.5-0.484-1.016-0.641-1.547l-2.859-0.422c-0.266-0.047-0.453-0.297-0.453-0.562v-3.469c0-0.234 0.187-0.516 0.422-0.562l2.906-0.438c0.156-0.5 0.359-0.969 0.609-1.437-0.531-0.75-1.094-1.453-1.672-2.156-0.094-0.109-0.156-0.234-0.156-0.375s0.063-0.25 0.141-0.359c0.375-0.516 2.484-2.797 3.016-2.797 0.141 0 0.281 0.063 0.406 0.156l2.156 1.672c0.453-0.234 0.938-0.438 1.422-0.594 0.109-0.953 0.203-1.969 0.453-2.906 0.063-0.25 0.281-0.438 0.562-0.438h3.469c0.281 0 0.531 0.203 0.562 0.469l0.438 2.875c0.484 0.156 0.953 0.344 1.406 0.578l2.219-1.672c0.094-0.094 0.234-0.141 0.375-0.141s0.281 0.063 0.391 0.156c0.828 0.766 1.922 1.734 2.578 2.656 0.078 0.094 0.109 0.219 0.109 0.344 0 0.141-0.047 0.25-0.125 0.359-0.531 0.719-1.109 1.406-1.641 2.141 0.266 0.5 0.484 1.016 0.641 1.531l2.859 0.438c0.266 0.047 0.453 0.297 0.453 0.562z" fill="WHITE">
                      <HBox.margin>
@@ -38,69 +39,71 @@
                   </Label>
                </children>
             </HBox>
-            <ImageView fitHeight="164.0" fitWidth="200.0" layoutX="70.0" layoutY="622.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="20.0">
-               <image>
-                  <Image url="@../../resources/nainchercheurdor.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="14.0" layoutY="636.0" text="Chercheur d'or" textFill="WHITE" AnchorPane.bottomAnchor="150.0">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <padding>
-                  <Insets left="5.0" />
-               </padding>
-            </Label>
-            <Label layoutX="14.0" layoutY="636.0" text="Saboteur" textFill="WHITE" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="20.0">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <padding>
-                  <Insets left="5.0" />
-               </padding>
-            </Label>
-            <ImageView fitHeight="164.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="20.0">
-               <image>
-                  <Image url="@../../resources/nainsaboteur.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-      <AnchorPane fx:id="boardAndCardContainer">
-         <children>
             <Pane fx:id="boardContainer" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Circle fx:id="gameBoard" fill="#a8a8a8" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0" />
+                  <Circle fx:id="gameBoard" fill="#a8a8a8" stroke="BLACK" strokeType="INSIDE" strokeWidth="4.0" />
                   <VBox fx:id="goalCardContainer" alignment="CENTER" spacing="10.0" visible="false" />
                </children>
             </Pane>
          </children>
       </AnchorPane>
-      <VBox alignment="CENTER">
-         <children>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+      <BorderPane>
+         <center>
+            <HBox fx:id="playerRoleContainer" alignment="CENTER_RIGHT" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="124.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                  <Label fx:id="playerRoleLabel" alignment="CENTER" text="label" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="playerRoleImage" fitHeight="200.0" fitWidth="141.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </HBox>
+         </center>
+         <bottom>
+            <AnchorPane fx:id="gameCardContainer" BorderPane.alignment="CENTER" />
+         </bottom>
+         <top>
+            <VBox alignment="CENTER_RIGHT" spacing="20.0" BorderPane.alignment="CENTER">
+               <children>
+                  <StackPane alignment="CENTER_RIGHT">
+                     <children>
+                        <ImageView fx:id="trash" fitHeight="127.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../resources/DosCartes.png" />
+                           </image>
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </ImageView>
+                        <Button fx:id="trashButton" alignment="CENTER" disable="true" mnemonicParsing="false" text="Défausse">
+                           <StackPane.margin>
+                              <Insets right="5.0" />
+                           </StackPane.margin>
+                        </Button>
+                     </children>
+                  </StackPane>
+                  <Button fx:id="endOfTurnButton" disable="true" mnemonicParsing="false" text="Fin de tour" />
+                  <ImageView fx:id="stack" fitHeight="127.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../resources/DosCartes.png" />
                      </image>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </ImageView>
-                  <Button fx:id="trashButton" disable="true" mnemonicParsing="false" text="Défausse" />
                </children>
-            </StackPane>
-            <Button fx:id="endOfTurnButton" disable="true" mnemonicParsing="false" text="Fin de tour" />
-            <ImageView fitHeight="127.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../resources/DosCartes.png" />
-               </image>
-               <VBox.margin>
-                  <Insets top="20.0" />
-               </VBox.margin>
-            </ImageView>
-         </children>
-         <HBox.margin>
-            <Insets left="50.0" />
-         </HBox.margin>
-      </VBox>
+            </VBox>
+         </top>
+         <left>
+            <VBox alignment="CENTER" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#undoButtonAction" text="undo" />
+                  <Button mnemonicParsing="false" onAction="#redoButtonAction" text="redo" />
+               </children>
+            </VBox>
+         </left>
+      </BorderPane>
+      <VBox alignment="CENTER_RIGHT" spacing="10.0" />
    </children>
 </HBox>

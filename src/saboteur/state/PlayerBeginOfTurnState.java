@@ -3,6 +3,8 @@ package saboteur.state;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -17,11 +19,11 @@ import saboteur.view.GameCardContainer;
 
 import java.io.IOException;
 
-public class PlayerEndOfTurnState extends State{
+public class PlayerBeginOfTurnState extends State{
 
     private Stage modalStage;
 
-	public PlayerEndOfTurnState(GameStateMachine gsm, Game game, Stage primaryStage){
+	public PlayerBeginOfTurnState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
     }
 
@@ -37,6 +39,14 @@ public class PlayerEndOfTurnState extends State{
 
     @Override
     public void onEnter(Object param) {
+    	GameCardContainer cardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#cardContainer");
+    	cardContainer.hideCards();
+
+    	Label playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
+    	ImageView playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
+    	playerRoleLabel.setVisible(false);
+    	playerRoleImage.setVisible(false);
+    	
         this.modalStage = new Stage();
         this.modalStage.initStyle(StageStyle.TRANSPARENT);
 
@@ -46,13 +56,17 @@ public class PlayerEndOfTurnState extends State{
 
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(App.class.getResource("/saboteur/view/modalEndOfTurn.fxml"));
+            loader.setLocation(App.class.getResource("/saboteur/view/modalBeginOfTurn.fxml"));
             loader.setController(this);
             Pane modalPane = loader.load();
             Scene scene = new Scene(modalPane, 500, 300, Color.TRANSPARENT);
 
             Text text = (Text)modalPane.lookup("#text");
-            text.setText(this.game.getCurrentPlayer().getName() + " a fini de jouer. c'est au tour de " + this.game.getNextPlayer().getName() + " de jouer");
+            if (this.game.getTurn() == 1){
+                text.setText("c'est au tour de " + this.game.getNextPlayer().getName() + " de jouer");
+            } else{
+                text.setText(this.game.getCurrentPlayer().getName() + " a fini de jouer. c'est au tour de " + this.game.getNextPlayer().getName() + " de jouer");
+            }
 
             scene.getStylesheets().add(Resources.getStylesheet());
 
@@ -76,6 +90,6 @@ public class PlayerEndOfTurnState extends State{
 
     @FXML
     private void goButtonAction(){
-	    this.gsm.pop();
+	    this.gsm.changePeek("playerWait");
     }
 }

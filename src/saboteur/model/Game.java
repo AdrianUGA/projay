@@ -52,6 +52,10 @@ public class Game {
 		this.playerList.add(player);
 	}
 	
+	/**
+	 * Execute an operation, add it to history and check if round is finished (To dealGold)
+	 * @param op
+	 */
 	public void playOperation(Operation op){
 		this.history.add(op);
 		op.exec(this);
@@ -62,6 +66,10 @@ public class Game {
 		this.historyRedo = new LinkedList<>();
 	}
 	
+	/**
+	 * Undo the last player turn in history (Operation classic + OperationTrash if exist)
+	 * @return operations undo
+	 */
 	public LinkedList<Operation> undo(){
 		LinkedList<Operation> listUndo = new LinkedList<>();
 		Operation toUndo = null;
@@ -94,6 +102,10 @@ public class Game {
 		return listUndo;
 	}
 	
+	/**
+	 * Redo the last player turn undo (in historyRedo) (Operation classic + OperationTrash if exist)
+	 * @return operations redo
+	 */
 	public LinkedList<Operation> redo(){
 		LinkedList<Operation> listRedo = new LinkedList<>();
 		Operation toRedo = null;
@@ -120,7 +132,14 @@ public class Game {
 	public boolean historyRedoIsEmpty(){
 		return this.historyRedo.isEmpty();
 	}
+	
+	public boolean historyUndoIsEmpty(){
+		return this.history.isEmpty();
+	}
 
+	/**
+	 * reset round, goldCardStack, history, historyRedo, currentPlayerIndex and launch a newRound
+	 */
 	public void newGame(){
 		this.teamWinnerAlreadyAnnounced = false;
 		this.round = 0;
@@ -133,9 +152,13 @@ public class Game {
 
 		this.currentPlayerIndex = this.playerList.size()-1;
 		this.newRound();
-		//this.loadConfig("editeur");
+		//this.loadConfig("almostFinished");
 	}
 
+	/**
+	 * Load the config file with the name (similar to newRound)
+	 * @param name
+	 */
 	public void loadConfig(String name){
 		beginInitRound();
 		
@@ -199,10 +222,13 @@ public class Game {
 				}
 			}
 		}*/
+		
 		endInitRound();
 	}
 
-	//init common to both methods (loadConfig() and newRound())
+	/**
+	 * reset trash, stack and board
+	 */
 	private void beginInitRound() {
 		this.trash = new LinkedList<>();
 		this.stack = this.deck.getCopyOtherCards();
@@ -217,6 +243,10 @@ public class Game {
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 	}
 
+	/**
+	 * increments round
+	 * reset turn, roundIsFinished, playerWinnerAlreadyAnnounced and teamWinnerAlreadyAnnounced
+	 */
 	private void endInitRound(){
 		this.round++;
 		this.turn = 1;
@@ -225,6 +255,10 @@ public class Game {
 		this.teamWinnerAlreadyAnnounced = false;
 	}
 	
+	/**
+	 * From a line of config file, recup the card from the stack and add it to the board
+	 * @param chaine
+	 */
 	private void addCardToBoardFromConfig(String chaine) {
 		String stringCard[] = chaine.split(" ");
 		PathCard cardToAdd = (PathCard) getCard(stringCard[Loader.indexIdCardToPlay]);
@@ -237,6 +271,11 @@ public class Game {
 		this.board.addCard(cardToAdd, position);
 	}
 
+	/**
+	 * From a line of config file, create a player (With hand...Handicaps ...) and add it to the listPLayers
+	 * @param chaine
+	 * @return
+	 */
 	private Player createPlayerFromConfig(String chaine) {
 		Player toAdd;
 		String stringPlayer[] = chaine.split(" ");
@@ -250,16 +289,13 @@ public class Game {
 		}
 		
 		//Hand
-		ArrayList<Card> hand = new ArrayList<>();
 		int indexHand = Loader.beginIndexPlayerHand;
 		while (!stringPlayer[indexHand].equals(";")){
 			Card cardToAdd = getCard(stringPlayer[indexHand]);
 			this.stack.remove(cardToAdd);
-			hand.add(cardToAdd);
-			
+			toAdd.addHandCard(cardToAdd);
 			indexHand++;
 		}
-		toAdd.setHand(hand);
 		
 		//Handicaps
 		int indexHandicap = indexHand + 1;
@@ -274,6 +310,11 @@ public class Game {
 		return toAdd;
 	}
 	
+	/**
+	 * Get a card from the stack with an id
+	 * @param id
+	 * @return
+	 */
 	private Card getCard(String id){
 		int idToSearch = Integer.parseInt(id);
 		Card firstCard = null;
@@ -292,18 +333,22 @@ public class Game {
 		this.setTeam();
 
 		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
+		
+		for(Player p : this.playerList){
+			p.resetHandicaps();
+		}
+		
 		initAI();
 		
 		this.dealCardsToPlayer();
 		
-		this.nextPlayer();
+		//this.nextPlayer();
 		
 		endInitRound();
 	}
 
 	public void initAI() {
 		for(Player p : this.playerList){
-			p.resetHandicaps();
 			if(p.isAI()){
 				((AI) p).initializeAI();
 			}
@@ -335,14 +380,26 @@ public class Game {
 		return this.playerList.get(this.currentPlayerIndex);
 	}
 
+	/**
+	 * Increment the index of currentplayer
+	 */
 	public void nextPlayer(){
+		this.turn++;
 		this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.playerList.size();
 	}
 	
+	/**
+	 * Decrement the index of currentplayer
+	 */
 	public void previousPlayer(){
 		this.currentPlayerIndex = (this.currentPlayerIndex - 1) % this.playerList.size();
+		if (this.currentPlayerIndex == -1) this.currentPlayerIndex = 2;
 	}
 
+	/**
+	 * Get the next player without increment the index of currentplayer
+	 * @return
+	 */
 	public Player getNextPlayer(){
 		return this.playerList.get((this.currentPlayerIndex + 1) % this.playerList.size());
 	}
@@ -475,6 +532,10 @@ public class Game {
 		return this.stack.removeFirst();
 	}
 	
+	public Card observeFirstCard(){
+		return this.stack.getFirst();
+	}
+	
 	public boolean stackIsEmpty(){
 		return this.stack.isEmpty();
 	}
@@ -503,24 +564,36 @@ public class Game {
 		}
 		return winners;
 	}
+
+	public LinkedList<Player> getRanking(){
+		LinkedList<Player> ranking = new LinkedList<>();
+		for (Player player: playerList){
+			if (ranking.isEmpty()){
+				ranking.addFirst(player);
+			} else{
+				int i = 0;
+				while(player.getGold() < ranking.get(i).getGold()){
+					i++;
+				}
+				ranking.add(i, player);
+			}
+		}
+		return ranking;
+	}
 	
+	/**
+	 * @param card
+	 * @return all players on which we can apply this ActionCardToPlayer
+	 */
 	public LinkedList<Player> getPlayers(ActionCardToPlayer card){
 		LinkedList<Player> result = new LinkedList<>();
 		boolean isPossible = false;
 		for (Player p : this.playerList){
-			switch (card.getType()) {
-				case SABOTAGE:
-					isPossible = p.canHandicap((SabotageCard)card, p);
-					break;
-				case RESCUE:
-					isPossible = p.canRescueItself((RescueCard)card);
-					break;
-				case DOUBLE_RESCUE:
-					isPossible = p.canRescueWithDoubleRescueCard((DoubleRescueCard)card);
-					break;
-				default:
-					break;
-			}
+
+			if (card.isSabotageCard()) isPossible = p.canHandicap((SabotageCard)card, p);
+			else if (card.isRescueCard()) isPossible = p.canRescueItself((RescueCard)card);
+			else if (card.isDoubleRescueCard()) isPossible = p.canRescueWithDoubleRescueCard((DoubleRescueCard)card);
+			
 			if (isPossible) result.add(p);
 		}
 		
@@ -581,6 +654,10 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * @param value
+	 * @return list of card to a total value
+	 */
 	private ArrayList<GoldCard> getCardsToValue(int value){
 		//TODO Improve this method
 		ArrayList<GoldCard> result = new ArrayList<>();
@@ -658,6 +735,9 @@ public class Game {
 		return result;
 	}
 
+	/**
+	 * Set team for each player randomly
+	 */
 	private void setTeam(){
 		ArrayList<Team> team = new ArrayList<>();
 		int nbPlayer = this.playerList.size();

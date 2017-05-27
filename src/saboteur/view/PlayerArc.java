@@ -1,5 +1,6 @@
 package saboteur.view;
 
+import java.awt.Label;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ import saboteur.model.Game;
 import saboteur.model.Player;
 import saboteur.model.Card.SabotageCard;
 import saboteur.model.Card.Tool;
+import saboteur.tools.GameComponentsSize;
 
 public class PlayerArc extends Pane{
 	private LinkedList<Player> players;
@@ -28,10 +30,12 @@ public class PlayerArc extends Pane{
 	private Hashtable<Player, Circle[]> playerCircles = new Hashtable<Player, Circle[]>();
 	private Player previousPlayer;
 	private Game game;
+	private GameComponentsSize gameComponentsSize;
 	private final static Color color = Color.web("#a4a4a4");
 	private final static Color colorCurrentPlayer = Color.web("#72e307");
 
-	public PlayerArc(Game game, double radius, double center) {
+	public PlayerArc(Game game) {
+		this.gameComponentsSize = GameComponentsSize.getGameComponentSize();
 		this.game = game;
 		this.players = this.game.getPlayerList();
 		this.setPadding(new Insets(0, 0, 0, 0));
@@ -42,12 +46,13 @@ public class PlayerArc extends Pane{
 		}
 		
 		//Arc of players
-        double lengthOfArc = 360.0 / nbPlayers;
-        double startAngle = 0.0;	
+		double spacing = 1.5;
+        double lengthOfArc = (360.0 - nbPlayers * spacing) / nbPlayers;
+        double startAngle = 0.0;
         for(Player player : this.players) {
-        	startAngle = startAngle - lengthOfArc;
-			createArc(radius, center, lengthOfArc, startAngle, player);
-			createCircle(radius, center, lengthOfArc, startAngle, player);
+        	startAngle = startAngle - lengthOfArc - spacing;
+			createArc(lengthOfArc, startAngle, player);
+			createCircle(lengthOfArc, startAngle, player);
         }
 	}
 	
@@ -103,13 +108,17 @@ public class PlayerArc extends Pane{
     	circle.setFill(new ImagePattern(img));
 	}
 	
-	private void createCircle(double radius, double center, double lengthOfArc, double startAngle, Player player) {
-		double circleRadius = lengthOfArc / 1.5  ; // half of the length of arc
-		double centerDistance = (radius/2) + circleRadius*1.2; // game board size + circle radius
-		double x =lengthOfArc/3;
+	private void createCircle(double lengthOfArc, double startAngle, Player player) {
+		double radius = this.gameComponentsSize.getPlayerArcRadius();
+		double center = this.gameComponentsSize.getCenterOfGameTable();
+		
+		double circleRadius = this.gameComponentsSize.getMiniCircleRadius();
+		double centerDistance = radius - circleRadius*1.5;
+		double x =lengthOfArc/3.5;
+		double y = (lengthOfArc - x*3)/2;
 		
 		for (int i = 0; i<3; i++) {  
-			double angle = -startAngle-x*i-x/2;
+			double angle = -startAngle-x*i-x/2-y;
 			this.playerCircles.get(player)[i] = new Circle(center + centerDistance, center, circleRadius, PlayerArc.color);
             Rotate rotate = new Rotate(angle, center, center);
             this.playerCircles.get(player)[i].getTransforms().add(rotate);
@@ -119,12 +128,15 @@ public class PlayerArc extends Pane{
 		}		
 	}
 	
-	private void createArc(double radius, double center, double lengthOfArc, double startAngle, Player player) {
+	private void createArc(double lengthOfArc, double startAngle, Player player) {
 		
 		Path path = new Path();
 		
 		//Prepare all different positions 
-		double innerRadius = radius/2;
+		double radius = this.gameComponentsSize.getPlayerArcRadius();
+		double center = this.gameComponentsSize.getCenterOfGameTable();
+		
+		double innerRadius = this.gameComponentsSize.getInnerRadiusOfArc();
         double radians = Math.toRadians(startAngle);
         double XstartOuter = (int)Math.round((Math.cos(radians) * radius + center));
         double YstartOuter = (int)Math.round((Math.sin(-radians)* radius + center));
@@ -173,6 +185,13 @@ public class PlayerArc extends Pane{
 
         this.playerArc.put(player, path);
         this.getChildren().add(path);
+        
+//        Label name = new Label(player.getName());
+//        double anglePosition = startAngle + lengthOfArc/2;
+//        
+//        
+        
+        
 	}
 	
 	public Circle[] getCircles(Player player) {

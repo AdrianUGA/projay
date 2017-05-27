@@ -92,9 +92,7 @@ public class Board implements Serializable {
 		if(this.getCard(position).isGoal()){
 			this.objectiveCards.remove(position);
 		}
-		else{
-			this.pathCardsPosition.remove(position);
-		}
+		this.pathCardsPosition.remove(position);
 		this.board[position.getcY()][position.getcX()] = null;
 	}
 	
@@ -324,7 +322,6 @@ public class Board implements Serializable {
 		Position currentPosition;
 		
 		LinkedList<Position> positionsAlreadyExplored = new LinkedList<>();
-		System.out.println("Taille already : " + positionsAlreadyExplored.size());
 		
 		currentPosition = getStart();
 		positionsToExplore.add(currentPosition);
@@ -334,7 +331,6 @@ public class Board implements Serializable {
 			currentPosition = positionsToExplore.removeFirst();
 			currentCard = this.getCard(currentPosition);
 			if(!currentCard.isCulDeSac()){
-				System.out.println("CardCardCard : " + currentCard.getId());
 				for(Cardinal cardinal : Cardinal.values()){
 					posNeighbor = currentPosition.getNeighbor(cardinal);
 					neighbor = this.getCard(posNeighbor);
@@ -344,24 +340,25 @@ public class Board implements Serializable {
 							positionsToExplore.add(posNeighbor);
 							if (neighbor.isGoal() && !neighbor.isVisible()){
 								System.out.println("fin1 :" + posNeighbor);
-								result.add(posNeighbor);
+								result.add(getCorrectGoalPosition(posNeighbor));
 							}
 						}
 					}
 				}
 			}
-		}/*
-		for(Cardinal cardinal : Cardinal.values()){
-			if (card.isOpen(cardinal)){
-				posNeighbor = p.getNeighbor(cardinal);
-				neighbor = this.getCard(posNeighbor);
-				if (neighbor != null && neighbor.isGoal() && !neighbor.isVisible()){
-					result.add(posNeighbor);
-				}
-			}
-		}*/
+		}
 		
 		return result;
+	}
+	
+	//To return the correct position (correct reference) to avoid problem
+	private Position getCorrectGoalPosition(Position p){
+		for (Position pos : this.objectiveCards){
+			if (p.equals(pos)){
+				return pos;
+			}
+		}
+		return null;
 	}
 	
 	public static Position getStart() {
@@ -387,6 +384,18 @@ public class Board implements Serializable {
 
 	public Map<Position, PathCard> getPathCardsPosition() {
 		return this.pathCardsPosition;
+	}
+	
+	public Map<Position, PathCard> getPathCardsPositionWhichCanBeRemoved(){
+		Map<Position, PathCard> result = new LinkedHashMap<>(this.pathCardsPosition);
+		
+		result.remove(START);
+		
+		for (Position pos : this.objectiveCards){
+			result.remove(pos);
+		}
+		
+		return result;
 	}
 	
 	public ArrayList<Position> getAllPlacablePositionFromStart(){

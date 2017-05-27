@@ -23,6 +23,14 @@ public class GameCardContainer extends HBox {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(20.0);
         AnchorPane.setBottomAnchor(this, 5.0);
+        AnchorPane.setLeftAnchor(this, 5.0);
+        AnchorPane.setRightAnchor(this, 5.0);
+        
+    	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
+        	this.handCardsImages[i] = new ImageView();
+        	this.handCardsImages[i].setFitWidth(108);
+        	this.handCardsImages[i].setFitHeight(166);
+        }
         
         this.allCards = Resources.getImage();
         
@@ -31,11 +39,21 @@ public class GameCardContainer extends HBox {
     public void generateHandCardImage() {
     	this.getChildren().removeAll(this.handCardsImages);
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
-        	this.handCardsImages[i] = new ImageView(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getFrontImage()));
-        	this.handCardsImages[i].setFitWidth(108);
-        	this.handCardsImages[i].setFitHeight(166);
+    		this.handCardsImages[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getFrontImage()));
         	this.getChildren().add(this.handCardsImages[i]);
         }
+    }
+    
+    public void hideCards(){
+    	this.getChildren().removeAll(this.handCardsImages);
+    	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
+    		this.handCardsImages[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getBackImage()));
+        	this.getChildren().add(this.handCardsImages[i]);
+        }
+    }
+    
+    public void showCards(){
+    	this.generateHandCardImage();
     }
 
 }

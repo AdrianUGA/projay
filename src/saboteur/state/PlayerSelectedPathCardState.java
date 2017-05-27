@@ -88,16 +88,10 @@ public class PlayerSelectedPathCardState extends State{
 		
 		
 		if(this.selectedCard.isCollapseCard()) {
-			Map<Position, PathCard> pathCardsPosition = new LinkedHashMap<>(game.getBoard().getPathCardsPosition());
+			Map<Position, PathCard> pathCardsPosition = game.getBoard().getPathCardsPositionWhichCanBeRemoved();
 			
 			//If the map content more than the 1st path card (entry)
-			if(pathCardsPosition.size() > 1) {
-				pathCardsPosition.remove(Board.getStart());
-//				for(Position p : this.game.getBoard().getGoalCards()) {
-//					System.out.println(p);
-//					System.out.println(this.game.getBoard().getCard(p));
-//					pathCardsPosition.remove(p);
-//				}
+			if(pathCardsPosition.size() > 0) {
 				System.out.println(pathCardsPosition);
 				for(Position posiCard : pathCardsPosition.keySet()) {
 					SVGPath svg = new SVGPath();
@@ -247,7 +241,7 @@ public class PlayerSelectedPathCardState extends State{
     
     private void endOfTurn() {
     	this.endOfTurnButton.setOnAction(null);
-		this.gsm.changePeek("playerEndOfTurn");
+		this.gsm.pop();
 	}
     
 }

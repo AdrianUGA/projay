@@ -15,6 +15,11 @@ public class OperationPick extends Operation {
 	@Override
 	public void exec(Game game) {
 		this.getSourcePlayer().addHandCard(this.cardPicked);
+		
+		//In situation where we do a redo
+		if (game.observeFirstCard() == this.cardPicked){
+			game.pick();
+		}
 	}
 
 	@Override
@@ -28,5 +33,8 @@ public class OperationPick extends Operation {
 	public boolean isOperationPick(){
 		return true;
 	}
-	
+
+	public Card getCardPicked(){
+		return this.cardPicked;
+	}
 }

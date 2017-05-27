@@ -30,24 +30,50 @@ public abstract class Player implements Serializable {
 	
 /* Actions */
 	
-	public Operation playCard(Card card){
-		return null;
-	}
+	/**
+	 * Play a RescueCard or a SabotageCard on a player
+	 * This method remove the selected card from the player's hand
+	 * Before, the selectedCard must be update in the source player
+	 * @param destinationPlayer
+	 * @return the operation executed
+	 */
 	public Operation playCard(Player destinationPlayer){
 		Operation op = new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer);
 		this.game.playOperation(op);
 		return op;
 	}
+	/**
+	 * Play a DoubleRescueCard on a player
+	 * This method remove the selected card from the player's hand
+	 * Before, the selectedCard must be update in the source player
+	 * @param destinationPlayer
+	 * @param destinationTool
+	 * @return the operation executed
+	 */
 	public Operation playCard(Player destinationPlayer, Tool destinationTool){
 		Operation op = new OperationActionCardToPlayer(this, this.selectedCard, destinationPlayer, destinationTool);
 		this.game.playOperation(op);
 		return op;
 	}
+	/**
+	 * Play a a PlanCard or a Collapse Card
+	 * This method remove the selected card from the player's hand
+	 * Before, the selectedCard must be update in the source player
+	 * @param destinationCard
+	 * @return the operation executed
+	 */
 	public Operation playCard(PathCard destinationCard){
 		Operation op = new OperationActionCardToBoard(this, this.selectedCard, destinationCard);
 		this.game.playOperation(op);
 		return op;
 	}
+	/**
+	 * Play a PathCard
+	 * This method remove the selected card from the player's hand
+	 * Before, the selectedCard must be update in the source player
+	 * @param position
+	 * @return the operation executed
+	 */
 	public Operation playCard(Position position){
 		OperationPathCard o = new OperationPathCard(this, this.selectedCard, position);
 		if(!this.game.getBoard().isPossible((PathCard)this.selectedCard, position)){
@@ -56,13 +82,21 @@ public abstract class Player implements Serializable {
 		this.game.playOperation(o);
 		return o;
 	}
-	
+	/**
+	 * Trash a card
+	 * This method remove the selected card from the player's hand
+	 * Before, the selectedCard must be update in the source player
+	 * @return the operation executed
+	 */
 	public Operation playCard(){		
 		Operation op = new OperationTrash(this, this.selectedCard);
 		this.game.playOperation(op);
 		return op;
 	}
-	
+	/**
+	 * Pick a card
+	 * @return the operation executed
+	 */
 	public Operation pickCard(){
 		Operation op = null;
 		if (!game.stackIsEmpty()){
@@ -86,11 +120,20 @@ public abstract class Player implements Serializable {
 	
 	
 /* Tests. No side effects */
-	
+	/**
+	 * Know if we can apply the RescueCard to this player
+	 * @param card
+	 * @return
+	 */
 	public boolean canRescueItself(RescueCard card){
 		return this.canRescue(card, this);
 	}
-	
+	/**
+	 * Know if we can apply a RescueCard to a player
+	 * @param card
+	 * @param player
+	 * @return
+	 */
 	public boolean canRescue(RescueCard card, Player player){
 		for (SabotageCard sabotageCard : player.handicaps){
 			if (sabotageCard.getSabotageType() == card.getRescueType()){
@@ -100,10 +143,20 @@ public abstract class Player implements Serializable {
 		return false;
 	}
 	
+	/**
+	 * Know if we can apply the DoubleRescueCard to this player
+	 * @param card
+	 * @return
+	 */
 	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card){
 		return this.canRescueWithDoubleRescueCard(card, this);
 	}
-	
+	/**
+	 * Know if we can apply a DoubleRescueCard to a player
+	 * @param card
+	 * @param player
+	 * @return
+	 */
 	public boolean canRescueWithDoubleRescueCard(DoubleRescueCard card, Player player) {
 		for (SabotageCard sabotageCard : player.handicaps){
 			Tool currentType = sabotageCard.getSabotageType();
@@ -128,6 +181,12 @@ public abstract class Player implements Serializable {
 		return false;
 	}
 	
+	/**
+	 * Know if we can apply the SabotageCard to a player
+	 * @param card
+	 * @param p
+	 * @return
+	 */
 	public boolean canHandicap(SabotageCard card, Player p){
 		for (SabotageCard sabotageCard : p.handicaps){
 			if (sabotageCard.getSabotageType() == card.getSabotageType()){
@@ -198,15 +257,18 @@ public abstract class Player implements Serializable {
 		this.name = nom;
 	}	
 	
-	/* return null if not found */
-		public SabotageCard getCardCorrespondingToRescueType(Tool tool){
-			for (SabotageCard sabotageCard : this.handicaps){
-				if (sabotageCard.getSabotageType() == tool){
-					return sabotageCard;
-				}
+	/**
+	 * @param tool
+	 * @return null if not found
+	 */
+	public SabotageCard getCardCorrespondingToRescueType(Tool tool){
+		for (SabotageCard sabotageCard : this.handicaps){
+			if (sabotageCard.getSabotageType() == tool){
+				return sabotageCard;
 			}
-			return null;
 		}
+		return null;
+	}
 		
 	public void addGold(GoldCard goldCard){
 		this.gold.add(goldCard);
@@ -224,6 +286,9 @@ public abstract class Player implements Serializable {
 		return this.handicaps;
 	}
 	
+	/**
+	 * @return Total gold (and not the list of its GoldCards
+	 */
 	public int getGold(){
 		int total = 0;
 		for (GoldCard card : this.gold){
@@ -259,9 +324,4 @@ public abstract class Player implements Serializable {
 	public void resetHandicaps() {
 		this.handicaps.clear();
 	}
-
-	public void removeHandicapWith(RescueCard card) {
-		// TODO Auto-generated method stub
-	}
-
 }
