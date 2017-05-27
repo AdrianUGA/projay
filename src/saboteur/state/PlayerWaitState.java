@@ -19,6 +19,7 @@ import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
+import saboteur.view.PlayerRoleContainer;
 import saboteur.view.TrashAndPickStackContainer;
 
 public class PlayerWaitState extends State{
@@ -26,10 +27,7 @@ public class PlayerWaitState extends State{
 	private TrashAndPickStackContainer trashAndPickStackContainer;
 	private GameCardContainer gameCardContainer;
 	private PlayerArc playersArc;
-	
-	private Label playerRoleLabel;
-	private ImageView playerRoleImage;
-
+	private PlayerRoleContainer playerRoleContainer;
 	
     public PlayerWaitState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -50,13 +48,7 @@ public class PlayerWaitState extends State{
     	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
     	this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
     	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
-    	this.playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
-    	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
-    	
-    	Button undoButton = (Button) this.primaryStage.getScene().lookup("#undoButton");
-    	Button redoButton = (Button) this.primaryStage.getScene().lookup("#redoButton");
-
-    	
+    	this.playerRoleContainer = (PlayerRoleContainer) this.primaryStage.getScene().lookup("#playerRoleContainer");    	
 
 		this.playersArc.refreshPlayersArcsAndCircles();
 
@@ -123,17 +115,8 @@ public class PlayerWaitState extends State{
 
     private void initControlForHuman(){
 		//Image and Label of player role
-
-		if(this.game.getCurrentPlayer().getTeam() == Team.DWARF) {
-			this.playerRoleLabel.setText("Chercheur d'or");
-			this.playerRoleImage.setImage(new Image("/resources/nainchercheurdor.png"));
-		}
-		else {
-			this.playerRoleLabel.setText("Saboteur");
-			this.playerRoleImage.setImage(new Image("/resources/nainsaboteur.png"));
-		}
-		this.playerRoleImage.setVisible(true);
-		this.playerRoleLabel.setVisible(true);
+		this.playerRoleContainer.refreshPlayerRole();
+		this.playerRoleContainer.setPlayerRoleComponentsVisible(true);
 
 		this.trashAndPickStackContainer.disablePickAndEndTurnButton();
 		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {

@@ -33,10 +33,13 @@ public class TrashAndPickStackContainer extends VBox{
 		this.trashPane = new StackPane(this.trashButton);
 		this.pickAndEndTurnPane = new StackPane(this.pickAndEndTurnButton);
 		
+		this.trashPane.setAlignment(Pos.CENTER_RIGHT);
+		this.pickAndEndTurnPane.setAlignment(Pos.CENTER_RIGHT);
+		
 		this.getChildren().addAll(this.trashPane, this.pickAndEndTurnPane);
 		this.setSpacing(20.0);
-		VBox.setMargin(this.pickAndEndTurnPane, new Insets(10.0, 10.0, 0.0, 0.0));
-		VBox.setMargin(this.trashPane, new Insets(10.0, 10.0, 0.0, 0.0));
+		VBox.setMargin(this.pickAndEndTurnPane, new Insets(0.0, 0.0, 0.0, 0.0));
+		VBox.setMargin(this.trashPane, new Insets(0.0, 0.0, 10.0, 0.0));
 	}
 	
 	private void initButton(Button button){
