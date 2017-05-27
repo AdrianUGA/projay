@@ -35,7 +35,7 @@
                   </LinearGradient>
                </stroke>
             </Text>
-            <HBox alignment="CENTER">
+            <HBox fx:id="goButtonContainer" alignment="CENTER">
                <children>
                   <Button fx:id="goButton" cancelButton="true" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#goButtonAction" styleClass="btn" text="C'est parti !" textAlignment="CENTER">
                      <font>

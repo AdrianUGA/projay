@@ -1,6 +1,5 @@
 package saboteur.state;
 
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -14,24 +13,29 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import saboteur.GameStateMachine;
+import saboteur.model.Card.PathCard;
 import saboteur.model.Game;
+import saboteur.model.Operation;
 import saboteur.model.Position;
-import saboteur.model.Card.Card;
 import saboteur.tools.Icon;
 import saboteur.tools.Resources;
 import saboteur.view.GameCardContainer;
+import saboteur.view.TrashAndPickStackContainer;
+import saboteur.view.PlayerArc;
 
 public class PlayerSelectedPlanCardState extends State{
 
-	private Object[] svgEyes= new Object[3];
+	private Object[] svgEyes = new Object[3];
 	private StackPane[] paneOfGoalCard = new StackPane[3];
 	private VBox goalCardContainer;
-	private Button endOfTurnButton;
+	private TrashAndPickStackContainer trashAndPickStackContainer;
 	private Circle gameBoard;
-	private Card selectedCard;
 	private boolean goalCardSelect;
-	
-    public PlayerSelectedPlanCardState(GameStateMachine gsm, Game game, Stage primaryStage){
+
+	private PathCard selectedGoalCard;
+	private GameCardContainer gameCardContainer;
+
+	public PlayerSelectedPlanCardState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
     }
 
@@ -47,14 +51,15 @@ public class PlayerSelectedPlanCardState extends State{
 
     @Override
     public void onEnter(Object param) {
-        System.out.println("plan card");
-        
-        
-        this.selectedCard = (Card) param;
-        this.goalCardContainer = (VBox) this.primaryStage.getScene().lookup("#goalCardContainer");
-    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
-        this.goalCardSelect = false;
+
         this.gameBoard = (Circle)this.primaryStage.getScene().lookup("#gameBoard");
+		PlayerArc playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
+		playersArc.refreshPlayersArcsAndCircles();
+		this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
+
+        this.goalCardContainer = (VBox) this.primaryStage.getScene().lookup("#goalCardContainer");
+    	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
+        this.goalCardSelect = false;
         
         this.gameBoard.toFront();
         this.goalCardContainer.toFront();
@@ -103,46 +108,38 @@ public class PlayerSelectedPlanCardState extends State{
     }
     
     private void selectGoalCard(MouseEvent event) {
-    	if(event.getTarget() instanceof ImageView || event.getTarget() instanceof SVGPath) {
-    		int i = 2;
-        	for (Node n : this.goalCardContainer.getChildren()) {
-        		StackPane p = (StackPane) n;
-        		
-        		//Turn selected card
-        		if(event.getSource() == p) {
-        			ImageView img = (ImageView) p.getChildren().get(0);
-        			Position posi = this.game.getBoard().getGoalCards().get(i%3);
-        			img.setImage( Resources.getImage().get(this.game.getBoard().getCard(posi).getFrontImage()) );
-        			this.game.getCurrentPlayer().playCard(this.game.getBoard().getCard(posi));
-                	this.beforEnd();
-        			this.goalCardSelect = true;
-                	break;
-        		}
-        		i++;
-        	}
-    	}
+		int i = 2;
+		for (Node n : this.goalCardContainer.getChildren()) {
+			StackPane p = (StackPane) n;
+
+			//Turn selected card
+			if(event.getSource() == p) {
+				ImageView img = (ImageView) p.getChildren().get(0);
+				Position posi = this.game.getBoard().getGoalCards().get(i%3);
+				img.setImage( Resources.getImage().get(this.game.getBoard().getCard(posi).getFrontImage()) );
+				this.selectedGoalCard = this.game.getBoard().getCard(posi);
+				this.beforEnd();
+				this.goalCardSelect = true;
+				break;
+			}
+			i++;
+		}
     }
     
     private void beforEnd() {
     	Button trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
     	trashButton.setDisable(true);
+
+		this.gameCardContainer.setOnMouseClicked(null);
     	
     	for(int i = 0; i < 3; i++){
     		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
     		this.paneOfGoalCard[i].setOnMouseClicked(null);
     	}
     	
-    	this.game.getCurrentPlayer().getHand().remove(this.selectedCard);
-    	
-		//Code : Go to EndOfTurn, generate new hand card image and delete event of the card selection
-    	this.game.getCurrentPlayer().pickCard();
-    	GameCardContainer cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
-    	cardContainer.setOnMouseClicked(null);
-    	cardContainer.generateHandCardImage(); 
-    	
-    	this.endOfTurnButton.setDisable(false);
-    	this.endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
-    	    @Override public void handle(ActionEvent e) {
+    	this.trashAndPickStackContainer.enablePickAndEndTurnButton();
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
+    	    @Override public void handle(MouseEvent e) {
     	        endOfTurn();
     	    }
     	});
@@ -151,7 +148,8 @@ public class PlayerSelectedPlanCardState extends State{
     private void endOfTurn() {
     	this.gameBoard.toBack();
 		this.goalCardContainer.setVisible(false);
-    	this.endOfTurnButton.setOnAction(null);
-    	this.gsm.pop();
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
+    	Operation op = this.game.getCurrentPlayer().playCard(this.selectedGoalCard);
+    	this.gsm.changePeek("playerPlayCard", op);
 	}
 }

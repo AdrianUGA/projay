@@ -4,10 +4,11 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -23,22 +24,30 @@ import saboteur.tools.GameComponentsSize;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
+import saboteur.view.TrashAndPickStackContainer;
 
 public class GameState extends State{
-
-	@FXML private AnchorPane gameCardContainer;
+	
+	@FXML private BorderPane gameBorderPane;
+	
 	@FXML private Pane boardContainer;
 	@FXML private Circle gameBoard;
 	@FXML private VBox goalCardContainer;
+	
 	@FXML private Label playerRoleLabel;
 	@FXML private ImageView playerRoleImage;
+	
+	@FXML private Button undoButton;
+	@FXML private Button redoButton;
 	
 	private FXMLLoader loader;
 	
 	private PlayerArc playersArc;
 	
 	private GameBoardGridPane gameBoardGridPane;
-	private GameCardContainer cardContainer;
+	
+	private GameCardContainer gameCardContainer;
+	private TrashAndPickStackContainer trahAndPickStackContainer;
 
     public GameState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -49,9 +58,8 @@ public class GameState extends State{
         if (this.game.roundIsFinished()){
             this.gsm.push("roundIsFinished");
         } else{
+            manageUndoRedoButton();
             this.gsm.push("playerBeginOfTurn");
-            this.gameBoardGridPane.generateBoard();
-            this.playersArc.refreshPlayersArcsAndCircles();
         }
     }
 
@@ -73,7 +81,6 @@ public class GameState extends State{
     private void initGame(){
         
         this.game.initAI();
-        
         try{
             this.loader = new FXMLLoader();
             this.loader.setLocation(App.class.getResource("/saboteur/view/boardGame.fxml"));
@@ -82,7 +89,8 @@ public class GameState extends State{
                        
             GameComponentsSize gameComponentSize = GameComponentsSize.getGameComponentSize();
             double gameTableSize = gameComponentSize.getGameTableSize();
-            double gameTableHalfSize = gameComponentSize.getGameTableHalfSize();
+            
+            // ******************** Right ********************
         	//Image and Label of player role
         	this.playerRoleLabel.setFont(new Font("Arial", 30));
         	this.playerRoleLabel.setTextFill(Color.WHITE);
@@ -90,8 +98,31 @@ public class GameState extends State{
         	this.playerRoleImage.setFitHeight(282.0);
         	this.playerRoleImage.setFitWidth(400.0);
         	
-            //Create the goal card for the planCardActcion
-            this.goalCardContainer.setPrefSize(gameTableSize, gameTableSize);
+            // trash and pick stacks
+        	this.trahAndPickStackContainer = new TrashAndPickStackContainer(this.game);
+        	this.trahAndPickStackContainer.setId("trashAndPickStackContainer");
+//        	this.gameBorderPane.setTop(this.trahAndPickStackContainer);
+        	this.gameBorderPane.setRight(this.trahAndPickStackContainer);
+            
+            //Cards of current player
+            this.gameCardContainer = new GameCardContainer(this.game, gameComponentSize.getScreenWidth() - gameTableSize - 100);
+            this.gameCardContainer.setId("gameCardContainer");
+            this.gameBorderPane.setBottom(this.gameCardContainer);
+            
+            
+            // ******************** Left ********************
+            //The game board
+            this.gameBoardGridPane = new GameBoardGridPane(this.game);
+            this.gameBoardGridPane.setId("gameBoardGridPane");
+            this.boardContainer.getChildren().add(this.gameBoardGridPane);
+            
+            this.playersArc = new PlayerArc(this.game);
+            this.playersArc.setId("playersArc");
+            this.playersArc.refreshPlayersArcsAndCircles();
+            this.boardContainer.getChildren().add(this.playersArc);
+            
+            //Create the goal card for the planCardAction
+            this.goalCardContainer.setPrefSize(gameComponentSize.getGameTableSize(), gameComponentSize.getGameTableSize());
             for (int i = 0; i < 3; i++) {
             	ImageView img = new ImageView();
             	img.setFitWidth(gameComponentSize.getCardWidth()/1.5);
@@ -101,26 +132,6 @@ public class GameState extends State{
             	p.setAlignment(Pos.CENTER);
             	this.goalCardContainer.getChildren().add(p);
             }
-            
-            //For center cards hand Image
-            this.cardContainer = new GameCardContainer(this.game, gameComponentSize.getScreenWidth() - gameTableSize - 100);
-            this.cardContainer.setId("cardContainer");
-            this.gameCardContainer.getChildren().add(this.cardContainer);
-            
-            //The game board
-//            double innerRadius = gameTableHalfSize/2;
-            double innerRadius = gameComponentSize.getInnerRadiusOfArc();
-	        double radians = Math.toRadians(135);
-	        double XstartInner = (int)Math.round((Math.cos(radians) * innerRadius + gameTableHalfSize));
-	        double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + gameTableHalfSize));
-            this.gameBoardGridPane = new GameBoardGridPane(this.game, XstartInner, YstartInner);
-            this.gameBoardGridPane.setId("gameBoardGridPane");
-            this.boardContainer.getChildren().add(this.gameBoardGridPane);
-            
-            this.playersArc = new PlayerArc(this.game);
-            this.playersArc.setId("playersArc");
-            this.boardContainer.getChildren().add(this.playersArc);
-            this.playersArc.refreshPlayersArcsAndCircles();
             
             this.boardContainer.toBack();
 
@@ -134,26 +145,52 @@ public class GameState extends State{
             e.printStackTrace();
         }
     }
+
+    private void manageUndoRedoButton(){
+        if(this.game.historyUndoIsEmpty()) {
+            undoButton.setDisable(true);
+        }
+        else {
+            undoButton.setDisable(false);
+        }
+
+        if(this.game.historyRedoIsEmpty()) {
+            redoButton.setDisable(true);
+        }
+        else {
+            redoButton.setDisable(false);
+        }
+    }
     
     @FXML
     private void undoButtonAction(){
-    	if(!this.game.historyUndoIsEmpty()) {
-        	this.game.undo();
+    	this.game.undo();
+    	this.game.previousPlayer();
+    	
+    	while(this.game.getCurrentPlayer().isAI()){
+    		this.game.undo();
         	this.game.previousPlayer();
-            this.gameBoardGridPane.generateBoard();
-            this.playersArc.refreshPlayersArcsAndCircles();
-            this.cardContainer.generateHandCardImage(); 
+    	}
+    	
+        this.gameBoardGridPane.generateBoard();
+        this.playersArc.refreshPlayersArcsAndCircles();
+        this.gameCardContainer.generateHandCardImage();
+        this.gsm.changePeek("playerBeginOfTurn");
+    	if(this.game.historyUndoIsEmpty()) {
+        	this.undoButton.setDisable(true);
     	}
     }
     
     @FXML
     private void redoButtonAction(){
-    	if(!this.game.historyRedoIsEmpty()){
-        	this.game.redo();
-        	this.game.nextPlayer();
-            this.gameBoardGridPane.generateBoard();
-            this.playersArc.refreshPlayersArcsAndCircles();
-            this.cardContainer.generateHandCardImage(); 
+    	this.game.redo();
+    	this.game.nextPlayer();    	
+        this.gameBoardGridPane.generateBoard();
+        this.playersArc.refreshPlayersArcsAndCircles();
+        this.gameCardContainer.generateHandCardImage();
+        this.gsm.changePeek("playerBeginOfTurn");
+    	if(this.game.historyRedoIsEmpty()){
+    		this.redoButton.setDisable(true);
     	}
     }
     

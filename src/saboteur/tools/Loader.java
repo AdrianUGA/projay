@@ -16,6 +16,7 @@ import java.util.LinkedList;
 
 public class Loader {
 
+	public final static String scoreFolder = ".score";
     public final static String savedFolder = ".saves/";
     public final static String configFolder = ".config/";
     

@@ -8,6 +8,7 @@ import saboteur.model.Board;
 import saboteur.model.Game;
 import saboteur.model.Position;
 import saboteur.model.Card.PathCard;
+import saboteur.tools.GameComponentsSize;
 import saboteur.tools.Resources;
 
 public class GameBoardGridPane extends GridPane {
@@ -20,32 +21,19 @@ public class GameBoardGridPane extends GridPane {
 	
 	private ImageView[][] imagesOfGridPane;
 	
-	public GameBoardGridPane(Game game, double XstartInner, double YstartInner) {
+	public GameBoardGridPane(Game game) {
 		this.board = game.getBoard();
 		this.game = game;
 		
         this.allCards = Resources.getImage();
-        
-		this.setLayoutX(XstartInner);
-        this.setLayoutY(YstartInner);
         this.generateBoard();
         
 	}
 	
-	public void addCardToBoard(PathCard card, Position position){
-		this.game.getCurrentPlayer().playCard(position);
-		this.generateBoard();
-	}
-	
-	public void removeCardOfBoard(Position position) {
-		this.game.getCurrentPlayer().playCard(this.board.getCard(position));
-		this.generateBoard();
-	}
-	
     public void generateBoard() {
-        double cardWidth = 108/3;
-        double cardHeight = 166/3;
-
+        double cardWidth = GameComponentsSize.getGameComponentSize().getCardWidth()/3;
+        double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/3;
+        
         this.getChildren().clear();
         
         this.xmin = Board.getGridSize();
@@ -105,6 +93,11 @@ public class GameBoardGridPane extends GridPane {
 				this.add(img, i, j);
         	}
         }
+    	// Set Layout acording to the number of card on the board
+		double boardHeight = cardHeight * (this.ymax - this.ymin + 1);
+		double boardWidth = cardWidth * (this.xmax - this.xmin+ 1);
+    	this.setLayoutX(GameComponentsSize.getGameComponentSize().getCenterOfGameTable()-boardWidth/2);
+    	this.setLayoutY(GameComponentsSize.getGameComponentSize().getCenterOfGameTable()-boardHeight/2);
     }
     
     public ImageView getImageOfPosition(Position posiCard) {

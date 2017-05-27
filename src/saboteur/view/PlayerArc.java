@@ -1,6 +1,5 @@
 package saboteur.view;
 
-import java.awt.Label;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -17,6 +16,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
+import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 import saboteur.model.Game;
 import saboteur.model.Player;
@@ -26,8 +26,8 @@ import saboteur.tools.GameComponentsSize;
 
 public class PlayerArc extends Pane{
 	private LinkedList<Player> players;
-	private Hashtable<Player, Path> playerArc = new Hashtable<Player, Path>();
-	private Hashtable<Player, Circle[]> playerCircles = new Hashtable<Player, Circle[]>();
+	private Hashtable<Player, Path> playerArc = new Hashtable<>();
+	private Hashtable<Player, Circle[]> playerCircles = new Hashtable<>();
 	private Player previousPlayer;
 	private Game game;
 	private GameComponentsSize gameComponentsSize;
@@ -117,13 +117,19 @@ public class PlayerArc extends Pane{
 		double x =lengthOfArc/3.5;
 		double y = (lengthOfArc - x*3)/2;
 		
-		for (int i = 0; i<3; i++) {  
+		for (int i = 0; i<3; i++) {              
 			double angle = -startAngle-x*i-x/2-y;
-			this.playerCircles.get(player)[i] = new Circle(center + centerDistance, center, circleRadius, PlayerArc.color);
-            Rotate rotate = new Rotate(angle, center, center);
-            this.playerCircles.get(player)[i].getTransforms().add(rotate);
+			double radians = Math.toRadians(angle);
+            double layoutX = (int)Math.round((Math.cos(radians) * centerDistance + center));
+            double layoutY = (int)Math.round((Math.sin(-radians)* centerDistance + center));
+            
+			this.playerCircles.get(player)[i] = new Circle(circleRadius);
+            this.playerCircles.get(player)[i].setLayoutX(layoutX);
+            this.playerCircles.get(player)[i].setLayoutY(layoutY);
             this.playerCircles.get(player)[i].setStroke(Color.BLACK);
             this.playerCircles.get(player)[i].setStrokeWidth(3);
+            this.playerCircles.get(player)[i].toFront();
+            
             this.getChildren().add(this.playerCircles.get(player)[i]);
 		}		
 	}
@@ -144,10 +150,10 @@ public class PlayerArc extends Pane{
         double YstartInner = (int)Math.round((Math.sin(-radians) * innerRadius + center));
 		
         radians = Math.toRadians(startAngle + lengthOfArc);
-        int XendOuter = (int)Math.round((Math.cos(radians) * radius + center));
-        int YendOuter = (int)Math.round((Math.sin(-radians) * radius + center));
-        int XendInner = (int)Math.round((Math.cos(radians) * innerRadius + center));
-        int YendInner = (int)Math.round((Math.sin(-radians) * innerRadius + center));
+        double XendOuter = (int)Math.round((Math.cos(radians) * radius + center));
+        double YendOuter = (int)Math.round((Math.sin(-radians) * radius + center));
+        double XendInner = (int)Math.round((Math.cos(radians) * innerRadius + center));
+        double YendInner = (int)Math.round((Math.sin(-radians) * innerRadius + center));
                        
                 
         path.setFill(PlayerArc.color);
@@ -185,13 +191,53 @@ public class PlayerArc extends Pane{
 
         this.playerArc.put(player, path);
         this.getChildren().add(path);
+        path.toBack();
         
-//        Label name = new Label(player.getName());
-//        double anglePosition = startAngle + lengthOfArc/2;
-//        
-//        
+        Text name = new Text(player.getName());
+        double anglePosition = startAngle + lengthOfArc/2;
+        radians = Math.toRadians(anglePosition);
+        anglePosition = Math.abs(anglePosition);
         
+        double distanceToCenter = radius;
+       
+        if( 0 <= anglePosition && anglePosition < 40 ) {
+        	distanceToCenter-=20;
+        }
+        else if( 40 <= anglePosition && anglePosition < 70 ) {
+        	distanceToCenter-=10;
+        }
+        else if( 70 <= anglePosition && anglePosition < 100 ) {
+        	distanceToCenter+=5;
+        }
+        else if( 100 <= anglePosition && anglePosition < 110 ) {
+        	distanceToCenter+=20;
+        }
+        else if( 110 <= anglePosition && anglePosition < 130 ) {
+        	distanceToCenter+=30;
+        }
+        else if( 130 <= anglePosition && anglePosition < 180 ) {
+        	distanceToCenter+=20;
+        }
+        else if( 180 <= anglePosition && anglePosition < 270 ) {
+        	distanceToCenter+=40;
+        }
+        else if( 270 <= anglePosition && anglePosition < 300 ) {
+        	distanceToCenter+=25;
+        }
+        else if( 300 <= anglePosition && anglePosition < 325 ) {
+        	distanceToCenter+=15;
+        }
+        XstartInner = (int)Math.round((Math.cos(radians) * distanceToCenter + center));
+        YstartInner = (int)Math.round((Math.sin(-radians) * distanceToCenter + center));
+
+        name.getStyleClass().add("player-arc-name");
+        name.setLayoutX(XstartInner);
+        name.setLayoutY(YstartInner);
         
+        double angle = Math.abs(anglePosition)%180 - 90;
+        name.setRotate(angle);
+        
+        this.getChildren().add(name);
 	}
 	
 	public Circle[] getCircles(Player player) {

@@ -1,8 +1,6 @@
 package saboteur.state;
 
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -21,23 +19,16 @@ import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
+import saboteur.view.TrashAndPickStackContainer;
 
 public class PlayerWaitState extends State{
 	
-	private GameCardContainer cardContainer;
+	private TrashAndPickStackContainer trashAndPickStackContainer;
+	private GameCardContainer gameCardContainer;
 	private PlayerArc playersArc;
 	
 	private Label playerRoleLabel;
 	private ImageView playerRoleImage;
-	
-	private ImageView imgSelectedCard = new ImageView();
-	private Card selectedCard = null;
-
-	private Button trashButton;
-	private Button endOfTurnButton;
-
-	private ImageView trash;
-	private ImageView stack;
 
 	
     public PlayerWaitState(GameStateMachine gsm, Game game, Stage primaryStage){
@@ -56,23 +47,29 @@ public class PlayerWaitState extends State{
 
     @Override
     public void onEnter(Object param) {
-    	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#cardContainer");
+    	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
+    	this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
     	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
-    	this.trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
-    	this.endOfTurnButton = (Button) this.primaryStage.getScene().lookup("#endOfTurnButton");
     	this.playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
     	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
-    	this.trash = (ImageView) this.primaryStage.getScene().lookup("#trash");
-    	this.stack = (ImageView) this.primaryStage.getScene().lookup("#stack");
+    	
+    	Button undoButton = (Button) this.primaryStage.getScene().lookup("#undoButton");
+    	Button redoButton = (Button) this.primaryStage.getScene().lookup("#redoButton");
+
+    	
+
+		this.playersArc.refreshPlayersArcsAndCircles();
 
 		if (this.game.getCurrentPlayer().isAI()){
-			Operation o = this.game.getCurrentPlayer().playCard();
-			this.gsm.changePeek("playerPlayCard", o);
+			PauseTransition pt = new PauseTransition(Duration.INDEFINITE.millis(1000));
+			pt.setOnFinished(event -> {
+				Operation o = this.game.getCurrentPlayer().playCard();
+				this.gsm.changePeek("playerPlayCard", o);
+			});
+			pt.play();
 		} else {
 			initControlForHuman();
 		}
-
-
     }
 
     @Override
@@ -81,43 +78,46 @@ public class PlayerWaitState extends State{
     }
         
     private void selectCardButtonAction(MouseEvent event) {
-    	ImageView newCard = null;
-    	HBox hb= (HBox)event.getSource();    	
-    	if (event.getTarget() != this.cardContainer) {
-    		
-        	newCard = (ImageView)event.getTarget();
+    	ImageView imgSelectedCard;
+    	HBox hb = (HBox)event.getSource();
+    	if (event.getTarget() != this.gameCardContainer) {
+
+			imgSelectedCard = (ImageView)event.getTarget();
             
-            if(newCard != this.imgSelectedCard) {
+            if(imgSelectedCard != this.gameCardContainer.getImgSelectedCard()) {
 
-            	removeOldSelection();
-        		addNewSelection(newCard);
+            	this.gameCardContainer.removeSelection();
 
+				Card selectedCard = null;
         		//take the ref. of the card.
 	        	int i = 0;
 	        	for(Node nodeIn:hb.getChildren()) {
 	                if( (ImageView)nodeIn == event.getTarget() ){
-	                	this.selectedCard = this.game.getCurrentPlayer().getHand().get(i);
-	                	this.game.getCurrentPlayer().setSelectedCard(this.selectedCard);
+	                	selectedCard = this.game.getCurrentPlayer().getHand().get(i);
+	                	this.game.getCurrentPlayer().setSelectedCard(selectedCard);
 	                }
 	                else {
 	                	i++;
 	                }
 	            }
+
+	            this.gameCardContainer.addSelection(selectedCard, imgSelectedCard);
 	        	
-	        	if(this.selectedCard.isSabotageCard() || this.selectedCard.isRescueCard() || this.selectedCard.isDoubleRescueCard()) {	        		
-                	this.gsm.changePeek("playerSelectedAction", this.selectedCard);
+
+	        	if(selectedCard.isSabotageCard() || selectedCard.isRescueCard() || selectedCard.isDoubleRescueCard()) {	        		
+                	this.gsm.changePeek("playerSelectedAction", selectedCard);
 	    		}
-	        	else if(this.selectedCard.isPathCard() || this.selectedCard.isCollapseCard()) {
-	        		this.gsm.changePeek("playerSelectedPath", this.selectedCard);
+	        	else if(selectedCard.isPathCard() || selectedCard.isCollapseCard()) {
+	        		this.gsm.changePeek("playerSelectedPath", selectedCard);
 	    		}
-	        	else if(this.selectedCard.isPlanCard()) {
-                	this.gsm.changePeek("playerSelectedPlan", this.selectedCard);
+	        	else if(selectedCard.isPlanCard()) {
+                	this.gsm.changePeek("playerSelectedPlan", selectedCard);
 	    		}
             }
         }
     	
-    	if(this.imgSelectedCard != null) {
-    		this.trashButton.setDisable(false);
+    	if(this.gameCardContainer.getImgSelectedCard() != null) {
+    		this.trashAndPickStackContainer.enableTrashButton();
     	}
     }
 
@@ -135,65 +135,26 @@ public class PlayerWaitState extends State{
 		this.playerRoleImage.setVisible(true);
 		this.playerRoleLabel.setVisible(true);
 
-
-		this.playersArc.refreshPlayersArcsAndCircles();
-
-		this.endOfTurnButton.setDisable(true);
-		this.trashButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+		this.trashAndPickStackContainer.disablePickAndEndTurnButton();
+		EventHandler<MouseEvent> event = new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				game.getCurrentPlayer().playCard();
-				gsm.changePeek("playerWait");
-				trashButton.setDisable(true);
-
-				System.out.println(game.stackIsEmpty());
-				game.getCurrentPlayer().pickCard();
-				GameCardContainer cardContainer = (GameCardContainer)primaryStage.getScene().lookup("#cardContainer");
-				cardContainer.setOnMouseClicked(null);
-				cardContainer.generateHandCardImage();
-
-				endOfTurnButton.setDisable(false);
-				endOfTurnButton.setOnAction(new EventHandler<ActionEvent>() {
-					@Override public void handle(ActionEvent e) {
-						endOfTurnButton.setOnAction(null);
-						gsm.pop();
-					}
-				});
+				Operation op = game.getCurrentPlayer().playCard();
+				gsm.changePeek("playerPlayCard", op);
+				
+				trashAndPickStackContainer.disableTrashButton();
 			}
-		});
+		};
+		this.trashAndPickStackContainer.setEventToTrashButton(event);
+		
 
-		this.cardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
+		this.gameCardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent event) {
 				selectCardButtonAction(event);
 			}
 		});
 
-		this.cardContainer.showCards();
-	}
-    
-    private void removeOldSelection() {
-    	if(this.selectedCard != null) {
-			TranslateTransition tt = new TranslateTransition(Duration.INDEFINITE.millis(200), this.imgSelectedCard);
-			tt.setByY(30);
-			ScaleTransition st = new ScaleTransition(Duration.INDEFINITE.millis(200), this.imgSelectedCard);
-			st.setByX(-0.2f);
-			st.setByY(-0.2f);
-			ParallelTransition pt = new ParallelTransition(tt, st);
-			pt.play();
-			this.imgSelectedCard = null;
-			this.selectedCard = null;
-		}
-	}
-
-	private void addNewSelection(ImageView newCard){
-		TranslateTransition tt = new TranslateTransition(Duration.INDEFINITE.millis(200), newCard);
-		tt.setByY(-30);
-		ScaleTransition st = new ScaleTransition(Duration.INDEFINITE.millis(200), newCard);
-		st.setByX(0.2f);
-		st.setByY(0.2f);
-		ParallelTransition pt = new ParallelTransition(tt, st);
-		pt.play();
-		this.imgSelectedCard = newCard;
+		this.gameCardContainer.showCards();
 	}
 }
