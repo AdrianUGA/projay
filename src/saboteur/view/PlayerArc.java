@@ -4,8 +4,13 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
+import javafx.animation.Animation;
+import javafx.animation.ParallelTransition;
+import javafx.animation.ScaleTransition;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -17,7 +22,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 import saboteur.model.Game;
 import saboteur.model.Player;
 import saboteur.model.Card.SabotageCard;
@@ -31,6 +36,7 @@ public class PlayerArc extends Pane{
 	private Player previousPlayer;
 	private Game game;
 	private GameComponentsSize gameComponentsSize;
+	private ParallelTransition handicapCircleAnimation;
 	private final static Color color = Color.web("#a4a4a4");
 	private final static Color colorCurrentPlayer = Color.web("#72e307");
 
@@ -238,6 +244,44 @@ public class PlayerArc extends Pane{
         name.setRotate(angle);
         
         this.getChildren().add(name);
+	}
+
+	public void activateHandicapCircle(int tool, LinkedList<Player> players, EventHandler<MouseEvent> mouseEvent, boolean isSabotage){
+		this.handicapCircleAnimation = new ParallelTransition();
+		handicapCircleAnimation.setAutoReverse(true);
+		handicapCircleAnimation.setCycleCount(Animation.INDEFINITE);
+
+		for(Player p : players) {
+			if (isSabotage){
+				playerCircles.get(p)[tool].setStroke(Color.RED);
+			} else{
+				playerCircles.get(p)[tool].setStroke(Color.GREEN);
+			}
+			ScaleTransition st = new ScaleTransition(Duration.millis(600), playerCircles.get(p)[tool]);
+			st.setFromX(1);
+			st.setFromY(1);
+			st.setByX(0.2f);
+			st.setByY(0.2f);
+			handicapCircleAnimation.getChildren().add(st);
+			playerCircles.get(p)[tool].setOnMouseClicked(mouseEvent);
+		}
+		this.handicapCircleAnimation.play();
+	}
+
+	public void desactivateHandicapCircle(int tool1, int tool2){
+		for(int i = 0; i < this.game.getPlayerList().size(); i++) {
+			playerCircles.get(this.game.getPlayerList().get(i))[tool1].setOnMouseClicked(null);
+			if(tool2 != -1){
+				playerCircles.get(this.game.getPlayerList().get(i))[tool2].setOnMouseClicked(null);
+			}
+		}
+
+		for(Player p : this.game.getPlayerList()) {
+			for (int i = 0; i < 3; i++) {
+				playerCircles.get(p)[i].setStroke(Color.BLACK);
+			}
+		}
+		this.handicapCircleAnimation.stop();
 	}
 	
 	public Circle[] getCircles(Player player) {
