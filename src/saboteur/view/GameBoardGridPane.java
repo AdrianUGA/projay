@@ -2,10 +2,14 @@ package saboteur.view;
 
 import java.util.LinkedHashMap;
 
+import javafx.animation.ScaleTransition;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.transform.Scale;
+import javafx.util.Duration;
 import saboteur.model.Board;
 import saboteur.model.Game;
 import saboteur.model.Position;
@@ -109,5 +113,16 @@ public class GameBoardGridPane extends GridPane {
     
     public LinkedHashMap<String, Image> getAllCards() {
     	return this.allCards;
-    }    
+    }
+
+    public void animatePathCard(Position pos, EventHandler onFinish){
+		ImageView card = this.getImageOfPosition(pos);
+		ScaleTransition st = new ScaleTransition(Duration.millis(500), card);
+		st.setByX(0.3f);
+		st.setByY(0.3f);
+		st.setCycleCount(2);
+		st.setAutoReverse(true);
+		st.setOnFinished(onFinish);
+		st.play();
+	}
 }

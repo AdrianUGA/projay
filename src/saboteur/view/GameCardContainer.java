@@ -2,9 +2,8 @@ package saboteur.view;
 
 import java.util.LinkedHashMap;
 
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -43,6 +42,9 @@ public class GameCardContainer extends HBox {
     public void generateHandCardImage() {
     	this.getChildren().removeAll(this.handCardsImages);
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
+			this.handCardsImages[i] = new ImageView();
+			this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.1);
+			this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.1);
     		this.handCardsImages[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getFrontImage()));
         	this.getChildren().add(this.handCardsImages[i]);
         }
@@ -51,6 +53,9 @@ public class GameCardContainer extends HBox {
     public void hideCards(){
     	this.getChildren().removeAll(this.handCardsImages);
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
+			this.handCardsImages[i] = new ImageView();
+			this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.1);
+			this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.1);
     		this.handCardsImages[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getBackImage()));
         	this.getChildren().add(this.handCardsImages[i]);
         }
@@ -95,4 +100,29 @@ public class GameCardContainer extends HBox {
 		pt.play();
 	}
 
+	public void animateCardToTrash(int indexOfCard, EventHandler onFinished){
+		ParallelTransition pt = new ParallelTransition();
+		ScaleTransition st = new ScaleTransition(Duration.millis(400), this.handCardsImages[indexOfCard]);
+		st.setByX(0.47f);
+		st.setByY(0.47f);
+		st.setInterpolator(Interpolator.EASE_IN);
+
+		ScaleTransition st2 = new ScaleTransition(Duration.millis(400), this.handCardsImages[indexOfCard]);
+		st2.setByX(-0.2f);
+		st2.setByY(-0.2f);
+		st2.setInterpolator(Interpolator.EASE_OUT);
+
+		SequentialTransition sequence = new SequentialTransition(st, st2);
+
+		TranslateTransition tt = new TranslateTransition(Duration.millis(800), this.handCardsImages[indexOfCard]);
+		tt.setFromX(0);
+		tt.setFromY(0);
+		tt.setToX(600);
+		this.handCardsImages[indexOfCard]
+		tt.setToY(-700);
+
+		pt.getChildren().addAll(sequence, tt);
+		pt.setOnFinished(onFinished);
+		pt.play();
+	}
 }
