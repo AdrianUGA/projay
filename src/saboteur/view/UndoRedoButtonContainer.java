@@ -18,24 +18,26 @@ public class UndoRedoButtonContainer extends HBox{
 
 	public UndoRedoButtonContainer(Game game) {
 		this.game = game;
-		this.undoButton = new Button(" Undo");
-		this.redoButton = new Button(" Redo");
+		this.undoButton = new Button(" Annuler");
+		this.redoButton = new Button(" Refaire");
 		
 		SVGPath undo = new SVGPath();
-		undo.setFill(Color.BLACK);
+		undo.setFill(Color.WHITE);
 		undo.setContent(Icon.undo);
 		this.undoButton.setGraphic(undo);
-		
+		this.undoButton.getStyleClass().add("btn");
+
 		SVGPath redo = new SVGPath();
-		redo.setFill(Color.BLACK);
+		redo.setFill(Color.WHITE);
 		redo.setContent(Icon.redo);
 		this.redoButton.setGraphic(redo);
-		
+		this.redoButton.getStyleClass().add("btn");
+
 		this.undoButton.setPrefHeight(50.0);
-		this.undoButton.setPrefWidth(100.0);
+		this.undoButton.setPrefWidth(170.0);
 		
 		this.redoButton.setPrefHeight(50.0);
-		this.redoButton.setPrefWidth(100.0);
+		this.redoButton.setPrefWidth(170.0);
 				
 		this.setSpacing(10);
 		this.getChildren().addAll(this.undoButton, this.redoButton);

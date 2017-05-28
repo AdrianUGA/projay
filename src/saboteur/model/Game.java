@@ -151,8 +151,8 @@ public class Game {
 		this.historyRedo = new LinkedList<>();
 
 		this.currentPlayerIndex = 0;
-		this.newRound();
-		//this.loadConfig("almostFinished");
+		//this.newRound();
+		this.loadConfig("almostFinished");
 	}
 
 	/**
@@ -242,16 +242,12 @@ public class Game {
 	 * reset trash, stack and board
 	 */
 	private void beginInitRound() {
-		this.trash = new LinkedList<>();
 		this.stack = this.deck.getCopyOtherCards();
-		
+		this.trash = new LinkedList<>();
+		this.history.clear();
+		this.historyRedo.clear();
 		Collections.shuffle(this.stack, new Random(Game.seed));
-		
-		/*
-		for(Card c : this.stack){
-			c.displayCardType();
-		}
-		*/
+
 		this.board = new Board(this.deck.getCopyStartPathCard(), this.deck.getCopyGoalPathCards());
 	}
 
@@ -619,11 +615,16 @@ public class Game {
 	}
 	
 	public Card observeFirstCard(){
+		if (this.stackIsEmpty()) return null;
 		return this.stack.getFirst();
 	}
 	
 	public boolean stackIsEmpty(){
 		return this.stack.isEmpty();
+	}
+
+	public boolean trashIsEmpty(){
+		return this.trash.isEmpty();
 	}
 	
 	public void addCardToStack(Card card){
@@ -933,5 +934,9 @@ public class Game {
 
 	public int getRound(){
 		return this.round;
+	}
+
+	public LinkedList<Card> getTrash(){
+		return this.trash;
 	}
 }

@@ -71,6 +71,8 @@ public class PlayerPlayCardState extends State{
     	this.stack = (ImageView) this.primaryStage.getScene().lookup("#stack");
 
 		this.trashAndPickStackContainer.disableTrashButton();
+		System.out.println(this.game.trashIsEmpty());
+		this.trashAndPickStackContainer.setEmptyTrash(this.game.trashIsEmpty());
 
 		cardContainer.setOnMouseClicked(null);
 
@@ -84,6 +86,7 @@ public class PlayerPlayCardState extends State{
     	//Pick card animation
 		OperationPick op = (OperationPick) this.game.getCurrentPlayer().pickCard();
 		this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
+		this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
 
 		if (this.game.getCurrentPlayer().isHuman()){
 			cardContainer.showCards();
