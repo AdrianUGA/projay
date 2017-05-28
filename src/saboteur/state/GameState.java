@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import saboteur.App;
@@ -46,6 +47,7 @@ public class GameState extends State{
 	private TrashAndPickStackContainer trashAndPickStackContainer;
 	private PlayerRoleContainer playerRoleContainer;
 	private UndoRedoButtonContainer undoRedoButtonContainer;
+	private Text roundNum;
 
 
     public GameState(GameStateMachine gsm, Game game, Stage primaryStage){
@@ -118,13 +120,11 @@ public class GameState extends State{
             //Cards of current player
             this.gameCardContainer = new GameCardContainer(this.game, gameComponentsSize.getScreenWidth() - gameComponentsSize.getGameTableSize() - margin);
             this.gameCardContainer.setId("gameCardContainer");
-            this.gameBorderPane.setBottom(this.gameCardContainer);
             BorderPane.setMargin(this.gameCardContainer, new Insets(0.0, margin, margin, 0.0));
             
         	//Image and Label of player role
         	this.playerRoleContainer = new PlayerRoleContainer(this.game);
         	this.playerRoleContainer.setId("playerRoleContainer");
-        	this.gameBorderPane.setCenter(this.playerRoleContainer);
             BorderPane.setMargin(this.playerRoleContainer, new Insets(0.0, margin, 0.0, 0.0));
         	
             // trash and pick stacks
@@ -141,13 +141,24 @@ public class GameState extends State{
             this.undoRedoButtonContainer.setUndoButtonAction(event -> undoButtonAction());
             this.undoRedoButtonContainer.setRedoButtonAction(event -> redoButtonAction());
             this.undoRedoButtonContainer.setAlignment(Pos.CENTER_LEFT);
+            //round
+            this.roundNum = new Text();
+            this.roundNum.setId("roundNum");
+    		this.roundNum.setText("Manche " + this.game.getRound());
+    		this.roundNum.getStyleClass().add("round-text");
             
-            AnchorPane stackAndButtonContainer = new AnchorPane(this.undoRedoButtonContainer, this.trashAndPickStackContainer);
+            VBox roundAndButtonContainer = new VBox(this.undoRedoButtonContainer, this.roundNum);
+            roundAndButtonContainer.setSpacing(10.0);
+            
+            AnchorPane stackAndButtonContainer = new AnchorPane(roundAndButtonContainer, this.trashAndPickStackContainer);
             AnchorPane.setRightAnchor(this.trashAndPickStackContainer, 30.0);
             AnchorPane.setTopAnchor(this.trashAndPickStackContainer, 30.0);
-            AnchorPane.setLeftAnchor(this.undoRedoButtonContainer, 0.0);
-            AnchorPane.setTopAnchor(this.undoRedoButtonContainer, 30.0);
+            AnchorPane.setLeftAnchor(roundAndButtonContainer, 0.0);
+            AnchorPane.setTopAnchor(roundAndButtonContainer, 30.0);
+            
             this.gameBorderPane.setTop(stackAndButtonContainer);
+            this.gameBorderPane.setBottom(this.gameCardContainer);
+        	this.gameBorderPane.setCenter(this.playerRoleContainer);
            
             this.gameBorderPane.setLayoutX(gameComponentsSize.getGameTableSize());
             this.gameBorderPane.setPrefHeight(gameComponentsSize.getScreenHeight());
