@@ -58,6 +58,7 @@ public class PlayerRoleContainer extends HBox{
 	public void setPlayerRoleComponentsVisible(boolean visible) {
 		this.playerRoleImage.setVisible(visible);
 		this.playerRoleText.setVisible(visible);
+		this.playerNameText.setVisible(visible);
 	}
 	
 	

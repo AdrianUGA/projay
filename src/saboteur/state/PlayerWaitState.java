@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import saboteur.GameStateMachine;
@@ -13,6 +14,7 @@ import saboteur.model.Game;
 import saboteur.model.Operation;
 import saboteur.model.Card.Card;
 import saboteur.model.Player;
+import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 import saboteur.view.PlayerRoleContainer;
@@ -22,11 +24,12 @@ public class PlayerWaitState extends State{
 	
 	private TrashAndPickStackContainer trashAndPickStackContainer;
 	private GameCardContainer gameCardContainer;
-	private PlayerArc playersArc;
 	private PlayerRoleContainer playerRoleContainer;
+	private int round;
 	
     public PlayerWaitState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
+        this.round = this.game.getRound();
     }
 
     @Override
@@ -43,13 +46,23 @@ public class PlayerWaitState extends State{
     public void onEnter(Object param) {
     	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
     	this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
-    	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
-    	this.playerRoleContainer = (PlayerRoleContainer) this.primaryStage.getScene().lookup("#playerRoleContainer");    	
-
-		this.playersArc.refreshPlayersArcsAndCircles();
+    	this.playerRoleContainer = (PlayerRoleContainer) this.primaryStage.getScene().lookup("#playerRoleContainer");
+    	
+    	GameBoardGridPane gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
+    	gameBoardGridPane.generateBoard();
+    	
+    	PlayerArc playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
+		playersArc.refreshPlayersArcsAndCircles();
+		
+		if(this.round != this.game.getRound()) {
+			this.round = this.game.getRound();
+			Text roundNum = (Text) this.primaryStage.getScene().lookup("#roundNum");
+			roundNum.setText("Manche " + this.round);
+		}
+		
 
 		if (this.game.getCurrentPlayer().isAI()){
-			PauseTransition pt = new PauseTransition(Duration.INDEFINITE.millis(1000));
+			PauseTransition pt = new PauseTransition(Duration.millis(1000));
 			pt.setOnFinished(event -> {
 				Operation o = this.game.getCurrentPlayer().playCard();
 				this.gsm.changePeek("playerPlayCard", o);

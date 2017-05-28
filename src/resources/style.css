@@ -107,3 +107,10 @@
     -fx-font-size: 1.8em;
     -fx-font-weight: bold;
 }
+.round-text{
+	-fx-font-size: 3em;
+    -fx-fill: white;
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
+    -fx-font-weight: bold;
+}
