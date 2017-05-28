@@ -77,7 +77,7 @@ public class PlayerSelectedPathCardState extends State{
         this.gameBoardGridPane.toFront();
         this.boardEffect = new LinkedList<>();
 
-        this.gameBoardGridPane.generateBoard();
+//        this.gameBoardGridPane.generateBoard();
 
         this.selectedImagePosition = null;
 		this.positionOfImages = new LinkedHashMap<>();
