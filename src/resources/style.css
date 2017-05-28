@@ -80,3 +80,19 @@
     -fx-stroke-width: 1;
     -fx-font-weight: bold;
 }
+
+.player-name{
+    -fx-font-size: 2.5em;
+    -fx-fill: white;
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
+    -fx-font-weight: bold;
+}
+
+.player-role{
+    -fx-font-size: 2.0em;
+    -fx-fill: white;
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
+    -fx-font-weight: bold;
+}

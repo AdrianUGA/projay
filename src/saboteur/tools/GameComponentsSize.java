@@ -19,22 +19,23 @@ public class GameComponentsSize {
 	private double innerRadiusOfArc;
 	private double playerArcRadius;
 	
-	private final double addToSize = 40;
-	private final int defaultMargin = 30;
+	private final double addToSize = 40.0;
+	private final double defaultMargin = 30.0;
+	private final double placeForName = 30.0;
 	
 	private static GameComponentsSize size;
 	
 	private GameComponentsSize(){
 		this.primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         this.gameTableSize = primaryScreenBounds.getHeight() + this.addToSize;
-        this.gameTableHalfSize = gameTableSize/2;
+        this.gameTableHalfSize = gameTableSize/2.0;
         
-        this.middleCircleRadius = gameTableHalfSize/2;
-        this.centerOfGameTable = gameTableSize/2;
+        this.middleCircleRadius = gameTableHalfSize/2.0;
+        this.centerOfGameTable = gameTableSize/2.0;
         
-        this.miniCircleRadius = this.gameTableHalfSize/15;
-        this.innerRadiusOfArc = this.gameTableHalfSize - this.miniCircleRadius*3 - this.defaultMargin;
-        this.playerArcRadius = this.gameTableHalfSize - this.defaultMargin;
+        this.miniCircleRadius = this.gameTableHalfSize/15.0;
+        this.innerRadiusOfArc = this.gameTableHalfSize - this.miniCircleRadius*3.0 - this.defaultMargin - this.placeForName;
+        this.playerArcRadius = this.gameTableHalfSize - this.defaultMargin - this.placeForName;
         
         this.cardHeight = 166.0;
         this.cardWidth = 108.0;
@@ -52,7 +53,7 @@ public class GameComponentsSize {
 	}
 	
 	public double getScreenWidth(){
-		return this.primaryScreenBounds.getWidth() + this.addToSize;
+		return this.primaryScreenBounds.getWidth();
 	}
 	
 	
@@ -95,7 +96,7 @@ public class GameComponentsSize {
 		return this.cardWidth;
 	}
 
-	public int getDefaultMargin() {
+	public double getDefaultMargin() {
 		return defaultMargin;
 	}
 

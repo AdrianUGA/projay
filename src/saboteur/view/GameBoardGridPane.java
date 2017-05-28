@@ -1,6 +1,8 @@
 package saboteur.view;
 
 import java.util.LinkedHashMap;
+
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -28,6 +30,7 @@ public class GameBoardGridPane extends GridPane {
         this.allCards = Resources.getImage();
         this.generateBoard();
         
+        this.setAlignment(Pos.CENTER);
 	}
 	
     public void generateBoard() {

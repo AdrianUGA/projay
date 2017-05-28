@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
-import javafx.geometry.Insets;
 import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -17,7 +17,6 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
 import saboteur.model.Game;
 import saboteur.model.Player;
 import saboteur.model.Card.SabotageCard;
@@ -29,6 +28,7 @@ public class PlayerArc extends Pane{
 	private Hashtable<Player, Path> playerArc = new Hashtable<>();
 	private Hashtable<Player, Circle[]> playerCircles = new Hashtable<>();
 	private Player previousPlayer;
+	private Circle middleCircle = new Circle();
 	private Game game;
 	private GameComponentsSize gameComponentsSize;
 	private final static Color color = Color.web("#a4a4a4");
@@ -38,7 +38,8 @@ public class PlayerArc extends Pane{
 		this.gameComponentsSize = GameComponentsSize.getGameComponentSize();
 		this.game = game;
 		this.players = this.game.getPlayerList();
-		this.setPadding(new Insets(0, 0, 0, 0));
+		
+//		this.setWidth(this.gameComponentsSize.getGameTableSize());
 		
 		int nbPlayers = this.game.getPlayerList().size();
 		for(Player p : this.players) {
@@ -54,6 +55,16 @@ public class PlayerArc extends Pane{
 			createArc(lengthOfArc, startAngle, player);
 			createCircle(lengthOfArc, startAngle, player);
         }
+        
+		//Create the circle of the game board
+		this.middleCircle.setCenterX(this.gameComponentsSize.getCenterOfGameTable());
+		this.middleCircle.setCenterY(this.gameComponentsSize.getCenterOfGameTable());
+		this.middleCircle.setRadius(this.gameComponentsSize.getInnerRadiusOfArc()-10);
+		this.middleCircle.setFill(color);
+		this.middleCircle.setStroke(Color.BLACK);
+		this.middleCircle.setStrokeWidth(4.0);
+		this.middleCircle.setStrokeType(StrokeType.INSIDE);
+		this.getChildren().add(this.middleCircle);
 	}
 	
 	public void refreshPlayersArcsAndCircles(){
@@ -114,11 +125,12 @@ public class PlayerArc extends Pane{
 		
 		double circleRadius = this.gameComponentsSize.getMiniCircleRadius();
 		double centerDistance = radius - circleRadius*1.5;
+		
 		double x =lengthOfArc/3.5;
 		double y = (lengthOfArc - x*3)/2;
 		
 		for (int i = 0; i<3; i++) {              
-			double angle = -startAngle-x*i-x/2-y;
+			double angle = startAngle+x*i+x/2+y;
 			double radians = Math.toRadians(angle);
             double layoutX = (int)Math.round((Math.cos(radians) * centerDistance + center));
             double layoutY = (int)Math.round((Math.sin(-radians)* centerDistance + center));
@@ -193,54 +205,47 @@ public class PlayerArc extends Pane{
         this.getChildren().add(path);
         path.toBack();
         
+        //player name
         Text name = new Text(player.getName());
-        double anglePosition = startAngle + lengthOfArc/2;
+        double anglePosition = startAngle + lengthOfArc/2.0;
         radians = Math.toRadians(anglePosition);
         anglePosition = Math.abs(anglePosition);
-        
         double distanceToCenter = radius;
-       
-        if( 0 <= anglePosition && anglePosition < 40 ) {
-        	distanceToCenter-=20;
+        
+        if( 0 <= anglePosition && anglePosition < 180 ) {
+        	distanceToCenter+=15.0;
         }
-        else if( 40 <= anglePosition && anglePosition < 70 ) {
-        	distanceToCenter-=10;
+        else if( 180 <= anglePosition && anglePosition < 360 ) {
+        	distanceToCenter+=21.0;
         }
-        else if( 70 <= anglePosition && anglePosition < 100 ) {
-        	distanceToCenter+=5;
-        }
-        else if( 100 <= anglePosition && anglePosition < 110 ) {
-        	distanceToCenter+=20;
-        }
-        else if( 110 <= anglePosition && anglePosition < 130 ) {
-        	distanceToCenter+=30;
-        }
-        else if( 130 <= anglePosition && anglePosition < 180 ) {
-        	distanceToCenter+=20;
-        }
-        else if( 180 <= anglePosition && anglePosition < 270 ) {
-        	distanceToCenter+=40;
-        }
-        else if( 270 <= anglePosition && anglePosition < 300 ) {
-        	distanceToCenter+=25;
-        }
-        else if( 300 <= anglePosition && anglePosition < 325 ) {
-        	distanceToCenter+=15;
-        }
-        XstartInner = (int)Math.round((Math.cos(radians) * distanceToCenter + center));
-        YstartInner = (int)Math.round((Math.sin(-radians) * distanceToCenter + center));
-
+        
+        double layoutX = (int)Math.round((Math.cos(radians) * distanceToCenter + center));
+        double layoutY = (int)Math.round((Math.sin(-radians) * distanceToCenter + center));
+        double angle = Math.abs(anglePosition)%180.0 - 90.0;
+        
         name.getStyleClass().add("player-arc-name");
-        name.setLayoutX(XstartInner);
-        name.setLayoutY(YstartInner);
         
-        double angle = Math.abs(anglePosition)%180 - 90;
-        name.setRotate(angle);
-        
-        this.getChildren().add(name);
+        BorderPane pane = new BorderPane();
+        pane.setCenter(name);
+        pane.setPrefHeight(30.0);
+        pane.setPrefWidth(200.0);
+        pane.setRotate(angle);        
+        pane.setLayoutX(layoutX - 100.0);
+        pane.setLayoutY(layoutY - 15.0);
+
+        this.getChildren().add(pane);
 	}
 	
 	public Circle[] getCircles(Player player) {
 		return playerCircles.get(player);
 	}
+	
+	public void circleToFront() {
+		this.middleCircle.toFront();
+	}
+	
+	public void circleToBack() {
+		this.middleCircle.toBack();
+	}
+
 }

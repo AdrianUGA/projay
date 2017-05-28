@@ -1,12 +1,8 @@
 package saboteur.state;
 
 import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -15,7 +11,6 @@ import javafx.util.Duration;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.model.Operation;
-import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
