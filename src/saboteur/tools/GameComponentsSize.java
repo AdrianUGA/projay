@@ -22,14 +22,28 @@ public class GameComponentsSize {
 	private final double addToSize = 40.0;
 	private final double defaultMargin = 30.0;
 	private final double placeForName = 30.0;
+	private final double defaultSpacing = 20.0;
+
+	private double gameBorderPaneHeight;
+	private double gameBorderPaneWidth;
+	
+	private double gameCardContainerWidth;
+
+	private double layoutXOfTrashStack;
+	private double layoutYOfTrashStack;
+
+	private double layoutXOfPickStack;
+	private double layoutYOfPickStack;
 	
 	private static GameComponentsSize size;
 	
 	private GameComponentsSize(){
+		//screen and board
 		this.primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         this.gameTableSize = primaryScreenBounds.getHeight() + this.addToSize;
         this.gameTableHalfSize = gameTableSize/2.0;
         
+        //circles and arc
         this.middleCircleRadius = gameTableHalfSize/2.0;
         this.centerOfGameTable = gameTableSize/2.0;
         
@@ -37,10 +51,27 @@ public class GameComponentsSize {
         this.innerRadiusOfArc = this.gameTableHalfSize - this.miniCircleRadius*3.0 - this.defaultMargin - this.placeForName;
         this.playerArcRadius = this.gameTableHalfSize - this.defaultMargin - this.placeForName;
         
+        //cards
         this.cardHeight = 166.0;
         this.cardWidth = 108.0;
+        
+        //gameBorderPane
+        this.gameBorderPaneHeight = this.getScreenHeight();
+        this.gameBorderPaneWidth = this.getScreenWidth()-this.gameTableSize;
+        
+        //gameCardContainer
+        this.gameCardContainerWidth = this.getScreenWidth() - this.gameTableSize - this.defaultMargin;
+        
+        //X and Y of trash stack
+        this.layoutXOfTrashStack = this.gameTableSize + this.gameBorderPaneWidth - this.defaultMargin - this.cardWidth;
+        this.layoutYOfTrashStack = this.defaultMargin;
+        
+        //X and Y of pick stack
+        this.layoutXOfPickStack = this.gameTableSize + this.gameBorderPaneWidth - this.defaultMargin - this.cardWidth;
+        this.layoutYOfPickStack = this.defaultMargin + this.cardHeight + this.defaultSpacing;
+         
 	}
-	
+
 	public static GameComponentsSize getGameComponentSize(){
 		if (size == null){
 			size = new GameComponentsSize();
@@ -100,4 +131,35 @@ public class GameComponentsSize {
 		return defaultMargin;
 	}
 
+	public double getDefaultSpacing() {
+		return defaultSpacing;
+	}
+	
+	public double getGameCardContainerWidth() {
+		return gameCardContainerWidth;
+	}
+
+	public double getGameBorderPaneHeight() {
+		return gameBorderPaneHeight;
+	}
+
+	public double getGameBorderPaneWidth() {
+		return gameBorderPaneWidth;
+	}
+	
+	public double getLayoutXOfTrashStack() {
+		return layoutXOfTrashStack;
+	}
+
+	public double getLayoutYOfTrashStack() {
+		return layoutYOfTrashStack;
+	}
+
+	public double getLayoutXOfPickStack() {
+		return layoutXOfPickStack;
+	}
+
+	public double getLayoutYOfPickStack() {
+		return layoutYOfPickStack;
+	}
 }

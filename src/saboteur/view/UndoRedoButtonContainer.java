@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import saboteur.model.Game;
+import saboteur.tools.GameComponentsSize;
 import saboteur.tools.Icon;
 
 public class UndoRedoButtonContainer extends HBox{
@@ -38,7 +39,7 @@ public class UndoRedoButtonContainer extends HBox{
 		this.redoButton.setPrefHeight(50.0);
 		this.redoButton.setPrefWidth(170.0);
 				
-		this.setSpacing(10);
+		this.setSpacing(GameComponentsSize.getGameComponentSize().getDefaultSpacing());
 		this.getChildren().addAll(this.undoButton, this.redoButton);
 	}
 	
