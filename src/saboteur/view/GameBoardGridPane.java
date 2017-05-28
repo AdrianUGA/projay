@@ -28,7 +28,6 @@ public class GameBoardGridPane extends GridPane {
 	private ImageView[][] imagesOfGridPane;
 	
 	public GameBoardGridPane(Game game) {
-		this.board = game.getBoard();
 		this.game = game;
 		
         this.allCards = Resources.getImage();
@@ -38,6 +37,7 @@ public class GameBoardGridPane extends GridPane {
 	}
 	
     public void generateBoard() {
+		this.board = game.getBoard();
         double cardWidth = GameComponentsSize.getGameComponentSize().getCardWidth()/3;
         double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/3;
         

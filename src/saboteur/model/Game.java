@@ -545,6 +545,9 @@ public class Game {
             
             for (Player p : this.getPlayerList()){
             	p.setGame(this);
+            	if(p.isAI()){
+            		((AI)p).printIsDwarf();
+            	}
             }
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {

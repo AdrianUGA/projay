@@ -21,11 +21,11 @@ public class HardSaboteurComputer extends Computer {
 	private static final float DISTANCE_TO_GOAL_FOR_COLLAPSE = 4;
 	private static final float SABOTAGE = 2;
 	private static final float DOUBLE_RESCUE = 14;
-	public static int PLAN = 75;
-	public static int RESCUE_ITSELF = 20;
-	public static float HANDICAP_SIZE = 0.5f;
-	public static int RESCUE = 15;
-	public static float COLLAPSE = 60;
+	public static final int PLAN = 75;
+	public static final int RESCUE_ITSELF = 20;
+	public static final float HANDICAP_SIZE = 0.5f;
+	public static final int RESCUE = 15;
+	public static final float COLLAPSE = 60;
 
 	@Override
 	void operationCollapseCard(Operation o) {
@@ -50,14 +50,13 @@ public class HardSaboteurComputer extends Computer {
 				board.temporarAddCard(new OperationPathCard(artificialIntelligence, operation.getDestinationCard(), p));
 				
 				if(min1 == min2){ /* No hole atm */
-					if(newMin1 != newMin2){
+					if(newMin1 != newMin2 && min2 != 0){
 						atLeastOne = true;
-						this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p));
+						this.artificialIntelligence.operationsWeight.put(operation, (COLLAPSE_AND_CREATE_HOLE + board.numberOfNeighbors(p))/min2);
 					}
 				}else{ /* Already an hole */
-					if(newMin2 > min2){
-						atLeastOne = true;
-						this.artificialIntelligence.operationsWeight.put(operation, COLLAPSE + board.numberOfNeighbors(p));
+					if(newMin2 > min2 && min2 != 0){
+						this.artificialIntelligence.operationsWeight.put(operation, (COLLAPSE + board.numberOfNeighbors(p))/min2);
 					}
 				}
 				this.artificialIntelligence.operationsWeight.put(o, COLLAPSE + 0f );
