@@ -27,7 +27,7 @@
             </ImageView>
             <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
                <content>
-                  <ListView fx:id="listFile" />
+                  <ListView fx:id="listFile" styleClass="list-file" />
                </content>
                <VBox.margin>
                   <Insets bottom="20.0" />

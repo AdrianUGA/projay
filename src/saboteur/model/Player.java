@@ -324,4 +324,8 @@ public abstract class Player implements Serializable {
 	public void resetHandicaps() {
 		this.handicaps.clear();
 	}
+
+	public boolean hasHandicap(){
+		return !this.handicaps.isEmpty();
+	}
 }

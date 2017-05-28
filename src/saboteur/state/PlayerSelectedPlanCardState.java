@@ -136,7 +136,9 @@ public class PlayerSelectedPlanCardState extends State{
     		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
     		this.paneOfGoalCard[i].setOnMouseClicked(null);
     	}
-    	
+
+    	this.trashAndPickStackContainer.disableTrashButton();
+		this.trashAndPickStackContainer.setEventToTrashButton(null);
     	this.trashAndPickStackContainer.enablePickAndEndTurnButton();
     	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(e -> endOfTurn());
     }

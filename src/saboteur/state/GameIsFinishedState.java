@@ -83,8 +83,8 @@ public class GameIsFinishedState extends State{
                 this.resultRound.add(player.getPlayerGold(), 3, i);
             }
 
-            modalPane.setPrefHeight(primaryStage.getWidth());
-            modalPane.setPrefWidth(primaryStage.getHeight());
+            modalPane.setPrefHeight(primaryStage.getHeight());
+            modalPane.setPrefWidth(primaryStage.getWidth());
 
             StackPane root = (StackPane) primaryStage.getScene().getRoot();
             root.getChildren().add(this.modalPane);

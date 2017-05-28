@@ -682,7 +682,7 @@ public class Game {
 			
 			if (isPossible) result.add(p);
 		}
-		
+
 		return result;
 	}
 	

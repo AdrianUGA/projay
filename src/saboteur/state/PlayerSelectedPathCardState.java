@@ -114,7 +114,7 @@ public class PlayerSelectedPathCardState extends State{
 		else {
 			PathCard card  = (PathCard) this.gameCardContainer.getSelectedCard();
 			this.possiblePositionList = this.game.getBoard().getPossiblePositionPathCard(card);
-			if(this.game.getCurrentPlayer().getHandicaps().size() != 0) {
+			if(this.game.getCurrentPlayer().hasHandicap()) {
 				this.possiblePositionList.clear();
 			}
 			for(Position posiCard : this.possiblePositionList) {

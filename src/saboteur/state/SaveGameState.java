@@ -110,7 +110,6 @@ public class SaveGameState extends State {
 
             this.confirmModalPane.setPrefHeight(primaryStage.getHeight());
             this.confirmModalPane.setPrefWidth(primaryStage.getWidth());
-
             this.rootPane.getChildren().add(this.confirmModalPane);
 
         } catch (IOException e) {

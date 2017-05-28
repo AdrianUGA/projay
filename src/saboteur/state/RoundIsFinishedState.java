@@ -67,8 +67,8 @@ public class RoundIsFinishedState extends State{
                 this.resultRound.add(player.getPlayerRole(), 2, i);
             }
 
-            this.modalPane.setPrefHeight(primaryStage.getWidth());
-            this.modalPane.setPrefWidth(primaryStage.getHeight());
+            this.modalPane.setPrefHeight(primaryStage.getHeight());
+            this.modalPane.setPrefWidth(primaryStage.getWidth());
 
             StackPane root = (StackPane) primaryStage.getScene().getRoot();
             root.getChildren().add(this.modalPane);

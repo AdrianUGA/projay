@@ -98,8 +98,9 @@ public class PlayerSelectedActionCardToPlayerState extends State{
 			this.playersArc.refreshCircles(circle, this.toolValue1, true);
 
 			for(Player p : this.game.getPlayers(this.card)) {
-				if( this.playersArc.getCircles(p)[this.toolValue1] == circle )
+				if( this.playersArc.getCircles(p)[this.toolValue1] == circle ){
 					this.playerSelected = p;
+				}
 			}
 
 		}
