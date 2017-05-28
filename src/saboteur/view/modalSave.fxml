@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox alignment="CENTER" prefWidth="900.0" styleClass="modal-pane-content">
          <children>
@@ -22,12 +22,12 @@
                   <Image url="@../../resources/SauvegarderLogo.png" />
                </image>
                <VBox.margin>
-                  <Insets bottom="50.0" top="150.0" />
+                  <Insets bottom="50.0" top="50.0" />
                </VBox.margin>
             </ImageView>
             <ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
                <content>
-                  <ListView fx:id="listFile" style="-fx-background-color: transparent;" />
+                  <ListView fx:id="listFile" styleClass="list-file" />
                </content>
                <VBox.margin>
                   <Insets bottom="20.0" />
@@ -46,11 +46,11 @@
             </TextField>
             <AnchorPane>
                <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" onMouseClicked="#cancelSaveModalButtonAction" prefWidth="100.0" styleClass="btn" text="Annuler" AnchorPane.leftAnchor="125.0" />
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#okSaveModalButtonAction" prefWidth="100.0" styleClass="btn" text="OK" AnchorPane.rightAnchor="125.0" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onMouseClicked="#cancelSaveModalButtonAction" prefWidth="120.0" styleClass="btn" text="Annuler" AnchorPane.leftAnchor="125.0" />
+                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#okSaveModalButtonAction" prefWidth="120.0" styleClass="btn" text="OK" AnchorPane.rightAnchor="125.0" />
                </children>
                <VBox.margin>
-                  <Insets bottom="100.0" top="50.0" />
+                  <Insets bottom="30.0" top="50.0" />
                </VBox.margin>
             </AnchorPane>
          </children>

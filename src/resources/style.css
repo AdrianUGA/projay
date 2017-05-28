@@ -40,23 +40,27 @@
     -fx-font-size: 1.8em;
 }
 
-.list-view > .list-cell{
+.list-file{
+    -fx-background-color: transparent;
+}
+
+.list-file .list-cell{
     -fx-font-size: 1.8em;
     -fx-padding-left: 20px;
 }
 
-.list-view > .list-cell:even {
+.list-file .list-cell:even {
     -fx-background-color: transparent;
     -fx-text-fill: white;
 }
 
-.list-view > .list-cell:odd {
+.list-file .list-cell:odd {
     -fx-background-color: rgba(125,125,125,0.1);
     -fx-text-fill: white;
 }
 
-.list-view > .list-cell:filled:selected:focused,
-.list-view > .list-cell:filled:selected {
+.list-file .list-cell:filled:selected:focused,
+.list-file .list-cell:filled:selected {
     -fx-background-color: rgba(255,255,255,0.2);
 }
 
@@ -94,5 +98,12 @@
     -fx-fill: white;
     -fx-stroke: black;
     -fx-stroke-width: 1;
+    }
+.btn-card{
+    -fx-background-color: rgba(125, 125, 125, 0.5);
+    -fx-background-image: url('/resources/cards/card_verso.png');
+    -fx-background-size: cover;
+    -fx-text-fill: white;
+    -fx-font-size: 1.8em;
     -fx-font-weight: bold;
 }

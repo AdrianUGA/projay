@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import saboteur.model.Game;
 import saboteur.tools.GameComponentsSize;
 
@@ -16,12 +17,10 @@ public class TrashAndPickStackContainer extends VBox{
 	
 	private StackPane trashPane, pickAndEndTurnPane;
 	private Button trashButton, pickAndEndTurnButton;
-	private Game game;
 	
-	public TrashAndPickStackContainer(Game game) {
-		this.game = game;
-		this.trashButton = new Button("Défausse");
-		this.pickAndEndTurnButton = new Button("Fin de tour");
+	public TrashAndPickStackContainer() {
+		this.trashButton = new Button("Défausser\net\nfinir le\ntour");
+		this.pickAndEndTurnButton = new Button("Finir le\ntour");
 		
 		this.initButton(trashButton);
 		this.initButton(pickAndEndTurnButton);
@@ -42,11 +41,20 @@ public class TrashAndPickStackContainer extends VBox{
 	}
 	
 	private void initButton(Button button){
-		button.setPrefWidth(GameComponentsSize.getGameComponentSize().getCardWidth());
-		button.setPrefHeight(GameComponentsSize.getGameComponentSize().getCardHeight());
-		button.setStyle("-fx-background-image: url('/resources/DosCartes.png')");
-		button.setTextFill(Color.WHITE);
-		button.setFont(new Font("Arial", 16));
+		button.setPrefWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.6);
+		button.setPrefHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.6);
+		button.setTextAlignment(TextAlignment.CENTER);
+		button.getStyleClass().add("btn-card");
+	}
+
+	public void updateStackText(int nbCard){
+		String text = ""+nbCard;
+		if (nbCard <= 1){
+			text += " carte\nrestante";
+		} else{
+			text += " cartes\nrestantes";
+		}
+		this.pickAndEndTurnButton.setText("Finir\n le tour\n\n" + text);
 	}
 
 	public void disablePickAndEndTurnButton() {

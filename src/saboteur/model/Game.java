@@ -682,7 +682,7 @@ public class Game {
 			
 			if (isPossible) result.add(p);
 		}
-		
+
 		return result;
 	}
 	
@@ -925,5 +925,13 @@ public class Game {
 
 	public LinkedList<Player> getObservers() {
 		return observers;
+	}
+
+	public int getNumberOfCardInStack(){
+		return this.stack.size();
+	}
+
+	public int getRound(){
+		return this.round;
 	}
 }

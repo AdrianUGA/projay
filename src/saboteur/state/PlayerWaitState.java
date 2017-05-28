@@ -12,6 +12,7 @@ import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.model.Operation;
 import saboteur.model.Card.Card;
+import saboteur.model.Player;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 import saboteur.view.PlayerRoleContainer;

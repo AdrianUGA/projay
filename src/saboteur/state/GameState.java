@@ -86,7 +86,7 @@ public class GameState extends State{
             this.loader.setController(this);
             Pane pane = this.loader.load();
                        
-            GameComponentsSize gameComponenstSize = GameComponentsSize.getGameComponentSize();
+            GameComponentsSize gameComponentsSize = GameComponentsSize.getGameComponentSize();
             
             // ******************** Left ********************
             this.playersArc = new PlayerArc(this.game);
@@ -101,11 +101,11 @@ public class GameState extends State{
             this.mainContainer.getChildren().add(this.gameBoardGridPane);
             
             //Create the goal card for the planCardAction
-            this.goalCardContainer.setPrefSize(gameComponenstSize.getGameTableSize(), gameComponenstSize.getGameTableSize());
+            this.goalCardContainer.setPrefSize(gameComponentsSize.getGameTableSize(), gameComponentsSize.getGameTableSize());
             for (int i = 0; i < 3; i++) {
             	ImageView img = new ImageView();
-            	img.setFitWidth(gameComponenstSize.getCardWidth()/1.5);
-            	img.setFitHeight(gameComponenstSize.getCardHeight()/1.5);
+            	img.setFitWidth(gameComponentsSize.getCardWidth()/1.5);
+            	img.setFitHeight(gameComponentsSize.getCardHeight()/1.5);
             	
             	StackPane p = new StackPane(img);
             	p.setAlignment(Pos.CENTER);
@@ -113,10 +113,10 @@ public class GameState extends State{
             }
             
             // ******************** Right ********************
-            double margin = gameComponenstSize.getDefaultMargin();
+            double margin = gameComponentsSize.getDefaultMargin();
                         
             //Cards of current player
-            this.gameCardContainer = new GameCardContainer(this.game, gameComponenstSize.getScreenWidth() - gameComponenstSize.getGameTableSize() - margin);
+            this.gameCardContainer = new GameCardContainer(this.game, gameComponentsSize.getScreenWidth() - gameComponentsSize.getGameTableSize() - margin);
             this.gameCardContainer.setId("gameCardContainer");
             this.gameBorderPane.setBottom(this.gameCardContainer);
             BorderPane.setMargin(this.gameCardContainer, new Insets(0.0, margin, margin, 0.0));
@@ -128,7 +128,7 @@ public class GameState extends State{
             BorderPane.setMargin(this.playerRoleContainer, new Insets(0.0, margin, 0.0, 0.0));
         	
             // trash and pick stacks
-        	this.trahAndPickStackContainer = new TrashAndPickStackContainer(this.game);
+        	this.trahAndPickStackContainer = new TrashAndPickStackContainer();
         	this.trahAndPickStackContainer.setId("trashAndPickStackContainer");
         	this.trahAndPickStackContainer.setAlignment(Pos.CENTER_RIGHT);
             
@@ -146,13 +146,13 @@ public class GameState extends State{
             AnchorPane.setTopAnchor(this.undoRedoButtonContainer, 30.0);
             this.gameBorderPane.setTop(stackAndButtonContainer);
            
-            this.gameBorderPane.setLayoutX(gameComponenstSize.getGameTableSize());
-            this.gameBorderPane.setPrefHeight(gameComponenstSize.getScreenHeight());
+            this.gameBorderPane.setLayoutX(gameComponentsSize.getGameTableSize());
+            this.gameBorderPane.setPrefHeight(gameComponentsSize.getScreenHeight());
             
             // ******************** end ********************
             this.menuButtonContainer.toFront();
-            pane.setMaxHeight(gameComponenstSize.getScreenHeight());
-            pane.setMaxWidth(gameComponenstSize.getScreenWidth());
+            pane.setMaxHeight(gameComponentsSize.getScreenHeight());
+            pane.setMaxWidth(gameComponentsSize.getScreenWidth());
                         
             this.changeLayout(pane);
         } catch (IOException e){

@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -26,9 +23,10 @@ import java.util.LinkedList;
 public class RoundIsFinishedState extends State{
 
     @FXML private Text text;
+    @FXML private Text roundText;
     @FXML private GridPane resultRound;
 
-    private Stage modalStage;
+    private Pane modalPane;
 
 	public RoundIsFinishedState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -46,25 +44,19 @@ public class RoundIsFinishedState extends State{
 
     @Override
     public void onEnter(Object param) {
-        this.modalStage = new Stage();
-        this.modalStage.initStyle(StageStyle.TRANSPARENT);
-
-        this.modalStage.initModality(Modality.APPLICATION_MODAL);
-        this.modalStage.initOwner(primaryStage);
-        this.modalStage.setTitle("Fin de la manche");
-
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/modalRoundIsFinished.fxml"));
             loader.setController(this);
-            Pane modalPane = loader.load();
-            Scene scene = new Scene(modalPane, 900, primaryStage.getHeight(), Color.TRANSPARENT);
+            this.modalPane = loader.load();
 
             if (this.game.dwarfsWon()){
                 this.text.setText("Les chercheurs d'or ont gagnés !!");
             } else{
                 this.text.setText("Les saboteurs ont gagnés !!");
             }
+
+            this.roundText.setText("Manche " + this.game.getRound() + " terminée.");
 
             LinkedList<Player> players = this.game.getPlayerList();
             for (int i = 0; i < players.size(); i++) {
@@ -75,14 +67,11 @@ public class RoundIsFinishedState extends State{
                 this.resultRound.add(player.getPlayerRole(), 2, i);
             }
 
-            scene.getStylesheets().add(Resources.getStylesheet());
+            this.modalPane.setPrefHeight(primaryStage.getHeight());
+            this.modalPane.setPrefWidth(primaryStage.getWidth());
 
-            this.modalStage.setScene(scene);
-
-            this.modalStage.setX(primaryStage.getWidth()/2d - 900/2d);
-            this.modalStage.setY(0);
-
-            this.modalStage.show();
+            StackPane root = (StackPane) primaryStage.getScene().getRoot();
+            root.getChildren().add(this.modalPane);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,7 +80,8 @@ public class RoundIsFinishedState extends State{
 
     @Override
     public void onExit() {
-        this.modalStage.close();
+        StackPane root = (StackPane) primaryStage.getScene().getRoot();
+        root.getChildren().remove(this.modalPane);
         if (this.game.gameIsFinished()){
             this.gsm.push("gameIsFinished");
         } else{

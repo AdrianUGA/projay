@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -25,10 +26,11 @@ import saboteur.tools.Resources;
 public class MainMenuState extends State {
 
     @FXML private Button noQuitGameBtn;
-
     @FXML private Button yesQuitGameBtn;
-    
     @FXML private HBox quitGameButton;
+
+    private Pane confirmModalPane;
+    private StackPane rootPane;
 
     public MainMenuState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -80,7 +82,7 @@ public class MainMenuState extends State {
     	HBox hb = (HBox)event.getSource();
     	for(Node nodeIn:hb.getChildren()){
             if(nodeIn instanceof ImageView){
-                FadeTransition ft = new FadeTransition(Duration.millis(500), nodeIn);
+                FadeTransition ft = new FadeTransition(Duration.millis(200), nodeIn);
                 ft.setFromValue(1.0);
                 ft.setToValue(0.0);
                 ft.play();
@@ -115,28 +117,19 @@ public class MainMenuState extends State {
     
     @FXML
     private void quitGameButtonAction(){
-        Stage stage = new Stage();
-        stage.initStyle(StageStyle.TRANSPARENT);
-
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(primaryStage);
-        stage.setTitle("modal");
-
        //add a modal box from builder (exit game confirmation)
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/modalQuitGame.fxml"));
             loader.setController(this);
-            Pane modalPane = loader.load();
-            Scene scene = new Scene(modalPane, 500, 300, Color.TRANSPARENT);
+            this.confirmModalPane = loader.load();
 
-            scene.getStylesheets().add(Resources.getStylesheet());
-            stage.setScene(scene);
+            this.confirmModalPane.setPrefHeight(primaryStage.getHeight());
+            this.confirmModalPane.setPrefWidth(primaryStage.getWidth());
 
-            stage.setX(primaryStage.getWidth()/2);
-            stage.setY(primaryStage.getHeight()/2);
+            this.rootPane = (StackPane) primaryStage.getScene().getRoot();
+            this.rootPane.getChildren().add(this.confirmModalPane);
 
-            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -144,12 +137,10 @@ public class MainMenuState extends State {
 
     @FXML
     private void noQuitGameBtnAction(){
-        Stage stgBtn = (Stage) this.noQuitGameBtn.getScene().getWindow();
-        stgBtn.close();
+        this.rootPane.getChildren().remove(this.confirmModalPane);
     }
     @FXML
     private void yesQuitGameBtnAction(){
-        Stage stgBtn = (Stage) this.yesQuitGameBtn.getScene().getWindow();
-        ((Stage) stgBtn.getOwner()).close();
+        this.primaryStage.close();
     }
 }

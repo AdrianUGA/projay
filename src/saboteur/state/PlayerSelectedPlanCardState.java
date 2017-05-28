@@ -99,6 +99,9 @@ public class PlayerSelectedPlanCardState extends State{
 
     @Override
     public void onExit() {
+		this.trashAndPickStackContainer.disablePickAndEndTurnButton();
+		this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
+
     	//Delete SVG and Mouse event
     	if(!this.goalCardSelect) {
 	    	for(int i = 0; i < 3; i++){
@@ -132,27 +135,26 @@ public class PlayerSelectedPlanCardState extends State{
     }
     
     private void beforEnd() {
-
 		this.gameCardContainer.setOnMouseClicked(null);
     	
     	for(int i = 0; i < 3; i++){
     		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
     		this.paneOfGoalCard[i].setOnMouseClicked(null);
     	}
-    	
+
+    	this.trashAndPickStackContainer.disableTrashButton();
+		this.trashAndPickStackContainer.setEventToTrashButton(null);
     	this.trashAndPickStackContainer.enablePickAndEndTurnButton();
-    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
-    	    @Override public void handle(MouseEvent e) {
-    	        endOfTurn();
-    	    }
-    	});
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(e -> endOfTurn());
     }
     
     private void endOfTurn() {
         this.playersArc.toBack();
 		this.goalCardContainer.setVisible(false);
+		
 		this.gameBoardGridPane.setVisible(true);
     	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
+    	
     	Operation op = this.game.getCurrentPlayer().playCard(this.selectedGoalCard);
     	this.gsm.changePeek("playerPlayCard", op);
 	}
