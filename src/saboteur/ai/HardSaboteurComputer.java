@@ -10,11 +10,13 @@ import saboteur.model.OperationPathCard;
 import saboteur.model.OperationTrash;
 import saboteur.model.Player;
 import saboteur.model.Position;
+import saboteur.model.Card.PathCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.SabotageCard;
 
 public class HardSaboteurComputer extends Computer {
 	
+	private static final float CUL_DE_SAC_WHEN_AGGRESSIVE = 70f;
 	private static final int DISTANCE_LEFT_BEFORE_PLACE_CULDESAC = 5;
 	private static final float TRASH_COLLAPSE_CARD = -20;
 	private static final float COLLAPSE_AND_CREATE_HOLE = 90;
@@ -69,10 +71,18 @@ public class HardSaboteurComputer extends Computer {
 
 	@Override
 	void operationPathCard(Operation o) {
-		if(this.artificialIntelligence.getGame().getBoard().minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition()) < DISTANCE_LEFT_BEFORE_PLACE_CULDESAC){
-			
+		OperationPathCard op = (OperationPathCard)o;
+		PathCard card = (PathCard)op.getCard();
+		if(this.saboteurPlaysAgressive()){
+			if(card.isCulDeSac()){
+				for(Operation p : this.artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(this.artificialIntelligence, card)){
+					this.artificialIntelligence.operationsWeight.put(p, CUL_DE_SAC_WHEN_AGGRESSIVE ); // TODO
+				}
+			}else{
+				// TODO
+			}
 		}else{
-			
+			if()
 		}
 	}
 
