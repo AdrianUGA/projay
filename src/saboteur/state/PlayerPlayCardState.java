@@ -88,6 +88,16 @@ public class PlayerPlayCardState extends State{
 		} else if (o.isOperationTrash()){
 			OperationTrash op = (OperationTrash) o;
 //			this.cardContainer.animateCardToTrash(op.getIndexOfCardInHandPlayer(), onFinished);
+		} else if (o.isOperationActionCardToPlayer()){
+			OperationActionCardToPlayer op = (OperationActionCardToPlayer) o;
+			this.playersArc.animateCircle(op.getDestinationPlayer(), op.getToolDestination(), onFinished);
+		} else if (o.isOperationActionCardToBoard()){
+			OperationActionCardToBoard op = (OperationActionCardToBoard) o;
+			if (op.getCard().isCollapseCard()){
+				this.gameBoardGridPane.animateCollapseCard(op.getDestinationCard(), op.getPositionDestination(), onFinished);
+			} else{
+				this.gameBoardGridPane.animateGoalCard(op.getPositionDestination(), onFinished);
+			}
 		}
 
 		this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());

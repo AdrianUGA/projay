@@ -118,7 +118,6 @@ public class GameCardContainer extends HBox {
 		tt.setFromX(0);
 		tt.setFromY(0);
 		tt.setToX(600);
-		this.handCardsImages[indexOfCard]
 		tt.setToY(-700);
 
 		pt.getChildren().addAll(sequence, tt);

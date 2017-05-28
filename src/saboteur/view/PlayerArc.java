@@ -283,6 +283,16 @@ public class PlayerArc extends Pane{
 		this.handicapCircleAnimation.stop();
 		this.handicapCircleAnimation.getChildren().clear();
 	}
+
+	public void animateCircle(Player player, Tool tool, EventHandler onFinished){
+		ScaleTransition st = new ScaleTransition(Duration.millis(600), this.playerCircles.get(player)[tool.getValue()]);
+		st.setByX(0.3f);
+		st.setByY(0.3f);
+		st.setCycleCount(2);
+		st.setAutoReverse(true);
+		st.setOnFinished(onFinished);
+		st.play();
+	}
 	
 	public Circle[] getCircles(Player player) {
 		return playerCircles.get(player);

@@ -2,15 +2,17 @@ package saboteur.view;
 
 import java.util.LinkedHashMap;
 
-import javafx.animation.ScaleTransition;
+import javafx.animation.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import saboteur.model.Board;
+import saboteur.model.Card.Card;
 import saboteur.model.Game;
 import saboteur.model.Position;
 import saboteur.model.Card.PathCard;
@@ -115,14 +117,53 @@ public class GameBoardGridPane extends GridPane {
     	return this.allCards;
     }
 
-    public void animatePathCard(Position pos, EventHandler onFinish){
+    public void animatePathCard(Position pos, EventHandler onFinished){
 		ImageView card = this.getImageOfPosition(pos);
 		ScaleTransition st = new ScaleTransition(Duration.millis(500), card);
 		st.setByX(0.3f);
 		st.setByY(0.3f);
 		st.setCycleCount(2);
 		st.setAutoReverse(true);
-		st.setOnFinished(onFinish);
+		st.setOnFinished(onFinished);
 		st.play();
+	}
+
+	public void animateCollapseCard(Card card, Position pos, EventHandler onFinished){
+		ImageView collapseCard = this.getImageOfPosition(pos);
+		collapseCard.setImage(Resources.getImage().get(card.getFrontImage()));
+		ScaleTransition st = new ScaleTransition(Duration.millis(200), collapseCard);
+		st.setByX(0.3f);
+		st.setByY(0.3f);
+
+		ScaleTransition st2 = new ScaleTransition(Duration.millis(300), collapseCard);
+		st2.setByX(-0.6f);
+		st2.setByY(-0.6f);
+
+		FadeTransition ft = new FadeTransition(Duration.millis(300), collapseCard);
+		ft.setFromValue(1.0);
+		ft.setToValue(0);
+
+		ParallelTransition pt = new ParallelTransition(st2, ft);
+
+		SequentialTransition seq = new SequentialTransition(st, pt);
+		seq.setOnFinished(onFinished);
+		seq.play();
+	}
+
+	public void animateGoalCard(Position pos, EventHandler onFinished){
+		ImageView card = this.getImageOfPosition(pos);
+		ScaleTransition st = new ScaleTransition(Duration.millis(500), card);
+		st.setByX(0.3f);
+		st.setByY(0.3f);
+		st.setCycleCount(2);
+		st.setAutoReverse(true);
+
+		RotateTransition rt = new RotateTransition(Duration.millis(500), card);
+		rt.setAxis(Rotate.Y_AXIS);
+		rt.setByAngle(360);
+
+		ParallelTransition pt = new ParallelTransition(rt, st);
+		pt.setOnFinished(onFinished);
+		pt.play();
 	}
 }
