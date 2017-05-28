@@ -55,4 +55,15 @@ public abstract class Computer {
 	abstract void operationDoubleRescueCard(Operation o);
 	abstract void operationRescueCard(Operation o);
 	abstract void operationPlanCard(Operation o);
+
+/* Common functions */
+	
+	protected boolean saboteurPlaysAgressive(){
+		int min = this.artificialIntelligence.getGame().getBoard()
+			.minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition());
+		int minimumDwarfAmout = this.artificialIntelligence.getGame().minimumAmountOfDwarf();
+		return min <= minimumDwarfAmout;
+	}
+	
+	
 }

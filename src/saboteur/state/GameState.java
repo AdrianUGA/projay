@@ -44,7 +44,7 @@ public class GameState extends State{
 	private PlayerArc playersArc;
 	private GameBoardGridPane gameBoardGridPane;
 	private GameCardContainer gameCardContainer;
-	private TrashAndPickStackContainer trahAndPickStackContainer;
+	private TrashAndPickStackContainer trashAndPickStackContainer;
 	private PlayerRoleContainer playerRoleContainer;
 	private UndoRedoButtonContainer undoRedoButtonContainer;
 	private Text roundNum;
@@ -128,17 +128,20 @@ public class GameState extends State{
             BorderPane.setMargin(this.playerRoleContainer, new Insets(0.0, margin, 0.0, 0.0));
         	
             // trash and pick stacks
-        	this.trahAndPickStackContainer = new TrashAndPickStackContainer();
-        	this.trahAndPickStackContainer.setId("trashAndPickStackContainer");
-        	this.trahAndPickStackContainer.setAlignment(Pos.CENTER_RIGHT);
-            
+        	this.trashAndPickStackContainer = new TrashAndPickStackContainer();
+        	this.trashAndPickStackContainer.setId("trashAndPickStackContainer");
+        	this.trashAndPickStackContainer.setAlignment(Pos.CENTER_RIGHT);
+            this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
+            this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
+            this.trashAndPickStackContainer.setEmptyTrash(this.game.trashIsEmpty());
+
             //undo redo button action
             this.undoRedoButtonContainer = new UndoRedoButtonContainer(this.game);
             this.undoRedoButtonContainer.setId("undoRedoButtonContainer");
             this.undoRedoButtonContainer.setUndoButtonAction(event -> undoButtonAction());
             this.undoRedoButtonContainer.setRedoButtonAction(event -> redoButtonAction());
             this.undoRedoButtonContainer.setAlignment(Pos.CENTER_LEFT);
-            
+            //round
             this.roundNum = new Text();
             this.roundNum.setId("roundNum");
     		this.roundNum.setText("Manche " + this.game.getRound());
@@ -147,16 +150,15 @@ public class GameState extends State{
             VBox roundAndButtonContainer = new VBox(this.undoRedoButtonContainer, this.roundNum);
             roundAndButtonContainer.setSpacing(10.0);
             
-            AnchorPane stackAndButtonContainer = new AnchorPane(roundAndButtonContainer, this.trahAndPickStackContainer);
-            AnchorPane.setRightAnchor(this.trahAndPickStackContainer, 30.0);
-            AnchorPane.setTopAnchor(this.trahAndPickStackContainer, 30.0);
+            AnchorPane stackAndButtonContainer = new AnchorPane(roundAndButtonContainer, this.trashAndPickStackContainer);
+            AnchorPane.setRightAnchor(this.trashAndPickStackContainer, 30.0);
+            AnchorPane.setTopAnchor(this.trashAndPickStackContainer, 30.0);
             AnchorPane.setLeftAnchor(roundAndButtonContainer, 0.0);
             AnchorPane.setTopAnchor(roundAndButtonContainer, 30.0);
             
-
+            this.gameBorderPane.setTop(stackAndButtonContainer);
             this.gameBorderPane.setBottom(this.gameCardContainer);
         	this.gameBorderPane.setCenter(this.playerRoleContainer);
-            this.gameBorderPane.setTop(stackAndButtonContainer);
            
             this.gameBorderPane.setLayoutX(gameComponentsSize.getGameTableSize());
             this.gameBorderPane.setPrefHeight(gameComponentsSize.getScreenHeight());
@@ -184,10 +186,10 @@ public class GameState extends State{
         this.gameBoardGridPane.generateBoard();
         this.playersArc.refreshPlayersArcsAndCircles();
         this.gameCardContainer.generateHandCardImage();
+        this.trashAndPickStackContainer.setEmptyTrash(this.game.trashIsEmpty());
+        this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
+        this.undoRedoButtonContainer.manageUndoRedoButton();
         this.gsm.changePeek("playerBeginOfTurn");
-    	if(this.game.historyUndoIsEmpty()) {
-        	this.undoRedoButtonContainer.disableUndoButton();
-    	}
     }
     
     private void redoButtonAction() {
@@ -196,10 +198,10 @@ public class GameState extends State{
         this.gameBoardGridPane.generateBoard();
         this.playersArc.refreshPlayersArcsAndCircles();
         this.gameCardContainer.generateHandCardImage();
+        this.trashAndPickStackContainer.setEmptyTrash(this.game.trashIsEmpty());
+        this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
+        this.undoRedoButtonContainer.manageUndoRedoButton();
         this.gsm.changePeek("playerBeginOfTurn");
-    	if(this.game.historyRedoIsEmpty()){
-    		this.undoRedoButtonContainer.disableRedoButton();
-    	}
     }
         
     @FXML
