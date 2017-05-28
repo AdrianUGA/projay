@@ -35,7 +35,7 @@ public class TrashAndPickStackContainer extends VBox{
 		this.pickAndEndTurnPane.setAlignment(Pos.CENTER_RIGHT);
 		
 		this.getChildren().addAll(this.trashPane, this.pickAndEndTurnPane);
-		this.setSpacing(20.0);
+		this.setSpacing(GameComponentsSize.getGameComponentSize().getDefaultSpacing());
 		VBox.setMargin(this.pickAndEndTurnPane, new Insets(0.0, 0.0, 0.0, 0.0));
 		VBox.setMargin(this.trashPane, new Insets(0.0, 0.0, 10.0, 0.0));
 	}

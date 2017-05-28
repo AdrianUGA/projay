@@ -25,11 +25,11 @@ public class GameCardContainer extends HBox {
 	
 	private LinkedHashMap<String, Image> allCards;
 	
-	public GameCardContainer(Game game, double gameTableSize){
+	public GameCardContainer(Game game){
 		this.game = game;
-        this.setPrefWidth(gameTableSize);
+        this.setPrefWidth(GameComponentsSize.getGameComponentSize().getGameCardContainerWidth());
         this.setAlignment(Pos.CENTER_RIGHT);
-        this.setSpacing(20.0);
+        this.setSpacing(GameComponentsSize.getGameComponentSize().getDefaultSpacing());
         
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
         	this.handCardsImages[i] = new ImageView();
