@@ -98,12 +98,18 @@
     -fx-fill: white;
     -fx-stroke: black;
     -fx-stroke-width: 1;
-    }
+    -fx-font-weight: bold;
+}
+
 .btn-card{
-    -fx-background-color: rgba(125, 125, 125, 0.5);
-    -fx-background-image: url('/resources/cards/card_verso.png');
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+    -fx-background-radius: 10;
     -fx-background-size: cover;
     -fx-text-fill: white;
-    -fx-font-size: 1.8em;
+    -fx-font-size: 1.7em;
     -fx-font-weight: bold;
+}
+
+.has-card{
+    -fx-background-image: url('/resources/cards/card_verso.png');
 }
