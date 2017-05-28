@@ -17,10 +17,8 @@ public class TrashAndPickStackContainer extends VBox{
 	
 	private StackPane trashPane, pickAndEndTurnPane;
 	private Button trashButton, pickAndEndTurnButton;
-	private Game game;
 	
-	public TrashAndPickStackContainer(Game game) {
-		this.game = game;
+	public TrashAndPickStackContainer() {
 		this.trashButton = new Button("Défausser\net\nfinir le\ntour");
 		this.pickAndEndTurnButton = new Button("Finir le\ntour");
 		
@@ -43,10 +41,20 @@ public class TrashAndPickStackContainer extends VBox{
 	}
 	
 	private void initButton(Button button){
-		button.setPrefWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.6);
-		button.setPrefHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.6);
+		button.setPrefWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.5);
+		button.setPrefHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.5);
 		button.setTextAlignment(TextAlignment.CENTER);
 		button.getStyleClass().add("btn-card");
+	}
+
+	public void updateStackText(int nbCard){
+		String text = ""+nbCard;
+		if (nbCard <= 1){
+			text += " carte\nrestante";
+		} else{
+			text += " cartes\nrestantes";
+		}
+		this.pickAndEndTurnButton.setText("Finir\n le tour\n\n" + text);
 	}
 
 	public void disablePickAndEndTurnButton() {
@@ -71,5 +79,22 @@ public class TrashAndPickStackContainer extends VBox{
 	
 	public void setEventToPickAndEndTurnButton(EventHandler<MouseEvent> event){
 		this.pickAndEndTurnButton.setOnMouseClicked(event);
+	}
+
+	public void setEmptyTrash(boolean isEmpty){
+		System.out.println(isEmpty);
+		if (isEmpty){
+			this.trashButton.getStyleClass().remove("has-card");
+		} else{
+			this.trashButton.getStyleClass().add("has-card");
+		}
+	}
+
+	public void setEmptyStack(boolean isEmpty){
+		if (isEmpty) {
+			this.pickAndEndTurnButton.getStyleClass().remove("has-card");
+		} else{
+			this.pickAndEndTurnButton.getStyleClass().add("has-card");
+		}
 	}
 }

@@ -2,6 +2,7 @@ package saboteur;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
 import saboteur.model.Game;
@@ -55,6 +56,7 @@ public class App extends Application {
 
     private void initStage(){
         primaryStage.setTitle("Saboteur");
+        primaryStage.getIcons().add(new Image("/resources/pioche.png"));
         StackPane rootLayout = new StackPane();
         rootLayout.getStyleClass().add("root-layout");
         rootLayout.getStylesheets().add(Resources.getStylesheet());

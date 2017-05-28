@@ -26,7 +26,7 @@ public class NewGameMenuState extends State{
 	@FXML private VBox playerContainer;
 	@FXML private Button addPlayerButton;
 	
-	private int nbPlayer = 3;
+	private int nbPlayer;
 
     public NewGameMenuState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -44,6 +44,7 @@ public class NewGameMenuState extends State{
 
     @Override
     public void onEnter(Object param) {
+    	this.nbPlayer = 3;
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/newGameMenu.fxml"));

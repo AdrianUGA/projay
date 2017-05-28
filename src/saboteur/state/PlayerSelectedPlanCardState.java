@@ -19,6 +19,7 @@ import saboteur.model.Operation;
 import saboteur.model.Position;
 import saboteur.tools.Icon;
 import saboteur.tools.Resources;
+import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.TrashAndPickStackContainer;
 import saboteur.view.PlayerArc;
@@ -29,11 +30,12 @@ public class PlayerSelectedPlanCardState extends State{
 	private StackPane[] paneOfGoalCard = new StackPane[3];
 	private VBox goalCardContainer;
 	private TrashAndPickStackContainer trashAndPickStackContainer;
-	private Circle gameBoard;
 	private boolean goalCardSelect;
 
 	private PathCard selectedGoalCard;
 	private GameCardContainer gameCardContainer;
+	private GameBoardGridPane gameBoardGridPane;
+	private PlayerArc playersArc;
 
 	public PlayerSelectedPlanCardState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -52,18 +54,20 @@ public class PlayerSelectedPlanCardState extends State{
     @Override
     public void onEnter(Object param) {
 
-        this.gameBoard = (Circle)this.primaryStage.getScene().lookup("#gameBoard");
-		PlayerArc playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
-		playersArc.refreshPlayersArcsAndCircles();
+		this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
+		this.playersArc.refreshPlayersArcsAndCircles();
 		this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
-
         this.goalCardContainer = (VBox) this.primaryStage.getScene().lookup("#goalCardContainer");
     	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
+    	this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
         this.goalCardSelect = false;
         
-        this.gameBoard.toFront();
+        
+        this.playersArc.circleToFront();
         this.goalCardContainer.toFront();
     	this.goalCardContainer.setVisible(true);
+    	this.gameBoardGridPane.setVisible(false);
+    	
     	
     	
         //Put verso of goal card on created ImageView, create eye svg and for each MouseClick event.
@@ -104,9 +108,10 @@ public class PlayerSelectedPlanCardState extends State{
 	    		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
 	    		this.paneOfGoalCard[i].setOnMouseClicked(null);
 	    	}
-	    	    	
-			this.gameBoard.toBack();
+
+	        this.playersArc.circleToBack();
 			this.goalCardContainer.setVisible(false);
+			this.gameBoardGridPane.setVisible(true);
     	}
     }
     
@@ -114,7 +119,7 @@ public class PlayerSelectedPlanCardState extends State{
 		int i = 2;
 		for (Node n : this.goalCardContainer.getChildren()) {
 			StackPane p = (StackPane) n;
-
+			
 			//Turn selected card
 			if(event.getSource() == p) {
 				ImageView img = (ImageView) p.getChildren().get(0);
@@ -130,27 +135,26 @@ public class PlayerSelectedPlanCardState extends State{
     }
     
     private void beforEnd() {
-    	Button trashButton = (Button)this.primaryStage.getScene().lookup("#trashButton");
-    	trashButton.setDisable(true);
-
 		this.gameCardContainer.setOnMouseClicked(null);
     	
     	for(int i = 0; i < 3; i++){
     		this.paneOfGoalCard[i].getChildren().remove(this.svgEyes[i]);
     		this.paneOfGoalCard[i].setOnMouseClicked(null);
     	}
-    	
+
+    	this.trashAndPickStackContainer.disableTrashButton();
+		this.trashAndPickStackContainer.setEventToTrashButton(null);
     	this.trashAndPickStackContainer.enablePickAndEndTurnButton();
-    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
-    	    @Override public void handle(MouseEvent e) {
-    	        endOfTurn();
-    	    }
-    	});
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(e -> endOfTurn());
     }
     
     private void endOfTurn() {
-    	this.gameBoard.toBack();
+        this.playersArc.toBack();
 		this.goalCardContainer.setVisible(false);
+		
+		this.gameBoardGridPane.setVisible(true);
+    	this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
+    	
     	Operation op = this.game.getCurrentPlayer().playCard(this.selectedGoalCard);
     	this.gsm.changePeek("playerPlayCard", op);
 	}

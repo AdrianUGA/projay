@@ -28,16 +28,13 @@ public class GameCardContainer extends HBox {
 	public GameCardContainer(Game game, double gameTableSize){
 		this.game = game;
         this.setPrefWidth(gameTableSize);
-        this.setAlignment(Pos.CENTER);
+        this.setAlignment(Pos.CENTER_RIGHT);
         this.setSpacing(20.0);
-        AnchorPane.setBottomAnchor(this, 5.0);
-        AnchorPane.setLeftAnchor(this, 5.0);
-        AnchorPane.setRightAnchor(this, 5.0);
         
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
         	this.handCardsImages[i] = new ImageView();
-        	this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth());
-        	this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight());
+        	this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.1);
+        	this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.1);
         }
         
         this.allCards = Resources.getImage();
