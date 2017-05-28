@@ -1,16 +1,12 @@
 package saboteur.view;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import saboteur.model.Game;
 import saboteur.tools.GameComponentsSize;
 
 public class TrashAndPickStackContainer extends VBox{
@@ -36,8 +32,6 @@ public class TrashAndPickStackContainer extends VBox{
 		
 		this.getChildren().addAll(this.trashPane, this.pickAndEndTurnPane);
 		this.setSpacing(GameComponentsSize.getGameComponentSize().getDefaultSpacing());
-		VBox.setMargin(this.pickAndEndTurnPane, new Insets(0.0, 0.0, 0.0, 0.0));
-		VBox.setMargin(this.trashPane, new Insets(0.0, 0.0, 10.0, 0.0));
 	}
 	
 	private void initButton(Button button){
