@@ -151,8 +151,8 @@ public class Game {
 		this.historyRedo = new LinkedList<>();
 
 		this.currentPlayerIndex = 0;
-		//this.newRound();
-		this.loadConfig("almostFinished");
+		this.newRound();
+		//this.loadConfig("almostFinished");
 	}
 
 	/**
@@ -545,6 +545,9 @@ public class Game {
             
             for (Player p : this.getPlayerList()){
             	p.setGame(this);
+            	if(p.isAI()){
+            		((AI)p).printIsDwarf();
+            	}
             }
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {

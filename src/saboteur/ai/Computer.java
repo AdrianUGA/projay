@@ -1,12 +1,17 @@
 package saboteur.ai;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import saboteur.model.Operation;
 
-public abstract class Computer {
+public abstract class Computer implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2891478424L;
 	public static int MINIMUM_TRUST_DWARF_HARD = 65;
 	public static int MINIMUM_TRUST_SABOTEUR_HARD = 35;
 

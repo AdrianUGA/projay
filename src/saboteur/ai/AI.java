@@ -1,4 +1,5 @@
 package saboteur.ai;
+import saboteur.model.Board;
 import saboteur.model.Game;
 import saboteur.model.Operation;
 
@@ -18,6 +19,29 @@ import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 
+//                                  _____
+//                                 |     |
+//                                 | ' ' |
+//                                 |_____|
+//                           ____ ___|_|___ ____
+//                          ()___)         ()___)
+//                          // /|   I.U.T   |\ \\
+//                         // / |  VALENCE  | \ \\
+//                        (___) |___________| (___)
+//                        (___)   (_______)   (___)
+//                        (___)     (___)     (___)
+//                        (___)      |_|      (___)
+//                        (___)  ___/___\___   | |
+//                         | |  |           |  | |
+//                         | |  |___________| /___\
+//                        /___\  |||     ||| //   \\
+//                       //   \\ |||     ||| \\   //
+//                       \\   // |||     |||  \\ //
+//                        \\ // ()__)   (__()
+//                              ///       \\\
+//                             ///         \\\
+//                           _///___     ___\\\_
+//                          |_______|   |_______|
 
 public class AI extends Player {
 	static final long serialVersionUID = 6519358301134674963L;
@@ -28,7 +52,7 @@ public class AI extends Player {
 	protected Difficulty difficulty;
 	protected LinkedHashMap<Position,Float> estimatedGoldCardPosition;
 	protected LinkedHashMap<Operation, Float> operationsWeight;
-
+	protected int currentMinDistance;
 	protected final long seedAI;
 	private Computer computer;
 	
@@ -60,19 +84,25 @@ public class AI extends Player {
 		else{
 			this.isDwarf.put(this, (float) 1073741824);
 		}
-		
+		this.currentMinDistance = this.getGame().getBoard().aStarOnEmptyCard(Board.getStart(), getEstimatedGoldCardPosition());
 		this.computer = ComputerFactory.getComputer(this);
 	}
 
 	@Override
 	public void notify(Operation o){
-		if(o.isOperationActionCardToBoard())
-			updateTrust((OperationActionCardToBoard) o);
-		else if(o.isOperationActionCardToPlayer())
-			updateTrust((OperationActionCardToPlayer) o);
-		else if(o.isOperationPathCard())
-			updateTrust((OperationPathCard) o);
-		else System.err.println("Opération non reconnue");
+		if(this != o.getSourcePlayer()){
+			//Doesn't update trust on itself
+			if(o.isOperationActionCardToBoard())
+				updateTrust((OperationActionCardToBoard) o);
+			else if(o.isOperationActionCardToPlayer())
+				updateTrust((OperationActionCardToPlayer) o);
+			else if(o.isOperationPathCard())
+				updateTrust((OperationPathCard) o);
+			else System.err.println("Opération non reconnue");
+		}
+		if(o.isOperationPathCard() || o.isOperationActionCardToBoard()){
+			this.currentMinDistance = this.getGame().getBoard().minFromAnyEmptyPositionToGoldCard(getEstimatedGoldCardPosition());
+		}
 	}
 	
 	protected Operation bestOperationToPlay(){
@@ -151,10 +181,15 @@ public class AI extends Player {
 		}
 		else if(o.getCard().isCollapseCard()){
 			if(((PathCard) o.getDestinationCard()).isCulDeSac()){
-				this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) + 10);
+				this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) + 20);
 			}
 			else{
-				this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 20);
+				int nextMinDistance = this.getGame().getBoard().minFromAnyEmptyPositionToGoldCard(getEstimatedGoldCardPosition());
+				if(nextMinDistance > this.currentMinDistance){
+					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 20);
+				}else if(nextMinDistance < this.currentMinDistance){
+					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) + 10);
+				}
 			}
 		}
 		else{
@@ -164,45 +199,68 @@ public class AI extends Player {
 	
 	// Sabotage & Rescue card
 	public void updateTrust(OperationActionCardToPlayer o){
-		if(o.getCard().isSabotageCard()){
-			if(this.isDwarf.get(o.getSourcePlayer()) > this.isDwarf.get(o.getDestinationPlayer()) && (this.isDwarf.get(o.getDestinationPlayer()) <= 40)){
-				// Enemies of our enemies are our allies
-				this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) + 10);
-			}
-			else if(this.isDwarf.get(o.getSourcePlayer()) <= this.isDwarf.get(o.getDestinationPlayer()) && (this.isDwarf.get(o.getDestinationPlayer()) >= 60)){
-				// Enemies of our allies are our enemies
-				this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 10);
-			}
-		}
-		else if(o.getCard().isRescueCard() || o.getCard().isDoubleRescueCard()){
-			if(!o.getSourcePlayer().equals(o.getDestinationPlayer())){
-				if(this.isDwarf.get(o.getDestinationPlayer()) <= 40){
-					// Allies of our enemies are our enemies
-					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 10);
-				}
-				else if(this.isDwarf.get(o.getDestinationPlayer()) >= 60){
-					// Allies of our allies are our allies
+		System.out.println("Je suis " + this.getName() + " et j'update " + o.getDestinationPlayer().getName() + " et source est " + o.getSourcePlayer().getName());
+		if(o.getDestinationPlayer() != this){
+			if(o.getCard().isSabotageCard()){
+				if(this.isDwarf.get(o.getSourcePlayer()) > this.isDwarf.get(o.getDestinationPlayer()) && (this.isDwarf.get(o.getDestinationPlayer()) <= 40)){
+					// Enemies of saboteurs are dwarfs 
 					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) + 10);
 				}
+				else if(this.isDwarf.get(o.getSourcePlayer()) <= this.isDwarf.get(o.getDestinationPlayer()) && (this.isDwarf.get(o.getDestinationPlayer()) >= 60)){
+					// Enemies of dwarfs are saboteurs
+					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 10);
+				}
 			}
-		}
-		else{
-			System.err.println("Operation ActionCarToPlayer undetected");
+			else if(o.getCard().isRescueCard() || o.getCard().isDoubleRescueCard()){
+				if(!o.getSourcePlayer().equals(o.getDestinationPlayer())){
+					if(this.isDwarf.get(o.getDestinationPlayer()) <= 40){
+						// Allies saboteurs are saboteurs
+						this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 10);
+					}
+					else if(this.isDwarf.get(o.getDestinationPlayer()) >= 60){
+						// Allies of dwarfs are dwarfs
+						this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) + 10);
+					}
+				}
+			}
+			else{
+				System.err.println("Operation ActionCarToPlayer undetected");
+			}
+		}else{
+			if(o.getCard().isSabotageCard()){
+				if(this.getTeam() == Team.DWARF){
+					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 10);
+				}else{
+					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) + 10);
+				}
+			}else if(o.getCard().isRescueCard() || o.getCard().isDoubleRescueCard()){
+				if(this.getTeam() == Team.DWARF){
+					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) + 10);
+				}else{
+					this.isDwarf.put(o.getSourcePlayer(), this.isDwarf.get(o.getSourcePlayer()) - 10);
+				}
+			}else{
+				System.err.println("Operation ActionCarToPlayer undetected");
+			}
 		}
 	}
 	
 	// Path card
 	public void updateTrust(OperationPathCard o){
-		int taxiDistance = o.getP().getTaxiDistance(getEstimatedGoldCardPosition());
-		int neighborsAmount = this.getGame().getBoard().numberOfNeighbors(o.getP());
 		
-		if(((PathCard) o.getCard()).isCulDeSac()){ 
-			// The closer the gold card, the heavier is the card.
-			// The more neighbors, the merr... heavier is the card.
-			this.isDwarf.put(o.getSourcePlayer(), (float) (this.isDwarf.get(o.getSourcePlayer()) - (40/(Math.pow(2, taxiDistance)))*(0.75+(neighborsAmount/4)) - 2));
+		int nextMinDistance = this.getGame().getBoard().aStarOnEmptyCard(o.getP(), getEstimatedGoldCardPosition());	
+		
+		if(((PathCard) o.getCard()).isCulDeSac()){
+			if(this.currentMinDistance < nextMinDistance){
+				int neighborsAmount = this.getGame().getBoard().numberOfNeighbors(o.getP());
+				this.isDwarf.put(o.getSourcePlayer(), (float) (this.isDwarf.get(o.getSourcePlayer()) - ((nextMinDistance - currentMinDistance)*5) - neighborsAmount));
+			}
 		}
 		else{
-			this.isDwarf.put(o.getSourcePlayer(), (float) (this.isDwarf.get(o.getSourcePlayer()) + 40/(Math.pow(2, taxiDistance)) + 3));
+			if(this.currentMinDistance > nextMinDistance){
+				//Distance get smaller
+				this.isDwarf.put(o.getSourcePlayer(), (float) (this.isDwarf.get(o.getSourcePlayer()) + 5 / currentMinDistance));
+			}
 		}
 	}
 	
@@ -407,6 +465,13 @@ public class AI extends Player {
 	
 	public void printHand(){
 			System.out.println(this.handToString());
+	}
+
+	public void printIsDwarf() {
+		for(Player p : this.game.getPlayerList()){
+			System.out.println(p.getName() + " : " + isDwarf.get(p));
+		}
+		
 	}
 
 
