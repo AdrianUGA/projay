@@ -9,9 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import saboteur.model.Board;
 import saboteur.model.Card.Card;
@@ -20,8 +18,6 @@ import saboteur.model.Position;
 import saboteur.model.Card.PathCard;
 import saboteur.tools.GameComponentsSize;
 import saboteur.tools.Resources;
-
-import javax.swing.*;
 
 public class GameBoardGridPane extends GridPane {
 
@@ -40,13 +36,12 @@ public class GameBoardGridPane extends GridPane {
         this.generateBoard();
         
         this.setAlignment(Pos.CENTER);
-        this.getStyleClass().add("grid");
 	}
 	
     public void generateBoard() {
 		this.board = game.getBoard();
-        double cardWidth = GameComponentsSize.getGameComponentSize().getCardWidth()/3;
-        double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/3;
+        double cardWidth = GameComponentsSize.getGameComponentSize().getCardWidth()/2.7;
+        double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/2.7;
         
         this.getChildren().clear();
         
@@ -103,9 +98,7 @@ public class GameBoardGridPane extends GridPane {
 					}
 				}
 				this.imagesOfGridPane[i][j] = img;
-				StackPane cell = new StackPane(img);
-				cell.getStyleClass().add("cell");
-				this.add(cell, i, j);
+				this.add(img, i, j);
         	}
         }
     	// Set Layout acording to the number of card on the board
