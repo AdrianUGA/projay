@@ -3,6 +3,7 @@ package saboteur.view;
 import java.util.LinkedHashMap;
 
 import javafx.animation.*;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -18,6 +19,8 @@ import saboteur.model.Position;
 import saboteur.model.Card.PathCard;
 import saboteur.tools.GameComponentsSize;
 import saboteur.tools.Resources;
+
+import javax.swing.*;
 
 public class GameBoardGridPane extends GridPane {
 
@@ -117,7 +120,7 @@ public class GameBoardGridPane extends GridPane {
     	return this.allCards;
     }
 
-    public void animatePathCard(Position pos, EventHandler onFinished){
+    public void animatePathCard(Position pos, EventHandler<ActionEvent> onFinished){
 		ImageView card = this.getImageOfPosition(pos);
 		ScaleTransition st = new ScaleTransition(Duration.millis(500), card);
 		st.setByX(0.3f);
@@ -128,7 +131,7 @@ public class GameBoardGridPane extends GridPane {
 		st.play();
 	}
 
-	public void animateCollapseCard(Card card, Position pos, EventHandler onFinished){
+	public void animateCollapseCard(Card card, Position pos, EventHandler<ActionEvent> onFinished){
 		ImageView collapseCard = this.getImageOfPosition(pos);
 		collapseCard.setImage(Resources.getImage().get(card.getFrontImage()));
 		ScaleTransition st = new ScaleTransition(Duration.millis(200), collapseCard);
@@ -150,7 +153,7 @@ public class GameBoardGridPane extends GridPane {
 		seq.play();
 	}
 
-	public void animateGoalCard(Position pos, EventHandler onFinished){
+	public void animateGoalCard(Position pos, EventHandler<ActionEvent> onFinished){
 		ImageView card = this.getImageOfPosition(pos);
 		ScaleTransition st = new ScaleTransition(Duration.millis(500), card);
 		st.setByX(0.3f);

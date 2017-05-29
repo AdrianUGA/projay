@@ -3,11 +3,13 @@ package saboteur.view;
 import java.util.LinkedHashMap;
 
 import javafx.animation.*;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import saboteur.model.Game;
 import saboteur.model.Card.Card;
@@ -77,7 +79,7 @@ public class GameCardContainer extends HBox {
 	public void removeSelection() {
 		if(this.selectedCard != null) {
 			TranslateTransition tt = new TranslateTransition(Duration.millis(200), this.imgSelectedCard);
-			tt.setByY(30);
+			tt.setByY(50);
 			ScaleTransition st = new ScaleTransition(Duration.millis(200), this.imgSelectedCard);
 			st.setByX(-0.2f);
 			st.setByY(-0.2f);
@@ -93,7 +95,7 @@ public class GameCardContainer extends HBox {
     	this.selectedCard = selectedCard;
     	this.imgSelectedCard = imgSelectedCard;
 		TranslateTransition tt = new TranslateTransition(Duration.millis(200), this.imgSelectedCard);
-		tt.setByY(-30);
+		tt.setByY(-50);
 		ScaleTransition st = new ScaleTransition(Duration.millis(200), this.imgSelectedCard);
 		st.setByX(0.2f);
 		st.setByY(0.2f);
@@ -101,7 +103,7 @@ public class GameCardContainer extends HBox {
 		pt.play();
 	}
 
-	public void animateCardToTrash(int indexOfCard, EventHandler onFinished){
+	public void animateCardToTrash(int indexOfCard, EventHandler<ActionEvent> onFinished){
 		ParallelTransition pt = new ParallelTransition();
 		ScaleTransition st = new ScaleTransition(Duration.millis(400), this.handCardsImages[indexOfCard]);
 		st.setByX(0.47f);
@@ -118,15 +120,32 @@ public class GameCardContainer extends HBox {
 		TranslateTransition tt = new TranslateTransition(Duration.millis(800), this.handCardsImages[indexOfCard]);
 		tt.setFromX(0);
 		tt.setFromY(0);
-		tt.setToX(this.gameComponentsSize.getLayoutXOfTrashStack() - (this.gameComponentsSize.getLayoutXOfGameCardContainer() + this.handCardsImages[indexOfCard].getLayoutX()));
-		tt.setToY(this.gameComponentsSize.getLayoutYOfTrashStack() - (this.gameComponentsSize.getLayoutYOfGameCardContainer() + this.handCardsImages[indexOfCard].getLayoutY()));
+		tt.setToX(this.gameComponentsSize.getLayoutXOfTrashStack() - (this.gameComponentsSize.getLayoutXOfGameCardContainer() + this.handCardsImages[indexOfCard].getLayoutX()) + 25);
+		tt.setToY(this.gameComponentsSize.getLayoutYOfTrashStack() - (this.gameComponentsSize.getLayoutYOfGameCardContainer() + this.handCardsImages[indexOfCard].getLayoutY()) + 35);
 
 		pt.getChildren().addAll(sequence, tt);
 		pt.setOnFinished(onFinished);
 		pt.play();
 	}
 
-	public void animateCard(int indexOfCard, EventHandler onFinished){
-		
+	public void animateCard(Card card, int indexOfCard, EventHandler<ActionEvent> onFinished){
+		TranslateTransition tt = new TranslateTransition(Duration.millis(600), this.handCardsImages[indexOfCard]);
+		tt.setFromX(0);
+		tt.setFromY(0);
+		tt.setToX(-this.handCardsImages[indexOfCard].getLayoutX() + 100);
+		tt.setToY(-400);
+
+		ScaleTransition st = new ScaleTransition(Duration.millis(600), this.handCardsImages[indexOfCard]);
+		st.setByX(0.2f);
+		st.setByY(0.2f);
+
+		ParallelTransition pt = new ParallelTransition(tt, st);
+		pt.setOnFinished(event -> {
+			this.handCardsImages[indexOfCard].setImage(Resources.getImage().get(card.getFrontImage()));
+			PauseTransition pause = new PauseTransition(Duration.millis(1000));
+			pause.setOnFinished(onFinished);
+			pause.play();
+		});
+		pt.play();
 	}
 }

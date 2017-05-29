@@ -80,6 +80,7 @@ public class PlayerPlayCardState extends State{
 		};
 
 		EventHandler<ActionEvent> operationAnimationEvent = event -> {
+
 			this.operationAnimation(o, pickCardEvent);
 		};
 
@@ -88,11 +89,8 @@ public class PlayerPlayCardState extends State{
 			OperationTrash op = (OperationTrash) o;
 			this.cardContainer.animateCardToTrash(op.getIndexOfCardInHandPlayer(), pickCardEvent);
 		} else{
-			this.cardContainer.animateCard(o.getIndexOfCardInHandPlayer(), operationAnimationEvent);
+			this.cardContainer.animateCard(o.getCard(), o.getIndexOfCardInHandPlayer(), operationAnimationEvent);
 		}
-
-		this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
-		this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
 	}
 
     @Override
@@ -109,7 +107,11 @@ public class PlayerPlayCardState extends State{
 				if (this.game.getCurrentPlayer().isHuman()){
 					cardContainer.showCards();
 					clone.setImage(Resources.getImage().get(op.getCardPicked().getFrontImage()));
+				} else{
+					cardContainer.hideCards();
 				}
+				this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
+				this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
 				PauseTransition pt = new PauseTransition(Duration.millis(2000));
 				pt.setOnFinished(event1 -> {
 					((Pane)clone.getParent()).getChildren().remove(clone);

@@ -19,8 +19,10 @@ public class TrashAndPickStackContainer extends VBox{
 	
 	private StackPane trashPane, pickAndEndTurnPane;
 	private Button trashButton, pickAndEndTurnButton;
+	private GameComponentsSize gameComponentsSize;
 	
 	public TrashAndPickStackContainer() {
+		this.gameComponentsSize = GameComponentsSize.getGameComponentSize();
 		this.trashButton = new Button("Défausser\net\nfinir le\ntour");
 		this.pickAndEndTurnButton = new Button("Finir le\ntour");
 		
@@ -37,12 +39,12 @@ public class TrashAndPickStackContainer extends VBox{
 		this.pickAndEndTurnPane.setAlignment(Pos.CENTER_RIGHT);
 		
 		this.getChildren().addAll(this.trashPane, this.pickAndEndTurnPane);
-		this.setSpacing(GameComponentsSize.getGameComponentSize().getDefaultSpacing());
+		this.setSpacing(this.gameComponentsSize.getDefaultSpacing());
 	}
 	
 	private void initButton(Button button){
-		button.setPrefWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*GameComponentsSize.getGameComponentSize().getTrashAndPickStackContainerMultiplier());
-		button.setPrefHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*GameComponentsSize.getGameComponentSize().getTrashAndPickStackContainerMultiplier());
+		button.setPrefWidth(this.gameComponentsSize.getCardWidth() * this.gameComponentsSize.getTrashAndPickStackContainerMultiplier());
+		button.setPrefHeight(this.gameComponentsSize.getCardHeight() * this.gameComponentsSize.getTrashAndPickStackContainerMultiplier());
 		button.setTextAlignment(TextAlignment.CENTER);
 		button.getStyleClass().add("btn-card");
 	}
@@ -116,22 +118,12 @@ public class TrashAndPickStackContainer extends VBox{
 		TranslateTransition tt = new TranslateTransition(Duration.millis(800), clone);
 		tt.setFromX(0);
 		tt.setFromY(0);
-		tt.setByY(516);
-		tt.setByX(20);
+		tt.setByY(520);
+		tt.setToX(20);
 
 		pt.getChildren().addAll(sequence, tt);
 		pt.setOnFinished(onFinished);
 		pt.play();
-	}
-
-	public void animateTrash(){
-		ScaleTransition st = new ScaleTransition(Duration.millis(400), this.trashPane);
-		st.setByX(0.2f);
-		st.setByY(0.2f);
-		st.setCycleCount(2);
-		st.setAutoReverse(true);
-		st.setInterpolator(Interpolator.EASE_IN);
-		st.play();
 	}
 
 	public double getXTrashPane(){
