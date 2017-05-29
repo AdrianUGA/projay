@@ -662,7 +662,7 @@ public class Game {
 				ranking.addFirst(player);
 			} else{
 				int i = 0;
-				while(player.getGold() < ranking.get(i).getGold()){
+				while(i < ranking.size() && player.getGold() < ranking.get(i).getGold() ){
 					i++;
 				}
 				ranking.add(i, player);
