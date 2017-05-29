@@ -1,7 +1,5 @@
 package saboteur.view;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,7 +23,6 @@ public class NewPlayerHBox extends HBox {
 	private Pane svgContainerPane;
 	private int playerNumber;
 	
-	//TODO : Attribuer les bon noms au joueur / bot
 	public NewPlayerHBox(int nbplayer, boolean isHuman) {
 		this.playerNumber = nbplayer;
 		initBox();
@@ -61,22 +58,19 @@ public class NewPlayerHBox extends HBox {
 		
 		// Split Menu
 		this.selectPlayerMenu = new ComboBox<>();
-		this.selectPlayerMenu.valueProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if (newValue.equals("Humain")){
-					svg.setContent(Icon.user);
-				} else{
-					svg.setContent(Icon.computer);
-				}
-			}
-		});
+		this.selectPlayerMenu.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.equals("Humain")){
+                svg.setContent(Icon.user);
+            } else{
+                svg.setContent(Icon.computer);
+            }
+        });
 		this.selectPlayerMenu.setPrefSize(255, 25);
 		this.selectPlayerMenu.setMaxSize(Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
 		this.selectPlayerMenu.setMinSize(Control.USE_COMPUTED_SIZE, Control.USE_COMPUTED_SIZE);
 		this.selectPlayerMenu.setStyle("-fx-font-size: 24px");
 		HBox.setMargin(this.selectPlayerMenu, new Insets(0,200,0,30));
-		this.selectPlayerMenu.getItems().addAll("Humain", "IA Facile", "IA Moyen", "IA Difficile");
+		this.selectPlayerMenu.getItems().addAll("Humain", "IA Facile", "IA Difficile");
 		
 		
 		// HBox (container)

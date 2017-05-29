@@ -2,8 +2,6 @@ package saboteur.ai;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
-import java.util.Set;
-
 import saboteur.model.Board;
 import saboteur.model.Operation;
 import saboteur.model.OperationActionCardToBoard;
@@ -26,7 +24,7 @@ public class HardSaboteurComputer extends Computer {
 	private static final float CUL_DE_SAC_WHEN_AGGRESSIVE = 100f;
 	private static final float PATHCARD_WHEN_AGGRESSIVE = 50f;
 	private static final float PATHCARD_WHEN_PASSIVE = 10f;
-	private static final float TRASH_COLLAPSE_CARD = -20;
+	private static final float TRASH_COLLAPSE_CARD = -30;
 	private static final float COLLAPSE_AND_CREATE_HOLE = 90;
 	private static final float DISTANCE_TO_GOAL_FOR_COLLAPSE = 4;
 	private static final float SABOTAGE = 2;
@@ -36,11 +34,15 @@ public class HardSaboteurComputer extends Computer {
 	private static final float HANDICAP_SIZE = 0.5f;
 	private static final int RESCUE = 15;
 	private static final float COLLAPSE = 60;
+	private static final float TRASH_SABOTAGECARD = -10f;
+	private static final float TRASH_DOUBLERESCUECARD = -11f;
+	private static final float TRASH_RESCUECARD = -10f;
 
 	@Override
 	void operationCollapseCard(Operation o) {
 		boolean atLeastOne = false;
 		Board board = this.artificialIntelligence.getGame().getBoard();
+		
 		if(board.minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition()) < DISTANCE_TO_GOAL_FOR_COLLAPSE){
 			int min1 = board.minFromEmptyReachablePathCardToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 			int min2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
@@ -55,7 +57,7 @@ public class HardSaboteurComputer extends Computer {
 				
 				OperationActionCardToBoard operation = (OperationActionCardToBoard) o;
 				operation.setPositionDestination(p);
-				operation.setDestinationCard(board.getCard(p));
+				operation.setDestinationCard(removed);
 				
 				int newMin1 = board.minFromEmptyReachablePathCardToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 				int newMin2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
@@ -166,7 +168,7 @@ public class HardSaboteurComputer extends Computer {
 			}
 		}
 		if(!atLeastOne){ /* Trash */
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -10);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) TRASH_SABOTAGECARD);
 		}
 	}
 
@@ -193,7 +195,7 @@ public class HardSaboteurComputer extends Computer {
 			}
 		}
 		if(!atLeastOne){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -11);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) TRASH_DOUBLERESCUECARD);
 		}
 	}
 
@@ -220,7 +222,7 @@ public class HardSaboteurComputer extends Computer {
 			}
 		}
 		if(!atLeastOne){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -10);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) TRASH_RESCUECARD);
 		}
 	}
 

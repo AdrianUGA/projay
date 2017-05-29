@@ -62,7 +62,6 @@ public class PlayerWaitState extends State{
 		
 
 		if (this.game.getCurrentPlayer().isAI()){
-			//TODO change pause
 			PauseTransition pt = new PauseTransition(Duration.millis(2000));
 			pt.setOnFinished(event -> {
 				Operation o = this.game.getCurrentPlayer().playCard();
