@@ -34,6 +34,13 @@ public class HardDwarfComputer extends Computer {
 	private static final float PATHCARD_OPENSIDES = 0.5f;
 	private static final int PATHCARD_FIXHOLE = 80;
 	private static final int SABOTAGE = 1;
+	private static final float TRASH_COLLAPSE = -25f;
+	private static final float TRASH_CUL_DE_SAC = 0f;
+	private static final float TRASH_PATHCARD = -5f;
+	private static final float TRASH_SABOTAGECARD = -10f;
+	private static final float TRASH_DOUBLERESCUECARD = -20f;
+	private static final float TRASH_RESCUECARD = -19f;
+	private static final Float TRASH_PLANCARD = 0f;
 	
 	
 	@Override
@@ -73,7 +80,6 @@ public class HardDwarfComputer extends Computer {
 						}
 					}
 					else if(artificialIntelligence.canPlayThere(currentPosition) && allClosestPosition.get(0).getTaxiDistance(goldCardPosition) < 2){
-						System.out.println("peux jouer " + currentPosition);
 						artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 						((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(currentPosition));
 						((OperationActionCardToBoard) o).setPositionDestination(currentPosition);
@@ -91,19 +97,18 @@ public class HardDwarfComputer extends Computer {
 			}
 		}
 		if(!atLeastOne){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -25f);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_COLLAPSE);
 		}
 
 	}
 
 	@Override
 	void operationPathCard(Operation o) {
-		System.out.println("PathCard = " + o.getCard() + " " + ((PathCard)o.getCard()).isCulDeSac() + " " + artificialIntelligence.getHandicaps().size());
 		if(((PathCard) o.getCard()).isCulDeSac()){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_CUL_DE_SAC);
 		}
 		else if(!(artificialIntelligence.getHandicaps().size() == 0)){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -5f);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_PATHCARD);
 		}
 		else{
 			Position estimatedGoldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
@@ -114,14 +119,11 @@ public class HardDwarfComputer extends Computer {
 			boolean atLeastOneOperation = false;
 			
 			if(minimumFromStart == Board.IMPOSSIBLE_PATH){
-				System.out.println("pas possible depuis début");
 				if(minimumFromAnywhere == Board.IMPOSSIBLE_PATH){
-					System.out.println("pas possible du tout");
 					//There is a loop, can't progress
 					//Do nothing
 				}
 				else{
-					System.out.println("Loop at start");
 					//There is a loop at the start
 					//Trying to improve min2
 					LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
@@ -146,7 +148,6 @@ public class HardDwarfComputer extends Computer {
 			}
 			else if(minimumFromStart == minimumFromAnywhere){ //There is no hole
 				//Trying to improve min2
-				System.out.println("No hole");
 				LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 				for(OperationPathCard currentOp : allOperationsForThisCard){
 					
@@ -168,7 +169,6 @@ public class HardDwarfComputer extends Computer {
 			}
 			else{ // There is a hole
 				//Trying to fix the hole
-				System.out.println("Hole");
 				LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 				for(OperationPathCard currentOp : allOperationsForThisCard){
 					board.temporarAddCard(currentOp);
@@ -197,8 +197,7 @@ public class HardDwarfComputer extends Computer {
 				}
 			}
 			if(!atLeastOneOperation){
-				System.out.println("Pas possible");
-				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), -5f);
+				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_PATHCARD);
 			}
 		}
 
@@ -208,7 +207,7 @@ public class HardDwarfComputer extends Computer {
 	void operationSabotageCard(Operation o) {
 		LinkedList<Player> mostLikelySaboteurPlayers = artificialIntelligence.getAllMostLikelySaboteurPlayersHardAI(false);
 		if(mostLikelySaboteurPlayers.size() == 0 || (mostLikelySaboteurPlayers.size() == 1 && mostLikelySaboteurPlayers.get(0) == artificialIntelligence)){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -10);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) TRASH_SABOTAGECARD);
 		}
 		else{
 			boolean atLeastOne = false;
@@ -221,7 +220,7 @@ public class HardDwarfComputer extends Computer {
 				}
 			}
 			if(!atLeastOne){ /* Trash */
-				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -10);
+				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) TRASH_SABOTAGECARD);
 			}
 		}
 	}
@@ -230,7 +229,7 @@ public class HardDwarfComputer extends Computer {
 	void operationDoubleRescueCard(Operation o) {
 		LinkedList<Player> mostLikelyDwarfPlayers = artificialIntelligence.getAllMostLikelyDwarfPlayersHardAI(true);
 		if(mostLikelyDwarfPlayers.size() == 0){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -19);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) TRASH_DOUBLERESCUECARD);
 		}
 		else{
 			boolean atLeastOne = false;
@@ -259,7 +258,7 @@ public class HardDwarfComputer extends Computer {
 				}
 			}
 			if(!atLeastOne){
-				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -19);
+				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) TRASH_DOUBLERESCUECARD);
 			}
 		}
 	}
@@ -268,7 +267,7 @@ public class HardDwarfComputer extends Computer {
 	void operationRescueCard(Operation o) {
 		LinkedList<Player> mostLikelyDwarfPlayers = artificialIntelligence.getAllMostLikelyDwarfPlayersHardAI(true);
 		if(mostLikelyDwarfPlayers.size() == 0){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) TRASH_RESCUECARD);
 		}
 		else{
 			boolean atLeastOne = false;
@@ -287,7 +286,7 @@ public class HardDwarfComputer extends Computer {
 				}
 			}
 			if(!atLeastOne){
-				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
+				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) TRASH_RESCUECARD);
 			}
 		}
 	}
@@ -302,7 +301,7 @@ public class HardDwarfComputer extends Computer {
 		}
 		else{
 			// Trash
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), 0f);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_PLANCARD);
 		}
 	}
 

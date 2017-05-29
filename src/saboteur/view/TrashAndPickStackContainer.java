@@ -83,7 +83,6 @@ public class TrashAndPickStackContainer extends VBox{
 	}
 
 	public void setEmptyTrash(boolean isEmpty){
-		System.out.println(isEmpty);
 		if (isEmpty){
 			this.trashButton.getStyleClass().remove("has-card");
 		} else{
