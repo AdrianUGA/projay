@@ -150,6 +150,7 @@ public class Game {
 		this.currentPlayerIndex = 0;
 		this.newRound();
 //		this.loadConfig("almostFinished");
+//		this.loadConfig("testMachineEtat");
 	}
 
 	/**
