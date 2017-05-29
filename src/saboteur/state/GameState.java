@@ -118,7 +118,7 @@ public class GameState extends State{
             double margin = gameComponentsSize.getDefaultMargin();
                         
             //Cards of current player
-            this.gameCardContainer = new GameCardContainer(this.game, gameComponentsSize.getScreenWidth() - gameComponentsSize.getGameTableSize() - margin);
+            this.gameCardContainer = new GameCardContainer(this.game);
             this.gameCardContainer.setId("gameCardContainer");
             BorderPane.setMargin(this.gameCardContainer, new Insets(0.0, margin, margin, 0.0));
             
@@ -148,20 +148,20 @@ public class GameState extends State{
     		this.roundNum.getStyleClass().add("round-text");
             
             VBox roundAndButtonContainer = new VBox(this.undoRedoButtonContainer, this.roundNum);
-            roundAndButtonContainer.setSpacing(10.0);
+            roundAndButtonContainer.setSpacing(gameComponentsSize.getDefaultSpacing());
             
             AnchorPane stackAndButtonContainer = new AnchorPane(roundAndButtonContainer, this.trashAndPickStackContainer);
-            AnchorPane.setRightAnchor(this.trashAndPickStackContainer, 30.0);
-            AnchorPane.setTopAnchor(this.trashAndPickStackContainer, 30.0);
-            AnchorPane.setLeftAnchor(roundAndButtonContainer, 0.0);
-            AnchorPane.setTopAnchor(roundAndButtonContainer, 30.0);
+            AnchorPane.setRightAnchor(this.trashAndPickStackContainer, gameComponentsSize.getDefaultMargin());
+            AnchorPane.setTopAnchor(this.trashAndPickStackContainer, gameComponentsSize.getDefaultMargin());
+            AnchorPane.setTopAnchor(roundAndButtonContainer, gameComponentsSize.getDefaultMargin());
             
             this.gameBorderPane.setTop(stackAndButtonContainer);
             this.gameBorderPane.setBottom(this.gameCardContainer);
         	this.gameBorderPane.setCenter(this.playerRoleContainer);
            
             this.gameBorderPane.setLayoutX(gameComponentsSize.getGameTableSize());
-            this.gameBorderPane.setPrefHeight(gameComponentsSize.getScreenHeight());
+            this.gameBorderPane.setPrefHeight(gameComponentsSize.getGameBorderPaneHeight());
+            this.gameBorderPane.setPrefWidth(gameComponentsSize.getGameBorderPaneWidth());
             
             // ******************** end ********************
             this.menuButtonContainer.toFront();
