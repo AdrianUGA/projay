@@ -13,6 +13,7 @@ public abstract class State {
     protected Game game;
     protected Stage primaryStage;
 
+
     public State(GameStateMachine gsm, Game game, Stage primaryStage){
         this.gsm = gsm;
         this.game = game;

@@ -1,16 +1,10 @@
 package saboteur.state;
 
 import java.io.IOException;
-
-import org.hamcrest.core.IsInstanceOf;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -18,11 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import saboteur.App;
 import saboteur.GameStateMachine;
@@ -83,7 +73,6 @@ public class GameState extends State{
     }
 
     private void initGame(){
-        
         //this.game.initAI();
         try{
             this.loader = new FXMLLoader();
