@@ -1,6 +1,9 @@
 package saboteur.state;
 
 import java.io.IOException;
+
+import org.hamcrest.core.IsInstanceOf;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -168,11 +171,21 @@ public class GameState extends State{
             pane.setMaxHeight(gameComponentsSize.getScreenHeight());
             pane.setMaxWidth(gameComponentsSize.getScreenWidth());
                         
+//            nodeBorder(pane);
+            
             this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();
         }
     }
+    
+//    private void nodeBorder(Pane pane){
+//    	pane.setStyle("-fx-border-color : black");
+//    	for(Node n : pane.getChildren()) {
+//    		if(n instanceof Pane)
+//    			nodeBorder((Pane) n );
+//    	}
+//    }
 
     private void undoButtonAction() {
     	this.game.undo();

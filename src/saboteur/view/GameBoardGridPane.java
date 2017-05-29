@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.util.Duration;
@@ -102,7 +103,9 @@ public class GameBoardGridPane extends GridPane {
 					}
 				}
 				this.imagesOfGridPane[i][j] = img;
-				this.add(img, i, j);
+				StackPane cell = new StackPane(img);
+				cell.getStyleClass().add("cell");
+				this.add(cell, i, j);
         	}
         }
     	// Set Layout acording to the number of card on the board
