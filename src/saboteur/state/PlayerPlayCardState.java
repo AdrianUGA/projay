@@ -82,6 +82,8 @@ public class PlayerPlayCardState extends State{
 
     private void pickCard(){
 		OperationPick op = (OperationPick) this.game.getCurrentPlayer().pickCard();
+		this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
+		this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
 		//Pick card animation
 		if (op != null){
 			ImageView clone = this.trashAndPickStackContainer.getCloneOfCard();
@@ -92,8 +94,7 @@ public class PlayerPlayCardState extends State{
 				} else{
 					cardContainer.hideCards();
 				}
-				this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
-				this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
+
 				PauseTransition pt = new PauseTransition(Duration.millis(1500));
 				pt.setOnFinished(event1 -> {
 					((Pane)clone.getParent()).getChildren().remove(clone);
