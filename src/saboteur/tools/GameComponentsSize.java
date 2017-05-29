@@ -34,6 +34,10 @@ public class GameComponentsSize {
 
 	private double layoutXOfPickStack;
 	private double layoutYOfPickStack;
+
+	private double gameCardContainerMultiplier;
+	private double layoutXOfGameCardContainer;
+	private double layoutYOfGameCardContainer;
 	
 	private static GameComponentsSize size;
 	
@@ -69,6 +73,11 @@ public class GameComponentsSize {
         //X and Y of pick stack
         this.layoutXOfPickStack = this.gameTableSize + this.gameBorderPaneWidth - this.defaultMargin - this.cardWidth;
         this.layoutYOfPickStack = this.defaultMargin + this.cardHeight + this.defaultSpacing;
+        
+        //X, Y layout and card size of gameCardContainer
+        this.gameCardContainerMultiplier = 1.1;
+        this.layoutXOfGameCardContainer = this.gameTableSize;
+        this.layoutYOfGameCardContainer = this.gameTableSize - this.defaultMargin - this.cardHeight * this.gameCardContainerMultiplier;
          
 	}
 
@@ -161,5 +170,17 @@ public class GameComponentsSize {
 
 	public double getLayoutYOfPickStack() {
 		return layoutYOfPickStack;
+	}
+
+	public double getGameCardContainerMultiplier() {
+		return gameCardContainerMultiplier;
+	}
+
+	public double getLayoutXOfGameCardContainer() {
+		return layoutXOfGameCardContainer;
+	}
+
+	public double getLayoutYOfGameCardContainer() {
+		return layoutYOfGameCardContainer;
 	}
 }

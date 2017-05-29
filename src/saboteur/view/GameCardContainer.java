@@ -31,8 +31,8 @@ public class GameCardContainer extends HBox {
         
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
         	this.handCardsImages[i] = new ImageView();
-        	this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.1);
-        	this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.1);
+        	this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*GameComponentsSize.getGameComponentSize().getGameCardContainerMultiplier());
+        	this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*GameComponentsSize.getGameComponentSize().getGameCardContainerMultiplier());
         }
         
         this.allCards = Resources.getImage();
