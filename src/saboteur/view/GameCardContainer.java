@@ -20,19 +20,21 @@ public class GameCardContainer extends HBox {
 	private ImageView imgSelectedCard = new ImageView();
 	private Card selectedCard = null;
 	private Game game;
+	private GameComponentsSize gameComponentsSize;
 	
 	private LinkedHashMap<String, Image> allCards;
 	
 	public GameCardContainer(Game game){
 		this.game = game;
-        this.setPrefWidth(GameComponentsSize.getGameComponentSize().getGameCardContainerWidth());
+		this.gameComponentsSize = GameComponentsSize.getGameComponentSize();
+        this.setPrefWidth(this.gameComponentsSize.getGameCardContainerWidth());
         this.setAlignment(Pos.CENTER_RIGHT);
-        this.setSpacing(GameComponentsSize.getGameComponentSize().getDefaultSpacing());
+        this.setSpacing(this.gameComponentsSize.getDefaultSpacing());
         
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
         	this.handCardsImages[i] = new ImageView();
-        	this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*GameComponentsSize.getGameComponentSize().getGameCardContainerMultiplier());
-        	this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*GameComponentsSize.getGameComponentSize().getGameCardContainerMultiplier());
+        	this.handCardsImages[i].setFitWidth(this.gameComponentsSize.getCardWidth() * this.gameComponentsSize.getGameCardContainerMultiplier());
+        	this.handCardsImages[i].setFitHeight(this.gameComponentsSize.getCardHeight() * this.gameComponentsSize.getGameCardContainerMultiplier());
         }
         
         this.allCards = Resources.getImage();
@@ -42,8 +44,8 @@ public class GameCardContainer extends HBox {
     	this.getChildren().removeAll(this.handCardsImages);
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
 			this.handCardsImages[i] = new ImageView();
-			this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.1);
-			this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.1);
+			this.handCardsImages[i].setFitWidth(this.gameComponentsSize.getCardWidth() * this.gameComponentsSize.getGameCardContainerMultiplier());
+			this.handCardsImages[i].setFitHeight(this.gameComponentsSize.getCardHeight() * this.gameComponentsSize.getGameCardContainerMultiplier());
     		this.handCardsImages[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getFrontImage()));
         	this.getChildren().add(this.handCardsImages[i]);
         }
@@ -53,8 +55,8 @@ public class GameCardContainer extends HBox {
     	this.getChildren().removeAll(this.handCardsImages);
     	for(int i = 0; i < this.game.getCurrentPlayer().getHand().size(); i++) {
 			this.handCardsImages[i] = new ImageView();
-			this.handCardsImages[i].setFitWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.1);
-			this.handCardsImages[i].setFitHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.1);
+			this.handCardsImages[i].setFitWidth(this.gameComponentsSize.getCardWidth() * this.gameComponentsSize.getGameCardContainerMultiplier());
+			this.handCardsImages[i].setFitHeight(this.gameComponentsSize.getCardHeight() * this.gameComponentsSize.getGameCardContainerMultiplier());
     		this.handCardsImages[i].setImage(this.allCards.get(this.game.getCurrentPlayer().getHand().get(i).getBackImage()));
         	this.getChildren().add(this.handCardsImages[i]);
         }
@@ -116,8 +118,8 @@ public class GameCardContainer extends HBox {
 		TranslateTransition tt = new TranslateTransition(Duration.millis(800), this.handCardsImages[indexOfCard]);
 		tt.setFromX(0);
 		tt.setFromY(0);
-		tt.setToX(GameComponentsSize.getGameComponentSize().getLayoutXOfTrashStack());
-		tt.setToY(GameComponentsSize.getGameComponentSize().getLayoutYOfTrashStack());
+		tt.setToX(this.gameComponentsSize.getLayoutXOfTrashStack() - (this.gameComponentsSize.getLayoutXOfGameCardContainer() + this.handCardsImages[indexOfCard].getLayoutX()));
+		tt.setToY(this.gameComponentsSize.getLayoutYOfTrashStack() - (this.gameComponentsSize.getLayoutYOfGameCardContainer() + this.handCardsImages[indexOfCard].getLayoutY()));
 
 		pt.getChildren().addAll(sequence, tt);
 		pt.setOnFinished(onFinished);
