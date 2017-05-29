@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 
 public class Resources {
@@ -77,7 +78,7 @@ public class Resources {
                 Files.walk(pathMusicFolder)
                         .filter(Files::isRegularFile)
                         .forEach(path -> music.add(new MediaPlayer(new Media((path.toUri().toString())))));
-
+                Collections.shuffle(music);
                 for (int i = 0; i < music.size(); i++) {
                     music.get(i).setOnEndOfMedia(new Runnable() {
                         @Override
