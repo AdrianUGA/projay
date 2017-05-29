@@ -90,32 +90,32 @@
                   <Insets bottom="5.0" top="5.0" />
                </VBox.margin>
             </HBox>
-            <HBox alignment="CENTER" onMouseClicked="#scoreButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
-               <children>
-                  <ImageView fitHeight="55.0" fitWidth="60.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">
-                     <HBox.margin>
-                        <Insets right="20.0" />
-                     </HBox.margin>
-                     <image>
-                        <Image url="@../../resources/pioche.png" />
-                     </image>
-                  </ImageView>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Scores" textAlignment="CENTER">
-                     <font>
-                        <Font size="20.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
-                     </HBox.margin>
-                  </Text>
-               </children>
-               <padding>
-                  <Insets bottom="5.0" top="5.0" />
-               </padding>
-               <VBox.margin>
-                  <Insets bottom="5.0" top="5.0" />
-               </VBox.margin>
-            </HBox>
+            <!--<HBox alignment="CENTER" onMouseClicked="#scoreButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">-->
+               <!--<children>-->
+                  <!--<ImageView fitHeight="55.0" fitWidth="60.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">-->
+                     <!--<HBox.margin>-->
+                        <!--<Insets right="20.0" />-->
+                     <!--</HBox.margin>-->
+                     <!--<image>-->
+                        <!--<Image url="@../../resources/pioche.png" />-->
+                     <!--</image>-->
+                  <!--</ImageView>-->
+                  <!--<Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 3em;" text="Scores" textAlignment="CENTER">-->
+                     <!--<font>-->
+                        <!--<Font size="20.0" />-->
+                     <!--</font>-->
+                     <!--<HBox.margin>-->
+                        <!--<Insets bottom="5.0" top="5.0" />-->
+                     <!--</HBox.margin>-->
+                  <!--</Text>-->
+               <!--</children>-->
+               <!--<padding>-->
+                  <!--<Insets bottom="5.0" top="5.0" />-->
+               <!--</padding>-->
+               <!--<VBox.margin>-->
+                  <!--<Insets bottom="5.0" top="5.0" />-->
+               <!--</VBox.margin>-->
+            <!--</HBox>-->
             <HBox alignment="CENTER" onMouseClicked="#helpButtonAction" onMouseEntered="#mouseOn" onMouseExited="#mouseOut">
                <children>
                   <ImageView fitHeight="55.0" fitWidth="60.0" opacity="0.0" pickOnBounds="true" preserveRatio="true">

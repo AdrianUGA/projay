@@ -37,7 +37,6 @@ public class Loader {
                     .filter(Files::isRegularFile)
                     .forEach(path -> savedFiles.add(path.getFileName().toString()));
         } catch (IOException e) {
-            e.printStackTrace();
         }
         return savedFiles;
     }

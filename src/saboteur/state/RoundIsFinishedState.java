@@ -44,8 +44,7 @@ public class RoundIsFinishedState extends State{
 
     @Override
     public void onEnter(Object param) {
-    	gsm.pop();
-        /*try {
+        try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(App.class.getResource("/saboteur/view/modalRoundIsFinished.fxml"));
             loader.setController(this);
@@ -75,7 +74,7 @@ public class RoundIsFinishedState extends State{
             root.getChildren().add(this.modalPane);
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
 
     }
 

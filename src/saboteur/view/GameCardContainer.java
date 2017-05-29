@@ -9,7 +9,6 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 import saboteur.model.Game;
 import saboteur.model.Card.Card;
