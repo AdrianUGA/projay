@@ -29,15 +29,17 @@ public class GameComponentsSize {
 	
 	private double gameCardContainerWidth;
 
+	private double trashAndPickStackContainerMultiplier;
+	private double gameCardContainerMultiplier;
+	
 	private double layoutXOfTrashStack;
 	private double layoutYOfTrashStack;
-
 	private double layoutXOfPickStack;
 	private double layoutYOfPickStack;
 
-	private double gameCardContainerMultiplier;
 	private double layoutXOfGameCardContainer;
 	private double layoutYOfGameCardContainer;
+
 	
 	private static GameComponentsSize size;
 	
@@ -66,16 +68,18 @@ public class GameComponentsSize {
         //gameCardContainer
         this.gameCardContainerWidth = this.getScreenWidth() - this.gameTableSize - this.defaultMargin;
         
+        //multiplier
+        this.trashAndPickStackContainerMultiplier = 1.5;
+        this.gameCardContainerMultiplier = 1.1;
         //X and Y of trash stack
-        this.layoutXOfTrashStack = this.gameTableSize + this.gameBorderPaneWidth - this.defaultMargin - this.cardWidth;
+        this.layoutXOfTrashStack = this.gameTableSize + this.gameBorderPaneWidth - this.defaultMargin - this.cardWidth * this.trashAndPickStackContainerMultiplier;
         this.layoutYOfTrashStack = this.defaultMargin;
         
         //X and Y of pick stack
-        this.layoutXOfPickStack = this.gameTableSize + this.gameBorderPaneWidth - this.defaultMargin - this.cardWidth;
+        this.layoutXOfPickStack = this.gameTableSize + this.gameBorderPaneWidth - this.defaultMargin - this.cardWidth * this.trashAndPickStackContainerMultiplier;
         this.layoutYOfPickStack = this.defaultMargin + this.cardHeight + this.defaultSpacing;
         
-        //X, Y layout and card size of gameCardContainer
-        this.gameCardContainerMultiplier = 1.1;
+        //X and Y of game card container
         this.layoutXOfGameCardContainer = this.gameTableSize;
         this.layoutYOfGameCardContainer = this.gameTableSize - this.defaultMargin - this.cardHeight * this.gameCardContainerMultiplier;
          
@@ -137,50 +141,54 @@ public class GameComponentsSize {
 	}
 
 	public double getDefaultMargin() {
-		return defaultMargin;
+		return this.defaultMargin;
 	}
 
 	public double getDefaultSpacing() {
-		return defaultSpacing;
+		return this.defaultSpacing;
 	}
 	
 	public double getGameCardContainerWidth() {
-		return gameCardContainerWidth;
+		return this.gameCardContainerWidth;
 	}
 
 	public double getGameBorderPaneHeight() {
-		return gameBorderPaneHeight;
+		return this.gameBorderPaneHeight;
 	}
 
 	public double getGameBorderPaneWidth() {
-		return gameBorderPaneWidth;
+		return this.gameBorderPaneWidth;
+	}
+
+	public double getTrashAndPickStackContainerMultiplier(){
+		return this.trashAndPickStackContainerMultiplier;
 	}
 	
 	public double getLayoutXOfTrashStack() {
-		return layoutXOfTrashStack;
+		return this.layoutXOfTrashStack;
 	}
 
 	public double getLayoutYOfTrashStack() {
-		return layoutYOfTrashStack;
+		return this.layoutYOfTrashStack;
 	}
 
 	public double getLayoutXOfPickStack() {
-		return layoutXOfPickStack;
+		return this.layoutXOfPickStack;
 	}
 
 	public double getLayoutYOfPickStack() {
-		return layoutYOfPickStack;
+		return this.layoutYOfPickStack;
 	}
 
 	public double getGameCardContainerMultiplier() {
-		return gameCardContainerMultiplier;
+		return this.gameCardContainerMultiplier;
 	}
 
 	public double getLayoutXOfGameCardContainer() {
-		return layoutXOfGameCardContainer;
+		return this.layoutXOfGameCardContainer;
 	}
 
 	public double getLayoutYOfGameCardContainer() {
-		return layoutYOfGameCardContainer;
+		return this.layoutYOfGameCardContainer;
 	}
 }
