@@ -13,7 +13,6 @@ import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.model.Operation;
 import saboteur.model.Card.Card;
-import saboteur.model.Player;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
@@ -134,7 +133,7 @@ public class PlayerWaitState extends State{
 			public void handle(MouseEvent event) {
 				Operation op = game.getCurrentPlayer().playCard();
 				gsm.changePeek("playerPlayCard", op);
-				
+
 				trashAndPickStackContainer.disableTrashButton();
 			}
 		};

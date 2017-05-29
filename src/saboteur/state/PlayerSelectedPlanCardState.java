@@ -2,14 +2,12 @@ package saboteur.state;
 
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
 import saboteur.GameStateMachine;
@@ -87,12 +85,7 @@ public class PlayerSelectedPlanCardState extends State{
         	this.paneOfGoalCard[i].getChildren().add(svg);
         	
         	//Add Action
-        	this.paneOfGoalCard[i].setOnMouseClicked(new EventHandler<MouseEvent>(){
-				@Override
-				public void handle(MouseEvent event) {
-					selectGoalCard(event);
-				}
-			});
+        	this.paneOfGoalCard[i].setOnMouseClicked(event -> selectGoalCard(event));
         	i++;        	
     	}
     }

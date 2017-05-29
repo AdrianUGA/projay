@@ -79,20 +79,14 @@ public class Resources {
                         .forEach(path -> music.add(new MediaPlayer(new Media((path.toUri().toString())))));
 
                 for (int i = 0; i < music.size(); i++) {
-                    music.get(i).setOnEndOfMedia(new Runnable() {
-                        @Override
-                        public void run() {
-                            music.get(j).stop();
-                            j= (j+1) % (music.size()-1);
-                            music.get(j).play();
-                        }
+                    music.get(i).setOnEndOfMedia(() -> {
+                        music.get(j).stop();
+                        j= (j+1) % (music.size()-1);
+                        music.get(j).play();
                     });
-                    music.get(i).setOnPlaying(new Runnable() {
-                        @Override
-                        public void run() {
-                            music.get(k).setVolume(volume);
-                            k++;
-                        }
+                    music.get(i).setOnPlaying(() -> {
+                        music.get(k).setVolume(volume);
+                        k++;
                     });
                 }
 

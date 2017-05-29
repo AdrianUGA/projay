@@ -44,12 +44,7 @@ public class OptionsState extends State {
             Pane pane = loader.load();
             sliderMusic.setValue(Resources.volume*100);
             changeVolume(Resources.volume*100);
-            sliderMusic.valueChangingProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                    changeVolume(sliderMusic.getValue());
-                }
-            });
+            sliderMusic.valueChangingProperty().addListener((observable, oldValue, newValue) -> changeVolume(sliderMusic.getValue()));
             this.changeLayout(pane);
         } catch (IOException e){
             e.printStackTrace();

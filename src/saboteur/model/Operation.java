@@ -30,11 +30,6 @@ public abstract class Operation implements Serializable {
 		return this.sourcePlayer;
 	}
 
-	public Operation setSourcePlayer(Player sourcePlayer) {
-		this.sourcePlayer = sourcePlayer;
-		return this;
-	}
-
 	public Operation setCard(Card card) {
 		this.card = card;
 		return this;

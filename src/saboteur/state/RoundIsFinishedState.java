@@ -3,18 +3,13 @@ package saboteur.state;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.VPos;
-import javafx.scene.Scene;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import saboteur.App;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.model.Player;
-import saboteur.tools.Resources;
 import saboteur.view.ResultPlayer;
 
 import java.io.IOException;

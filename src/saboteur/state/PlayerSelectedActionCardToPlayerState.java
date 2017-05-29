@@ -2,14 +2,10 @@ package saboteur.state;
 
 import java.util.LinkedList;
 
-import javafx.animation.Animation;
-import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import saboteur.GameStateMachine;
 import saboteur.model.Game;
 import saboteur.model.Operation;

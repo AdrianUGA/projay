@@ -869,22 +869,6 @@ public class Game {
 			aPlayerList.setTeam(role);
 		}
 	}
-	
-	public boolean isTeamWinnerAlreadyAnnounced() {
-		return teamWinnerAlreadyAnnounced;
-	}
-
-	public void setTeamWinnerAlreadyAnnounced(boolean teamWinnerAlreadyAnnounced) {
-		this.teamWinnerAlreadyAnnounced = teamWinnerAlreadyAnnounced;
-	}
-
-	public boolean isPlayerWinnerAlreadyAnnounced() {
-		return playerWinnerAlreadyAnnounced;
-	}
-
-	public void setPlayerWinnerAlreadyAnnounced(boolean playerWinnerAlreadyAnnounced) {
-		this.playerWinnerAlreadyAnnounced = playerWinnerAlreadyAnnounced;
-	}
 
 	public void notifyAINoGoldThere(Position p) {
 		for(Player player : playerList){
