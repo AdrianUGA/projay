@@ -116,11 +116,15 @@ public class GameCardContainer extends HBox {
 		TranslateTransition tt = new TranslateTransition(Duration.millis(800), this.handCardsImages[indexOfCard]);
 		tt.setFromX(0);
 		tt.setFromY(0);
-		tt.setToX(600);
-		tt.setToY(-700);
+		tt.setToX(GameComponentsSize.getGameComponentSize().getLayoutXOfTrashStack());
+		tt.setToY(GameComponentsSize.getGameComponentSize().getLayoutYOfTrashStack());
 
 		pt.getChildren().addAll(sequence, tt);
 		pt.setOnFinished(onFinished);
 		pt.play();
+	}
+
+	public void animateCard(int indexOfCard, EventHandler onFinished){
+		
 	}
 }

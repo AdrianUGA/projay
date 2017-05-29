@@ -69,35 +69,26 @@ public class PlayerPlayCardState extends State{
 		this.trashAndPickStackContainer.disableTrashButton();
 		this.trashAndPickStackContainer.setEmptyTrash(this.game.trashIsEmpty());
 
-		cardContainer.setOnMouseClicked(null);
-
+		this.cardContainer.setOnMouseClicked(null);
 		this.cardContainer.removeSelection();
 
 		this.gameBoardGridPane.generateBoard();
 		this.playersArc.refreshPlayersArcsAndCircles();
 
-		EventHandler<ActionEvent> onFinished = event -> {
+		EventHandler<ActionEvent> pickCardEvent = event -> {
 			this.pickCard();
 		};
 
-		System.out.println(o);
-		//Operation card animation
-		if (o.isOperationPathCard()){
-			OperationPathCard op = (OperationPathCard) o;
-			this.gameBoardGridPane.animatePathCard(op.getP(), onFinished);
-		} else if (o.isOperationTrash()){
+		EventHandler<ActionEvent> operationAnimationEvent = event -> {
+			this.operationAnimation(o, pickCardEvent);
+		};
+
+
+		if (o.isOperationTrash()){
 			OperationTrash op = (OperationTrash) o;
-//			this.cardContainer.animateCardToTrash(op.getIndexOfCardInHandPlayer(), onFinished);
-		} else if (o.isOperationActionCardToPlayer()){
-			OperationActionCardToPlayer op = (OperationActionCardToPlayer) o;
-			this.playersArc.animateCircle(op.getDestinationPlayer(), op.getToolDestination(), onFinished);
-		} else if (o.isOperationActionCardToBoard()){
-			OperationActionCardToBoard op = (OperationActionCardToBoard) o;
-			if (op.getCard().isCollapseCard()){
-				this.gameBoardGridPane.animateCollapseCard(op.getDestinationCard(), op.getPositionDestination(), onFinished);
-			} else{
-				this.gameBoardGridPane.animateGoalCard(op.getPositionDestination(), onFinished);
-			}
+			this.cardContainer.animateCardToTrash(op.getIndexOfCardInHandPlayer(), pickCardEvent);
+		} else{
+			this.cardContainer.animateCard(o.getIndexOfCardInHandPlayer(), operationAnimationEvent);
 		}
 
 		this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
@@ -129,6 +120,24 @@ public class PlayerPlayCardState extends State{
 			this.trashAndPickStackContainer.animateStack(clone, onFinished);
 		} else{
 			gsm.pop();
+		}
+	}
+
+	private void operationAnimation(Operation o, EventHandler onFinished){
+		//Operation card animation
+		if (o.isOperationPathCard()){
+			OperationPathCard op = (OperationPathCard) o;
+			this.gameBoardGridPane.animatePathCard(op.getP(), onFinished);
+		} else if (o.isOperationActionCardToPlayer()){
+			OperationActionCardToPlayer op = (OperationActionCardToPlayer) o;
+			this.playersArc.animateCircle(op.getDestinationPlayer(), op.getToolDestination(), onFinished);
+		} else if (o.isOperationActionCardToBoard()){
+			OperationActionCardToBoard op = (OperationActionCardToBoard) o;
+			if (op.getCard().isCollapseCard()){
+				this.gameBoardGridPane.animateCollapseCard(op.getDestinationCard(), op.getPositionDestination(), onFinished);
+			} else{
+				this.gameBoardGridPane.animateGoalCard(op.getPositionDestination(), onFinished);
+			}
 		}
 	}
 }
