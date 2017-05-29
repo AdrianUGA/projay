@@ -19,9 +19,9 @@ public class OperationActionCardToBoard extends Operation {
 		this.getSourcePlayer().removeHandCard(this.getCard());
 		
 		//Execution different if actionCard is a collapseCard or a planCard
-		if (sourceCard.isCollapse()){
+		this.positionDestination = game.getBoard().getPosition(destinationCard);
+		if (sourceCard.isCollapseCard()){
 			if (!destinationCard.isStart() && !destinationCard.isGoal()){
-				this.positionDestination = game.getBoard().getPosition(destinationCard);		
 				game.getBoard().removeCard(this.positionDestination);
 			}
 		} else {
@@ -39,7 +39,7 @@ public class OperationActionCardToBoard extends Operation {
 		this.getSourcePlayer().addHandCard(this.getCard());
 		
 		//Execution different if actionCard is a collapseCard or a planCard
-		if (sourceCard.isCollapse()){
+		if (sourceCard.isCollapseCard()){
 			if (!destinationCard.isStart() && !destinationCard.isGoal()){	
 				game.getBoard().addCard(destinationCard, this.positionDestination);
 			}

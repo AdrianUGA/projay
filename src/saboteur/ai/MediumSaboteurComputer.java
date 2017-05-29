@@ -4,6 +4,11 @@ import saboteur.model.Operation;
 
 public class MediumSaboteurComputer extends Computer {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6555103036273509392L;
+
 	@Override
 	void operationCollapseCard(Operation o) {
 		// TODO Auto-generated method stub

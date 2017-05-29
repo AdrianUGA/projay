@@ -64,10 +64,9 @@ public class PlayerBeginOfTurnState extends State{
 
             if(this.game.getCurrentPlayer().isAI()){
                 this.goButtonContainer.setVisible(false);
-                PauseTransition pt = new PauseTransition(Duration.millis(2000));
-                pt.setOnFinished(event -> {
-                    goButtonAction();
-                });
+
+                PauseTransition pt = new PauseTransition(Duration.millis(1000));
+                pt.setOnFinished(event -> goButtonAction());
                 pt.play();
             }
 

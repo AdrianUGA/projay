@@ -19,18 +19,19 @@ import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import saboteur.GameStateMachine;
+import saboteur.model.*;
 import saboteur.model.Card.Card;
-import saboteur.model.Game;
-import saboteur.model.Operation;
-import saboteur.model.OperationPick;
-import saboteur.model.Team;
+import saboteur.tools.Resources;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 import saboteur.view.TrashAndPickStackContainer;
 
+import javax.swing.*;
+
 public class PlayerPlayCardState extends State{
 
+	private Pane mainContainer;
 	private GameCardContainer cardContainer;
 	private PlayerArc playersArc;
 	private GameBoardGridPane gameBoardGridPane;
@@ -38,10 +39,6 @@ public class PlayerPlayCardState extends State{
 
 	private Label playerRoleLabel;
 	private ImageView playerRoleImage;
-
-	private ImageView trash;
-	private ImageView stack;
-
 
     public PlayerPlayCardState(GameStateMachine gsm, Game game, Stage primaryStage){
         super(gsm, game, primaryStage);
@@ -61,71 +58,88 @@ public class PlayerPlayCardState extends State{
     public void onEnter(Object param) {
     	Operation o = (Operation) param;
 
+    	this.mainContainer = (Pane)this.primaryStage.getScene().lookup("#mainContainer");
     	this.cardContainer = (GameCardContainer)this.primaryStage.getScene().lookup("#gameCardContainer");
     	this.playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
     	this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
     	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
     	this.playerRoleLabel = (Label) this.primaryStage.getScene().lookup("#playerRoleLabel");
     	this.playerRoleImage = (ImageView) this.primaryStage.getScene().lookup("#playerRoleImage");
-    	this.trash = (ImageView) this.primaryStage.getScene().lookup("#trash");
-    	this.stack = (ImageView) this.primaryStage.getScene().lookup("#stack");
 
 		this.trashAndPickStackContainer.disableTrashButton();
-		System.out.println(this.game.trashIsEmpty());
 		this.trashAndPickStackContainer.setEmptyTrash(this.game.trashIsEmpty());
 
-		cardContainer.setOnMouseClicked(null);
-
+		this.cardContainer.setOnMouseClicked(null);
 		this.cardContainer.removeSelection();
 
 		this.gameBoardGridPane.generateBoard();
 		this.playersArc.refreshPlayersArcsAndCircles();
 
-		//Operation card animation
+		EventHandler<ActionEvent> pickCardEvent = event -> {
+			this.pickCard();
+		};
 
-    	//Pick card animation
-		OperationPick op = (OperationPick) this.game.getCurrentPlayer().pickCard();
-		this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
-		this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
+		EventHandler<ActionEvent> operationAnimationEvent = event -> {
 
-		if (this.game.getCurrentPlayer().isHuman()){
-			cardContainer.showCards();
+			this.operationAnimation(o, pickCardEvent);
+		};
+
+
+		if (o.isOperationTrash()){
+			OperationTrash op = (OperationTrash) o;
+			this.cardContainer.animateCardToTrash(op.getIndexOfCardInHandPlayer(), pickCardEvent);
+		} else{
+			this.cardContainer.animateCard(o.getCard(), o.getIndexOfCardInHandPlayer(), operationAnimationEvent);
 		}
-
-//		ScaleTransition st = new ScaleTransition(Duration.millis(400), this.stack);
-//		st.setByX(0.3f);
-//		st.setByY(0.3f);
-//		st.setCycleCount(2);
-//		st.setAutoReverse(true);
-//		st.setInterpolator(Interpolator.EASE_IN);
-//		st.play();
-//		ImageView cloneStack = new ImageView(this.stack.getImage());
-//		cloneStack.setLayoutX(this.stack.getLayoutX());
-//		cloneStack.setLayoutY(this.stack.getLayoutY());
-//		((Pane)this.stack.getParent()).getChildren().add(cloneStack);
-//		TranslateTransition tt = new TranslateTransition(Duration.millis(400), cloneStack);
-//		tt.setFromX(0);
-//		tt.setFromY(0);
-//		tt.setToX(-500);
-//
-//		RotateTransition rt = new RotateTransition(Duration.millis(600), cloneStack);
-//		rt.setAxis(Rotate.Y_AXIS);
-//		rt.setFromAngle(0);
-//		rt.setToAngle(360);
-//		rt.setCycleCount(3);
-//		rt.setInterpolator(Interpolator.LINEAR);
-//
-//		ParallelTransition pt = new ParallelTransition(rt, tt);
-//		pt.setOnFinished(event -> {
-//			((Pane)this.stack.getParent()).getChildren().remove(cloneStack);
-//			this.gsm.pop();
-//		});
-//		pt.play();
-		this.gsm.pop();
 	}
 
     @Override
     public void onExit() {
     	this.game.nextPlayer();
     }
+
+    private void pickCard(){
+		OperationPick op = (OperationPick) this.game.getCurrentPlayer().pickCard();
+		//Pick card animation
+		if (op != null){
+			ImageView clone = this.trashAndPickStackContainer.getCloneOfCard();
+			EventHandler<ActionEvent> onFinished = event -> {
+				if (this.game.getCurrentPlayer().isHuman()){
+					cardContainer.showCards();
+					clone.setImage(Resources.getImage().get(op.getCardPicked().getFrontImage()));
+				} else{
+					cardContainer.hideCards();
+				}
+				this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
+				this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
+				PauseTransition pt = new PauseTransition(Duration.millis(2000));
+				pt.setOnFinished(event1 -> {
+					((Pane)clone.getParent()).getChildren().remove(clone);
+					gsm.pop();
+				});
+				pt.play();
+			};
+			this.trashAndPickStackContainer.animateStack(clone, onFinished);
+		} else{
+			gsm.pop();
+		}
+	}
+
+	private void operationAnimation(Operation o, EventHandler onFinished){
+		//Operation card animation
+		if (o.isOperationPathCard()){
+			OperationPathCard op = (OperationPathCard) o;
+			this.gameBoardGridPane.animatePathCard(op.getP(), onFinished);
+		} else if (o.isOperationActionCardToPlayer()){
+			OperationActionCardToPlayer op = (OperationActionCardToPlayer) o;
+			this.playersArc.animateCircle(op.getDestinationPlayer(), op.getToolDestination(), onFinished);
+		} else if (o.isOperationActionCardToBoard()){
+			OperationActionCardToBoard op = (OperationActionCardToBoard) o;
+			if (op.getCard().isCollapseCard()){
+				this.gameBoardGridPane.animateCollapseCard(op.getDestinationCard(), op.getPositionDestination(), onFinished);
+			} else{
+				this.gameBoardGridPane.animateGoalCard(op.getPositionDestination(), onFinished);
+			}
+		}
+	}
 }

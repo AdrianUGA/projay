@@ -21,16 +21,19 @@ import saboteur.model.Card.SabotageCard;
 
 public class HardDwarfComputer extends Computer {
 
-	public static int RESCUE_ITSELF = 30;
-	public static float HANDICAP_SIZE = 0.5f;
-	public static int RESCUE = 20;
-	public static int DOUBLERESCUE = 19;
-	public static int PLAN = 150;
-	public static int COLLAPSE_CAN_REPLACE = 40;
-	public static int COLLAPSE_CDS = 45;
-	public static int PATHCARD = 10;
-	public static float PATHCARD_OPENSIDES = 0.5f;
-	public static int PATHCARD_FIXHOLE = 80;
+	private static final long serialVersionUID = -7502818089275125621L;
+	
+	private static final int RESCUE_ITSELF = 30;
+	private static final float HANDICAP_SIZE = 0.5f;
+	private static final int RESCUE = 20;
+	private static final int DOUBLERESCUE = 19;
+	private static final int PLAN = 150;
+	private static final int COLLAPSE_CAN_REPLACE = 40;
+	private static final int COLLAPSE_CDS = 45;
+	private static final int PATHCARD = 10;
+	private static final float PATHCARD_OPENSIDES = 0.5f;
+	private static final int PATHCARD_FIXHOLE = 80;
+	private static final int SABOTAGE = 1;
 	
 	
 	@Override
@@ -214,7 +217,7 @@ public class HardDwarfComputer extends Computer {
 				if(p != artificialIntelligence && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 					atLeastOne = true;
-					artificialIntelligence.operationsWeight.put(o, (float) (Maths.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * EasyDwarfComputer.SABOTAGE) * ((3-p.getHandicaps().size())/3));
+					artificialIntelligence.operationsWeight.put(o, (float) (Maths.positiveOrZero(artificialIntelligence.AVERAGE_TRUST - artificialIntelligence.isDwarf.get(p)) * SABOTAGE) * ((3-p.getHandicaps().size())/3));
 				}
 			}
 			if(!atLeastOne){ /* Trash */

@@ -10,7 +10,11 @@ public class OperationActionCardToPlayer extends Operation {
 	
 	public OperationActionCardToPlayer(Player sourcePlayer, Card card, Player destinationPlayer) {
 		super(sourcePlayer, card);
-		this.toolDestination = null;
+		if (card.isRescueCard()){
+			this.toolDestination = ((RescueCard)card).getTool();
+		} else if (card.isSabotageCard()){
+			this.toolDestination = ((SabotageCard)card).getSabotageType();
+		}
 		this.destinationPlayer = destinationPlayer;
 		this.destinationCard = null;
 	}
