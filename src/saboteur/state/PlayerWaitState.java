@@ -1,5 +1,7 @@
 package saboteur.state;
 
+import org.w3c.dom.events.EventException;
+
 import javafx.animation.PauseTransition;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -91,7 +93,7 @@ public class PlayerWaitState extends State{
 				Card selectedCard = null;
         		//take the ref. of the card.
 	        	int i = 0;
-	        	for(Node nodeIn:hb.getChildren()) {
+	        	for(Node nodeIn : hb.getChildren()) {
 	                if( (ImageView)nodeIn == event.getTarget() ){
 	                	selectedCard = this.game.getCurrentPlayer().getHand().get(i);
 	                	this.game.getCurrentPlayer().setSelectedCard(selectedCard);
@@ -137,14 +139,8 @@ public class PlayerWaitState extends State{
 			}
 		};
 		this.trashAndPickStackContainer.setEventToTrashButton(event);
-		
 
-		this.gameCardContainer.setOnMouseClicked(new EventHandler<MouseEvent>(){
-			@Override
-			public void handle(MouseEvent event) {
-				selectCardButtonAction(event);
-			}
-		});
+		this.gameCardContainer.setOnMouseClicked(e -> selectCardButtonAction(e));
 
 		this.gameCardContainer.showCards();
 	}

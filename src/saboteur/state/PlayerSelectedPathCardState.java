@@ -3,6 +3,10 @@ package saboteur.state;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.sun.java.swing.plaf.windows.WindowsInternalFrameTitlePane.ScalableIconUIResource;
+
+import javafx.animation.ScaleTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.image.Image;
@@ -12,6 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import saboteur.GameStateMachine;
 import saboteur.model.*;
 import saboteur.model.Card.Card;
@@ -30,6 +35,7 @@ public class PlayerSelectedPathCardState extends State{
 	private GameBoardGridPane gameBoardGridPane;
 	private List<Position> possiblePositionList;
 	private LinkedHashMap<Position, Object> newBoardEffect;
+	private LinkedHashMap<Position, SVGPath> svgsPosition;
 	private LinkedHashMap<ImageView, Position> positionOfImages;
 	private LinkedHashMap<String, Image> allCards = Resources.getImage();
 	private boolean positionSelected;
@@ -67,8 +73,8 @@ public class PlayerSelectedPathCardState extends State{
 		PlayerArc playersArc = (PlayerArc) this.primaryStage.getScene().lookup("#playersArc");
 		playersArc.refreshPlayersArcsAndCircles();
 
-        double cardWidth = GameComponentsSize.getGameComponentSize().getCardWidth()/3;
-        double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/3;
+        double cardWidth = GameComponentsSize.getGameComponentSize().getCardWidth()/2.7;
+        double cardHeight = GameComponentsSize.getGameComponentSize().getCardHeight()/2.7;
         
 
     	this.trashAndPickStackContainer = (TrashAndPickStackContainer) this.primaryStage.getScene().lookup("#trashAndPickStackContainer");
@@ -79,6 +85,7 @@ public class PlayerSelectedPathCardState extends State{
 
         this.selectedImagePosition = null;
         this.selectedSVGPosition = null;
+		this.svgsPosition = new LinkedHashMap<>();
 		this.positionOfImages = new LinkedHashMap<>();
 		this.positionSelected = false;
         
@@ -102,6 +109,10 @@ public class PlayerSelectedPathCardState extends State{
 					svg.setMouseTransparent(true);
 					GridPane.setHalignment(svg, HPos.CENTER);
 					this.newBoardEffect.put(posiCard, svg);
+					this.svgsPosition.put(posiCard, svg);
+					
+					this.gameBoardGridPane.getImageOfPosition(posiCard).setOnMouseEntered(e -> this.mouseEntered(e));
+					this.gameBoardGridPane.getImageOfPosition(posiCard).setOnMouseExited(e -> this.mouseExited(e));
 					
 					this.positionOfImages.put(this.gameBoardGridPane.getImageOfPosition(posiCard), posiCard);
 					
@@ -127,9 +138,14 @@ public class PlayerSelectedPathCardState extends State{
 				img.setFitHeight(cardHeight);
 				img.setFitWidth(cardWidth);
 				img.setOpacity(0);
+
+				img.setOnMouseEntered(e-> this.mouseEntered(e));
+				img.setOnMouseExited(e-> this.mouseExited(e));
 				
 				this.newBoardEffect.put(posiCard, svg);
 				this.newBoardEffect.put(posiCard, img);
+				
+				this.svgsPosition.put(posiCard, svg);
 				
 				this.positionOfImages.put(img, posiCard);
 
@@ -151,6 +167,7 @@ public class PlayerSelectedPathCardState extends State{
 			}
     	}
 		this.gameBoardGridPane.setOnMouseClicked(null);
+		this.gameBoardGridPane.generateBoard();
     }
     
     private void selectPositionOnBoard(MouseEvent event) {
@@ -234,4 +251,26 @@ public class PlayerSelectedPathCardState extends State{
     	    }
     	});
 	}
+    
+    private void mouseEntered(MouseEvent event) {
+		Position position = this.positionOfImages.get(event.getTarget());
+		SVGPath svg = this.svgsPosition.get(position);
+		ScaleTransition st = new ScaleTransition(Duration.millis(250), svg);
+		st.setFromX(1);
+		st.setFromY(1);
+		st.setByX(0.3f);
+		st.setByY(0.3f);
+		st.play();
+    }
+    
+    private void mouseExited(MouseEvent event) {
+		Position position = this.positionOfImages.get(event.getTarget());
+		SVGPath svg = this.svgsPosition.get(position);
+		ScaleTransition st = new ScaleTransition(Duration.millis(250), svg);
+		st.setFromX(1.3);
+		st.setFromY(1.3);
+		st.setByX(-0.3f);
+		st.setByY(-0.3f);
+		st.play();
+    }
 }

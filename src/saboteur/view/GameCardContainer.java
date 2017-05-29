@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import saboteur.model.Game;
@@ -74,7 +75,7 @@ public class GameCardContainer extends HBox {
 	public Card getSelectedCard() {
 		return selectedCard;
 	}
-
+	
 	public void removeSelection() {
 		if(this.selectedCard != null) {
 			TranslateTransition tt = new TranslateTransition(Duration.millis(200), this.imgSelectedCard);
