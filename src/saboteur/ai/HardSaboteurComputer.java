@@ -1,5 +1,6 @@
 package saboteur.ai;
 
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 
 import saboteur.model.Board;
@@ -16,8 +17,13 @@ import saboteur.model.Card.SabotageCard;
 
 public class HardSaboteurComputer extends Computer {
 	
-	private static final float CUL_DE_SAC_WHEN_AGGRESSIVE = 70f;
-	private static final int DISTANCE_LEFT_BEFORE_PLACE_CULDESAC = 5;
+	private static final long serialVersionUID = -2838550033321889406L;
+	
+	private static final float TRASH_PATHCARD = -1f;
+	private static final float TRASH_CUL_DE_SAC = -50f;
+	private static final float CUL_DE_SAC_WHEN_AGGRESSIVE = 100f;
+	private static final float PATHCARD_WHEN_AGGRESSIVE = 50f;
+	private static final float PATHCARD_WHEN_PASSIVE = 10f;
 	private static final float TRASH_COLLAPSE_CARD = -20;
 	private static final float COLLAPSE_AND_CREATE_HOLE = 90;
 	private static final float DISTANCE_TO_GOAL_FOR_COLLAPSE = 4;
@@ -73,16 +79,64 @@ public class HardSaboteurComputer extends Computer {
 	void operationPathCard(Operation o) {
 		OperationPathCard op = (OperationPathCard)o;
 		PathCard card = (PathCard)op.getCard();
-		if(this.saboteurPlaysAgressive()){
-			if(card.isCulDeSac()){
-				for(Operation p : this.artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(this.artificialIntelligence, card)){
-					this.artificialIntelligence.operationsWeight.put(p, CUL_DE_SAC_WHEN_AGGRESSIVE ); // TODO
+		LinkedHashSet<OperationPathCard> allOperationsForThisCard = this.artificialIntelligence.getGame().getBoard().getPossibleOperationPathCard(this.artificialIntelligence, card);
+		Board board = this.artificialIntelligence.getGame().getBoard();
+		Position estimatedGoldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
+		int currentMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+		boolean atLeastOne = false;
+		
+		if(artificialIntelligence.getHandicaps().size() == 0){
+			if(this.saboteurPlaysAgressive()){
+				if(card.isCulDeSac()){
+					for(OperationPathCard currentOp : allOperationsForThisCard){
+						
+						board.temporarAddCard(currentOp);
+						int nextMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+						board.temporarRemoveCard(currentOp.getP());
+						if(nextMin > currentMin){
+							//CdS is blocking the path
+							atLeastOne = true;
+							this.artificialIntelligence.operationsWeight.put(currentOp, (CUL_DE_SAC_WHEN_AGGRESSIVE / (card.getOpenSides().size() * 0.5f)) * nextMin - currentMin);
+						}
+					}
 				}
-			}else{
-				// TODO
+				else{
+					for(OperationPathCard currentOp : allOperationsForThisCard){
+						
+						board.temporarAddCard(currentOp);
+						int nextMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+						board.temporarRemoveCard(currentOp.getP());
+						if(nextMin > currentMin){
+							//PathCard is increasing the minimum path length
+							atLeastOne = true;
+							this.artificialIntelligence.operationsWeight.put(currentOp, (PATHCARD_WHEN_AGGRESSIVE / (card.getOpenSides().size() * 0.5f)) * nextMin - currentMin);
+						}
+					}
+				}
 			}
-		}else{
-			if()
+			else{
+				if(!card.isCulDeSac()){
+					for(OperationPathCard currentOp : allOperationsForThisCard){
+						board.temporarAddCard(currentOp);
+						int nextMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+						board.temporarRemoveCard(currentOp.getP());
+						
+						if(nextMin < currentMin){
+							//PathCard is increasing the minimum path length
+							atLeastOne = true;
+							this.artificialIntelligence.operationsWeight.put(currentOp, (PATHCARD_WHEN_PASSIVE / (card.getOpenSides().size() * 0.5f)) * nextMin - currentMin);
+						}
+					}
+				}
+			}
+		}
+		if(!atLeastOne ){
+			if(card.isCulDeSac()){
+				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_CUL_DE_SAC);
+			}
+			else{
+				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_PATHCARD);
+			}
 		}
 	}
 

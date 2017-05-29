@@ -67,7 +67,18 @@ public abstract class Computer implements Serializable {
 		int min = this.artificialIntelligence.getGame().getBoard()
 			.minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition());
 		int minimumDwarfAmout = this.artificialIntelligence.getGame().minimumAmountOfDwarf();
-		return min <= minimumDwarfAmout;
+		switch(minimumDwarfAmout){
+			case 2:
+			case 3:
+				return min<=4;
+			case 4:
+			case 5:
+				return min<=5;
+			case 6:
+				return min<=6;
+			default:
+				return false;
+		}
 	}
 	
 	
