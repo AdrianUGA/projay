@@ -80,7 +80,6 @@ public class HardDwarfComputer extends Computer {
 						}
 					}
 					else if(artificialIntelligence.canPlayThere(currentPosition) && allClosestPosition.get(0).getTaxiDistance(goldCardPosition) < 2){
-						System.out.println("peux jouer " + currentPosition);
 						artificialIntelligence.getGame().getBoard().temporarAddCard(new OperationPathCard(artificialIntelligence, removedCard, currentPosition));
 						((OperationActionCardToBoard) o).setDestinationCard(artificialIntelligence.getGame().getBoard().getCard(currentPosition));
 						((OperationActionCardToBoard) o).setPositionDestination(currentPosition);
@@ -105,7 +104,6 @@ public class HardDwarfComputer extends Computer {
 
 	@Override
 	void operationPathCard(Operation o) {
-		System.out.println("PathCard = " + o.getCard() + " " + ((PathCard)o.getCard()).isCulDeSac() + " " + artificialIntelligence.getHandicaps().size());
 		if(((PathCard) o.getCard()).isCulDeSac()){
 			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_CUL_DE_SAC);
 		}
@@ -121,14 +119,11 @@ public class HardDwarfComputer extends Computer {
 			boolean atLeastOneOperation = false;
 			
 			if(minimumFromStart == Board.IMPOSSIBLE_PATH){
-				System.out.println("pas possible depuis début");
 				if(minimumFromAnywhere == Board.IMPOSSIBLE_PATH){
-					System.out.println("pas possible du tout");
 					//There is a loop, can't progress
 					//Do nothing
 				}
 				else{
-					System.out.println("Loop at start");
 					//There is a loop at the start
 					//Trying to improve min2
 					LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
@@ -153,7 +148,6 @@ public class HardDwarfComputer extends Computer {
 			}
 			else if(minimumFromStart == minimumFromAnywhere){ //There is no hole
 				//Trying to improve min2
-				System.out.println("No hole");
 				LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 				for(OperationPathCard currentOp : allOperationsForThisCard){
 					
@@ -175,7 +169,6 @@ public class HardDwarfComputer extends Computer {
 			}
 			else{ // There is a hole
 				//Trying to fix the hole
-				System.out.println("Hole");
 				LinkedHashSet<OperationPathCard> allOperationsForThisCard = board.getPossibleOperationPathCard(artificialIntelligence,(PathCard) o.getCard());
 				for(OperationPathCard currentOp : allOperationsForThisCard){
 					board.temporarAddCard(currentOp);
@@ -204,7 +197,6 @@ public class HardDwarfComputer extends Computer {
 				}
 			}
 			if(!atLeastOneOperation){
-				System.out.println("Pas possible");
 				artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), TRASH_PATHCARD);
 			}
 		}

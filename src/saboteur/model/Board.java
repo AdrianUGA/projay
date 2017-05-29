@@ -21,7 +21,7 @@ public class Board implements Serializable {
 			new Position(getStart().getcX() + DISTANCE_START_OBJECTIVE_X, getStart().getcY() - DISTANCE_START_OBJECTIVE_Y)};
 
 	private PathCard[][] board;
-	private List<Position> objectiveCards;
+	private LinkedList<Position> objectiveCards;
 	private Map<Position, PathCard> pathCardsPosition;
 	
 	public Board(ArrayList<PathCard> startPathCard, ArrayList<PathCard> goalPathCard){
@@ -39,11 +39,6 @@ public class Board implements Serializable {
 		this.addCard(startPathCard.get(0), getStart());
 		for(int i=0; i<3; i++)
 			this.addCard(goalPathCard.get(i), goalCardsPositions[i]);
-		for(Position p : objectiveCards){
-			if(this.getCard(p).hasGold()){
-				System.out.println("Gold x:" + p.getcX() + " y:" + p.getcY());
-			}
-		}
 	}
 	
 	public void addCard(PathCard card, Position position){
@@ -65,11 +60,6 @@ public class Board implements Serializable {
 				if (!toFlip.hasGold() && !isPossible(toFlip, p)) toFlip.reverse();
 				
 				getPathCardsPosition().put(p, toFlip);
-				//System.out.println("POSITION VOISIN = (" + p.getcX() + "," + p.getcY() + ")");
-				System.out.println("CARTE OBJECTIF A RETOURNER");
-				if(toFlip.hasGold()){
-					System.out.println("Terminé nains ont gagné");
-				}
 			}
 		}
 	}
@@ -339,7 +329,6 @@ public class Board implements Serializable {
 							positionsAlreadyExplored.add(posNeighbor);
 							positionsToExplore.add(posNeighbor);
 							if (neighbor.isGoal() && !neighbor.isVisible()){
-								System.out.println("fin1 :" + posNeighbor);
 								result.add(getCorrectGoalPosition(posNeighbor));
 							}
 						}
@@ -431,7 +420,7 @@ public class Board implements Serializable {
 	private ArrayList<Position> getAllEmptyReachablePositions(){
 		ArrayList<Position> allEmptyReachablePositions = new ArrayList<Position>();
 		for(Position p : this.pathCardsPosition.keySet()){
-			if(!getCard(p).isGoal()){
+			if(!getCard(p).isGoal() && !getCard(p).isCulDeSac()){
 				for(Cardinal cardinal : getCard(p).getOpenSides()){
 					if(getCard(p.getNeighbor(cardinal)) == null && canPutAnyPathCardThere(p.getNeighbor(cardinal))){
 						allEmptyReachablePositions.add(p.getNeighbor(cardinal));

@@ -125,28 +125,19 @@ public class AI extends Player {
 		}
 		
 		if(bestOperations.size() == 0){
-			System.out.println("This threw illegalArgument exeption in nextInt : " 
+			System.err.println("This threw illegalArgument exeption in nextInt : " 
 				+ bestOperations.size());
 		}
 		Operation o = bestOperations.get(r.nextInt(bestOperations.size()));
-		System.out.print("Opération joué par " + this.name + " ==> ");
-		o.displayOperationInformation();
 		if(o.isOperationPathCard() && ((OperationPathCard)o).getReversed()){
-			System.out.print(" !R");
 		}
-		System.out.println(" ==> rôle = " + this.getTeam() + " with weight = "+ operationsWeight.get(o));
 		return o;
 	}
 	
 	@Override
 	public Operation playCard(){
-		System.out.print("ma main : ");
-		printHand();
-		System.out.println(getEstimatedGoldCardPosition());
 		Operation o = selectOperation();
-		//System.out.println("AI " + this.name +" turn " + getGame().getTurn() + " played operation " + o.getClass().getName() + " with card + "+ o.getCard().getClassName());
 		this.getGame().playOperation(o);
-		//System.out.println("It now has " + hand.size() + " cards");
 		return o;
 	}
 	
@@ -202,7 +193,6 @@ public class AI extends Player {
 	
 	// Sabotage & Rescue card
 	public void updateTrust(OperationActionCardToPlayer o){
-		System.out.println("Je suis " + this.getName() + " et j'update " + o.getDestinationPlayer().getName() + " et source est " + o.getSourcePlayer().getName());
 		if(o.getDestinationPlayer() != this){
 			if(o.getCard().isSabotageCard()){
 				if(this.isDwarf.get(o.getSourcePlayer()) > this.isDwarf.get(o.getDestinationPlayer()) && (this.isDwarf.get(o.getDestinationPlayer()) <= 40)){
@@ -284,7 +274,6 @@ public class AI extends Player {
 		for(Position p : this.estimatedGoldCardPosition.keySet()){
 			if(Math.round((this.estimatedGoldCardPosition.get(p))*1000) > max){
 				max = Math.round(this.estimatedGoldCardPosition.get(p)*1000);
-				//System.out.println("max = " + max);
 			}
 		}
 		for(Position p : this.estimatedGoldCardPosition.keySet()){
@@ -338,8 +327,6 @@ public class AI extends Player {
 	}
 	
 	public boolean knowsTheGoldCardPosition(){
-		if(estimatedGoldCardPosition.containsValue(1f))
-			System.out.println(this.name + " connait la position de la carte or");
 		return this.estimatedGoldCardPosition.containsValue(1f);
 	}
 	

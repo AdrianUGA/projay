@@ -82,7 +82,6 @@ public class Game {
 				toUndo.execReverse(this);
 				listUndo.add(toUndo);
 				this.historyRedo.add(toUndo);
-				System.out.println("Operation pick undo");
 				toUndo = null;
 			}
 		}
@@ -90,16 +89,12 @@ public class Game {
 			if (!this.history.isEmpty()){
 				toUndo = this.history.removeLast();
 			} else {
-				System.out.println("It's not possible to have any Operation after an OperationPick");
+				System.err.println("It's not possible to have any Operation after an OperationPick");
 			}
 		}
 		toUndo.execReverse(this);
 		listUndo.add(toUndo);
 		this.historyRedo.add(toUndo);
-		if (toUndo.isOperationActionCardToBoard()) System.out.println("Operation board undo");
-		else if (toUndo.isOperationActionCardToPlayer()) System.out.println("Operation player undo");
-		else if (toUndo.isOperationPathCard()) System.out.println("Operation pathCard undo");
-		else if (toUndo.isOperationTrash()) System.out.println("Operation trash undo");
 		
 		return listUndo;
 	}
@@ -205,17 +200,14 @@ public class Game {
 			numRound = Integer.parseInt(chaine);
 			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			if (reader != null){
 				try {
 					reader.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -223,21 +215,9 @@ public class Game {
 		
 		this.setTeam();
         initAI();
-		//this.nextPlayer();
-		/*for (Player p : this.playerList){
-			System.out.println("Nom = " + p.name);
-			for (Card firstCard : p.getHand()){
-				System.out.println("XXX id = " + firstCard.getId());
-				if (firstCard.isPathCard()){
-					PathCard temp = (PathCard) firstCard;
-					System.out.println("XXX id = " + firstCard.getId() + temp.isOpen(Cardinal.NORTH) + temp.isOpen(Cardinal.EAST) + temp.isOpen(Cardinal.SOUTH) + temp.isOpen(Cardinal.WEST));
-				}
-			}
-		}*/
 		
 		endInitRound();
 		this.round = numRound;
-		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
 	}
 
 	/**
@@ -355,7 +335,6 @@ public class Game {
 		//this.nextPlayer();
 		
 		endInitRound();
-		System.out.println("Round = " +this.round +" taille stack = "+ this.stack.size());
 	}
 
 	public void initAI() {
@@ -446,7 +425,7 @@ public class Game {
 			objectOutput.writeObject(old);
 			objectOutput.close();
 		} catch (IOException e) {
-			System.out.println("Impossible to save score in file : "
+			System.err.println("Impossible to save score in file : "
 					+ cheminDuFichier);
 		}
 	}
@@ -477,13 +456,10 @@ public class Game {
 			}
 		}
         catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -520,7 +496,6 @@ public class Game {
             objectOutput.writeObject(this.observers);
             objectOutput.close();
         } catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -549,19 +524,13 @@ public class Game {
             
             for (Player p : this.getPlayerList()){
             	p.setGame(this);
-            	if(p.isAI()){
-            		((AI)p).printIsDwarf();
-            	}
             }
 	        objectInputStream.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -706,7 +675,6 @@ public class Game {
 				if (current.getTeam() == Team.DWARF){
 					goldCard = goldCardStack.removeFirst();
 					current.addGold(goldCard);
-					//System.out.println("On ajoute une carte de valeur "+goldCard.getValue()+" au joueur " + current.getName());
 					nbCardsDealt++;
 				}
 				currentNumber = (currentNumber+1)%playerList.size();
@@ -742,7 +710,6 @@ public class Game {
 				if (current.getTeam() == Team.SABOTEUR){
 					for (GoldCard card : getCardsToValue(valueToDeal)){
 						current.addGold(card);
-						//System.out.println("On ajoute une carte de valeur "+card.getValue()+" au joueur " + current.getName());
 					}
 				}
 			}

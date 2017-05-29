@@ -112,7 +112,6 @@ public class EasySaboteurComputer extends Computer {
 	public void operationSabotageCard(Operation o) {
 		Player p = artificialIntelligence.mostLikelyADwarf();
 		if(artificialIntelligence.isDwarf.get(p) >= LIMIT_ESTIMATED_DWARF && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p) && artificialIntelligence != p){
-			System.out.println("Je vais foutre un malus à " + p.getName());
 			((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 			artificialIntelligence.operationsWeight.put(o, 
 				(float) (Maths.positiveOrZero(artificialIntelligence.isDwarf.get(p) - artificialIntelligence.AVERAGE_TRUST) 

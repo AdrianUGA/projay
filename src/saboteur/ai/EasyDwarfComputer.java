@@ -50,7 +50,6 @@ public class EasyDwarfComputer extends Computer {
 
 	@Override
 	void operationPathCard(Operation o) {
-		System.out.println("/ ! \\ IA FACILE");
 		if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
 			Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 			List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);
