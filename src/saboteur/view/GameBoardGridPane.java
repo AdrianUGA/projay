@@ -36,6 +36,7 @@ public class GameBoardGridPane extends GridPane {
         this.generateBoard();
         
         this.setAlignment(Pos.CENTER);
+        this.getStyleClass().add("grid");
 	}
 	
     public void generateBoard() {
@@ -92,7 +93,6 @@ public class GameBoardGridPane extends GridPane {
 						else {
 	    					img.setImage(this.allCards.get(card.getBackImage()));
 						}
-						
 						if(card.isReversed()) {
 							img.setRotate(180.0);
 						}
