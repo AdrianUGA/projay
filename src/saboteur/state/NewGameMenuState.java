@@ -73,15 +73,13 @@ public class NewGameMenuState extends State{
     private void addPlayerButtonAction() {
     	if(this.nbPlayer < 10) {
     		nbPlayer++;
-        	EventHandler<MouseEvent> deleteEvent = new EventHandler<MouseEvent>(){
-				public void handle(MouseEvent event) {
-					nbPlayer--;
-					Pane p = (Pane)event.getSource();
-                    NewPlayerHBox h = (NewPlayerHBox)p.getParent();
-					playerContainer.getChildren().remove(h);
-                    addPlayerButton.setDisable(false);
-			    }
-			};
+        	EventHandler<MouseEvent> deleteEvent = event -> {
+                nbPlayer--;
+                Pane p = (Pane)event.getSource();
+                NewPlayerHBox h = (NewPlayerHBox)p.getParent();
+                playerContainer.getChildren().remove(h);
+                addPlayerButton.setDisable(false);
+            };
         	addPlayer(nbPlayer, false, deleteEvent);
         	if (nbPlayer == 10){
         	    addPlayerButton.setDisable(true);
@@ -99,28 +97,23 @@ public class NewGameMenuState extends State{
             String playerName = playerBox.getPlayerName().getCharacters().toString();
             String playerType = playerBox.getSelectPlayerMenu().getValue();
             Player player;
-            if (playerType.equals("Humain")){
-                player = new Human(this.game, playerName);
-            } else if(playerType.equals("IA Facile")){
-                player = new AI(this.game, "temp", Difficulty.EASY, r.nextLong());
-            } else if(playerType.equals("IA Difficile")){
-                player = new AI(this.game, "temp", Difficulty.HARD, r.nextLong());
-            }else {
-            	System.err.println("Difficulté non détectée");
-            	player = new AI(this.game, "temp", Difficulty.EASY, r.nextLong());
+            switch (playerType) {
+                case "Humain":
+                    player = new Human(this.game, playerName);
+                    break;
+                case "IA Facile":
+                    player = new AI(this.game, "temp", Difficulty.EASY, r.nextLong());
+                    break;
+                case "IA Difficile":
+                    player = new AI(this.game, "temp", Difficulty.HARD, r.nextLong());
+                    break;
+                default:
+                    System.err.println("Difficulté non détectée");
+                    player = new AI(this.game, "temp", Difficulty.EASY, r.nextLong());
+                    break;
             }
             player.setName(playerName);
             this.game.addPlayer(player);
-        }
-
-    	boolean ai = false; // auto ai
-        if(ai){
-	    	this.game.getPlayerList().clear();
-	    	this.game.getObservers().clear();
-	    	
-	    	this.game.addPlayer(new AI(this.game, "Yves", Difficulty.EASY, r.nextLong()));
-	    	this.game.addPlayer(new AI(this.game, "Philippe", Difficulty.EASY, r.nextLong()));
-	    	this.game.addPlayer(new AI(this.game, "Jean-Marie", Difficulty.EASY, r.nextLong()));
         }
 
         this.game.newGame();

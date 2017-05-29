@@ -44,19 +44,25 @@ public class UndoRedoButtonContainer extends HBox{
 	}
 	
     public void manageUndoRedoButton(){
-        if(this.game.historyUndoIsEmpty()) {
-            this.disableUndoButton();
-        }
-        else {
-            this.enableUndoButton();
-        }
+		if (this.game.getCurrentPlayer().isAI())
+		{
+			this.disableRedoButton();
+			this.disableUndoButton();
+		} else{
+			if(this.game.historyUndoIsEmpty()) {
+				this.disableUndoButton();
+			}
+			else {
+				this.enableUndoButton();
+			}
 
-        if(this.game.historyRedoIsEmpty()) {
-            this.disableRedoButton();
-        }
-        else {
-        	this.enableRedoButton();
-        }
+			if(this.game.historyRedoIsEmpty()) {
+				this.disableRedoButton();
+			}
+			else {
+				this.enableRedoButton();
+			}
+		}
     }
     
     public void setUndoButtonAction(EventHandler<ActionEvent> event) {

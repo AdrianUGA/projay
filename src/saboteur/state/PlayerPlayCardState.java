@@ -3,31 +3,18 @@ package saboteur.state;
 import javafx.animation.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.chart.Axis;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import saboteur.GameStateMachine;
 import saboteur.model.*;
-import saboteur.model.Card.Card;
 import saboteur.tools.Resources;
 import saboteur.view.GameBoardGridPane;
 import saboteur.view.GameCardContainer;
 import saboteur.view.PlayerArc;
 import saboteur.view.TrashAndPickStackContainer;
-
-import javax.swing.*;
 
 public class PlayerPlayCardState extends State{
 
@@ -75,14 +62,9 @@ public class PlayerPlayCardState extends State{
 		this.gameBoardGridPane.generateBoard();
 		this.playersArc.refreshPlayersArcsAndCircles();
 
-		EventHandler<ActionEvent> pickCardEvent = event -> {
-			this.pickCard();
-		};
+		EventHandler<ActionEvent> pickCardEvent = event -> this.pickCard();
 
-		EventHandler<ActionEvent> operationAnimationEvent = event -> {
-
-			this.operationAnimation(o, pickCardEvent);
-		};
+		EventHandler<ActionEvent> operationAnimationEvent = event -> this.operationAnimation(o, pickCardEvent);
 
 
 		if (o.isOperationTrash()){
@@ -112,7 +94,7 @@ public class PlayerPlayCardState extends State{
 				}
 				this.trashAndPickStackContainer.updateStackText(this.game.getNumberOfCardInStack());
 				this.trashAndPickStackContainer.setEmptyStack(this.game.stackIsEmpty());
-				PauseTransition pt = new PauseTransition(Duration.millis(2000));
+				PauseTransition pt = new PauseTransition(Duration.millis(1500));
 				pt.setOnFinished(event1 -> {
 					((Pane)clone.getParent()).getChildren().remove(clone);
 					gsm.pop();
@@ -125,7 +107,7 @@ public class PlayerPlayCardState extends State{
 		}
 	}
 
-	private void operationAnimation(Operation o, EventHandler onFinished){
+	private void operationAnimation(Operation o, EventHandler<ActionEvent> onFinished){
 		//Operation card animation
 		if (o.isOperationPathCard()){
 			OperationPathCard op = (OperationPathCard) o;

@@ -1,11 +1,10 @@
 package saboteur.view;
 
 import javafx.animation.*;
-import javafx.event.Event;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -100,7 +99,7 @@ public class TrashAndPickStackContainer extends VBox{
 		}
 	}
 
-	public void animateStack(ImageView clone, EventHandler onFinished){
+	public void animateStack(ImageView clone, EventHandler<ActionEvent> onFinished){
 		ParallelTransition pt = new ParallelTransition();
 
 		ScaleTransition st = new ScaleTransition(Duration.millis(400), clone);
@@ -124,22 +123,6 @@ public class TrashAndPickStackContainer extends VBox{
 		pt.getChildren().addAll(sequence, tt);
 		pt.setOnFinished(onFinished);
 		pt.play();
-	}
-
-	public double getXTrashPane(){
-		return this.trashPane.getLayoutX();
-	}
-
-	public double getYTrashPane(){
-		return this.trashPane.getLayoutY();
-	}
-
-	public double getXStackPane(){
-		return this.pickAndEndTurnPane.getLayoutX();
-	}
-
-	public double getYStackPane(){
-		return this.pickAndEndTurnPane.getLayoutY();
 	}
 
 	public ImageView getCloneOfCard(){
