@@ -182,6 +182,17 @@ public class HardSaboteurComputer extends Computer {
 			for(Player p : mostLikelySaboteursPlayers){
 				if(artificialIntelligence.canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard(), p)){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(p);
+					
+					if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1(), p) && artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType2(), p)){
+						((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getOneOfTheTwoType());
+					}
+					else if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1(), p)){
+						((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getRescueType1());
+					}
+					else{
+						((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getRescueType2());
+					}
+					
 					if (p.getHandicaps().size() != 1)
 						continue;
 					if(p == artificialIntelligence){ /* Rescue itself */

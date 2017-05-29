@@ -237,10 +237,10 @@ public class HardDwarfComputer extends Computer {
 				if(artificialIntelligence.canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard(), p)){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 					//LinkedHashSet tool
-					if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1()) && artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType2())){
+					if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1(), p) && artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType2(), p)){
 						((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getOneOfTheTwoType());
 					}
-					else if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1())){
+					else if(artificialIntelligence.canRescueType(((DoubleRescueCard)o.getCard()).getRescueType1(), p)){
 						((OperationActionCardToPlayer) o).setToolDestination(((DoubleRescueCard)o.getCard()).getRescueType1());
 					}
 					else{

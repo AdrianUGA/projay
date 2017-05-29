@@ -140,7 +140,7 @@ public class Game {
 	public void newGame(){
 		this.teamWinnerAlreadyAnnounced = false;
 		this.round = 0;
-
+		seed = new Random().nextLong();
 		this.goldCardStack = this.deck.getCopyGoldCards();
 		Collections.shuffle(this.goldCardStack, new Random(Game.seed));
 
@@ -320,7 +320,6 @@ public class Game {
 	
 	public void newRound(){
 		beginInitRound();
-		seed = new Random().nextLong();
 		System.out.println("Le seed de cette game est " + seed);
 		
 		this.setTeam();
@@ -545,6 +544,9 @@ public class Game {
 	}
 	
 	public boolean roundIsFinished(){
+		if(roundFinished){
+			seed = new Random().nextLong();
+		}
 		return this.roundFinished;
 	}
 
