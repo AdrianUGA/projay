@@ -35,8 +35,8 @@ public class TrashAndPickStackContainer extends VBox{
 	}
 	
 	private void initButton(Button button){
-		button.setPrefWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*1.5);
-		button.setPrefHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*1.5);
+		button.setPrefWidth(GameComponentsSize.getGameComponentSize().getCardWidth()*GameComponentsSize.getGameComponentSize().getTrashAndPickStackContainerMultiplier());
+		button.setPrefHeight(GameComponentsSize.getGameComponentSize().getCardHeight()*GameComponentsSize.getGameComponentSize().getTrashAndPickStackContainerMultiplier());
 		button.setTextAlignment(TextAlignment.CENTER);
 		button.getStyleClass().add("btn-card");
 	}

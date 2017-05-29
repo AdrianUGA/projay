@@ -30,13 +30,14 @@ public class PlayerSelectedPathCardState extends State{
 	private GameCardContainer gameCardContainer;
 	private GameBoardGridPane gameBoardGridPane;
 	private List<Position> possiblePositionList;
-	private List<Object> boardEffect;
+	private LinkedHashMap<Position, Object> newBoardEffect;
 	private LinkedHashMap<ImageView, Position> positionOfImages;
 	private LinkedHashMap<String, Image> allCards = Resources.getImage();
 	private boolean positionSelected;
 	private TrashAndPickStackContainer trashAndPickStackContainer;
 
 	private ImageView selectedImagePosition;
+	private SVGPath selectedSVGPosition;
 	private boolean pathCardOnTheBoard;
 	private SVGPath rotateSVG;
 
@@ -75,11 +76,12 @@ public class PlayerSelectedPathCardState extends State{
         this.gameCardContainer = (GameCardContainer) this.primaryStage.getScene().lookup("#gameCardContainer");
         this.gameBoardGridPane = (GameBoardGridPane) this.primaryStage.getScene().lookup("#gameBoardGridPane");
         this.gameBoardGridPane.toFront();
-        this.boardEffect = new LinkedList<>();
+        this.newBoardEffect = new LinkedHashMap<>();
 
 //        this.gameBoardGridPane.generateBoard();
 
         this.selectedImagePosition = null;
+        this.selectedSVGPosition = null;
 		this.positionOfImages = new LinkedHashMap<>();
 		this.positionSelected = false;
         
@@ -102,7 +104,7 @@ public class PlayerSelectedPathCardState extends State{
 					svg.setContent(Icon.minus);
 					svg.setMouseTransparent(true);
 					GridPane.setHalignment(svg, HPos.CENTER);
-					this.boardEffect.add(svg);
+					this.newBoardEffect.put(posiCard, svg);
 					
 					this.positionOfImages.put(this.gameBoardGridPane.getImageOfPosition(posiCard), posiCard);
 					
@@ -129,8 +131,9 @@ public class PlayerSelectedPathCardState extends State{
 				img.setFitWidth(cardWidth);
 				img.setOpacity(0);
 				
-				this.boardEffect.add(svg);
-				this.boardEffect.add(img);
+				this.newBoardEffect.put(posiCard, svg);
+				this.newBoardEffect.put(posiCard, img);
+				
 				this.positionOfImages.put(img, posiCard);
 
 				this.gameBoardGridPane.add(svg, posiCard.getcX(), posiCard.getcY());
@@ -146,7 +149,7 @@ public class PlayerSelectedPathCardState extends State{
 		this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(null);
 
 		if(!this.positionSelected) {
-			for(Object obj : this.boardEffect) {
+			for(Object obj : this.newBoardEffect.values()) {
 				this.gameBoardGridPane.getChildren().remove(obj);
 			}
     	}
@@ -161,10 +164,14 @@ public class PlayerSelectedPathCardState extends State{
     			if(this.gameCardContainer.getSelectedCard().isCollapseCard()) {
 					if(this.selectedImagePosition != null) {
 						this.selectedImagePosition.setOpacity(1.0);
+						this.selectedSVGPosition.setVisible(true);
 					}
 					this.selectedImagePosition = (ImageView) event.getTarget();
 					this.selectedImagePosition.setOpacity(0.0);
         			this.positionSelected = true;
+        			
+        			this.selectedSVGPosition = (SVGPath) this.newBoardEffect.get(position);
+        			this.selectedSVGPosition.setVisible(false);
         			
         			this.trashAndPickStackContainer.enablePickAndEndTurnButton();
         			this.trashAndPickStackContainer.setEventToPickAndEndTurnButton(new EventHandler<MouseEvent>() {
@@ -200,7 +207,7 @@ public class PlayerSelectedPathCardState extends State{
 			this.gameBoardGridPane.getChildren().remove(this.rotateSVG);
 		}
     	else{
-			this.boardEffect.add(this.rotateSVG);
+			this.newBoardEffect.put(position, rotateSVG);
 		}
     	
     	Card selectedCard = this.gameCardContainer.getSelectedCard();
