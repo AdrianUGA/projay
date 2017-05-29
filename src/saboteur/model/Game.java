@@ -16,7 +16,9 @@ public class Game {
 	private int currentPlayerIndex;
 	private int round;
 	private int turn;
-	public final static long seed = 321456789;
+
+	//public final static long seed = 123456789;
+	public static long seed;
 
 	private final Deck deck;
 
@@ -337,7 +339,9 @@ public class Game {
 	
 	public void newRound(){
 		beginInitRound();
-
+		seed = new Random().nextLong();
+		System.out.println("Le seed de cette game est " + seed);
+		
 		this.setTeam();
 		
 		for(Player p : this.playerList){
@@ -662,7 +666,7 @@ public class Game {
 				ranking.addFirst(player);
 			} else{
 				int i = 0;
-				while(player.getGold() < ranking.get(i).getGold()){
+				while(player.getGold() <= ranking.get(i).getGold()){
 					i++;
 				}
 				ranking.add(i, player);

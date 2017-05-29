@@ -18,17 +18,19 @@ import saboteur.model.Card.SabotageCard;
 
 public class EasyDwarfComputer extends Computer {
 	
-	public static int SABOTAGE = 1;
-	public static float HANDICAP_SIZE = 0.5f;
-	public static int RESCUE = 15;
-	public static int DOUBLERESCUE = 9;
-	public static int PLAN_TURN = 6;
-	public static int PLAN = 10;
-	public static int PATHCARD = 10;
-	public static int DISTANCE_PATHCARD = 2;
-	public static int COLLAPSE = 5;
-	public static int BETTER_DISTANCE_MIN = 20;
-	public static int LIMIT_ESTIMATED_SABOTEUR = 35;
+	private static final long serialVersionUID = -8589886740345244240L;
+	
+	private static final int SABOTAGE = 1;
+	private static final float HANDICAP_SIZE = 0.5f;
+	private static final int RESCUE = 15;
+	private static final int DOUBLERESCUE = 9;
+	private static final int PLAN_TURN = 6;
+	private static final int PLAN = 10;
+	private static final int PATHCARD = 10;
+	private static final int DISTANCE_PATHCARD = 2;
+	private static final int COLLAPSE = 5;
+	private static final int BETTER_DISTANCE_MIN = 20;
+	private static final int LIMIT_ESTIMATED_SABOTEUR = 35;
 
 	@Override
 	void operationCollapseCard(Operation o) {
@@ -48,6 +50,7 @@ public class EasyDwarfComputer extends Computer {
 
 	@Override
 	void operationPathCard(Operation o) {
+		System.out.println("/ ! \\ IA FACILE");
 		if(!((PathCard) o.getCard()).isCulDeSac() && artificialIntelligence.getHandicaps().size() == 0){
 			Position goldCardPosition = artificialIntelligence.getEstimatedGoldCardPosition();
 			List<Position> allClosestPosition = artificialIntelligence.getGame().getBoard().getNearestPossiblePathCardPlace(goldCardPosition);

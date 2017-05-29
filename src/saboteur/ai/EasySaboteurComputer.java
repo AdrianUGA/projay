@@ -19,6 +19,10 @@ import saboteur.model.Card.SabotageCard;
 
 public class EasySaboteurComputer extends Computer {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3779949447922189281L;
 	public static int SABOTAGE = 1;
 	public static float HANDICAP_SIZE = 0.25f;
 	public static int LIMIT_ESTIMATED_DWARF = 50;

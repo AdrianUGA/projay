@@ -91,7 +91,7 @@ public class PathCard extends Card {
 
 	@Override
 	public String toString() {
-		return "Paths : " + this.openSides + " Gold : " + this.isGoal;
+		return "Paths : " + this.openSides;
 	}
 
 	public PathCard clone(){
