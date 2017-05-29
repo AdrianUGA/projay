@@ -19,9 +19,10 @@ import saboteur.model.Team;
 import saboteur.model.Card.Card;
 import saboteur.model.Card.PathCard;
 
-//                                  _____
-//                                 |     |
-//                                 | ' ' |
+//									 ___
+//                                  /   \
+//                                 | | | |
+//                                 |  _  |
 //                                 |_____|
 //                           ____ ___|_|___ ____
 //                          ()___)         ()___)
@@ -42,6 +43,8 @@ import saboteur.model.Card.PathCard;
 //                             ///         \\\
 //                           _///___     ___\\\_
 //                          |_______|   |_______|
+//
+// Tribute to C.Metge, my favorite cousin English teacher
 
 public class AI extends Player {
 	static final long serialVersionUID = 6519358301134674963L;
@@ -424,7 +427,7 @@ public class AI extends Player {
 				}
 			}
 			maxTrust = maxTrust - 5;
-		}while(likelyDwarf.size() >= maxAmountOfSaboteur);
+		}while(likelyDwarf.size() >= maxAmountOfSaboteur + 1);
 		
 		return likelyDwarf;
 	}

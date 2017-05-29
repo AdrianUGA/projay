@@ -62,7 +62,8 @@ public class PlayerWaitState extends State{
 		
 
 		if (this.game.getCurrentPlayer().isAI()){
-			PauseTransition pt = new PauseTransition(Duration.millis(1000));
+			//TODO change pause
+			PauseTransition pt = new PauseTransition(Duration.millis(2000));
 			pt.setOnFinished(event -> {
 				Operation o = this.game.getCurrentPlayer().playCard();
 				this.gsm.changePeek("playerPlayCard", o);
