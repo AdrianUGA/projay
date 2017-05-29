@@ -62,7 +62,7 @@ public class Game {
 		this.history.add(op);
 		op.exec(this);
 		if ( (this.board.isGoalCardWithGoldVisible() || emptyHandsPlayers()) && !this.roundFinished){
-			dealGold();
+			//dealGold();
 			this.roundFinished = true;
 		}
 		this.historyRedo = new LinkedList<>();
@@ -571,7 +571,7 @@ public class Game {
 	}
 	
 	public boolean gameIsFinished(){
-		return round == 3 && roundIsFinished();
+		return round == 1000 && roundIsFinished();
 	}
 	
 	public boolean roundIsFinished(){
