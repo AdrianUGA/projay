@@ -2,6 +2,7 @@ package saboteur.ai;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 import saboteur.model.Board;
 import saboteur.model.Operation;
@@ -11,6 +12,7 @@ import saboteur.model.OperationPathCard;
 import saboteur.model.OperationTrash;
 import saboteur.model.Player;
 import saboteur.model.Position;
+import saboteur.model.Card.DoubleRescueCard;
 import saboteur.model.Card.PathCard;
 import saboteur.model.Card.RescueCard;
 import saboteur.model.Card.SabotageCard;
@@ -29,11 +31,11 @@ public class HardSaboteurComputer extends Computer {
 	private static final float DISTANCE_TO_GOAL_FOR_COLLAPSE = 4;
 	private static final float SABOTAGE = 2;
 	private static final float DOUBLE_RESCUE = 14;
-	public static final int PLAN = 75;
-	public static final int RESCUE_ITSELF = 20;
-	public static final float HANDICAP_SIZE = 0.5f;
-	public static final int RESCUE = 15;
-	public static final float COLLAPSE = 60;
+	private static final int PLAN = 75;
+	private static final int RESCUE_ITSELF = 20;
+	private static final float HANDICAP_SIZE = 0.5f;
+	private static final int RESCUE = 15;
+	private static final float COLLAPSE = 60;
 
 	@Override
 	void operationCollapseCard(Operation o) {
@@ -42,12 +44,14 @@ public class HardSaboteurComputer extends Computer {
 		if(board.minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition()) < DISTANCE_TO_GOAL_FOR_COLLAPSE){
 			int min1 = board.minFromEmptyReachablePathCardToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 			int min2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
+			LinkedHashSet<Position> allPos = new LinkedHashSet<Position>(this.artificialIntelligence.getGame().getBoard().getPathCardsPosition().keySet());
 			
-			for(Position p : this.artificialIntelligence.getGame().getBoard().getPathCardsPosition().keySet()){
-				if(board.getCard(p).isGoal() || board.getCard(p).isStart())
+			for(Position p : allPos){
+				if(board.getCard(p).isGoal() || board.getCard(p).isStart()){
 					continue;
+				}
 				
-				board.temporarRemoveCard(p);
+				PathCard removed = board.temporarRemoveCard(p);
 				
 				OperationActionCardToBoard operation = (OperationActionCardToBoard) o;
 				operation.setPositionDestination(p);
@@ -55,7 +59,8 @@ public class HardSaboteurComputer extends Computer {
 				
 				int newMin1 = board.minFromEmptyReachablePathCardToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
 				int newMin2 = board.minFromAnyEmptyPositionToGoldCard(artificialIntelligence.getEstimatedGoldCardPosition());
-				board.temporarAddCard(new OperationPathCard(artificialIntelligence, operation.getDestinationCard(), p));
+				
+				board.temporarAddCard(new OperationPathCard(artificialIntelligence, removed, p));
 				
 				if(min1 == min2){ /* No hole atm */
 					if(newMin1 != newMin2 && min2 != 0){
@@ -64,10 +69,10 @@ public class HardSaboteurComputer extends Computer {
 					}
 				}else{ /* Already an hole */
 					if(newMin2 > min2 && min2 != 0){
+						atLeastOne = true;
 						this.artificialIntelligence.operationsWeight.put(operation, (COLLAPSE + board.numberOfNeighbors(p))/min2);
 					}
 				}
-				this.artificialIntelligence.operationsWeight.put(o, COLLAPSE + 0f );
 			}
 		}
 		if(!atLeastOne){
@@ -102,9 +107,14 @@ public class HardSaboteurComputer extends Computer {
 				}
 				else{
 					for(OperationPathCard currentOp : allOperationsForThisCard){
-						
+						int nextMin;
 						board.temporarAddCard(currentOp);
-						int nextMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+						if(board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition) == board.minFromEmptyReachablePathCardToGoldCard(estimatedGoldCardPosition)){
+							nextMin = board.minFromAnyEmptyPositionToGoldCard(estimatedGoldCardPosition);
+						}
+						else{
+							nextMin = board.minFromEmptyReachablePathCardToGoldCard(estimatedGoldCardPosition);
+						}
 						board.temporarRemoveCard(currentOp.getP());
 						if(nextMin > currentMin){
 							//PathCard is increasing the minimum path length
@@ -143,9 +153,9 @@ public class HardSaboteurComputer extends Computer {
 	@Override
 	void operationSabotageCard(Operation o) {
 		LinkedList<Player> mostLikelyDwarfPlayers = artificialIntelligence.getAllMostLikelyDwarfPlayersHardAI(false);
-		
+	
 		boolean atLeastOne = false;
-		if(this.artificialIntelligence.getGame().getBoard().minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition()) < 5){
+		if(this.saboteurPlaysAgressive()){
 			for(Player p : mostLikelyDwarfPlayers){
 				//AI won't hurt itself... it isn't masochistic... Or is it ?
 				if(p != artificialIntelligence && artificialIntelligence.canHandicap((SabotageCard)o.getCard(), p)){
@@ -163,12 +173,12 @@ public class HardSaboteurComputer extends Computer {
 	@Override
 	void operationDoubleRescueCard(Operation o) {
 		LinkedList<Player> mostLikelySaboteursPlayers = artificialIntelligence.getAllMostLikelySaboteurPlayersHardAI(true);
-
+		
 		boolean atLeastOne = false;
-		if(this.artificialIntelligence.getGame().getBoard().minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition()) < 5){
+		if(this.saboteurPlaysAgressive()){
 
 			for(Player p : mostLikelySaboteursPlayers){
-				if(artificialIntelligence.canRescue((RescueCard)o.getCard(), p)){
+				if(artificialIntelligence.canRescueWithDoubleRescueCard((DoubleRescueCard)o.getCard(), p)){
 					((OperationActionCardToPlayer) o).setDestinationPlayer(p);
 					if (p.getHandicaps().size() != 1)
 						continue;
@@ -183,7 +193,7 @@ public class HardSaboteurComputer extends Computer {
 			}
 		}
 		if(!atLeastOne){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -11);
 		}
 	}
 
@@ -192,7 +202,7 @@ public class HardSaboteurComputer extends Computer {
 		LinkedList<Player> mostLikelySaboteursPlayers = artificialIntelligence.getAllMostLikelySaboteurPlayersHardAI(true);
 
 		boolean atLeastOne = false;
-		if(this.artificialIntelligence.getGame().getBoard().minFromAnyEmptyPositionToGoldCard(this.artificialIntelligence.getEstimatedGoldCardPosition()) < 5){
+		if(this.saboteurPlaysAgressive()){
 
 			for(Player p : mostLikelySaboteursPlayers){
 				if(artificialIntelligence.canRescue((RescueCard)o.getCard(), p)){
@@ -210,7 +220,7 @@ public class HardSaboteurComputer extends Computer {
 			}
 		}
 		if(!atLeastOne){
-			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -20);
+			artificialIntelligence.operationsWeight.put(new OperationTrash(o.getSourcePlayer(),o.getCard()), (float) -10);
 		}
 	}
 

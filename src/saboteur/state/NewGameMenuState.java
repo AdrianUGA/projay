@@ -101,8 +101,13 @@ public class NewGameMenuState extends State{
             Player player;
             if (playerType.equals("Humain")){
                 player = new Human(this.game, playerName);
-            } else{
+            } else if(playerType.equals("IA Facile")){
                 player = new AI(this.game, "temp", Difficulty.EASY, r.nextLong());
+            } else if(playerType.equals("IA Difficile")){
+                player = new AI(this.game, "temp", Difficulty.HARD, r.nextLong());
+            }else {
+            	System.err.println("Difficulté non détectée");
+            	player = new AI(this.game, "temp", Difficulty.EASY, r.nextLong());
             }
             player.setName(playerName);
             this.game.addPlayer(player);

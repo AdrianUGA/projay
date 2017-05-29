@@ -12,8 +12,8 @@ public abstract class Computer implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -2891478424L;
-	public static int MINIMUM_TRUST_DWARF_HARD = 65;
-	public static int MINIMUM_TRUST_SABOTEUR_HARD = 35;
+	protected static int MINIMUM_TRUST_DWARF_HARD = 65;
+	protected static int MINIMUM_TRUST_SABOTEUR_HARD = 35;
 
 	
 	protected AI artificialIntelligence;
